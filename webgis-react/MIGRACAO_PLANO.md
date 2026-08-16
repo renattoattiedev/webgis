@@ -55,5 +55,12 @@ Portar, em ordem de dependência:
 - **Commit após cada fase** (evita mega-diff)
 - **QA** por fase: `npm run build && npm run test` no webgis-react
 
+## ⚠️ REGRA DE FIDELIDADE (prioridade do cliente — adotada em 16/08)
+- **Reproduzir o componente como ele funciona no webgis original (Angular)** — NÃO basta portar a lógica.
+- Cada componente migrado deve ser **fiel à tela/UX original**: layout, painel, posição, estilos, comportamento de interação e textos devem espelhar o `.scss`/`.html` do Angular de origem.
+- **Antes de migrar**: abrir o `.html` e o `.scss` do componente Angular e replicar visualmente (classes/estilo equivalentes no React, mantendo a paleta do tema).
+- **Critério de aceite**: comparar visualmente com o componente Angular — se "não parece igual", NÃO considerar pronto.
+- **Feedback em aberto (16/08)**: os 8 componentes já migrados (ScaleBar, CustomZoom, CurrentLocation, Basemap, LayerOpacity, MenuTopo, Drawing, Measure) têm lógica ok mas **diferenças de tela** vs original → rever a fidelidade visual deles.
+
 ---
 **Priorização sugerida para esta sessão:** Fase 0 (fundação) + início da Fase 1 (Mapa + Basemap + Escala). É o núcleo que destrava o resto.
