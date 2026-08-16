@@ -34,12 +34,20 @@ export class DwDatabaseService implements OnModuleInit, OnModuleDestroy {
       requestTimeout: 60000,
     };
 
+    // Se o DW não está configurado (env vazio), não bloqueia o boot do app.
+    if (!config.server) {
+      this.logger.warn('DW SQL Server não configurado — rodando sem DW.');
+      return;
+    }
+
     try {
       this.pool = await new sql.ConnectionPool(config).connect();
       this.logger.log('DW SQL Server conectado com sucesso');
     } catch (err) {
-      this.logger.error('Falha ao conectar ao DW SQL Server', err);
-      throw err;
+      // Não derruba a aplicação inteira se o DW externo estiver fora do ar.
+      this.logger.warn(
+        `DW SQL Server indisponível (${config.server}:1433) — continuando sem DW.`,
+      );
     }
   }
 

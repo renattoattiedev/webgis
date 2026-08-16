@@ -1,6 +1,9 @@
 -- Altera a coluna GEOMETRY de geometry(Point,4674) para geometry(Point,31984)
 -- Executado apenas se a tabela existir (idempotente).
 
+-- Garante que o tipo geometry (PostGIS, em public) fique visível no schema camadas
+SET search_path = "camadas", public;
+
 DO $$
 BEGIN
   IF EXISTS (

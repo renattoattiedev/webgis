@@ -17,9 +17,9 @@ async function bootstrap() {
 
     const allowedOrigins = [
       'http://localhost:4200',
-      'https://giscesan.cesan.com.br',
-      'https://dev-giscesan.cesan.com.br',
-      'https://hom-giscesan.cesan.com.br',
+      'http://localhost:4201',
+      'http://127.0.0.1:4201',
+      'http://localhost:5173',
     ];
 
     console.log('🌐 CORS configured for origins:', allowedOrigins);
