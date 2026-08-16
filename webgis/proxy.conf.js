@@ -44,7 +44,7 @@ const GEO_TARGET = normalizeGeoTarget(
   process.env.GEOSERVER_URL ||
     dotenv.GEOSERVER_URL ||
     dotenv.GEOSERVER_HOST ||
-    'https://geoserver.cesan.com.br',
+    'http://localhost:8080/geoserver',
 );
 
 console.log('[proxy] GeoServer target:', GEO_TARGET);

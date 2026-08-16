@@ -41,7 +41,7 @@ import { MatButtonModule } from '@angular/material/button';
     {
       provide: MAT_SLIDE_TOGGLE_DEFAULT_OPTIONS,
       useValue: {
-        color: '#4DA9E7',
+        color: '#2e7d32',
       },
     },
   ],

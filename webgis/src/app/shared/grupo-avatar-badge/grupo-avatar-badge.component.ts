@@ -4,7 +4,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { GrupoItem } from 'src/app/models/grupo-item.model';
 
 const PALETA_CORES = [
-  '#4DA9E7',
+  '#2e7d32',
   '#7C4DFF',
   '#22A06B',
   '#E8604C',

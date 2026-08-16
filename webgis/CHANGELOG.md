@@ -1,4 +1,4 @@
-# 📝 CHANGELOG - WebGIS CESAN
+# 📝 CHANGELOG - WebGIS RunForrestGIS
 
 Todas as mudanças notáveis neste projeto serão documentadas neste arquivo.
 

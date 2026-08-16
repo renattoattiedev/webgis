@@ -1,9 +1,9 @@
 // ─── Variables ─────────────────────────────────────────────────────────────
 
-$blue:        #01499B;
+$blue:        #1b5e20;
 $blue-light:  rgba(1, 73, 155, 0.08);
 $blue-border: rgba(1, 73, 155, 0.22);
-$text:        #1e3a5f;
+$text:        #14532d;
 $muted:       #6b7280;
 
 // ─── Container ─────────────────────────────────────────────────────────────
@@ -403,7 +403,7 @@ $muted:       #6b7280;
   }
 
   &:hover:not(:disabled) {
-    background: #013d82;
+    background: #14532d;
   }
 
   &:disabled {

@@ -9,14 +9,14 @@ $font-family: Roboto, "Helvetica Neue", sans-serif;
 $background-color-tooltip: rgba(255, 255, 255, 0.8);
 $border-color-tooltip: #ccc;
 $shadow-color-tooltip: rgba(0, 0, 0, 0.3);
-$background-color-header-bar: #01499B;
+$background-color-header-bar: #1b5e20;
 $background-color-hover-remove-marker: #e0e0e0;
 $background-color-transparent: rgba(255, 255, 255, 0.0);
 $hover-color: rgba(173, 216, 230, 0.3);
 
 html, body {
   height: 100%;
-  background-color: #01499B!important;
+  background-color: #1b5e20!important;
 
 }
 
@@ -345,7 +345,7 @@ body {
 }
 
 .mdc-switch:enabled .mdc-switch__track::after {
-  background-color: #01499B!important;
+  background-color: #1b5e20!important;
 }
 
 .mat-mdc-form-field{
@@ -378,7 +378,7 @@ body {
 
 .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected {
   background: rgba(1, 73, 155, 0.06) !important;
-  color: #1e3a5f !important;
+  color: #14532d !important;
 }
 
 .mat-mdc-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
@@ -505,11 +505,11 @@ body {
 
 .wg-menu .mat-mdc-menu-item:not([disabled]):hover mat-icon,
 .wg-menu .mat-mdc-menu-item:not([disabled]):hover .mat-icon {
-  color: #01499B !important;
+  color: #1b5e20 !important;
 }
 
 .wg-menu .mat-mdc-menu-item:not([disabled]):hover .mdc-list-item__primary-text {
-  color: #1e3a5f !important;
+  color: #14532d !important;
 }
 
 .wg-menu .mat-mdc-menu-item[disabled] {
@@ -648,14 +648,14 @@ body {
 .mk-pin-icon {
   width: 14px;
   height: 14px;
-  color: #01499B;
+  color: #1b5e20;
   flex-shrink: 0;
 }
 
 .mk-title {
   font-size: 12px;
   font-weight: 700;
-  color: #1e3a5f;
+  color: #14532d;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -698,7 +698,7 @@ body {
   transition: background 0.13s, color 0.13s;
 
   svg { width: 13px; height: 13px; }
-  &:hover { background: rgba(1, 73, 155, 0.08); color: #01499B; }
+  &:hover { background: rgba(1, 73, 155, 0.08); color: #1b5e20; }
   &--done { color: #16a34a; }
 }
 
@@ -729,7 +729,7 @@ body {
 .mk-value {
   font-size: 12px;
   font-weight: 500;
-  color: #1e3a5f;
+  color: #14532d;
   word-break: break-word;
   flex: 1;
   font-family: system-ui, sans-serif;

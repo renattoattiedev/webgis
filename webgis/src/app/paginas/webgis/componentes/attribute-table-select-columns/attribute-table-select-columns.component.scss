@@ -1,8 +1,8 @@
 // ── Design tokens ─────────────────────────────────────────────────────────────
-$blue:        #01499B;
+$blue:        #1b5e20;
 $blue-light:  rgba(1, 73, 155, 0.07);
 $blue-border: rgba(1, 73, 155, 0.18);
-$text:        #1e3a5f;
+$text:        #14532d;
 $muted:       #6b7280;
 
 // ── Dialog wrapper ────────────────────────────────────────────────────────────
@@ -102,7 +102,7 @@ $muted:       #6b7280;
 
   mat-icon { font-size: 14px; width: 14px; height: 14px; }
 
-  &:hover { background: #013d82; }
+  &:hover { background: #14532d; }
 
   &--outline {
     background: transparent;
@@ -142,8 +142,8 @@ $muted:       #6b7280;
 }
 
 ::ng-deep .mat-mdc-list-option.mat-accent {
-  --mdc-checkbox-selected-icon-color: #01499B;
-  --mdc-checkbox-selected-focus-icon-color: #01499B;
-  --mdc-checkbox-selected-hover-icon-color: #01499B;
-  --mdc-checkbox-selected-pressed-icon-color: #01499B;
+  --mdc-checkbox-selected-icon-color: #1b5e20;
+  --mdc-checkbox-selected-focus-icon-color: #1b5e20;
+  --mdc-checkbox-selected-hover-icon-color: #1b5e20;
+  --mdc-checkbox-selected-pressed-icon-color: #1b5e20;
 }

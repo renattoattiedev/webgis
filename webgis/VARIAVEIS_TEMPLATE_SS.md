@@ -5,7 +5,7 @@
 Estas variáveis estão sendo preenchidas com os dados retornados pelo endpoint `/fetch-solicitacao-servicos-detalhada/{codigo}`:
 
 ### Cabeçalho
-- `{{SS_TITLE}}` - Título fixo: "SOLICITAÇÃO DE SERVIÇO - CESAN"
+- `{{SS_TITLE}}` - Título fixo: "SOLICITAÇÃO DE SERVIÇO - RunForrestGIS"
 - `{{SS_SUBTITLE}}` - Subtítulo com cd_atendimento: "Atendimento: {cd_atendimento}"
 - `{{SS_NUMBER}}` - Número da SS (ref_atendimento ou cd_atendimento)
 

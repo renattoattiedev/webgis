@@ -129,7 +129,7 @@ type RegistroSelecionado = CroquiEndereco | RegistroConsulta;
     {
       provide: MAT_SLIDE_TOGGLE_DEFAULT_OPTIONS,
       useValue: {
-        color: '#4DA9E7',
+        color: '#2e7d32',
       },
     },
   ],
@@ -3956,7 +3956,7 @@ export class ImprimirCroquiVistoriaComponent
 
       // ===== Variáveis do Template SS =====
       // Cabeçalho
-      '{{SS_TITLE}}': 'SOLICITAÇÃO DE SERVIÇO - CESAN',
+      '{{SS_TITLE}}': 'SOLICITAÇÃO DE SERVIÇO - RunForrestGIS',
       '{{SS_SUBTITLE}}': '',
       '{{SS_NUMBER}}':
         registro && this.isRegistroConsulta(registro)

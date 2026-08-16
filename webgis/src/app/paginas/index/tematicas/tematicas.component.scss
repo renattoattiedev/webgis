@@ -1,13 +1,13 @@
-$brand:     #01499B;
-$brand-tint:#eef4fb;
-$ink:       #0b2545;
-$ink-soft:  #5b6b85;
-$muted:     #7b8aa3;
-$line:      #e6ecf5;
+$brand:     #1b5e20;
+$brand-tint:#eef5ec;
+$ink:       #1a2e1f;
+$ink-soft:  #4d6b52;
+$muted:     #6b8f74;
+$line:      #e7f0e7;
 
 // ── Skeleton ────────────────────────────────────────────────────────────────
 .sk {
-  background: linear-gradient(90deg, #f0f4fa 25%, #e6ecf5 50%, #f0f4fa 75%);
+  background: linear-gradient(90deg, #f0f4fa 25%, #e7f0e7 50%, #f0f4fa 75%);
   background-size: 200% 100%;
   animation: sk-shimmer 1.4s ease-in-out infinite;
   border-radius: 4px;

@@ -92,7 +92,7 @@ export class PerfilConteudoComponent implements AfterViewInit, OnDestroy {
   }
 
   private getGeoServerBaseUrl(): string {
-    return 'https://hom-giscesan.cesan.com.br/geoserver-proxy/';
+    return 'http://localhost:3333/geoserver-proxy/';
   }
 
   private getLegendUrlForMapa(

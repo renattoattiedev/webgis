@@ -29,7 +29,7 @@ dockerize:
   extends: .registry_login
   script:
     - APP_VERSION=$(grep version package.json | awk -F \" '{print $4}')
-    - DOCKER_IMAGE_TAG=registry.cesan.com.br/cesan/${CI_PROJECT_NAME}:${APP_VERSION}
+    - DOCKER_IMAGE_TAG=localhost:8080/RunForrestGIS/${CI_PROJECT_NAME}:${APP_VERSION}
     - echo "DOCKER_IMAGE_TAG=${DOCKER_IMAGE_TAG}" >> docker.env
     - echo "Building with API_URL=${API_URL}"
     - echo "Building with GEOSERVER_HOST=${GEOSERVER_HOST}"
