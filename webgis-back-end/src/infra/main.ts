@@ -22,7 +22,11 @@ async function bootstrap() {
       'http://localhost:5173',
     ];
 
-    console.log('🌐 CORS configured for origins:', allowedOrigins);
+    // Em desenvolvimento, aceita origins de dev/túnel (ex.: trycloudflare.com) e
+    // localhost — sem precisar listar cada host temporário. (Restringir em produção.)
+    const isDev = (process.env.NODE_ENV ?? 'development') !== 'production';
+
+    console.log('🌐 CORS configured (dev=%s)', isDev);
 
     app.enableCors({
       origin: function (origin, callback) {
@@ -32,6 +36,11 @@ async function bootstrap() {
 
         if (allowedOrigins.includes(origin)) {
           console.log('✅ Origin allowed:', origin);
+          return callback(null, true);
+        }
+
+        // Em desenvolvimento, aceita qualquer origem (testes, túnel, LAN).
+        if (isDev) {
           return callback(null, true);
         }
 

@@ -15,6 +15,9 @@ export default defineConfig({
   },
   server: {
     port: 4201,
+    // Permite acesso via túnel Cloudflare (trycloudflare.com) e outros hosts
+    // em desenvolvimento, sem erro de allowedHosts do Vite.
+    allowedHosts: true,
     proxy: {
       '/api': {
         target: process.env.VITE_API_URL || 'http://localhost:3333',
