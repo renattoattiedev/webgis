@@ -30,6 +30,7 @@
   /* Suporte */
   --danger:       #dc2626;
   --danger-soft:  #fef2f2;
+  --danger-line:  #fecaca;
 
   /* Tipografia */
   --font-ui:      'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;

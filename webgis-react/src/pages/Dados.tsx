@@ -1,5 +1,5 @@
 // GEO Portal — Dados Espaciais (React)
-import { useNavigate } from 'react-router-dom';
+import TopBar from '../components/TopBar';
 import './dados.css';
 
 const CAMADAS = [
@@ -12,16 +12,9 @@ const CAMADAS = [
 ];
 
 export default function Dados() {
-  const navigate = useNavigate();
   return (
     <div className="dados">
-      <header className="dados-topbar">
-        <button className="dados-slot" onClick={() => navigate('/')}>←</button>
-        <div className="dados-titulo">
-          <strong>Dados Espaciais</strong>
-          <span>Catálogo de camadas disponíveis</span>
-        </div>
-      </header>
+      <TopBar titulo="Dados Espaciais" subtitulo="Catálogo de camadas disponíveis" />
       <div className="dados-wrap">
         <h1 className="dados-h1">Catálogo de dados</h1>
         <div className="dados-grid">

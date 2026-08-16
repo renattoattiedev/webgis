@@ -4,6 +4,7 @@ import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
+import TopBar from '../components/TopBar';
 import './webgis.css';
 
 export default function Webgis() {
@@ -28,17 +29,16 @@ export default function Webgis() {
 
   return (
     <div className="webgis">
-      <header className="webgis-topbar">
-        <button className="webgis-slot">←</button>
-        <div className="webgis-titulo">
-          <strong>Mapa Interativo</strong>
-          <span>Repositório de Dados Espaciais</span>
-        </div>
-        <div className="webgis-acoes">
-          <button className="webgis-btn">Camadas</button>
-          <button className="webgis-btn">Ferramentas</button>
-        </div>
-      </header>
+      <TopBar
+        titulo="Mapa Interativo"
+        subtitulo="Repositório de Dados Espaciais"
+        acoes={
+          <>
+            <button>Camadas</button>
+            <button>Ferramentas</button>
+          </>
+        }
+      />
       <div className="webgis-corpo">
         <aside className="webgis-painel">
           <h3>Camadas</h3>

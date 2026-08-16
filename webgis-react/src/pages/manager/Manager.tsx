@@ -1,17 +1,13 @@
 // GEO Portal — Painel Administrativo (React)
-import { useNavigate } from 'react-router-dom';
+import TopBar from '../../components/TopBar';
 import './manager.css';
 
 const SECOES = ['Visão geral', 'Conteúdo', 'Grupos', 'Membros', 'Mapas'];
 
 export default function Manager() {
-  const navigate = useNavigate();
   return (
     <div className="mgr">
-      <header className="mgr-topbar">
-        <button className="mgr-slot" onClick={() => navigate('/')}>←</button>
-        <div className="mgr-titulo"><strong>Painel Administrativo</strong><span>Gestão da plataforma</span></div>
-      </header>
+      <TopBar titulo="Painel Administrativo" subtitulo="Gestão da plataforma" />
       <div className="mgr-corpo">
         <aside className="mgr-menu">
           {SECOES.map((s, i) => (

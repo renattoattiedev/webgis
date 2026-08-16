@@ -105,7 +105,7 @@
   min-width: 220px;
   background: #fff;
   border-radius: 14px;
-  box-shadow: 0 12px 36px rgba(15,118,110,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  box-shadow: var(--shadow-lg);
   border: 1px solid var(--line);
   overflow: hidden;
   z-index: 300;
@@ -180,7 +180,7 @@
   margin: 0 0 22px;
   color: #fff;
 }
-.idx-hero-title-em { font-family: var(--font-serif); font-weight: 400; font-style: italic; color: #6ee7b7; }
+.idx-hero-title-em { font-family: var(--font-serif); font-weight: 400; font-style: italic; color: var(--accent-soft); }
 .idx-hero-sub {
   font-size: 17px;
   line-height: 1.6;

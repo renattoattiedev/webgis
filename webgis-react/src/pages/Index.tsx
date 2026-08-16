@@ -10,7 +10,7 @@ const MODULES = [
   { key: 'webgis', nome: 'Mapa Interativo', desc: 'Explore camadas sobre o mapa da sua região.', icone: 'map', ativo: true },
   { key: 'pitometria', nome: 'Pitometria', desc: 'Análises de medição de vazão e redes.', icone: 'gauge', ativo: false },
   { key: 'croqui', nome: 'Croqui de Vistoria', desc: 'Gerencie e imprima croquis de vistoria.', icone: 'ruler', ativo: false },
-  { key: 'relatorios', nome: 'Relatórios', desc: 'Geração de relatórios técnicos e sspaciais.', icone: 'file', ativo: false },
+  { key: 'relatorios', nome: 'Relatórios', desc: 'Geração de relatórios técnicos e geoespaciais.', icone: 'file', ativo: false },
 ];
 
 const STATS = [
