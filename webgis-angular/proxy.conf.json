@@ -1,0 +1,71 @@
+{
+  "/tile-proxy": {
+    "target": "https://tile.openstreetmap.org",
+    "secure": true,
+    "changeOrigin": true,
+    "timeout": 15000,
+    "proxyTimeout": 15000,
+    "headers": {
+      "User-Agent": "webgis-dev (contact: dev@local)"
+    },
+    "pathRewrite": {
+      "^/tile-proxy": ""
+    }
+  },
+  "/geoserver": {
+    "target": "https://dev-geoserver.cesan.com.br",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/geoserver": "/geoserver"
+    }
+  },
+  "/geoserver-proxy": {
+    "target": "http://localhost:8080",
+    "secure": false,
+    "changeOrigin": true,
+    "pathRewrite": {
+      "^/geoserver-proxy": "/geoserver"
+    }
+  },
+  "/imagery": {
+    "target": "https://services.arcgisonline.com",
+    "secure": true,
+    "changeOrigin": true,
+    "timeout": 15000,
+    "proxyTimeout": 15000,
+    "pathRewrite": {
+      "^/imagery": "/arcgis/rest/services/World_Imagery/MapServer"
+    }
+  },
+  "/topo": {
+    "target": "https://services.arcgisonline.com/arcgis/rest/services/World_Topo_Map/MapServer",
+    "secure": true,
+    "changeOrigin": true,
+    "timeout": 15000,
+    "proxyTimeout": 15000,
+    "pathRewrite": {
+      "^/topo": ""
+    }
+  },
+  "/physical": {
+    "target": "https://services.arcgisonline.com/arcgis/rest/services/World_Physical_Map/MapServer",
+    "secure": true,
+    "changeOrigin": true,
+    "timeout": 15000,
+    "proxyTimeout": 15000,
+    "pathRewrite": {
+      "^/physical": ""
+    }
+  },
+  "/street": {
+    "target": "https://services.arcgisonline.com/arcgis/rest/services/World_Street_Map/MapServer",
+    "secure": true,
+    "changeOrigin": true,
+    "timeout": 15000,
+    "proxyTimeout": 15000,
+    "pathRewrite": {
+      "^/street": ""
+    }
+  }
+}
