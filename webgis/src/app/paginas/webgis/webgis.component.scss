@@ -1,6 +1,6 @@
 @import 'node_modules/ol/ol.css';
 
-$cesan-blue: #01499B;
+$RunForrestGIS-blue: #1b5e20;
 $glass-btn-bg: rgba(255, 255, 255, 0.08);
 $glass-btn-border: rgba(255, 255, 255, 0.15);
 $header-icon-color: #c5cae9;
@@ -23,7 +23,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 
 // ── Header unificado ──────────────────────────────────────────────────────────
 .app-header {
-  background: $cesan-blue;
+  background: $RunForrestGIS-blue;
   display: flex;
   align-items: center;
   padding: 0 14px;
@@ -66,7 +66,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   width: 30px;
   height: 30px;
   border-radius: 7px;
-  background: $cesan-blue;
+  background: $RunForrestGIS-blue;
   border: none;
   display: flex;
   align-items: center;
@@ -76,7 +76,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 }
 
 .launcher-pill-text {
-  color: $cesan-blue;
+  color: $RunForrestGIS-blue;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 2px;
@@ -162,7 +162,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   height: 28px;
   border-radius: 50%;
   background: #fff;
-  color: $cesan-blue;
+  color: $RunForrestGIS-blue;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,7 +199,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   background: #fff;
   border-radius: 12px;
   box-shadow: 0 10px 32px rgba(1,73,155,0.18), 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid #e6ecf5;
+  border: 1px solid #e7f0e7;
   overflow: hidden;
   z-index: 500;
 }
@@ -208,15 +208,15 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   padding: 11px 16px 8px;
   font-size: 11px;
   font-weight: 700;
-  color: #7b8aa3;
+  color: #6b8f74;
   letter-spacing: 0.3px;
   text-transform: uppercase;
-  border-bottom: 1px solid #f0f4f9;
+  border-bottom: 1px solid #edf4ea;
 }
 
 .wg-dropdown-divider {
   height: 1px;
-  background: #f0f4f9;
+  background: #edf4ea;
   margin: 4px 0;
 }
 
@@ -230,15 +230,15 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   border: none;
   text-align: left;
   font-size: 13px;
-  color: #0b2545;
+  color: #1a2e1f;
   cursor: pointer;
   font-family: inherit;
   font-weight: 500;
   transition: background 0.12s;
 
-  svg { width: 14px; height: 14px; color: #7b8aa3; flex-shrink: 0; }
+  svg { width: 14px; height: 14px; color: #6b8f74; flex-shrink: 0; }
 
-  &:hover { background: #eef4fb; }
+  &:hover { background: #eef5ec; }
 
   &--danger {
     color: #dc2626;

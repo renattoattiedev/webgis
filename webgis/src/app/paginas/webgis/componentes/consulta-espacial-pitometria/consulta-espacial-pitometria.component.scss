@@ -1,7 +1,7 @@
-$blue: #01499B;
+$blue: #1b5e20;
 $blue-light: rgba(1, 73, 155, 0.08);
 $blue-border: rgba(1, 73, 155, 0.22);
-$text: #1e3a5f;
+$text: #14532d;
 $muted: #6b7280;
 $divider: rgba(0, 0, 0, 0.07);
 
@@ -239,7 +239,7 @@ $divider: rgba(0, 0, 0, 0.07);
   cursor: pointer;
   transition: background 0.13s;
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
-  &:hover:not(:disabled) { background: #013d82; }
+  &:hover:not(:disabled) { background: #14532d; }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
@@ -308,13 +308,13 @@ $divider: rgba(0, 0, 0, 0.07);
 .cep-check {
   font-size: 11px;
   --mdc-checkbox-selected-checkmark-color: #ffffff;
-  --mdc-checkbox-selected-focus-icon-color: #01499B;
-  --mdc-checkbox-selected-hover-icon-color: #01499B;
-  --mdc-checkbox-selected-icon-color: #01499B;
-  --mdc-checkbox-selected-pressed-icon-color: #01499B;
-  --mdc-checkbox-unselected-hover-icon-color: #01499B;
-  --mdc-checkbox-unselected-focus-icon-color: #01499B;
-  --mdc-checkbox-unselected-pressed-icon-color: #01499B;
+  --mdc-checkbox-selected-focus-icon-color: #1b5e20;
+  --mdc-checkbox-selected-hover-icon-color: #1b5e20;
+  --mdc-checkbox-selected-icon-color: #1b5e20;
+  --mdc-checkbox-selected-pressed-icon-color: #1b5e20;
+  --mdc-checkbox-unselected-hover-icon-color: #1b5e20;
+  --mdc-checkbox-unselected-focus-icon-color: #1b5e20;
+  --mdc-checkbox-unselected-pressed-icon-color: #1b5e20;
   ::ng-deep .mdc-label { font-size: 12px; color: #374151; }
   ::ng-deep .mdc-checkbox { transform: scale(0.85); }
 }
@@ -491,7 +491,7 @@ $divider: rgba(0, 0, 0, 0.07);
   cursor: pointer;
   transition: background 0.13s;
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
-  &:hover:not(:disabled) { background: #013d82; }
+  &:hover:not(:disabled) { background: #14532d; }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 

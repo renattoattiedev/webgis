@@ -62,7 +62,7 @@ export class RelatorioInventarioComponent implements OnInit, OnDestroy {
         chart: { type: 'donut', height: 220 },
         labels: d.porTema.map((t) => t.tema),
         colors: [
-          '#01499B',
+          '#1b5e20',
           '#2e7d32',
           '#b45309',
           '#7c3aed',
@@ -79,7 +79,7 @@ export class RelatorioInventarioComponent implements OnInit, OnDestroy {
       this.barHChart = new ApexCharts(this.barHEl.nativeElement, {
         series: [{ name: 'Camadas', data: d.porNivel.map((n) => n.total) }],
         chart: { type: 'bar', height: 180, toolbar: { show: false } },
-        colors: ['#01499B'],
+        colors: ['#1b5e20'],
         plotOptions: { bar: { horizontal: true, borderRadius: 3 } },
         dataLabels: { enabled: false },
         xaxis: {

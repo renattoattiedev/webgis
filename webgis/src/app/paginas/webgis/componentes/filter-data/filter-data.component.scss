@@ -1,8 +1,8 @@
 // ── Design tokens ─────────────────────────────────────────────────────────────
-$blue:        #01499B;
+$blue:        #1b5e20;
 $blue-light:  rgba(1, 73, 155, 0.07);
 $blue-border: rgba(1, 73, 155, 0.18);
-$text:        #1e3a5f;
+$text:        #14532d;
 $muted:       #6b7280;
 $green:       #16a34a;
 $red:         #ef4444;
@@ -390,7 +390,7 @@ $red:         #ef4444;
   &--primary {
     background: $blue;
     color: #fff;
-    &:hover:not(:disabled) { background: #013d82; }
+    &:hover:not(:disabled) { background: #14532d; }
     &:disabled { background: #d1d5db; cursor: not-allowed; }
   }
 }

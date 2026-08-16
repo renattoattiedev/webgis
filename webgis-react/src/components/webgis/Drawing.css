@@ -1,0 +1,37 @@
+/* GEO Portal — Drawing panel styles */
+.drawing-panel {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  width: 260px;
+  overflow: hidden;
+  font-size: 13px;
+}
+.drawing-header {
+  background: var(--brand);
+  color: #fff;
+  padding: 10px 14px;
+  font-weight: 600;
+  font-size: 13px;
+}
+.drawing-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 10px; }
+.drawing-row { display: flex; flex-direction: column; gap: 4px; }
+.drawing-row label { font-size: 12px; font-weight: 600; color: var(--ink-soft); }
+.drawing-row select,
+.drawing-row input[type='range'] { width: 100%; }
+.drawing-row input[type='color'] { height: 30px; padding: 0; border: 1px solid var(--line); border-radius: 6px; cursor: pointer; }
+.drawing-check label { display: flex; align-items: center; gap: 7px; font-weight: 500; color: var(--ink); cursor: pointer; }
+.drawing-actions { margin-top: 4px; }
+.drawing-clear {
+  width: 100%;
+  background: var(--danger);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.drawing-clear:hover { background: #b91c1c; }

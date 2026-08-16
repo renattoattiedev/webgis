@@ -18,7 +18,7 @@ RUN npm run "build:${ENVIRONMENT}"
 
 RUN sed "s|\${GEOSERVER_HOST}|${GEOSERVER_HOST}|g" docker/httpd.conf.template > docker/httpd.conf
 
-FROM registry.cesan.com.br/cesan/httpd:2.4.43
+FROM localhost:8080/httpd:2.4.43
 WORKDIR /usr/local/apache2
 COPY --chown=root:root --from=build /app/docker/httpd.conf conf/httpd.conf
 COPY --chown=www-data:www-data --from=build /app/dist/webgis htdocs

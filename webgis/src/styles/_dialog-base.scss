@@ -1,5 +1,5 @@
 // ─────────────────────────────────────────────────────────────────────────────
-// IDE CESAN — Dialog base styles (variante C · Side accent)
+// IDE RunForrestGIS — Dialog base styles (variante C · Side accent)
 // Adicione ao seu styles.scss global:
 //
 //   @use './styles/dialog-base';
@@ -12,15 +12,15 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Tokens ──────────────────────────────────────────────────────────────────
-$idedlg-brand:        #01499B !default;
-$idedlg-brand-mid:    #023775 !default;
+$idedlg-brand:        #1b5e20 !default;
+$idedlg-brand-mid:    #14532d !default;
 $idedlg-brand-deep:   #012656 !default;
-$idedlg-brand-tint:   #eef4fb !default;
-$idedlg-brand-tint-2: #dbe7f6 !default;
-$idedlg-ink:          #0b2545 !default;
-$idedlg-ink-soft:     #5b6b85 !default;
-$idedlg-muted:        #7b8aa3 !default;
-$idedlg-line:         #e6ecf5 !default;
+$idedlg-brand-tint:   #eef5ec !default;
+$idedlg-brand-tint-2: #e2eee0 !default;
+$idedlg-ink:          #1a2e1f !default;
+$idedlg-ink-soft:     #4d6b52 !default;
+$idedlg-muted:        #6b8f74 !default;
+$idedlg-line:         #e7f0e7 !default;
 $idedlg-line-soft:    #f3f6fb !default;
 $idedlg-accent:       #5fe3a1 !default;
 $idedlg-success:      #047857 !default;

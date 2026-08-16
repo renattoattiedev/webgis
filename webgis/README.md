@@ -1,16 +1,16 @@
 <p align="center">
-  <img src="logo-cesan.png" alt="CESAN" />
+  <img src="logo-RunForrestGIS.png" alt="RunForrestGIS" />
 </p>
 
 <img src="angular.png" alt="ANGULAR" width="50" height="50"/>
 
 # WEBGIS - FRONTEND
 
-Este repositório contém o frontend do WebGIS da CESAN, desenvolvido com Angular e OpenLayers. Este projeto proporciona uma interface de usuário rica para interagir com serviços geoespaciais.
+Este repositório contém o frontend do WebGIS da RunForrestGIS, desenvolvido com Angular e OpenLayers. Este projeto proporciona uma interface de usuário rica para interagir com serviços geoespaciais.
 
 ## Descrição do Projeto
 
-Esta plataforma WebGIS tem como objetivo realizar consultas de dados geo-espaciais em uma interface amigável e terá como base os dados a serem disponibilizados pela CESAN.
+Esta plataforma WebGIS tem como objetivo realizar consultas de dados geo-espaciais em uma interface amigável e terá como base os dados a serem disponibilizados pela RunForrestGIS.
 
 
 ## Requisitos

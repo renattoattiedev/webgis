@@ -1,15 +1,22 @@
 // GEO Portal — Webgis (mapa interativo) — React com OpenLayers
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import Map from 'ol/Map';
 import View from 'ol/View';
 import TileLayer from 'ol/layer/Tile';
 import OSM from 'ol/source/OSM';
 import TopBar from '../components/TopBar';
+import { useMapa } from '../contexts/MapaContext';
+import MenuTopo from '../components/webgis/MenuTopo';
+import ScaleBar from '../components/webgis/ScaleBar';
+import CustomZoom from '../components/webgis/CustomZoom';
+import CurrentLocation from '../components/webgis/CurrentLocation';
+import Basemap from '../components/webgis/Basemap';
+import LayerOpacity from '../components/webgis/LayerOpacity';
 import './webgis.css';
 
 export default function Webgis() {
   const mapRef = useRef<HTMLDivElement | null>(null);
-  const [mapa, setMapa] = useState<Map | null>(null);
+  const { mapa, setMapa } = useMapa();
 
   useEffect(() => {
     if (!mapRef.current || mapa) return;
@@ -25,19 +32,14 @@ export default function Webgis() {
     });
     setMapa(m);
     return () => m.setTarget(undefined);
-  }, [mapa]);
+  }, [mapa, setMapa]);
 
   return (
     <div className="webgis">
       <TopBar
         titulo="Mapa Interativo"
         subtitulo="Repositório de Dados Espaciais"
-        acoes={
-          <>
-            <button>Camadas</button>
-            <button>Ferramentas</button>
-          </>
-        }
+        acoes={<MenuTopo />}
       />
       <div className="webgis-corpo">
         <aside className="webgis-painel">
@@ -48,8 +50,18 @@ export default function Webgis() {
             <li><span className="w-check w-init" /> Rede hidrográfica</li>
             <li><span className="w-check" /> Infraestrutura urbana</li>
           </ul>
+          <h3 className="webgis-painel-subtitulo">Opacidade da base</h3>
+          <LayerOpacity />
         </aside>
-        <div ref={mapRef} className="webgis-mapa" data-testid="map-container" />
+        <div className="webgis-mapa-wrap">
+          <div ref={mapRef} className="webgis-mapa" data-testid="map-container" />
+          <CustomZoom />
+          <CurrentLocation />
+          <div className="webgis-pillbar">
+            <Basemap />
+            <ScaleBar />
+          </div>
+        </div>
       </div>
     </div>
   );

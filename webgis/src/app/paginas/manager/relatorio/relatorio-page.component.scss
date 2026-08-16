@@ -119,10 +119,10 @@ $tabs-h: 53px;
   }
 
   &.active {
-    background: #eef4fb;
-    color: #01499B;
+    background: #eef5ec;
+    color: #1b5e20;
     font-weight: 600;
-    svg { color: #01499B; }
+    svg { color: #1b5e20; }
   }
 
   .collapsed & {

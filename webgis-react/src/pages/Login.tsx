@@ -1,6 +1,7 @@
-// GEO Portal — Login (React)
+// GEO Portal — Login (React) — conectado ao backend
 import { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { autenticar } from '../lib/api';
 import './login.css';
 
 export default function Login() {
@@ -14,18 +15,18 @@ export default function Login() {
     e.preventDefault();
     setErro('');
     setCarregando(true);
-    // Exemplo: chamada ao backend. Adaptar para a API real (via variável de ambiente).
     try {
-      // placeholder de autenticação
-      if (!email || !senha) {
-        setErro('Informe e-mail e senha.');
-        setCarregando(false);
-        return;
-      }
-      // Aqui seria a chamada real: await api.auth.login(email, senha)
+      const resp = await autenticar({ DSC_EMAIL: email, DSC_PASSWORD: senha });
+      // Salva dados do usuário e redireciona
+      localStorage.setItem('id_usuario', resp.idUsuario);
       navigate('/webgis');
-    } catch {
-      setErro('Não foi possível entrar. Verifique suas credenciais.');
+    } catch (err) {
+      setErro(
+        err instanceof Error && err.message.includes('Captcha')
+          ? 'Verificação de segurança não concluída. Tente novamente.'
+          : 'E-mail ou senha inválidos.'
+      );
+    } finally {
       setCarregando(false);
     }
   };
@@ -51,6 +52,7 @@ export default function Login() {
               onChange={(e) => setEmail(e.target.value)}
               placeholder="voce@exemplo.gov.br"
               autoComplete="email"
+              required
             />
           </label>
           <label className="login-field">
@@ -61,6 +63,7 @@ export default function Login() {
               onChange={(e) => setSenha(e.target.value)}
               placeholder="••••••••"
               autoComplete="current-password"
+              required
             />
           </label>
           <button type="submit" className="login-btn" disabled={carregando}>

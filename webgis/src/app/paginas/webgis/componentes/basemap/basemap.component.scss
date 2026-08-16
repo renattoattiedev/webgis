@@ -1,5 +1,5 @@
 $transition: 0.18s ease;
-$cesan-blue: #01499B;
+$RunForrestGIS-blue: #1b5e20;
 
 // ── Wrapper ───────────────────────────────────────────────────────────────────
 .basemap-wrapper {
@@ -22,13 +22,13 @@ $cesan-blue: #01499B;
   transition: border-color $transition, box-shadow $transition;
 
   &:hover {
-    border-color: rgba($cesan-blue, 0.5);
+    border-color: rgba($RunForrestGIS-blue, 0.5);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
   }
 
   &.active {
-    border-color: rgba($cesan-blue, 0.6);
-    box-shadow: 0 0 0 2px rgba($cesan-blue, 0.2);
+    border-color: rgba($RunForrestGIS-blue, 0.6);
+    box-shadow: 0 0 0 2px rgba($RunForrestGIS-blue, 0.2);
   }
 }
 
@@ -120,8 +120,8 @@ $cesan-blue: #01499B;
   .basemap-card.selected & {
     border-color: transparent;
     box-shadow:
-      0 0 0 2.5px $cesan-blue,
-      0 0 0 4px rgba($cesan-blue, 0.15);
+      0 0 0 2.5px $RunForrestGIS-blue,
+      0 0 0 4px rgba($RunForrestGIS-blue, 0.15);
   }
 }
 
@@ -153,6 +153,6 @@ $cesan-blue: #01499B;
   text-overflow: ellipsis;
 
   .basemap-card.selected & {
-    background: linear-gradient(transparent, rgba($cesan-blue, 0.72));
+    background: linear-gradient(transparent, rgba($RunForrestGIS-blue, 0.72));
   }
 }

@@ -1,6 +1,9 @@
 -- CreateSchema
 CREATE SCHEMA IF NOT EXISTS "camadas";
 
+-- Garante que o tipo geometry (PostGIS, em public) fique visível no schema camadas
+SET search_path = "camadas", public;
+
 -- CreateEnum
 CREATE TYPE "camadas"."TipoPitometria" AS ENUM ('VAZAO', 'PRESSAO');
 

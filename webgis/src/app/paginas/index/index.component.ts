@@ -54,7 +54,7 @@ export class IndexComponent implements OnInit {
     {
       id: 'aplicacoes',
       nome: 'Aplicações',
-      descricao: 'Apps desenvolvidos pela CESAN para saneamento',
+      descricao: 'Apps desenvolvidos pela RunForrestGIS para saneamento',
       ativo: false,
     },
   ];

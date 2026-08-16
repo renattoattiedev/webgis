@@ -21,7 +21,7 @@
 .panel-label {
   font-size: 11.5px;
   font-weight: 700;
-  color: #1e3a5f;
+  color: #14532d;
   letter-spacing: 0.3px;
 }
 
@@ -51,7 +51,7 @@
   transition: background 0.22s ease;
 
   .toggle-on & {
-    background: #01499B;
+    background: #1b5e20;
   }
 }
 
@@ -79,7 +79,7 @@
   min-width: 18px;
 
   .toggle-on & {
-    color: #01499B;
+    color: #1b5e20;
   }
 }
 
@@ -112,7 +112,7 @@
   &-e {
     background: rgba(1, 73, 155, 0.10);
     border: 1.5px solid rgba(1, 73, 155, 0.30);
-    color: #01499B;
+    color: #1b5e20;
   }
 
   &-d {

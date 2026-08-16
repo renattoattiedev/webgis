@@ -4,7 +4,7 @@ services:
   frontend:
     image: "${DOCKER_IMAGE_TAG}"
     labels:
-      - "br.com.cesan.app=gis"
+      - "br.com.RunForrestGIS.app=gis"
     volumes:
       - /etc/localtime:/etc/localtime:ro
     ports:
