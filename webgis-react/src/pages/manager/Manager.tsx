@@ -1,8 +1,8 @@
-// GEO Portal — Painel Administrativo (React) — placeholder estruturado
+// GEO Portal — Painel Administrativo (React)
 import { useNavigate } from 'react-router-dom';
 import './manager.css';
 
-const SEcoes = ['Visão geral', 'Conteúdo', 'Grupos', 'Membros', 'Mapas'];
+const SECOES = ['Visão geral', 'Conteúdo', 'Grupos', 'Membros', 'Mapas'];
 
 export default function Manager() {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ export default function Manager() {
       </header>
       <div className="mgr-corpo">
         <aside className="mgr-menu">
-          {SEcoes.map((s, i) => (
+          {SECOES.map((s, i) => (
             <button key={s} className={`mgr-menu-item ${i === 0 ? 'mgr-active' : ''}`}>{s}</button>
           ))}
         </aside>
