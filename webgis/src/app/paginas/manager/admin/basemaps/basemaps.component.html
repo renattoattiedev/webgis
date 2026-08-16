@@ -1,0 +1,79 @@
+<div class="ad-list">
+  <div class="al-top">
+    <div class="al-top-left">
+      <h2 class="al-title">Basemaps <em>do mapa</em></h2>
+      <span class="al-count">{{ dataSourceBasemaps.data.length }} basemaps</span>
+    </div>
+    <div class="al-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="Buscar por nome…" (keyup)="aplicarFiltroNome($event)"/>
+    </div>
+    <button class="al-add" (click)="openAddDialog()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Novo basemap
+    </button>
+  </div>
+  <div class="al-table-wrap">
+    <table mat-table [dataSource]="dataSourceBasemaps" class="al-table">
+      <ng-container matColumnDef="thumbnail">
+        <th mat-header-cell *matHeaderCellDef>Miniatura</th>
+        <td mat-cell *matCellDef="let basemap">
+          <img class="al-thumb" [src]="thumbnailUrls.get(basemap.thumbnail) || 'assets/imagens/logo.png'" [alt]="basemap.name"/>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Nome</th>
+        <td mat-cell *matCellDef="let basemap"><div class="al-cell-title">{{ basemap.name }}</div></td>
+      </ng-container>
+      <ng-container matColumnDef="order">
+        <th mat-header-cell *matHeaderCellDef>Ordem</th>
+        <td mat-cell *matCellDef="let basemap">
+          <input class="al-order-input" type="number" min="0" step="1"
+                 [value]="basemap.order" (blur)="onOrderEdit(basemap, $event)"
+                 (keydown.enter)="onOrderEdit(basemap, $event)" aria-label="Editar ordem"/>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="isDefault">
+        <th mat-header-cell *matHeaderCellDef>Padrão</th>
+        <td mat-cell *matCellDef="let basemap">
+          <mat-slide-toggle [checked]="basemap.isDefault"
+                            (change)="onToggleDefault(basemap, $event)"
+                            [matTooltip]="basemap.isDefault ? 'Basemap padrão' : 'Não é padrão'">
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="isActive">
+        <th mat-header-cell *matHeaderCellDef>Ativo</th>
+        <td mat-cell *matCellDef="let basemap">
+          <mat-slide-toggle [checked]="basemap.isActive"
+                            (change)="onToggleActive(basemap, $event)"
+                            [matTooltip]="basemap.isActive ? 'Basemap ativo' : 'Basemap inativo'">
+          </mat-slide-toggle>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="createdAt">
+        <th mat-header-cell *matHeaderCellDef>Criação</th>
+        <td mat-cell *matCellDef="let basemap">
+          <div class="al-cell-date">{{ basemap.createdAt | date: 'dd/MM/yyyy' }}<span>{{ basemap.createdAt | date: 'HH:mm' }}</span></div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="updatedAt">
+        <th mat-header-cell *matHeaderCellDef>Alteração</th>
+        <td mat-cell *matCellDef="let basemap">
+          <div class="al-cell-date">{{ basemap.updatedAt | date: 'dd/MM/yyyy' }}<span>{{ basemap.updatedAt | date: 'HH:mm' }}</span></div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="acao">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let basemap">
+          <button class="al-row-icon danger" (click)="openDeleteDialog(basemap)" matTooltip="Excluir">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
+  <mat-paginator class="al-paginator" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+</div>

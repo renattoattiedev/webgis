@@ -1,0 +1,165 @@
+// Estilos compartilhados em src/styles/_dialog-base.scss
+
+$brand:        #01499B;
+$brand-tint:   #eef4fb;
+$brand-tint-2: #dbe7f6;
+$ink:          #0b2545;
+$ink-soft:     #5b6b85;
+$muted:        #7b8aa3;
+$line:         #e6ecf5;
+$line-soft:    #f0f4f9;
+$gold-bg:      #fef9c3;
+$gold-border:  #fde68a;
+
+:host {
+  display: block;
+  min-width: 920px;
+
+  @media (max-width: 1000px) { min-width: 0; width: 100%; }
+}
+
+.atributos-body {
+  padding: 16px 18px;
+  max-height: 64vh;
+  overflow: auto;
+}
+
+// ── Tabela ───────────────────────────────────────────────────────────────────
+.atrib-table {
+  width: 100%;
+  background: #fff;
+  font-family: inherit;
+  border: 1px solid $line;
+  border-radius: 12px;
+  overflow: hidden;
+
+  ::ng-deep .mat-mdc-header-row {
+    background: $line-soft;
+    min-height: 40px;
+  }
+  ::ng-deep .mat-mdc-header-cell {
+    color: $muted;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase;
+    padding: 0 12px;
+    border-bottom: 1px solid $line;
+  }
+  ::ng-deep .mat-mdc-row {
+    min-height: 48px;
+    transition: background 0.12s;
+    &:hover:not(.atrib-highlight) { background: $brand-tint; }
+  }
+  ::ng-deep .mat-mdc-cell {
+    padding: 6px 12px;
+    border-bottom: 1px solid $line-soft;
+    font-size: 13px; color: $ink;
+    vertical-align: middle;
+  }
+
+  // Column widths
+  ::ng-deep .mat-column-ordenacao   { width: 180px; }
+  ::ng-deep .mat-column-nomeAtributo{ width: 200px; }
+  ::ng-deep .mat-column-visivel,
+  ::ng-deep .mat-column-acao        { width: 80px; text-align: center; }
+}
+
+// Linha alterada (não salva)
+.atrib-highlight {
+  background: $gold-bg !important;
+  position: relative;
+
+  &::before {
+    content: ""; position: absolute; left: 0; top: 0; bottom: 0;
+    width: 3px; background: #ca8a04;
+  }
+}
+
+// Ordering
+.atrib-order {
+  display: inline-flex; align-items: center; gap: 4px;
+}
+
+.atrib-grip {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: transparent; border: 1px solid transparent;
+  color: $muted; cursor: grab;
+  display: inline-flex; align-items: center; justify-content: center;
+  svg { width: 14px; height: 14px; }
+  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &:active { cursor: grabbing; }
+}
+
+.atrib-index {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 26px; height: 22px; border-radius: 6px;
+  background: $line-soft; color: $ink-soft;
+  font-size: 11.5px; font-weight: 700;
+}
+
+.atrib-arrows { display: inline-flex; gap: 2px; }
+.atrib-arrow {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: transparent; border: 1px solid transparent;
+  color: $muted; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  svg { width: 13px; height: 13px; }
+  &:hover:not(:disabled) { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &:disabled { opacity: 0.35; cursor: not-allowed; }
+}
+
+// Cells
+.atrib-name {
+  font-weight: 500; color: $ink;
+  font-family: ui-monospace, 'JetBrains Mono', monospace;
+  font-size: 12.5px;
+}
+
+.atrib-input {
+  width: 100%;
+  border: 1px solid transparent;
+  background: transparent;
+  border-radius: 7px;
+  padding: 7px 10px;
+  font-family: inherit; font-size: 13px; color: $ink;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+
+  &::placeholder { color: $muted; }
+  &:hover { background: $line-soft; }
+  &:focus {
+    background: #fff;
+    border-color: $brand;
+    box-shadow: 0 0 0 3px rgba(1,73,155,0.1);
+  }
+}
+
+// Salvar
+.atrib-save {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: $line-soft; border: 1px solid $line;
+  color: $muted; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.12s;
+  svg { width: 15px; height: 15px; }
+
+  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &:active { transform: scale(0.94); }
+
+  &.edited {
+    background: $brand; color: #fff; border-color: $brand;
+    box-shadow: 0 4px 12px rgba(1,73,155,0.25);
+    &:hover { background: #023775; border-color: #023775; }
+  }
+}
+
+// CDK drag preview/placeholder
+::ng-deep .cdk-drag-preview {
+  background: #fff !important;
+  border: 1px solid $brand !important;
+  border-radius: 8px;
+  box-shadow: 0 12px 32px rgba(1,73,155,0.18) !important;
+}
+::ng-deep .cdk-drag-placeholder {
+  opacity: 0.3;
+  background: $brand-tint;
+}

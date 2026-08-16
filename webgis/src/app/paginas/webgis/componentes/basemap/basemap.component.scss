@@ -1,0 +1,158 @@
+$transition: 0.18s ease;
+$cesan-blue: #01499B;
+
+// ── Wrapper ───────────────────────────────────────────────────────────────────
+.basemap-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+// ── Thumbnail inline na pill bar ─────────────────────────────────────────────
+.basemap-thumb {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1.5px solid rgba(255, 255, 255, 0.9);
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
+  flex-shrink: 0;
+  transition: border-color $transition, box-shadow $transition;
+
+  &:hover {
+    border-color: rgba($cesan-blue, 0.5);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.18);
+  }
+
+  &.active {
+    border-color: rgba($cesan-blue, 0.6);
+    box-shadow: 0 0 0 2px rgba($cesan-blue, 0.2);
+  }
+}
+
+.basemap-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+// ── Painel expandido ──────────────────────────────────────────────────────────
+.expanded-panel {
+  position: absolute;
+  bottom: calc(100% + 14px);
+  left: 0;
+  min-width: 300px;
+  max-width: 480px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.75);
+  background: rgba(255, 255, 255, 0.94);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  box-shadow: 0 8px 28px rgba(15, 23, 42, 0.2);
+  z-index: 1100;
+  animation: panelIn 0.18s ease;
+}
+
+@keyframes panelIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Títulos de seção discretos ────────────────────────────────────────────────
+.section-title {
+  font-size: 9px;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.35);
+  letter-spacing: 0.4px;
+  margin-bottom: 7px;
+}
+
+.section-divider {
+  height: 1px;
+  margin: 8px -2px;
+  background: rgba(0, 0, 0, 0.07);
+}
+
+// ── Grade ─────────────────────────────────────────────────────────────────────
+.basemap-grid {
+  display: grid;
+  gap: 7px;
+}
+
+.geoserver-grid {
+  grid-template-columns: repeat(auto-fill, minmax(62px, 1fr));
+}
+
+.external-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+
+// ── Card ──────────────────────────────────────────────────────────────────────
+.basemap-card {
+  cursor: pointer;
+  border-radius: 9px;
+  overflow: hidden;
+  transition: transform $transition, opacity $transition;
+
+  &:hover {
+    transform: translateY(-1px);
+    opacity: 0.9;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+// ── Wrapper da imagem (posição relativa para o overlay) ───────────────────────
+.basemap-image-wrap {
+  position: relative;
+  width: 100%;
+  border-radius: 9px;
+  overflow: hidden;
+  border: 1.5px solid rgba(0, 0, 0, 0.07);
+  transition: box-shadow $transition;
+
+  .basemap-card.selected & {
+    border-color: transparent;
+    box-shadow:
+      0 0 0 2.5px $cesan-blue,
+      0 0 0 4px rgba($cesan-blue, 0.15);
+  }
+}
+
+// ── Imagem ────────────────────────────────────────────────────────────────────
+.basemap-image {
+  width: 52px;
+  height: 52px;
+  display: block;
+  object-fit: cover;
+}
+
+// ── Label sobreposta via gradient ─────────────────────────────────────────────
+.basemap-label-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 10px 4px 3px;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.55));
+  color: #fff;
+  font-size: 8px;
+  font-weight: 600;
+  text-align: center;
+  line-height: 1.2;
+  letter-spacing: 0.1px;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+
+  .basemap-card.selected & {
+    background: linear-gradient(transparent, rgba($cesan-blue, 0.72));
+  }
+}

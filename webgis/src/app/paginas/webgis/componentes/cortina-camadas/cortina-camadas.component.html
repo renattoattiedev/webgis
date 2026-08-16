@@ -1,0 +1,61 @@
+<!-- ── Header ─────────────────────────────────────────────────────────────── -->
+<div class="panel-header">
+  <div class="panel-title">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+      <rect x="3" y="3" width="18" height="18" rx="2.5" stroke="#01499B" stroke-width="1.8"/>
+      <line x1="12" y1="3" x2="12" y2="21" stroke="#01499B" stroke-width="1.8"/>
+    </svg>
+    <span class="panel-label">Cortina</span>
+  </div>
+
+  <div
+    class="toggle-wrap"
+    [class.toggle-on]="isSwipeEnabled"
+    [class.toggle-disabled]="!layer1 || !layer2"
+    (click)="layer1 && layer2 && toggleSwipe()"
+    [attr.aria-label]="isSwipeEnabled ? 'Desativar cortina' : 'Ativar cortina'"
+    role="switch"
+    [attr.aria-checked]="isSwipeEnabled"
+  >
+    <div class="toggle-track">
+      <div class="toggle-thumb"></div>
+    </div>
+    <span class="toggle-label">{{ isSwipeEnabled ? 'ON' : 'OFF' }}</span>
+  </div>
+</div>
+
+<!-- ── Camada Esquerda ─────────────────────────────────────────────────────── -->
+<div class="select-row">
+  <div class="badge badge-e" aria-label="Camada esquerda">E</div>
+  <div class="select-wrap">
+    <mat-select
+      name="layer1"
+      [(ngModel)]="layer1"
+      (selectionChange)="onSelectionChange($event, 'layer1')"
+      placeholder="Selecionar camada..."
+      panelClass="webgis-select-panel"
+    >
+      <mat-option *ngFor="let layer of availableLayers" [value]="layer.get('id')">
+        {{ layer.get('titulo') }}
+      </mat-option>
+    </mat-select>
+  </div>
+</div>
+
+<!-- ── Camada Direita ──────────────────────────────────────────────────────── -->
+<div class="select-row">
+  <div class="badge badge-d" aria-label="Camada direita">D</div>
+  <div class="select-wrap">
+    <mat-select
+      name="layer2"
+      [(ngModel)]="layer2"
+      (selectionChange)="onSelectionChange($event, 'layer2')"
+      placeholder="Selecionar camada..."
+      panelClass="webgis-select-panel"
+    >
+      <mat-option *ngFor="let layer of availableLayers" [value]="layer.get('id')">
+        {{ layer.get('titulo') }}
+      </mat-option>
+    </mat-select>
+  </div>
+</div>

@@ -1,0 +1,225 @@
+<div #draggableWindow class="cep-window" [class.minimized]="isMinimized" [class.dragging]="isDragging" [ngStyle]="getWindowStyle()">
+
+  <!-- ── Header ──────────────────────────────────────────────────────────── -->
+  <div *ngIf="!isMinimized" class="cep-header"
+       (mousedown)="onHeaderMouseDown($event)">
+    <div class="cep-title">
+      <mat-icon>travel_explore</mat-icon>
+      <span>Consulta Espacial — Pitometria</span>
+    </div>
+    <div class="cep-header-actions">
+      <button class="cep-icon-btn"
+              (mousedown)="$event.stopPropagation()"
+              (click)="$event.stopPropagation(); minimizeWindow()"
+              matTooltip="Minimizar">
+        <mat-icon>remove</mat-icon>
+      </button>
+      <button class="cep-icon-btn cep-icon-btn--close"
+              (mousedown)="$event.stopPropagation()"
+              (click)="$event.stopPropagation(); fechar()"
+              matTooltip="Fechar">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- Beacon (minimizado) -->
+  <div class="win-beacon" *ngIf="isMinimized" (click)="maximizeWindow()">
+    <div class="beacon-icon-wrap"><mat-icon>travel_explore</mat-icon></div>
+    <span class="beacon-label">Consulta Espacial</span>
+  </div>
+
+  <!-- ── Body ────────────────────────────────────────────────────────────── -->
+  <div class="cep-body" *ngIf="!isMinimized">
+
+    <!-- ── Modo de seleção ─────────────────────────────────────────────── -->
+    <div class="cep-section">
+      <div class="cep-section-label">Área de seleção</div>
+      <div class="cep-mode-tabs">
+        <button class="mode-tab" [class.mode-tab--active]="modoSelecao === 'desenho'" (click)="setModo('desenho')">
+          <mat-icon>draw</mat-icon> Desenho livre
+        </button>
+        <button class="mode-tab" [class.mode-tab--active]="modoSelecao === 'camada'" (click)="setModo('camada')">
+          <mat-icon>layers</mat-icon> Por camada
+        </button>
+      </div>
+
+      <!-- Desenho livre -->
+      <div class="cep-draw-btns" *ngIf="modoSelecao === 'desenho'">
+        <button class="draw-btn" (click)="iniciarDesenho('poligono')" [disabled]="carregando"
+                matTooltip="Cliques para formar polígono — duplo-clique para finalizar">
+          <mat-icon>pentagon</mat-icon><span>Polígono</span>
+        </button>
+        <button class="draw-btn" (click)="iniciarDesenho('livre')" [disabled]="carregando"
+                matTooltip="Segure e arraste para desenhar livremente">
+          <mat-icon>gesture</mat-icon><span>Livre</span>
+        </button>
+      </div>
+
+      <!-- Por camada -->
+      <ng-container *ngIf="modoSelecao === 'camada'">
+        <div *ngIf="camadasEspaciais.length === 0" class="cep-empty">
+          Nenhuma camada configurada. Configure no painel admin.
+        </div>
+        <ng-container *ngIf="camadasEspaciais.length > 0">
+          <div class="field-group">
+            <span class="field-label">Camada de polígono</span>
+            <div class="select-wrap">
+              <mat-select [(ngModel)]="camadaEspacialSelecionadaId"
+                          (ngModelChange)="onCamadaChange($event)"
+                          panelClass="webgis-select-panel">
+                <mat-option *ngFor="let c of camadasEspaciais" [value]="c.camadaId">{{ c.label }}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          <!-- Loading valores -->
+          <div class="cep-loading cep-loading--inline" *ngIf="carregandoValores">
+            <mat-spinner diameter="16"></mat-spinner>
+            <span>Carregando valores...</span>
+          </div>
+
+          <!-- Select de valor do campo -->
+          <div class="field-group" *ngIf="!carregandoValores && valoresDisponiveis.length > 0">
+            <span class="field-label">{{ camadaSelecionada?.campoLabel || camadaSelecionada?.campo }}</span>
+            <div class="select-wrap">
+              <mat-select [(ngModel)]="valorCamadaSelecionado"
+                          (ngModelChange)="onValorChange($event)"
+                          panelClass="webgis-select-panel">
+                <mat-option *ngFor="let v of valoresDisponiveis" [value]="v">{{ v }}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          <!-- Loading polígono -->
+          <div class="cep-loading cep-loading--inline" *ngIf="carregandoPoligono">
+            <mat-spinner diameter="16"></mat-spinner>
+            <span>Buscando polígono...</span>
+          </div>
+        </ng-container>
+      </ng-container>
+
+      <!-- Indicador de polígono capturado -->
+      <div class="cep-hint cep-hint--ok" *ngIf="ultimoPoligono">
+        <mat-icon>check_circle</mat-icon> Área selecionada. Clique em Consultar.
+      </div>
+    </div>
+
+    <div class="cep-divider"></div>
+
+    <!-- ── Filtros de data ─────────────────────────────────────────────── -->
+    <div class="cep-section">
+      <div class="cep-date-row">
+        <mat-form-field appearance="outline" class="cep-date-field">
+          <mat-label>Data início</mat-label>
+          <input matInput type="date" [(ngModel)]="dataInicio">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="cep-date-field">
+          <mat-label>Data fim</mat-label>
+          <input matInput type="date" [(ngModel)]="dataFim">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="cep-divider"></div>
+
+    <!-- ── Medição de / Fonte de Dados ────────────────────────────────── -->
+    <div class="cep-two-col">
+      <div class="cep-section">
+        <div class="cep-section-label">Medição de:</div>
+        <mat-checkbox [(ngModel)]="medicaoPressao" class="cep-check">Pressão</mat-checkbox>
+        <mat-checkbox [(ngModel)]="medicaoVazao"   class="cep-check">Vazão</mat-checkbox>
+      </div>
+      <div class="cep-section">
+        <div class="cep-section-label">Fonte de Dados:</div>
+        <mat-checkbox *ngFor="let f of FONTES_DADOS"
+                      [checked]="isFonteSelecionada(f)"
+                      (change)="toggleFonte(f)"
+                      class="cep-check">{{ f }}</mat-checkbox>
+      </div>
+    </div>
+
+    <div class="cep-divider"></div>
+
+    <!-- ── Ocorrência Operacional ──────────────────────────────────────── -->
+    <div class="cep-section">
+      <div class="cep-section-label">Ocorrência Operacional:</div>
+      <mat-checkbox [(ngModel)]="incluirOcorrencia" class="cep-check">
+        Incluir medições com Ocorrência Operacional
+      </mat-checkbox>
+    </div>
+
+    <div class="cep-divider"></div>
+
+    <!-- ── Rampa de cor ──────────────────────────────────────────────── -->
+    <div class="cep-section">
+      <div class="cep-section-label">Mostrar rampa de cor pelo valor da:</div>
+      <div class="select-wrap">
+        <mat-select [(ngModel)]="estatisticaSelecionada" panelClass="webgis-select-panel">
+          <mat-option *ngFor="let e of estatisticas" [value]="e.value">{{ e.label }}</mat-option>
+        </mat-select>
+      </div>
+    </div>
+
+    <div class="cep-divider"></div>
+
+    <!-- ── Cor da legenda ─────────────────────────────────────────────── -->
+    <div class="cep-section">
+      <div class="cep-section-label">Cor do label:</div>
+      <div class="cep-cor-row">
+        <div class="select-wrap">
+          <mat-select [(ngModel)]="corLegendaSelecionada" panelClass="webgis-select-panel">
+            <mat-option value="">Rampa automática</mat-option>
+            <mat-option *ngFor="let c of coresLegenda" [value]="c.value">
+              <span class="cep-cor-option">
+                <span class="cep-cor-dot" [style.background]="c.hex"
+                      [style.border]="c.value === 'branco' ? '1px solid #ccc' : 'none'"></span>
+                {{ c.label }}
+              </span>
+            </mat-option>
+          </mat-select>
+        </div>
+        <div class="cep-cor-preview" [style.background]="corHexSelecionada"
+             [style.border]="corLegendaSelecionada === 'branco' ? '1px solid #ccc' : 'none'">
+        </div>
+      </div>
+    </div>
+
+    <div class="cep-divider" *ngIf="legendaItens.length"></div>
+
+    <!-- ── Legenda da rampa ───────────────────────────────────────────── -->
+    <div class="cep-section" *ngIf="legendaItens.length">
+      <div class="cep-section-label">Legenda da rampa de cor:</div>
+      <div class="cep-legenda-rampa">
+        <div *ngFor="let item of legendaItens" class="cep-legenda-item">
+          <span class="cep-legenda-cor" [style.background]="item.cor"></span>
+          <span class="cep-legenda-label">{{ item.label }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── Loading ─────────────────────────────────────────────────────── -->
+    <div class="cep-loading" *ngIf="carregando">
+      <mat-spinner diameter="22"></mat-spinner>
+      <span>Consultando...</span>
+    </div>
+
+    <div class="cep-divider"></div>
+
+    <!-- ── Ações ───────────────────────────────────────────────────────── -->
+    <div class="cep-footer">
+      <button class="cep-clear-btn" (click)="limpar()" [disabled]="carregando">
+        <mat-icon>clear</mat-icon> Limpar
+      </button>
+      <button class="cep-results-btn" (click)="mostrarResultados()"
+              [disabled]="!temResultados || carregando" matTooltip="Abre os dados na tabela de atributos">
+        <mat-icon>table_chart</mat-icon> Mostrar Resultados
+      </button>
+      <button class="cep-consultar-btn" (click)="consultar()"
+              [disabled]="!podeConsultar" matTooltip="Marca os pontos de pitometria na área selecionada">
+        <mat-icon>search</mat-icon> Consultar
+      </button>
+    </div>
+
+  </div>
+</div>

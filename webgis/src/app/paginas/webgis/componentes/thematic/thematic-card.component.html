@@ -1,0 +1,123 @@
+<div
+  #draggableWindow
+  class="thematic-window"
+  [class.minimized]="isMinimized"
+  [class.dragging]="isDragging"
+  [ngStyle]="getWindowStyle()"
+>
+  <div
+    *ngIf="!isMinimized"
+    class="thematic-header"
+    (mousedown)="onHeaderMouseDown($event)"
+  >
+    <div class="thematic-title">
+      <mat-icon>gradient</mat-icon>
+      <span>{{ spec.label }}</span>
+    </div>
+    <div class="thematic-header-actions">
+      <button
+        class="thematic-icon-btn"
+        (mousedown)="$event.stopPropagation()"
+        (click)="$event.stopPropagation(); minimizeWindow()"
+        matTooltip="Minimizar"
+      >
+        <mat-icon>remove</mat-icon>
+      </button>
+      <button
+        class="thematic-icon-btn thematic-icon-btn--close"
+        (mousedown)="$event.stopPropagation()"
+        (click)="$event.stopPropagation(); fechar()"
+        matTooltip="Fechar"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="win-beacon" *ngIf="isMinimized" (click)="maximizeWindow()">
+    <div class="beacon-icon-wrap"><mat-icon>gradient</mat-icon></div>
+    <span class="beacon-label">{{ spec.label }}</span>
+  </div>
+
+  <div class="thematic-body" *ngIf="!isMinimized">
+    <div class="thematic-section">
+      <div class="thematic-section-label">Camadas</div>
+      <p class="thematic-hint">
+        Cada setor usa faixas próprias de pressão média, pintadas no cliente.
+      </p>
+
+      <div class="thematic-loading" *ngIf="carregandoLista">
+        <mat-spinner diameter="18"></mat-spinner>
+        <span>Buscando camadas...</span>
+      </div>
+
+      <div class="thematic-empty" *ngIf="!carregandoLista && layers.length === 0">
+        Nenhuma camada encontrada neste grupo.
+      </div>
+
+      <div class="thematic-layer-list" *ngIf="layers.length">
+        <button
+          type="button"
+          class="thematic-layer-row"
+          *ngFor="let item of layers"
+          [class.on]="item.visible"
+          [disabled]="item.loading"
+          (click)="toggleLayer(item)"
+        >
+          <span class="thematic-layer-check">
+            <mat-icon>{{ item.visible ? 'check_box' : 'check_box_outline_blank' }}</mat-icon>
+          </span>
+          <span class="thematic-layer-meta">
+            <span class="thematic-layer-name">{{ item.camada.tituloCamada }}</span>
+            <span class="thematic-layer-sub" *ngIf="item.featureCount != null">
+              {{ item.featureCount }} setor(es)
+            </span>
+            <span class="thematic-layer-sub error" *ngIf="item.error">{{ item.error }}</span>
+          </span>
+          <mat-spinner *ngIf="item.loading" diameter="16"></mat-spinner>
+        </button>
+      </div>
+    </div>
+
+    <div class="thematic-actions" *ngIf="layers.length">
+      <button type="button" class="thematic-text-btn" (click)="carregarTodas()">
+        Exibir todas
+      </button>
+      <button
+        type="button"
+        class="thematic-text-btn"
+        [disabled]="!algumaVisivel"
+        (click)="limparTodas()"
+      >
+        Ocultar
+      </button>
+      <button
+        type="button"
+        class="thematic-text-btn"
+        [disabled]="!algumaVisivel"
+        (click)="enquadrar()"
+      >
+        Enquadrar
+      </button>
+    </div>
+
+    <div class="thematic-divider" *ngIf="algumaVisivel"></div>
+
+    <div class="thematic-section thematic-legends" *ngIf="algumaVisivel">
+      <app-thematic-legend
+        *ngFor="let model of legendasVisiveis"
+        [model]="model"
+      ></app-thematic-legend>
+    </div>
+  </div>
+</div>
+
+<div
+  #hoverTooltip
+  class="thematic-hover"
+  [class.visible]="!!hoverInfo"
+>
+  <div class="thematic-hover-title" *ngIf="hoverInfo">{{ hoverInfo.titulo }}</div>
+  <div class="thematic-hover-name" *ngIf="hoverInfo?.nome">{{ hoverInfo?.nome }}</div>
+  <div class="thematic-hover-value" *ngIf="hoverInfo">{{ hoverInfo.valorLabel }}</div>
+</div>

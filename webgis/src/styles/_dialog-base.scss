@@ -1,0 +1,443 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// IDE CESAN — Dialog base styles (variante C · Side accent)
+// Adicione ao seu styles.scss global:
+//
+//   @use './styles/dialog-base';
+//
+// Características:
+//   • Barra vertical azul fina à esquerda do dialog (assinatura sutil da marca)
+//   • Header sem gradient, fundo branco, ícone discreto + título + close
+//   • Inputs com floating label (mat-form-field appearance="outline")
+//   • Footer sem fundo cinza · botões compactos
+// ─────────────────────────────────────────────────────────────────────────────
+
+// ── Tokens ──────────────────────────────────────────────────────────────────
+$idedlg-brand:        #01499B !default;
+$idedlg-brand-mid:    #023775 !default;
+$idedlg-brand-deep:   #012656 !default;
+$idedlg-brand-tint:   #eef4fb !default;
+$idedlg-brand-tint-2: #dbe7f6 !default;
+$idedlg-ink:          #0b2545 !default;
+$idedlg-ink-soft:     #5b6b85 !default;
+$idedlg-muted:        #7b8aa3 !default;
+$idedlg-line:         #e6ecf5 !default;
+$idedlg-line-soft:    #f3f6fb !default;
+$idedlg-accent:       #5fe3a1 !default;
+$idedlg-success:      #047857 !default;
+$idedlg-success-bg:   #ecfdf5 !default;
+$idedlg-warn:         #b45309 !default;
+$idedlg-warn-bg:      #fffbeb !default;
+$idedlg-warn-border:  #fde68a !default;
+$idedlg-danger:       #dc2626 !default;
+$idedlg-danger-bg:    #fef2f2 !default;
+$idedlg-danger-border:#fecaca !default;
+$idedlg-gold:         #eab308 !default;
+
+$idedlg-font-ui:    'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif !default;
+$idedlg-font-serif: 'Instrument Serif', Georgia, serif !default;
+
+// ── Container Material ──────────────────────────────────────────────────────
+.mat-mdc-dialog-container:has(.idedlg) .mdc-dialog__surface {
+  border-radius: 14px !important;
+  overflow: hidden !important;
+  border: 1px solid $idedlg-line;
+  box-shadow:
+    0 24px 60px -20px rgba(11,37,69,0.25),
+    0 4px 12px rgba(11,37,69,0.06) !important;
+  background: #fff;
+}
+
+.mat-mdc-dialog-container:has(.idedlg) .mat-mdc-dialog-content {
+  padding: 0 !important;
+  max-height: 72vh;
+}
+
+.mat-mdc-dialog-container:has(.idedlg) .mat-mdc-dialog-actions {
+  padding: 0 !important;
+  min-height: 0 !important;
+}
+
+// ── Wrapper principal — com barra azul lateral ──────────────────────────────
+.idedlg {
+  font-family: $idedlg-font-ui;
+  color: $idedlg-ink;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #fff;
+  position: relative;
+  padding-left: 14px;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0; top: 14px; bottom: 14px;
+    width: 3px;
+    background: $idedlg-brand;
+    border-radius: 100px;
+    transition: background 0.2s;
+  }
+}
+
+// Variantes tonais — só mudam a cor da barra lateral
+.idedlg--danger::before  { background: $idedlg-danger; }
+.idedlg--warn::before    { background: #d97706; }
+.idedlg--success::before { background: $idedlg-success; }
+
+// ── Header ──────────────────────────────────────────────────────────────────
+.idedlg-head {
+  display: flex; align-items: flex-start; justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px 6px;
+}
+
+.idedlg-head-left {
+  display: flex; align-items: flex-start; gap: 12px;
+  min-width: 0; flex: 1;
+}
+
+.idedlg-head-icon {
+  width: 30px; height: 30px; border-radius: 8px;
+  background: $idedlg-brand-tint; color: $idedlg-brand;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0; margin-top: 1px;
+  svg { width: 15px; height: 15px; }
+
+  .idedlg--danger  & { background: $idedlg-danger-bg;  color: $idedlg-danger; }
+  .idedlg--warn    & { background: $idedlg-warn-bg;    color: #d97706; }
+  .idedlg--success & { background: $idedlg-success-bg; color: $idedlg-success; }
+}
+
+.idedlg-head-text {
+  display: flex; flex-direction: column; min-width: 0; gap: 2px;
+}
+
+.idedlg-title {
+  margin: 0;
+  font-family: $idedlg-font-ui;
+  font-size: 15px; font-weight: 600; letter-spacing: -0.2px;
+  color: $idedlg-ink;
+  line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+
+  em {
+    font-family: $idedlg-font-serif;
+    font-style: italic; font-weight: 400; color: $idedlg-ink-soft;
+  }
+}
+
+.idedlg-sub {
+  margin: 0;
+  font-size: 12px;
+  color: $idedlg-muted;
+  line-height: 1.4;
+}
+
+.idedlg-close {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: transparent;
+  color: $idedlg-muted;
+  border: 1px solid transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s, transform 0.12s;
+
+  svg { width: 14px; height: 14px; }
+  &:hover {
+    background: $idedlg-line-soft; color: $idedlg-ink;
+    border-color: $idedlg-line;
+  }
+  &:active { transform: scale(0.94); }
+}
+
+// ── Body ────────────────────────────────────────────────────────────────────
+.idedlg-body {
+  padding: 12px 18px 8px;
+  background: #fff;
+  overflow-y: auto;
+  max-height: calc(72vh - 50px - 56px);
+
+  > p {
+    margin: 4px 0 12px;
+    color: $idedlg-ink-soft;
+    font-size: 13px;
+    line-height: 1.55;
+  }
+  > p:last-child { margin-bottom: 4px; }
+}
+
+// Grid 2 colunas
+.idedlg-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+  align-items: start;
+
+  @media (max-width: 760px) {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
+
+.idedlg-col {
+  display: flex; flex-direction: column;
+  min-width: 0;
+}
+
+.idedlg-section-title {
+  font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px;
+  text-transform: uppercase; color: $idedlg-muted;
+  margin: 0 0 8px;
+
+  &:not(:first-child) { margin-top: 14px; }
+}
+
+// ── Form fields — outline com floating label ────────────────────────────────
+.idedlg {
+  .mat-mdc-form-field {
+    width: 100%;
+    font-family: $idedlg-font-ui;
+    display: block;
+    margin-bottom: 2px;
+
+    // Compactar tudo
+    .mat-mdc-text-field-wrapper {
+      padding: 0 12px;
+      background: transparent;
+    }
+
+    .mat-mdc-form-field-infix {
+      min-height: 0;
+      padding-top: 14px !important;
+      padding-bottom: 10px !important;
+    }
+
+    .mat-mdc-form-field-flex { align-items: center; }
+
+    .mat-mdc-form-field-subscript-wrapper {
+      padding: 0 12px;
+    }
+  }
+
+  // Force outline appearance (mais clean)
+  .mdc-text-field--outlined {
+    --mdc-outlined-text-field-outline-color: #{$idedlg-line};
+    --mdc-outlined-text-field-hover-outline-color: #{$idedlg-brand-tint-2};
+    --mdc-outlined-text-field-focus-outline-color: #{$idedlg-brand};
+    --mdc-outlined-text-field-disabled-outline-color: #{$idedlg-line};
+    --mdc-outlined-text-field-input-text-color: #{$idedlg-ink};
+    --mdc-outlined-text-field-label-text-color: #{$idedlg-muted};
+    --mdc-outlined-text-field-focus-label-text-color: #{$idedlg-brand};
+    --mdc-outlined-text-field-hover-label-text-color: #{$idedlg-ink-soft};
+    --mdc-outlined-text-field-input-text-placeholder-color: #{$idedlg-muted};
+    --mdc-outlined-text-field-outline-width: 1px;
+    --mdc-outlined-text-field-focus-outline-width: 1.5px;
+    --mdc-outlined-text-field-label-text-size: 13px;
+    --mdc-outlined-text-field-container-shape: 9px;
+  }
+
+  // Variante "fill" cai pra outline-like também (compatibilidade)
+  .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: transparent !important;
+    border: 1px solid $idedlg-line;
+    border-radius: 9px;
+    overflow: hidden;
+
+    &::before { display: none; }
+    .mdc-line-ripple { display: none; }
+  }
+  .mat-mdc-form-field-focus-overlay { background: transparent !important; }
+
+  // Label flutuante mais clean
+  .mdc-floating-label {
+    font-family: $idedlg-font-ui;
+    font-weight: 500;
+  }
+
+  .mdc-floating-label--float-above {
+    font-size: 11px !important;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+  }
+
+  // Mat-error
+  .mat-mdc-form-field-error {
+    color: $idedlg-danger;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+
+  // Mat-hint
+  .mat-mdc-form-field-hint {
+    color: $idedlg-muted;
+    font-size: 11.5px;
+  }
+
+  // Select arrow
+  .mat-mdc-select-arrow { color: $idedlg-muted; }
+  .mat-mdc-select-value { color: $idedlg-ink; font-size: 13px; }
+
+  // Suffix
+  .mat-mdc-form-field-icon-suffix {
+    color: $idedlg-muted;
+    padding-right: 4px;
+  }
+
+  // Textarea
+  textarea.mat-mdc-input-element {
+    line-height: 1.5;
+    font-size: 13px;
+  }
+
+  // Checkbox / Radio
+  --mdc-checkbox-selected-icon-color: #{$idedlg-brand};
+  --mdc-checkbox-selected-focus-icon-color: #{$idedlg-brand};
+  --mdc-checkbox-selected-hover-icon-color: #{$idedlg-brand};
+  --mdc-checkbox-selected-pressed-icon-color: #{$idedlg-brand};
+  --mdc-radio-selected-icon-color: #{$idedlg-brand};
+  --mdc-radio-selected-focus-icon-color: #{$idedlg-brand};
+  --mdc-radio-selected-hover-icon-color: #{$idedlg-brand};
+  --mdc-radio-selected-pressed-icon-color: #{$idedlg-brand};
+
+  // Progress spinner
+  .mat-mdc-progress-spinner {
+    --mdc-circular-progress-active-indicator-color: #{$idedlg-brand};
+  }
+}
+
+// Override global para painel do mat-select (renderizado fora do componente)
+.mat-mdc-option {
+  font-family: $idedlg-font-ui;
+  font-size: 13px;
+
+  &.mat-mdc-option-active,
+  &.mdc-list-item--selected:not(.mdc-list-item--disabled) {
+    background: $idedlg-brand-tint !important;
+    color: $idedlg-brand !important;
+    .mdc-list-item__primary-text { color: $idedlg-brand !important; }
+  }
+
+  &:hover:not(.mdc-list-item--disabled) {
+    background: $idedlg-line-soft !important;
+  }
+}
+
+// ── Actions / Footer ────────────────────────────────────────────────────────
+.idedlg-actions {
+  display: flex; justify-content: flex-end; align-items: center;
+  gap: 6px;
+  padding: 8px 14px 14px;
+  background: transparent;
+}
+
+.idedlg-actions-spread { justify-content: space-between; }
+
+.idedlg-btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  font-family: $idedlg-font-ui;
+  font-size: 13px; font-weight: 600;
+  padding: 8px 14px;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.12s;
+
+  svg { width: 13px; height: 13px; }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.idedlg-btn-primary {
+  background: $idedlg-brand; color: #fff;
+  &:hover:not(:disabled) { background: $idedlg-brand-mid; }
+  &:active:not(:disabled) { transform: scale(0.98); }
+}
+
+.idedlg-btn-ghost {
+  background: transparent; color: $idedlg-ink-soft;
+  &:hover:not(:disabled) { background: $idedlg-line-soft; color: $idedlg-ink; }
+}
+
+.idedlg-btn-danger {
+  background: $idedlg-danger; color: #fff;
+  &:hover:not(:disabled) { background: #b91c1c; }
+}
+
+.idedlg-btn-success {
+  background: $idedlg-success; color: #fff;
+  &:hover:not(:disabled) { background: #065f46; }
+}
+
+// ── Notas / Alerts ──────────────────────────────────────────────────────────
+.idedlg-note {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid $idedlg-line;
+  background: $idedlg-line-soft;
+  margin: 0 0 10px;
+
+  &.tone-warn   { background: $idedlg-warn-bg;   border-color: $idedlg-warn-border; color: $idedlg-warn; }
+  &.tone-danger { background: $idedlg-danger-bg; border-color: $idedlg-danger-border; color: $idedlg-danger; }
+  &.tone-info   { background: $idedlg-brand-tint; border-color: $idedlg-brand-tint-2; color: $idedlg-brand; }
+
+  .idedlg-note-icon {
+    width: 20px; height: 20px; flex-shrink: 0;
+    display: inline-flex; align-items: center; justify-content: center;
+    svg { width: 16px; height: 16px; }
+  }
+
+  .idedlg-note-body {
+    flex: 1; min-width: 0;
+    font-size: 12.5px;
+    line-height: 1.5;
+
+    strong {
+      display: block;
+      font-size: 12.5px; font-weight: 600;
+      margin-bottom: 2px;
+    }
+    p { margin: 2px 0 0; font-size: 12px; opacity: 0.9; }
+    ul { margin: 6px 0 0; padding-left: 16px; }
+    li { font-size: 12px; margin-bottom: 4px; }
+    code { font-family: ui-monospace, monospace; font-size: 11px; }
+  }
+}
+
+// ── Empty state ─────────────────────────────────────────────────────────────
+.idedlg-empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 24px 18px;
+  text-align: center;
+  color: $idedlg-muted;
+  font-size: 12.5px;
+
+  .idedlg-empty-icon {
+    width: 42px; height: 42px; border-radius: 12px;
+    background: $idedlg-brand-tint; color: $idedlg-brand;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+    svg { width: 22px; height: 22px; }
+  }
+}
+
+// ── Loading row ─────────────────────────────────────────────────────────────
+.idedlg-loading {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 12.5px; color: $idedlg-ink-soft;
+}
+
+// ── Hint badge inline ───────────────────────────────────────────────────────
+.idedlg-hint {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11.5px; color: $idedlg-muted;
+  padding: 3px 9px;
+  background: $idedlg-line-soft;
+  border-radius: 100px;
+  border: 1px solid $idedlg-line;
+
+  svg { width: 12px; height: 12px; }
+}

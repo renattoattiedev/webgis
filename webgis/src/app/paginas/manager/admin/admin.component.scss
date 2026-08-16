@@ -1,0 +1,55 @@
+// ─── Admin shell ─────────────────────────────────────────────────────────
+$brand:#01499B; $brand-mid:#023775; $brand-tint:#eef4fb; $brand-tint-2:#dbe7f6;
+$ink:#0b2545; $ink-soft:#5b6b85; $muted:#7b8aa3; $line:#e6ecf5; $line-soft:#f0f4f9;
+$bg:#f6f8fc;
+$font-ui:'Geist',system-ui,sans-serif;
+$font-serif:'Instrument Serif',Georgia,serif;
+
+:host { display:block; background:$bg; font-family:$font-ui; color:$ink; }
+* { box-sizing:border-box; }
+
+.ad-page {
+  display:grid; grid-template-columns:260px 1fr;
+  gap:20px; padding:20px 32px 40px;
+  min-height:calc(100vh - 60px - 53px);
+}
+
+.ad-side {
+  background:#fff; border:1px solid $line; border-radius:14px;
+  padding:18px 14px; align-self:flex-start;
+  position:sticky; top:134px;
+  box-shadow:0 2px 8px rgba(11,37,69,0.04);
+}
+.ad-side-head { padding:0 6px 12px; }
+.ad-side-title {
+  font-size:11px; font-weight:700; letter-spacing:1.8px;
+  text-transform:uppercase; color:$muted;
+}
+
+.ad-nav { display:flex; flex-direction:column; gap:2px; }
+.ad-nav-item {
+  display:flex; align-items:center; gap:10px;
+  padding:9px 12px; border-radius:8px;
+  background:transparent; border:1px solid transparent;
+  font-family:inherit; font-size:13.5px; font-weight:500; color:$ink-soft;
+  cursor:pointer; text-align:left;
+  transition:background 0.12s, color 0.12s, border-color 0.12s;
+  svg { width:15px; height:15px; flex-shrink:0; color:$muted; }
+  &:hover { background:$brand-tint; color:$ink; svg{color:$brand;} }
+  &.active {
+    background:$brand-tint; color:$brand; font-weight:600;
+    border-color:$brand-tint-2;
+    svg { color:$brand; }
+  }
+}
+
+.ad-main {
+  background:#fff; border:1px solid $line; border-radius:16px;
+  box-shadow:0 4px 18px rgba(11,37,69,0.04);
+  padding:24px; min-width:0; align-self:flex-start;
+}
+
+@media (max-width:1024px) {
+  .ad-page { grid-template-columns:1fr; }
+  .ad-side { position:static; }
+}

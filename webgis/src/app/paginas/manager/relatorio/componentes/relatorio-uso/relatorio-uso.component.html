@@ -1,0 +1,100 @@
+<div class="ru-wrapper">
+
+  <!-- Header + filtros -->
+  <div class="ru-header">
+    <span class="ru-title">Uso do Sistema</span>
+    <div class="ru-filters">
+      <button class="ru-preset" [class.active]="preset === '7'"  (click)="setPreset('7')">7d</button>
+      <button class="ru-preset" [class.active]="preset === '30'" (click)="setPreset('30')">30d</button>
+      <button class="ru-preset" [class.active]="preset === '90'" (click)="setPreset('90')">90d</button>
+      <input type="date" [(ngModel)]="dataInicio" (change)="onDateChange()" class="ru-date">
+      <input type="date" [(ngModel)]="dataFim"    (change)="onDateChange()" class="ru-date">
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="ru-loading">Carregando...</div>
+
+  <ng-container *ngIf="!loading && data">
+
+    <!-- KPI Cards -->
+    <div class="ru-kpis">
+      <div class="ru-kpi ru-kpi--blue">
+        <div class="ru-kpi-label">Total de acessos</div>
+        <div class="ru-kpi-value">{{ data.kpis.totalAcessos | number }}</div>
+        <div class="ru-kpi-sub" [class.up]="variacao > 0" [class.down]="variacao < 0">
+          <ng-container *ngIf="variacao !== 0">
+            {{ variacao > 0 ? '▲' : '▼' }} {{ variacao | number }}% vs período anterior
+          </ng-container>
+          <ng-container *ngIf="variacao === 0">— sem dados anteriores</ng-container>
+        </div>
+      </div>
+      <div class="ru-kpi ru-kpi--green">
+        <div class="ru-kpi-label">Camadas acessadas</div>
+        <div class="ru-kpi-value">{{ data.kpis.camadasAcessadas }}</div>
+        <div class="ru-kpi-sub">de {{ data.kpis.totalCamadasAtivas }} camadas ativas</div>
+      </div>
+      <div class="ru-kpi ru-kpi--amber">
+        <div class="ru-kpi-label">Mapas visualizados</div>
+        <div class="ru-kpi-value">{{ data.kpis.mapasVisualizados }}</div>
+        <div class="ru-kpi-sub">de {{ data.kpis.totalMapas }} mapas</div>
+      </div>
+      <div class="ru-kpi ru-kpi--purple">
+        <div class="ru-kpi-label">Total de favoritos</div>
+        <div class="ru-kpi-value">{{ data.kpis.totalFavoritos }}</div>
+        <div class="ru-kpi-sub">camadas + mapas</div>
+      </div>
+    </div>
+
+    <!-- Gráficos -->
+    <div class="ru-charts">
+      <div class="ru-chart-card ru-chart-card--wide">
+        <div class="ru-chart-title">Acessos por dia</div>
+        <div #barChartEl></div>
+      </div>
+      <div class="ru-chart-card">
+        <div class="ru-chart-title">Top {{ data.topCamadas.length }} Camadas</div>
+        <div class="ru-ranking">
+          <div class="ru-ranking-item" *ngFor="let c of data.topCamadas; let i = index">
+            <span class="ru-rank-num">{{ i + 1 }}</span>
+            <span class="ru-rank-nome" [title]="c.nome">{{ c.nome }}</span>
+            <span class="ru-rank-val">{{ c.acessos }}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="ru-table-card">
+      <div class="ru-table-title">Detalhamento de acessos por camada</div>
+      <table class="ru-table">
+        <thead>
+          <tr>
+            <th (click)="sort('nome')">Camada <span class="sort-icon">{{ sortCol === 'nome' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</span></th>
+            <th (click)="sort('grupo')">Grupo <span class="sort-icon">{{ sortCol === 'grupo' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</span></th>
+            <th (click)="sort('tema')">Tema <span class="sort-icon">{{ sortCol === 'tema' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</span></th>
+            <th class="num" (click)="sort('acessos')">Acessos <span class="sort-icon">{{ sortCol === 'acessos' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</span></th>
+            <th class="num" (click)="sort('favoritos')">Favoritos <span class="sort-icon">{{ sortCol === 'favoritos' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of tabelaPaginada">
+            <td>{{ row.nome }}</td>
+            <td class="muted">{{ row.grupo }}</td>
+            <td class="muted">{{ row.tema }}</td>
+            <td class="num blue">{{ row.acessos }}</td>
+            <td class="num purple">{{ row.favoritos }}</td>
+          </tr>
+          <tr *ngIf="tabelaPaginada.length === 0">
+            <td colspan="5" class="empty">Nenhuma camada acessada no período</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="ru-pagination" *ngIf="totalPages > 1">
+        <button (click)="page = page - 1" [disabled]="page === 1">‹</button>
+        <span>{{ page }} / {{ totalPages }}</span>
+        <button (click)="page = page + 1" [disabled]="page === totalPages">›</button>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

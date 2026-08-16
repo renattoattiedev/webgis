@@ -1,0 +1,140 @@
+<!-- ── Header ─────────────────────────────────────────────────────────────── -->
+<div class="panel-header">
+  <div class="panel-title">
+    <mat-icon>layers</mat-icon>
+    <span>Camadas Ativas</span>
+  </div>
+  <div class="header-actions">
+    <button class="icon-btn" (click)="habilitarTodasCamadas()" title="Habilitar todas">
+      <mat-icon>check_circle</mat-icon>
+    </button>
+    <button class="icon-btn icon-btn--danger" (click)="desabilitarTodasCamadas()" title="Desabilitar todas">
+      <mat-icon>cancel</mat-icon>
+    </button>
+  </div>
+</div>
+
+<!-- ── Pesquisa ───────────────────────────────────────────────────────────── -->
+<div class="search-section">
+  <div class="search-wrap">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input class="search-input" type="text" placeholder="Pesquisar camadas ativas..."
+           [(ngModel)]="pesquisaCamadasAplicadas" (input)="filtrarCamadasAplicadas()"/>
+  </div>
+</div>
+
+<!-- ── Lista drag-and-drop ────────────────────────────────────────────────── -->
+<div class="body-container">
+  <div cdkDropList class="drop-list" (cdkDropListDropped)="drop($event)"
+       *ngIf="conteudoService.dadosAdicionais.length > 0">
+
+    <div class="layer-row" *ngFor="let conteudoAtivo of conteudoService.dadosAdicionais" cdkDrag>
+      <div class="drag-placeholder" *cdkDragPlaceholder></div>
+
+      <!-- Drag handle -->
+      <div class="drag-handle" cdkDragHandle>
+        <mat-icon>drag_indicator</mat-icon>
+      </div>
+
+      <!-- Thumbnail -->
+      <div class="layer-thumb"
+           [attr.data-thumbnail-id]="'content-' + conteudoAtivo.id"
+           #thumbnailContainer
+           (load)="observeThumbnail(thumbnailContainer, getItemId(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo))">
+        <img *ngIf="getThumbnail(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo)"
+             class="thumb-img" [src]="getThumbnail(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo)" alt=""/>
+        <div *ngIf="!getThumbnail(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo) && isThumbnailLoading(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo)"
+             class="thumb-placeholder loading">
+          <mat-icon class="spin">hourglass_empty</mat-icon>
+        </div>
+        <div *ngIf="!getThumbnail(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo) && hasThumbnailError(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo)"
+             class="thumb-placeholder error">
+          <mat-icon>error_outline</mat-icon>
+          <button class="retry-btn" (click)="reloadThumbnail(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo)" title="Tentar novamente">
+            <mat-icon>refresh</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="!getThumbnail(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo) && !isThumbnailLoading(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo) && !hasThumbnailError(conteudoAtivo.nomeConteudo, conteudoAtivo.boundingBox, conteudoAtivo.fonteDadosCamadaRaster, conteudoAtivo.tipoConteudo, conteudoAtivo)"
+             class="thumb-placeholder">
+          <mat-icon>{{ conteudoAtivo.tipoConteudo === 'camada' ? 'layers' : conteudoAtivo.tipoConteudo === 'raster' ? 'image' : 'map' }}</mat-icon>
+        </div>
+      </div>
+
+      <!-- Nome + toggle -->
+      <div class="layer-info">
+        <mat-slide-toggle [checked]="conteudoAtivo.ativo"
+          (change)="toggleCamadaVisibilidade(conteudoAtivo.ativo, conteudoAtivo.nomeConteudo)">
+          {{ conteudoAtivo.tituloConteudo }}
+        </mat-slide-toggle>
+      </div>
+
+      <!-- Menu de contexto -->
+      <button class="menu-btn" [matMenuTriggerFor]="rowMenu" aria-label="Opções">
+        <mat-icon>more_vert</mat-icon>
+      </button>
+
+      <mat-menu #rowMenu="matMenu" panelClass="layer-context-menu">
+
+        <button mat-menu-item class="ctx-item" (click)="openPerfilPanel(conteudoAtivo.nomeConteudo)">
+          <span class="ctx-icon"><mat-icon>view_comfy</mat-icon></span>
+          <span class="ctx-label">Perfil / Legenda</span>
+        </button>
+
+        <button mat-menu-item class="ctx-item" (click)="getExtent(conteudoAtivo)">
+          <span class="ctx-icon"><mat-icon>zoom_in</mat-icon></span>
+          <span class="ctx-label">Zoom para</span>
+        </button>
+
+        <!-- Opacidade -->
+        <div class="ctx-opacity-row" (click)="$event.stopPropagation()">
+          <span class="ctx-icon"><mat-icon>opacity</mat-icon></span>
+          <span class="ctx-opacity-label">Opacidade</span>
+          <app-layer-opacity [camada]="getLayerOpacity(conteudoAtivo.nomeConteudo, conteudoAtivo.tipoConteudo)"></app-layer-opacity>
+        </div>
+
+        <div class="ctx-divider"></div>
+
+        <ng-container *ngIf="conteudoAtivo.tipoConteudo === 'camada' || conteudoAtivo.tipoConteudo === 'mapa'">
+          <button mat-menu-item class="ctx-item" [class.ctx-item--active]="!conteudoAtivo.popup"
+                  (click)="mostrarPopupCamada(conteudoAtivo.nomeConteudo)">
+            <span class="ctx-icon"><mat-icon>{{ conteudoAtivo.popup ? 'chat_bubble' : 'chat_bubble_outline' }}</mat-icon></span>
+            <span class="ctx-label">{{ conteudoAtivo.popup ? 'Desabilitar pop-up' : 'Habilitar pop-up' }}</span>
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="conteudoAtivo.tipoConteudo === 'camada' || conteudoAtivo.tipoConteudo === 'mapa'">
+          <button mat-menu-item class="ctx-item" [class.ctx-item--active]="conteudoAtivo.tableAttribute"
+                  (click)="mostrarTabelaAtributos(conteudoAtivo)">
+            <span class="ctx-icon"><mat-icon>table_chart</mat-icon></span>
+            <span class="ctx-label">Tabela de Atributos</span>
+          </button>
+        </ng-container>
+
+        <button mat-menu-item class="ctx-item" (click)="moveCamadaParaCima(conteudoAtivo.nomeConteudo)">
+          <span class="ctx-icon"><mat-icon>arrow_upward</mat-icon></span>
+          <span class="ctx-label">Mover para cima</span>
+        </button>
+        <button mat-menu-item class="ctx-item" (click)="moveCamadaParaBaixo(conteudoAtivo.nomeConteudo)">
+          <span class="ctx-icon"><mat-icon>arrow_downward</mat-icon></span>
+          <span class="ctx-label">Mover para baixo</span>
+        </button>
+
+        <div class="ctx-divider"></div>
+
+        <button mat-menu-item class="ctx-item ctx-item--danger"
+                (click)="removerCamadaDoArray(conteudoAtivo.nomeConteudo, conteudoAtivo)">
+          <span class="ctx-icon"><mat-icon>delete</mat-icon></span>
+          <span class="ctx-label">Remover</span>
+        </button>
+
+      </mat-menu>
+    </div>
+
+  </div>
+
+  <!-- Empty state -->
+  <div class="empty-state" *ngIf="conteudoService.dadosAdicionais.length === 0">
+    <mat-icon>layers_clear</mat-icon>
+    <span>Nenhuma camada ativa</span>
+  </div>
+</div>

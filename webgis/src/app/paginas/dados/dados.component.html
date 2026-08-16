@@ -1,0 +1,358 @@
+<!-- ── Hero compacto ──────────────────────────────────────────────────────── -->
+<section class="page-hero">
+  <nav class="breadcrumb">
+    <a routerLink="/">Início</a>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <polyline points="9 18 15 12 9 6"/>
+    </svg>
+    <span class="breadcrumb-current">Dados</span>
+  </nav>
+
+  <div class="page-title-row">
+    <div>
+      <h1 class="page-title">Dados <em>geoespaciais</em></h1>
+      <p class="page-sub">
+        Catálogo de conjuntos de dados publicados pela CESAN. Filtre por temática
+        ou formato, baixe nos formatos disponíveis e consulte os metadados.
+      </p>
+    </div>
+    <div class="hero-meta">
+      <div class="hero-meta-item" *ngFor="let i of indicadores">
+        <div class="n">{{ i.valor }}</div>
+        <div class="l">{{ i.label }}</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="search-wrap">
+    <form class="search" (ngSubmit)="buscar()">
+      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/>
+        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <input type="search"
+             [(ngModel)]="termoBusca"
+             name="termoBusca"
+             placeholder="Qual dado ou informação você procura?"/>
+      <button class="search-btn" type="submit">
+        Buscar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </button>
+    </form>
+  </div>
+</section>
+
+<!-- ── Loading / Erro ─────────────────────────────────────────────────────── -->
+<div class="state-msg" *ngIf="carregando">
+  <div class="spinner"></div>
+  <span>Carregando catálogo…</span>
+</div>
+
+<div class="state-msg state-msg--erro" *ngIf="erro && !carregando">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+    <circle cx="12" cy="12" r="10"/>
+    <line x1="12" y1="8" x2="12" y2="12"/>
+    <line x1="12" y1="16" x2="12.01" y2="16"/>
+  </svg>
+  <span>Não foi possível carregar o catálogo. Tente novamente.</span>
+</div>
+
+<!-- ── Layout principal ───────────────────────────────────────────────────── -->
+<div class="layout" *ngIf="!carregando && !erro">
+
+  <!-- Sidebar -->
+  <aside class="side">
+    <div class="side-section">
+      <a class="side-link" (click)="limparFiltros()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="19" y1="12" x2="5" y2="12"/>
+          <polyline points="12 19 5 12 12 5"/>
+        </svg>
+        Ver tudo
+        <span class="active-badge" *ngIf="filtrosAtivos">✕</span>
+      </a>
+    </div>
+
+    <!-- Tipo de dado -->
+    <div class="side-section">
+      <div class="side-h">Tipo de dado</div>
+      <label class="check" *ngFor="let f of tipos">
+        <input type="checkbox" [checked]="f.ativo" (change)="toggleTipo(f)"/>
+        {{ f.rotulo }}
+        <span class="num">{{ f.total }}</span>
+      </label>
+    </div>
+
+    <!-- Temáticas -->
+    <div class="side-section">
+      <div class="side-h">Temáticas</div>
+
+      <div class="empty-side" *ngIf="tematicas.length === 0">
+        Nenhuma temática disponível.
+      </div>
+
+      <div class="accordion">
+        <div class="acc-row" *ngFor="let t of tematicas; trackBy: trackById"
+             [class.open]="t.aberta">
+          <div class="acc-head" (click)="toggleTematica(t)">
+            <span>{{ t.nome }}</span>
+            <span class="acc-head-right">
+              <span class="count">{{ t.total }}</span>
+              <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <polyline points="6 9 12 15 18 9"/>
+              </svg>
+            </span>
+          </div>
+          <div class="acc-body" *ngIf="t.aberta && t.grupos.length">
+            <label class="check" *ngFor="let g of t.grupos">
+              <input type="checkbox"
+                     [checked]="isGrupoSelecionado(g.id)"
+                     (change)="toggleGrupo(g.id)"/>
+              {{ g.nome }}
+              <span class="num">{{ g.total }}</span>
+            </label>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- Resultados -->
+  <section class="results">
+
+    <div class="results-top">
+      <div class="listing-label">
+        Mostrando
+        <span class="count-pill">{{ inicioPagina }}–{{ fimPagina }}</span>
+        de
+        <span class="count-pill gray">{{ total }}</span>
+        resultados
+      </div>
+
+      <div class="sort-wrap">
+        <button class="sort" type="button"
+                (click)="ordenarAberto = !ordenarAberto">
+          Ordenar por: <b>{{ ordenacaoAtual }}</b>
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+               [class.open]="ordenarAberto">
+            <polyline points="6 9 12 15 18 9"/>
+          </svg>
+        </button>
+        <div class="sort-menu" *ngIf="ordenarAberto">
+          <button *ngFor="let o of ordenacoes"
+                  (click)="selecionarOrdenacao(o)"
+                  [class.active]="o === ordenacaoAtual">{{ o }}</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Estado vazio -->
+    <div class="empty-results" *ngIf="total === 0">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+        <circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      <p>Nenhum dado encontrado para os filtros selecionados.</p>
+      <button (click)="limparFiltros()">Limpar filtros</button>
+    </div>
+
+    <!-- Cards -->
+    <article class="card" *ngFor="let c of conjuntosPagina; trackBy: trackById">
+      <div class="thumb" [attr.data-tipo]="c.tipo">
+
+        <!-- badge tipo -->
+        <span class="thumb-type"
+              [class.thumb-type--raster]="c.tipo === 'raster'"
+              [class.thumb-type--mapa]="c.tipo === 'mapa'">
+          {{ c.tipo === 'raster' ? 'Raster' : c.tipo === 'mapa' ? 'Mapa' : 'Vetorial' }}
+        </span>
+
+        <!-- thumbnail real via WMS -->
+        <img *ngIf="getThumbWmsUrl(c) && !hasThumbError(c)"
+             [src]="getThumbWmsUrl(c)"
+             [alt]="c.titulo"
+             class="thumb-img"
+             (error)="onThumbError(c)"/>
+
+        <!-- placeholder vetorial -->
+        <svg *ngIf="(!getThumbWmsUrl(c) || hasThumbError(c)) && c.tipo === 'vetorial'"
+             class="thumb-svg" viewBox="0 0 220 165" preserveAspectRatio="none">
+          <defs>
+            <pattern [attr.id]="'g-' + c.id" width="14" height="14" patternUnits="userSpaceOnUse">
+              <path d="M14 0H0V14" fill="none" stroke="rgba(1,73,155,0.08)" stroke-width="1"/>
+            </pattern>
+          </defs>
+          <rect width="220" height="165" [attr.fill]="'url(#g-' + c.id + ')'"/>
+          <rect width="220" height="165" fill="#e8f0fb"/>
+          <path d="M40 35 Q70 25 105 40 Q140 50 165 40 Q185 60 175 95 Q165 130 130 130 Q90 135 65 115 Q40 95 35 70 Q30 50 40 35 Z"
+                fill="rgba(1,73,155,0.15)" stroke="#01499B" stroke-width="1.5"/>
+          <path d="M55 80 Q80 70 110 80 Q140 90 160 85"
+                fill="none" stroke="#5fa8ff" stroke-width="1.5"/>
+          <circle cx="105" cy="85" r="4" fill="#5fe3a1" stroke="#fff" stroke-width="1.5"/>
+        </svg>
+
+        <!-- placeholder raster -->
+        <svg *ngIf="(!getThumbWmsUrl(c) || hasThumbError(c)) && c.tipo === 'raster'"
+             class="thumb-svg" viewBox="0 0 220 165" preserveAspectRatio="none">
+          <rect width="220" height="165" fill="#fdf3e7"/>
+          <g opacity="0.75">
+            <rect x="60"  y="40" width="14" height="14" fill="#ffd166"/>
+            <rect x="74"  y="40" width="14" height="14" fill="#f59f3a"/>
+            <rect x="88"  y="40" width="14" height="14" fill="#e7791f"/>
+            <rect x="102" y="40" width="14" height="14" fill="#ffd166"/>
+            <rect x="60"  y="54" width="14" height="14" fill="#f59f3a"/>
+            <rect x="74"  y="54" width="14" height="14" fill="#cf4307"/>
+            <rect x="88"  y="54" width="14" height="14" fill="#cf4307"/>
+            <rect x="102" y="54" width="14" height="14" fill="#e7791f"/>
+            <rect x="116" y="54" width="14" height="14" fill="#ffd166"/>
+            <rect x="60"  y="68" width="14" height="14" fill="#ffd166"/>
+            <rect x="74"  y="68" width="14" height="14" fill="#e7791f"/>
+            <rect x="88"  y="68" width="14" height="14" fill="#cf4307"/>
+            <rect x="102" y="68" width="14" height="14" fill="#e7791f"/>
+            <rect x="116" y="68" width="14" height="14" fill="#f59f3a"/>
+            <rect x="74"  y="82" width="14" height="14" fill="#ffd166"/>
+            <rect x="88"  y="82" width="14" height="14" fill="#f59f3a"/>
+            <rect x="102" y="82" width="14" height="14" fill="#ffd166"/>
+          </g>
+        </svg>
+
+        <!-- placeholder mapa -->
+          <svg *ngIf="(!getThumbWmsUrl(c) || hasThumbError(c)) && c.tipo === 'mapa'"
+             class="thumb-svg" viewBox="0 0 220 165" preserveAspectRatio="none">
+          <rect width="220" height="165" fill="#edf3ff"/>
+          <path d="M20 40 L85 25 L135 45 L200 28 L200 130 L135 115 L85 135 L20 120 Z"
+                fill="rgba(1,73,155,0.10)" stroke="rgba(1,73,155,0.25)" stroke-width="1"/>
+          <path d="M85 25 L85 135 M135 45 L135 115"
+                stroke="rgba(1,73,155,0.2)" stroke-width="0.8" stroke-dasharray="3 3"/>
+          <circle cx="105" cy="80" r="6" fill="#01499B" opacity="0.7"/>
+          <circle cx="155" cy="65" r="4" fill="#5fa8ff" opacity="0.7"/>
+          <circle cx="60"  cy="95" r="4" fill="#5fe3a1" opacity="0.7"/>
+        </svg>
+      </div>
+
+      <div class="card-body">
+        <div class="card-header-row">
+          <a class="card-title">{{ c.titulo }}</a>
+          <span class="acessos-badge">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+              <circle cx="12" cy="12" r="3"/>
+            </svg>
+            {{ c.acessos | number:'1.0-0' }}
+          </span>
+        </div>
+
+        <div class="card-meta">
+          <span class="meta-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+              <line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+            {{ c.temaNome }}
+          </span>
+          <span class="meta-tag">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            {{ c.grupoNome }}
+          </span>
+          <span class="meta-date">Atualizado {{ c.atualizadoFmt }}</span>
+        </div>
+
+        <p class="card-desc">{{ c.descricao }}</p>
+
+        <div class="chips">
+          <button type="button"
+                  *ngFor="let f of c.formatos"
+                  class="chip"
+                  [class.chip-dl]="f.estilo === 'download'"
+                  [class.chip-meta]="f.estilo === 'metadados'"
+                  [class.chip-svc]="f.estilo === 'servico'"
+                  (click)="onChipClick(c, f)">
+            <ng-container [ngSwitch]="f.estilo">
+              <svg *ngSwitchCase="'download'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                <polyline points="7 10 12 15 17 10"/>
+                <line x1="12" y1="15" x2="12" y2="3"/>
+              </svg>
+              <svg *ngSwitchCase="'metadados'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                <polyline points="14 2 14 8 20 8"/>
+              </svg>
+              <svg *ngSwitchCase="'servico'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+                <polyline points="15 3 21 3 21 9"/>
+                <line x1="10" y1="14" x2="21" y2="3"/>
+              </svg>
+            </ng-container>
+            {{ f.rotulo }}
+          </button>
+          <a class="chip chip-meta" *ngIf="c.linkMetadados" [href]="c.linkMetadados" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+            Ver metadados
+          </a>
+        </div>
+      </div>
+    </article>
+
+    <!-- Toast global -->
+    <div class="toast" *ngIf="toastMsg"
+         [class.toast--ok]="toastTipo === 'ok'"
+         [class.toast--info]="toastTipo === 'info'"
+         [class.toast--erro]="toastTipo === 'erro'">
+      <!-- ok: checkmark -->
+      <svg *ngIf="toastTipo === 'ok'" class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="20 6 9 17 4 12"/>
+      </svg>
+      <!-- info: link/clipboard -->
+      <svg *ngIf="toastTipo === 'info'" class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/>
+        <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>
+      </svg>
+      <!-- erro: exclamation -->
+      <svg *ngIf="toastTipo === 'erro'" class="toast-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="10"/>
+        <line x1="12" y1="8" x2="12" y2="12"/>
+        <line x1="12" y1="16" x2="12.01" y2="16"/>
+      </svg>
+      <span>{{ toastMsg }}</span>
+    </div>
+
+    <!-- Pager -->
+    <div class="pager" *ngIf="totalPaginas > 1">
+      <div class="pager-info">
+        Página {{ paginaAtual }} de {{ totalPaginas }} ·
+        Mostrando {{ inicioPagina }}–{{ fimPagina }} de {{ total }}
+      </div>
+      <div class="pager-controls">
+        <button class="pg icon" aria-label="Anterior"
+                [disabled]="paginaAtual === 1"
+                (click)="irParaPagina(paginaAtual - 1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="15 18 9 12 15 6"/>
+          </svg>
+        </button>
+        <ng-container *ngFor="let p of paginasVisiveis">
+          <button *ngIf="p !== '…'; else ell"
+                  class="pg" [class.active]="p === paginaAtual"
+                  (click)="irParaPagina(+p)">{{ p }}</button>
+          <ng-template #ell><span class="pg-ellipsis">…</span></ng-template>
+        </ng-container>
+        <button class="pg icon" aria-label="Próxima"
+                [disabled]="paginaAtual === totalPaginas"
+                (click)="irParaPagina(paginaAtual + 1)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="9 18 15 12 9 6"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </section>
+</div>

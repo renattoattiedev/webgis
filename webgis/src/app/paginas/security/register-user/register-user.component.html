@@ -1,0 +1,145 @@
+<div class="auth-root">
+
+  <!-- ── Brand panel ──────────────────────────────────────────────────────── -->
+  <div class="auth-visual">
+    <div class="av-content">
+      <img class="av-logo" src="assets/imagens/logo2.png" alt="CESAN"/>
+      <h1 class="av-title">WebGIS</h1>
+      <p class="av-sub">Crie sua conta para acessar o Sistema de Informações Geográficas</p>
+      <div class="av-features">
+        <div class="av-feat">
+          <span class="av-feat-dot"></span>
+          Dados geoespaciais integrados
+        </div>
+        <div class="av-feat">
+          <span class="av-feat-dot"></span>
+          Visualização de mapas temáticos
+        </div>
+        <div class="av-feat">
+          <span class="av-feat-dot"></span>
+          Análises e relatórios georreferenciados
+        </div>
+      </div>
+    </div>
+    <p class="av-footer">CESAN · Companhia Espírito-Santense de Saneamento</p>
+  </div>
+
+  <!-- ── Form panel ───────────────────────────────────────────────────────── -->
+  <div class="auth-form">
+    <div class="af-card">
+
+      <div class="af-head">
+        <h2 class="af-title">Criar conta</h2>
+        <p class="af-sub">Preencha os dados abaixo para se registrar no sistema</p>
+      </div>
+
+      <form (ngSubmit)="register(NOM_USER.value, DSC_EMAIL.value, DSC_PASSWORD.value)"
+            #registerForm="ngForm" autocomplete="on">
+
+        <div class="field">
+          <label class="field-label" for="NOM_USER">Nome completo</label>
+          <div class="field-wrap">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            <input class="field-input" type="text" id="NOM_USER" name="NOM_USER"
+                   ngModel #NOM_USER="ngModel" required autocomplete="name"
+                   placeholder="João Silva">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="DSC_EMAIL">E-mail</label>
+          <div class="field-wrap">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+              <polyline points="22,6 12,13 2,6"/>
+            </svg>
+            <input class="field-input" type="email" id="DSC_EMAIL" name="DSC_EMAIL"
+                   ngModel #DSC_EMAIL="ngModel" required autocomplete="email"
+                   placeholder="joao@email.com">
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="DSC_PASSWORD">Senha</label>
+          <div class="field-wrap">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input class="field-input field-input--padded-r" #pwdInput type="password"
+                   id="DSC_PASSWORD" name="DSC_PASSWORD"
+                   ngModel #DSC_PASSWORD="ngModel" required
+                   (input)="validatePassword(DSC_PASSWORD.value, DSC_PASSWORD_CONFIRM.value)"
+                   placeholder="••••••••">
+            <button type="button" class="field-eye"
+                    (click)="pwdInput.type = pwdInput.type === 'password' ? 'text' : 'password'">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="field">
+          <label class="field-label" for="DSC_PASSWORD_CONFIRM">Confirmar senha</label>
+          <div class="field-wrap">
+            <svg class="field-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+              <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+            <input class="field-input field-input--padded-r" #pwdConfirmInput type="password"
+                   id="DSC_PASSWORD_CONFIRM" name="DSC_PASSWORD_CONFIRM"
+                   ngModel #DSC_PASSWORD_CONFIRM="ngModel" required
+                   (input)="validatePassword(DSC_PASSWORD.value, DSC_PASSWORD_CONFIRM.value)"
+                   placeholder="••••••••">
+            <button type="button" class="field-eye"
+                    (click)="pwdConfirmInput.type = pwdConfirmInput.type === 'password' ? 'text' : 'password'">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                <circle cx="12" cy="12" r="3"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="pwd-reqs">
+          <p class="pwd-reqs-label">Requisitos da senha</p>
+          <div class="pwd-reqs-grid">
+            <div class="pwd-req" [class.pwd-req--ok]="passwordValidation.minLength">8+ caracteres</div>
+            <div class="pwd-req" [class.pwd-req--ok]="passwordValidation.uppercase">Maiúscula</div>
+            <div class="pwd-req" [class.pwd-req--ok]="passwordValidation.lowercase">Minúscula</div>
+            <div class="pwd-req" [class.pwd-req--ok]="passwordValidation.number">Número</div>
+            <div class="pwd-req" [class.pwd-req--ok]="passwordValidation.specialChar">Especial ({{ specialChars }})</div>
+            <div class="pwd-req" [class.pwd-req--ok]="passwordValidation.passwordsMatch">Senhas iguais</div>
+          </div>
+        </div>
+
+        <button class="btn-primary" type="submit"
+                [disabled]="!registerForm.valid ||
+                            !passwordValidation.minLength ||
+                            !passwordValidation.uppercase ||
+                            !passwordValidation.lowercase ||
+                            !passwordValidation.number ||
+                            !passwordValidation.specialChar ||
+                            !passwordValidation.passwordsMatch">
+          Criar conta
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+
+        <p class="af-alt">
+          Já tem conta?&nbsp;
+          <a routerLink="/login">Entrar</a>
+        </p>
+
+      </form>
+    </div>
+  </div>
+
+</div>

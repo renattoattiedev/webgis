@@ -1,0 +1,528 @@
+// ─── Variables ─────────────────────────────────────────────────────────────
+
+$blue:        #01499B;
+$blue-light:  rgba(1, 73, 155, 0.08);
+$blue-border: rgba(1, 73, 155, 0.22);
+$text:        #1e3a5f;
+$muted:       #6b7280;
+
+// ─── Container ─────────────────────────────────────────────────────────────
+
+.pitometria-container {
+  position: relative;
+}
+
+// ─── Window ────────────────────────────────────────────────────────────────
+
+.pitometria-card {
+  position: fixed;
+  width: 280px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+  z-index: 1200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s ease;
+
+  &.minimized {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    &:hover {
+      width: 200px;
+      border-radius: 20px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+    }
+  }
+
+  &.dragging {
+    transition: none !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+    cursor: grabbing !important;
+    z-index: 9999 !important;
+    user-select: none;
+  }
+}
+
+// ─── Header ────────────────────────────────────────────────────────────────
+
+.pitometria-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(1, 73, 155, 0.06);
+  border-bottom: 1px solid $blue-border;
+  cursor: grab;
+  user-select: none;
+  min-height: 42px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+
+  .minimized & {
+    border-bottom: none;
+    cursor: pointer;
+  }
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: $text;
+  font-size: 12px;
+  font-weight: 700;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $blue;
+  }
+}
+
+// ─── Window controls ──────────────────────────────────────────────────────
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  pointer-events: auto;
+}
+
+.cep-icon-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text;
+  transition: background 0.15s;
+  pointer-events: auto;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.07);
+  }
+
+  &--close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+}
+
+// ─── Body ──────────────────────────────────────────────────────────────────
+
+.window-content {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 75vh;
+}
+
+// ─── Section labels ────────────────────────────────────────────────────────
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: $blue;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// ─── Divider ───────────────────────────────────────────────────────────────
+
+.divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.07);
+}
+
+// ─── Tipo selector ─────────────────────────────────────────────────────────
+
+.tipo-selector {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tipo-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid $blue-border;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  color: $text;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+    line-height: 15px;
+  }
+
+  &:hover {
+    background: $blue-light;
+  }
+
+  &.active {
+    background: $blue;
+    border-color: $blue;
+    color: #fff;
+  }
+}
+
+// ─── Mover button ──────────────────────────────────────────────────────────
+
+.mover-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border: 1px solid $blue-border;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 12px;
+  color: $text;
+  width: 100%;
+  box-sizing: border-box;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+  }
+
+  &:hover:not(.mover-ativo) {
+    background: $blue-light;
+  }
+
+  &.mover-ativo {
+    background: $blue-light;
+    border-color: $blue;
+    color: $blue;
+    font-weight: 600;
+  }
+}
+
+// ─── Instrução contextual ──────────────────────────────────────────────────
+
+.instrucao {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  padding: 5px 7px;
+  border-radius: 6px;
+  color: $muted;
+  background: rgba(0, 0, 0, 0.03);
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+
+  &.instrucao-mover {
+    background: #fff8e1;
+    color: #92400e;
+    border: 1px solid #fde68a;
+
+    mat-icon { color: #d97706; }
+  }
+
+  &.instrucao-destino {
+    background: #f0fdf4;
+    color: #166534;
+    border: 1px solid #bbf7d0;
+
+    mat-icon { color: #16a34a; }
+  }
+}
+
+.mover-spinner {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+// ─── Legenda ───────────────────────────────────────────────────────────────
+
+.legenda {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: 12px;
+}
+
+.legenda-icone {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+
+  &.vazao {
+    background: $blue;
+    border: 2px solid darken(#01499B, 8%);
+  }
+
+  &.pressao {
+    background: #ef4444;
+    border: 2px solid #b91c1c;
+  }
+}
+
+.legenda-texto {
+  flex: 1;
+  color: $text;
+}
+
+.legenda-count {
+  font-weight: 700;
+  color: $text;
+  background: $blue-light;
+  border-radius: 4px;
+  padding: 1px 6px;
+  font-size: 11px;
+}
+
+.legenda-total {
+  font-size: 11px;
+  color: $muted;
+  text-align: right;
+
+  strong { color: $text; }
+}
+
+// ─── Hover tooltip (OL Overlay) ────────────────────────────────────────────
+
+.hover-tooltip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: rgba(30, 30, 30, 0.82);
+  color: #fff;
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translateX(-50%) translateY(calc(-100% - 8px));
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  position: relative;
+
+  .hover-icon {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+    opacity: 0.85;
+  }
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid rgba(30, 30, 30, 0.82);
+  }
+}
+
+// ─── Popup OL ──────────────────────────────────────────────────────────────
+
+.pitometria-popup {
+  position: absolute;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.25);
+  min-width: 240px;
+  max-width: 280px;
+  transform: translateX(-50%) translateY(calc(-100% - 12px));
+  z-index: 1000;
+
+  &::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-left: 8px solid transparent;
+    border-right: 8px solid transparent;
+    border-top: 8px solid #fff;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.15));
+  }
+}
+
+.popup-inner { padding: 12px; }
+
+.popup-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+
+  strong { font-size: 13px; color: $text; }
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  color: $muted;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+
+  &:hover { color: $text; }
+}
+
+.popup-body { display: flex; flex-direction: column; gap: 2px; }
+
+.popup-loading { display: flex; justify-content: center; padding: 16px 0; }
+
+.popup-field {
+  width: 100%;
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper { min-height: 0; }
+}
+
+.field-error-hint { color: #d32f2f !important; }
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+}
+
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.select-wrap {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: rgba(1, 73, 155, 0.35);
+    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.07);
+  }
+}
+
+::ng-deep .select-wrap {
+  .mat-mdc-select { display: block; padding: 7px 10px; }
+  .mat-mdc-select-trigger { display: flex; align-items: center; width: 100%; height: auto; min-height: unset; }
+  .mat-mdc-select-value { flex: 1; min-width: 0; font-size: 12px; font-family: system-ui, sans-serif; color: #374151; }
+  .mat-mdc-select-placeholder { color: #9ca3af; font-size: 12px; }
+  .mat-mdc-select-arrow-wrapper { height: auto; transform: none !important; flex-shrink: 0; padding-left: 8px; }
+  .mat-mdc-select-arrow { color: #9ca3af; }
+  .mat-mdc-select-ripple, .mat-ripple { display: none; }
+  .mat-mdc-select:focus { outline: none; }
+}
+
+.confirmar-exclusao {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 8px;
+  background: #fff3e0;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #e65100;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; }
+}
+
+.popup-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 6px;
+  margin-top: 10px;
+  flex-wrap: wrap;
+
+  button { font-size: 12px; height: 32px; line-height: 32px; padding: 0 10px; }
+}
+
+// ─── Beacon (minimized) ────────────────────────────────────────────────────
+
+.win-beacon {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  overflow: hidden;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.beacon-icon-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $blue;
+  }
+}
+
+.beacon-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: $text;
+  white-space: nowrap;
+  opacity: 0;
+  padding-right: 12px;
+  transition: opacity 0.18s ease 0.14s;
+}
+
+.pitometria-card.minimized:hover .beacon-label {
+  opacity: 1;
+}

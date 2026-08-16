@@ -1,0 +1,18 @@
+// Estilos compartilhados em src/styles/_dialog-base.scss
+
+.idedlg-sigla-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.idedlg-sigla-field {
+  width: 90px;
+
+  input {
+    text-align: center;
+    text-transform: uppercase;
+    font-weight: 700;
+  }
+}

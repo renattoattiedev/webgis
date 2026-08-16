@@ -1,0 +1,334 @@
+// ─── Variables ─────────────────────────────────────────────────────────────
+
+$blue:        #01499B;
+$blue-light:  rgba(1, 73, 155, 0.08);
+$blue-border: rgba(1, 73, 155, 0.22);
+$text:        #1e3a5f;
+$muted:       #6b7280;
+
+// ─── Container ─────────────────────────────────────────────────────────────
+
+.consulta-pitometria-container {
+  position: relative;
+}
+
+// ─── Window ────────────────────────────────────────────────────────────────
+
+.consulta-pitometria-card {
+  position: fixed;
+  width: 310px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+  z-index: 1200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s ease;
+
+  &.minimized {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    &:hover {
+      width: 200px;
+      border-radius: 20px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+    }
+  }
+
+  &.dragging {
+    transition: none !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+    cursor: grabbing !important;
+    z-index: 9999 !important;
+    user-select: none;
+  }
+}
+
+// ─── Header ────────────────────────────────────────────────────────────────
+
+.consulta-pitometria-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(1, 73, 155, 0.06);
+  border-bottom: 1px solid $blue-border;
+  cursor: grab;
+  user-select: none;
+  min-height: 42px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+
+  .minimized & {
+    border-bottom: none;
+    cursor: pointer;
+  }
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: $text;
+  font-size: 12px;
+  font-weight: 700;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $blue;
+  }
+}
+
+// ─── Window controls ──────────────────────────────────────────────────────
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  pointer-events: auto;
+}
+
+.cep-icon-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text;
+  transition: background 0.15s;
+  pointer-events: auto;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.07);
+  }
+
+  &--close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+}
+
+// ─── Body ──────────────────────────────────────────────────────────────────
+
+.window-content {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 75vh;
+}
+
+// ─── Formulário ────────────────────────────────────────────────────────────
+
+.filtro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.campo-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.campo-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: $blue;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.campo-input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 30px;
+  border: 1px solid #d0d7e3;
+  border-radius: 7px;
+  padding: 0 9px;
+  font-size: 12px;
+  color: $text;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+
+  &:focus {
+    border-color: $blue;
+  }
+
+  &::placeholder {
+    color: $muted;
+  }
+}
+
+.datas-row {
+  display: flex;
+  gap: 8px;
+
+  .campo-grupo { flex: 1; }
+}
+
+// ─── Badge AUTO ────────────────────────────────────────────────────────────
+
+.auto-badge {
+  font-size: 9px;
+  background: $blue-light;
+  color: $blue;
+  border: 1px solid $blue-border;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  cursor: default;
+  text-transform: uppercase;
+}
+
+// ─── Ações ─────────────────────────────────────────────────────────────────
+
+.acoes {
+  display: flex;
+  gap: 8px;
+  margin-top: 2px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(0, 0, 0, 0.07);
+}
+
+.btn-consultar {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: $blue;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  height: 32px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+  }
+
+  &:hover:not(:disabled) {
+    background: #013d82;
+  }
+
+  &:disabled {
+    background: #bdbdbd;
+    cursor: not-allowed;
+    color: #fff;
+  }
+}
+
+.btn-limpar {
+  background: #fff;
+  color: $blue;
+  border: 1px solid $blue-border;
+  border-radius: 7px;
+  height: 32px;
+  padding: 0 12px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  &:hover {
+    background: $blue-light;
+  }
+}
+
+.spinner-inline {
+  display: inline-flex;
+}
+
+// ─── Dica mapa ─────────────────────────────────────────────────────────────
+
+.dica-mapa {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 10px;
+  color: $muted;
+
+  mat-icon {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+    color: rgba(1, 73, 155, 0.45);
+  }
+}
+
+// ─── Beacon (minimized) ────────────────────────────────────────────────────
+
+.win-beacon {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  overflow: hidden;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.beacon-icon-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $blue;
+  }
+}
+
+.beacon-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: $text;
+  white-space: nowrap;
+  opacity: 0;
+  padding-right: 12px;
+  transition: opacity 0.18s ease 0.14s;
+}
+
+.consulta-pitometria-card.minimized:hover .beacon-label {
+  opacity: 1;
+}

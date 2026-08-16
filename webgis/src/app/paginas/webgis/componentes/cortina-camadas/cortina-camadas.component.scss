@@ -1,0 +1,200 @@
+:host {
+  display: block;
+  font-family: system-ui, sans-serif;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.panel-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #1e3a5f;
+  letter-spacing: 0.3px;
+}
+
+// ── Toggle customizado ────────────────────────────────────────────────────────
+
+.toggle-wrap {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.15s ease;
+
+  &.toggle-disabled {
+    opacity: 0.40;
+    cursor: default;
+    pointer-events: none;
+  }
+}
+
+.toggle-track {
+  width: 34px;
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(0, 0, 0, 0.12);
+  position: relative;
+  transition: background 0.22s ease;
+
+  .toggle-on & {
+    background: #01499B;
+  }
+}
+
+.toggle-thumb {
+  width: 14px;
+  height: 14px;
+  border-radius: 7px;
+  background: #fff;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.28);
+  transition: left 0.22s ease;
+
+  .toggle-on & {
+    left: 18px;
+  }
+}
+
+.toggle-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(0, 0, 0, 0.35);
+  transition: color 0.22s ease;
+  min-width: 18px;
+
+  .toggle-on & {
+    color: #01499B;
+  }
+}
+
+// ── Linhas de seleção ─────────────────────────────────────────────────────────
+
+.select-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+
+  & + & {
+    margin-top: 7px;
+  }
+}
+
+// ── Badges E / D ──────────────────────────────────────────────────────────────
+
+.badge {
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: -0.3px;
+
+  &-e {
+    background: rgba(1, 73, 155, 0.10);
+    border: 1.5px solid rgba(1, 73, 155, 0.30);
+    color: #01499B;
+  }
+
+  &-d {
+    background: rgba(229, 57, 53, 0.08);
+    border: 1.5px solid rgba(229, 57, 53, 0.28);
+    color: #c62828;
+  }
+}
+
+// ── Select wrapper ────────────────────────────────────────────────────────────
+
+.select-wrap {
+  flex: 1;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+
+  &:focus-within {
+    border-color: rgba(1, 73, 155, 0.35);
+    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.08);
+  }
+}
+
+// ── mat-select sem mat-form-field ─────────────────────────────────────────────
+// Remover ripple, underline e estilos padrão do MDC
+
+::ng-deep .select-wrap {
+  .mat-mdc-select {
+    display: block;
+    padding: 7px 10px;
+  }
+
+  .mat-mdc-select-trigger {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: auto;
+    min-height: unset;
+  }
+
+  .mat-mdc-select-value {
+    flex: 1;
+    min-width: 0;
+    font-size: 12px;
+    font-family: system-ui, sans-serif;
+    color: #374151;
+    line-height: 1.4;
+  }
+
+  .mat-mdc-select-value-text {
+    color: #374151;
+  }
+
+  .mat-mdc-select-placeholder {
+    color: #9ca3af;
+    font-size: 12px;
+    font-family: system-ui, sans-serif;
+  }
+
+  .mat-mdc-select-arrow-wrapper {
+    height: auto;
+    transform: none !important;
+    flex-shrink: 0;
+    padding-left: 8px;
+  }
+
+  .mat-mdc-select-arrow {
+    color: #9ca3af;
+    width: 10px;
+    height: 10px;
+  }
+
+  // Remove ripple overlay
+  .mat-mdc-select-ripple,
+  .mat-ripple {
+    display: none;
+  }
+
+  // Remove focus outline from inner element (handled by .select-wrap)
+  .mat-mdc-select:focus {
+    outline: none;
+  }
+}

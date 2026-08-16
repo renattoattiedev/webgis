@@ -1,0 +1,18 @@
+<div class="gab-stack" *ngIf="grupos.length">
+  <span
+    *ngFor="let grupo of visiveis; let i = index"
+    class="gab-circle"
+    [style.background]="corDoGrupo(grupo.id)"
+    [style.zIndex]="visiveis.length - i"
+    [style.marginLeft]="i === 0 ? '0' : '-8px'"
+    [matTooltip]="grupo.nome"
+    (click)="onCircleClick(grupo.id)"
+  >{{ grupo.sigla }}</span>
+
+  <span
+    *ngIf="restantes.length"
+    class="gab-overflow"
+    [style.marginLeft]="'-8px'"
+    [matTooltip]="restantesTooltip"
+  >+{{ restantes.length }}</span>
+</div>

@@ -1,0 +1,63 @@
+<div class="config-dialog" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle=".dialog-header">
+    <div class="dialog-header">
+        <mat-icon>tune</mat-icon>
+        <h3>Configurar Croqui de Vistoria</h3>
+    </div>
+
+    <div class="dialog-content">
+        <mat-card class="section">
+            <div class="section-title">
+                <mat-icon>layers</mat-icon>
+                <span>Camadas Auxiliares</span>
+            </div>
+            <div class="aux-list">
+                <div class="aux-item" *ngFor="let aux of auxCamadas">
+                    <img class="aux-thumb" [src]="getAuxThumbnail(aux)" alt="thumbnail" />
+                    <div class="aux-info">
+                        <div class="aux-title">{{ aux.camadaNome || aux.camada }}</div>
+                        <div class="aux-actions">
+                            <mat-slide-toggle [checked]="config.auxSelecionadasIds.includes(aux.camada || '')"
+                                (change)="toggleAux(aux.camada || null, aux)">
+                            </mat-slide-toggle>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="auxCamadas.length === 0" class="empty">
+                    Nenhuma camada auxiliar configurada no componente.
+                </div>
+            </div>
+        </mat-card>
+        <mat-card class="section">
+            <div class="section-title">
+                <mat-icon>settings</mat-icon>
+                <span>Opções de Impressão</span>
+            </div>
+            <div class="options">
+                <mat-checkbox [(ngModel)]="config.imprimirLegenda">Imprimir Legenda</mat-checkbox>
+                <div class="field-group basemap-field">
+                    <span class="field-label">Basemap</span>
+                    <div class="select-wrap">
+                        <mat-select [(ngModel)]="basemapSelecionado" panelClass="webgis-select-panel">
+                            <mat-option *ngFor="let b of basemapOptions" [value]="b.source">{{ b.name }}</mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+                <div class="field-group escala-field">
+                    <span class="field-label">Escala</span>
+                    <div class="select-wrap">
+                        <mat-select [(ngModel)]="escalaSelecionada" panelClass="webgis-select-panel">
+                            <mat-option *ngFor="let s of escalaOptions" [value]="s">1:{{ s | number:'1.0-0' }}</mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+            </div>
+        </mat-card>
+    </div>
+
+    <div class="dialog-footer">
+        <button mat-raised-button color="white" (click)="aplicarNoMapa()">
+            <mat-icon>map</mat-icon>
+            Aplicar no mapa
+        </button>
+    </div>
+</div>

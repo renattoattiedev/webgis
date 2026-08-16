@@ -1,0 +1,25 @@
+.gab-stack {
+  display: inline-flex;
+  align-items: center;
+}
+
+.gab-circle,
+.gab-overflow {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  color: #fff;
+  font: 700 10px 'Geist', system-ui, sans-serif;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 1px #e6ecf5;
+  cursor: pointer;
+  user-select: none;
+}
+
+.gab-overflow {
+  background: #e0e2e6;
+  color: #5b6b85;
+}

@@ -1,0 +1,311 @@
+// ── Design tokens ─────────────────────────────────────────────────────────────
+$blue:        #01499B;
+$blue-light:  rgba(1, 73, 155, 0.07);
+$blue-border: rgba(1, 73, 155, 0.18);
+$text:        #1e3a5f;
+$muted:       #6b7280;
+$header-bg:   rgba(1, 73, 155, 0.05);
+
+// ── Balloon shell ─────────────────────────────────────────────────────────────
+.id-balloon {
+  position: absolute;
+  width: 360px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid $blue-border;
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.07);
+  z-index: 999;
+  // overflow: visible so the arrow triangle can protrude outside the balloon
+  overflow: visible;
+}
+
+// ── Arrow — CSS border triangle technique ─────────────────────────────────────
+// Zero-size element with coloured borders creates a pure triangle.
+// No rotation, no clip-path, no diamond effect.
+// Outer element = border colour; ::after = white fill offset inward.
+
+.id-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+// Balloon ABOVE click → tip points DOWN ▼
+.id-balloon.arrow-bottom .id-arrow {
+  bottom: -9px;
+  left: calc(var(--arrow-x, 50%) - 8px);
+  border-left:  8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top:   9px solid $blue-border;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -7px;
+    border-left:  7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top:   8px solid rgba(255, 255, 255, 0.97);
+  }
+}
+
+// Balloon BELOW click → tip points UP ▲
+.id-balloon.arrow-top .id-arrow {
+  top: -9px;
+  left: calc(var(--arrow-x, 50%) - 8px);
+  border-left:   8px solid transparent;
+  border-right:  8px solid transparent;
+  border-bottom: 9px solid $blue-border;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: -7px;
+    border-left:   7px solid transparent;
+    border-right:  7px solid transparent;
+    border-bottom: 8px solid rgba(255, 255, 255, 0.97);
+  }
+}
+
+// Balloon to the RIGHT of click → tip points LEFT ◀
+.id-balloon.arrow-left .id-arrow {
+  left: -9px;
+  top: calc(var(--arrow-y, 50%) - 8px);
+  border-top:    8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right:  9px solid $blue-border;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 2px;
+    border-top:    7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right:  8px solid rgba(255, 255, 255, 0.97);
+  }
+}
+
+// Balloon to the LEFT of click → tip points RIGHT ▶
+.id-balloon.arrow-right .id-arrow {
+  right: -9px;
+  top: calc(var(--arrow-y, 50%) - 8px);
+  border-top:    8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left:   9px solid $blue-border;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    right: 2px;
+    border-top:    7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left:   8px solid rgba(255, 255, 255, 0.97);
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.id-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 8px 10px;
+  background: $header-bg;
+  border-bottom: 1px solid $blue-border;
+  border-radius: 12px 12px 0 0;
+}
+
+.id-title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.id-layer-icon {
+  font-size: 14px;
+  width: 14px;
+  height: 14px;
+  color: $blue;
+  flex-shrink: 0;
+}
+
+.id-layer-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: $text;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.id-header-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.id-counter {
+  font-size: 10px;
+  font-weight: 600;
+  color: $muted;
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  padding: 2px 7px;
+  white-space: nowrap;
+}
+
+.id-close-btn {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $muted;
+  padding: 0;
+  transition: background 0.13s, color 0.13s;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  &:hover { background: rgba(239, 68, 68, 0.08); color: #ef4444; }
+}
+
+// ── Property list ─────────────────────────────────────────────────────────────
+.id-body {
+  max-height: 280px;
+  overflow-y: auto;
+  padding: 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+
+  &::-webkit-scrollbar       { width: 4px; }
+  &::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 2px; }
+}
+
+.id-prop-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  padding: 5px 12px;
+  transition: background 0.1s;
+
+  &--alt { background: rgba(1, 73, 155, 0.025); }
+  &:hover { background: $blue-light; }
+}
+
+.id-prop-key {
+  font-size: 10px;
+  font-weight: 700;
+  color: $muted;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  min-width: 90px;
+  max-width: 130px;
+  flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.id-prop-value {
+  font-size: 12px;
+  font-weight: 500;
+  color: $text;
+  word-break: break-word;
+  flex: 1;
+  min-width: 0;
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.id-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px 16px;
+  color: $muted;
+  gap: 6px;
+  border-radius: 0 0 12px 12px;
+
+  mat-icon { font-size: 28px; width: 28px; height: 28px; opacity: 0.35; }
+  p { font-size: 12px; margin: 0; text-align: center; }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+.id-footer {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  padding-right: 6px;
+  min-height: 40px;
+  border-radius: 0 0 12px 12px;
+}
+
+// ── Paginator override ────────────────────────────────────────────────────────
+::ng-deep .id-balloon .mat-mdc-paginator {
+  flex: 1;
+  background: transparent !important;
+}
+
+::ng-deep .id-balloon .mat-mdc-paginator-container {
+  padding: 0 0 0 2px !important;
+  min-height: 40px !important;
+  justify-content: flex-start !important;
+  flex-wrap: nowrap !important;
+}
+
+::ng-deep .id-balloon .mat-mdc-paginator-range-label {
+  font-size: 11px !important;
+  color: $muted !important;
+  margin: 0 2px !important;
+}
+
+::ng-deep .id-balloon .mat-mdc-paginator-navigation-previous,
+::ng-deep .id-balloon .mat-mdc-paginator-navigation-next {
+  width: 28px !important;
+  height: 28px !important;
+  padding: 0 !important;
+  color: $text !important;
+
+  .mat-icon { font-size: 18px !important; }
+}
+
+::ng-deep .id-balloon .mat-mdc-paginator-range-actions {
+  gap: 0 !important;
+}
+
+// ── Action buttons ────────────────────────────────────────────────────────────
+.id-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.id-action-btn {
+  width: 30px;
+  height: 30px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text;
+  padding: 0;
+  transition: background 0.13s, color 0.13s;
+
+  mat-icon { font-size: 17px; width: 17px; height: 17px; }
+  &:hover { background: $blue-light; color: $blue; }
+}

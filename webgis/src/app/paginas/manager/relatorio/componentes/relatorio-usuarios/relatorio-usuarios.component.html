@@ -1,0 +1,133 @@
+<div class="rus-wrapper">
+
+  <div class="rus-header">
+    <span class="rus-title">Usuários</span>
+    <div class="rus-filters">
+      <select [(ngModel)]="perfilFiltro" (change)="carregar(); page = 1" class="rus-select">
+        <option value="">Todos os perfis</option>
+        <option value="Admin">Admin</option>
+        <option value="Editor">Editor</option>
+        <option value="Viewer">Viewer</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="rus-loading">Carregando...</div>
+
+  <ng-container *ngIf="!loading && data">
+
+    <!-- KPIs -->
+    <div class="rus-kpis">
+      <div class="rus-kpi rus-kpi--blue">
+        <div class="rus-kpi-label">Total de usuários</div>
+        <div class="rus-kpi-value">{{ data.kpis.total }}</div>
+      </div>
+      <div class="rus-kpi rus-kpi--purple">
+        <div class="rus-kpi-label">Admins</div>
+        <div class="rus-kpi-value">{{ data.kpis.admins }}</div>
+      </div>
+      <div class="rus-kpi rus-kpi--green">
+        <div class="rus-kpi-label">Editores</div>
+        <div class="rus-kpi-value">{{ data.kpis.editores }}</div>
+      </div>
+      <div class="rus-kpi rus-kpi--amber">
+        <div class="rus-kpi-label">Inativos (+30d)</div>
+        <div class="rus-kpi-value">{{ data.kpis.inativos }}</div>
+      </div>
+    </div>
+
+    <!-- Charts + Atividade recente -->
+    <div class="rus-middle">
+
+      <div class="rus-chart-card">
+        <div class="rus-chart-title">Distribuição por perfil</div>
+        <div #pizzaEl></div>
+      </div>
+
+      <div class="rus-feed-card">
+        <div class="rus-feed-title">Atividade recente</div>
+        <div class="rus-feed-note">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/>
+            <line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          Registros de criação e edição de camadas e mapas. Acessos individuais não são rastreados pelo sistema.
+        </div>
+        <div class="rus-feed">
+          <div class="rus-feed-item" *ngFor="let a of data.atividadeRecente">
+            <div class="rus-feed-dot" [class.rus-feed-dot--mapa]="a.tipo === 'mapa'"></div>
+            <div class="rus-feed-body">
+              <span class="rus-feed-who">{{ a.usuario }}</span>
+              <span class="rus-feed-action">{{ a.acao }}</span>
+              <span class="rus-feed-tipo">{{ a.tipo === 'camada' ? 'camada' : 'mapa' }}</span>
+              <span class="rus-feed-nome" [title]="a.nome">{{ a.nome }}</span>
+            </div>
+            <div class="rus-feed-date">{{ a.data | date:'dd/MM HH:mm' }}</div>
+          </div>
+          <div class="rus-feed-empty" *ngIf="data.atividadeRecente.length === 0">
+            Nenhuma atividade registrada
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Tabela de usuários -->
+    <div class="rus-table-card">
+      <div class="rus-table-header">
+        <span class="rus-table-title">Lista de usuários</span>
+        <div class="rus-table-controls">
+          <input type="text" [(ngModel)]="busca" (input)="page = 1" placeholder="Buscar nome ou email..." class="rus-search">
+          <select [(ngModel)]="statusFiltro" (change)="page = 1" class="rus-select">
+            <option value="">Todos os status</option>
+            <option value="ativo">Ativos</option>
+            <option value="inativo">Inativos</option>
+          </select>
+        </div>
+      </div>
+      <div class="rus-table-wrap">
+        <table class="rus-table">
+          <thead>
+            <tr>
+              <th (click)="sort('nome')">Nome <span class="si">{{ sortIcon('nome') }}</span></th>
+              <th (click)="sort('email')">Email <span class="si">{{ sortIcon('email') }}</span></th>
+              <th (click)="sort('perfil')">Perfil <span class="si">{{ sortIcon('perfil') }}</span></th>
+              <th class="num" (click)="sort('logins')">Logins <span class="si">{{ sortIcon('logins') }}</span></th>
+              <th class="num" (click)="sort('camadas')">Camadas <span class="si">{{ sortIcon('camadas') }}</span></th>
+              <th class="num" (click)="sort('mapas')">Mapas <span class="si">{{ sortIcon('mapas') }}</span></th>
+              <th class="num" (click)="sort('raster')">Raster <span class="si">{{ sortIcon('raster') }}</span></th>
+              <th class="num" (click)="sort('favoritos')">Favoritos <span class="si">{{ sortIcon('favoritos') }}</span></th>
+              <th (click)="sort('ultimoAcesso')">Último login <span class="si">{{ sortIcon('ultimoAcesso') }}</span></th>
+              <th (click)="sort('ultimaAtividade')">Última atividade <span class="si">{{ sortIcon('ultimaAtividade') }}</span></th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let row of tabelaPaginada">
+              <td class="nome">{{ row.nome }}</td>
+              <td class="muted">{{ row.email }}</td>
+              <td><span class="badge-perfil">{{ row.perfil }}</span></td>
+              <td class="num">{{ row.logins }}</td>
+              <td class="num">{{ row.camadas }}</td>
+              <td class="num">{{ row.mapas }}</td>
+              <td class="num">{{ row.raster }}</td>
+              <td class="num">{{ row.favoritos }}</td>
+              <td class="muted">{{ row.ultimoAcesso ? (row.ultimoAcesso | date:'dd/MM/yyyy HH:mm') : 'Nunca' }}</td>
+              <td class="muted">{{ row.ultimaAtividade ? (row.ultimaAtividade | date:'dd/MM/yyyy HH:mm') : '—' }}</td>
+              <td><span class="badge" [class.badge--on]="row.ativo">{{ row.ativo ? 'Ativo' : 'Inativo' }}</span></td>
+            </tr>
+            <tr *ngIf="tabelaPaginada.length === 0">
+              <td colspan="11" class="empty">Nenhum usuário encontrado</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="rus-pagination" *ngIf="totalPages > 1">
+        <button (click)="page = page - 1" [disabled]="page === 1">‹</button>
+        <span>{{ page }} / {{ totalPages }}</span>
+        <button (click)="page = page + 1" [disabled]="page === totalPages">›</button>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

@@ -1,0 +1,19 @@
+# Teste da nova rota fetch-sicat-imovel-by-matricula
+
+@baseUrl = http://localhost:3333
+
+### Teste 1: Buscar imóvel por matrícula (caso de sucesso)
+GET {{baseUrl}}/fetch-sicat-imovel/123456
+Content-Type: application/json
+
+### Teste 2: Buscar imóvel com matrícula inválida (caso de erro - not found)
+GET {{baseUrl}}/fetch-sicat-imovel/999999999
+Content-Type: application/json
+
+### Teste 3: Buscar imóvel com matrícula não numérica (caso de erro - bad request)
+GET {{baseUrl}}/fetch-sicat-imovel/abc
+Content-Type: application/json
+
+### Para comparar com a rota existente:
+GET {{baseUrl}}/get-sicat-imovel/123456
+Content-Type: application/json

@@ -1,0 +1,489 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Configurações inline de componentes (Imprimir Croqui + Pitometria)
+// Padrão visual IDE CESAN — barra lateral azul, headers limpos, cards.
+// Importe no styles.scss ou deixe encapsulado por componente — funciona dos dois jeitos.
+// ─────────────────────────────────────────────────────────────────────────────
+
+$brand:        #01499B;
+$brand-mid:    #023775;
+$brand-tint:   #eef4fb;
+$brand-tint-2: #dbe7f6;
+$ink:          #0b2545;
+$ink-soft:     #5b6b85;
+$muted:        #7b8aa3;
+$line:         #e6ecf5;
+$line-soft:    #f3f6fb;
+$bg:           #f6f8fc;
+$success:      #047857;
+$success-bg:   #ecfdf5;
+$warn:         #b45309;
+$warn-bg:      #fffbeb;
+$danger:       #dc2626;
+$danger-bg:    #fef2f2;
+
+$font-ui:    'Geist', system-ui, sans-serif;
+$font-serif: 'Instrument Serif', Georgia, serif;
+
+:host {
+  display:block;
+  font-family:$font-ui;
+  color:$ink;
+}
+
+* { box-sizing:border-box; }
+
+// ── Wrapper inline (com barra lateral azul) ────────────────────────────
+.cfg {
+  background:#fff;
+  border:1px solid $line;
+  border-radius:14px;
+  overflow:hidden;
+  display:flex; flex-direction:column;
+  position:relative;
+  padding-left:14px;
+  box-shadow:0 2px 8px rgba(11,37,69,0.04);
+
+  &::before {
+    content:""; position:absolute; left:0; top:14px; bottom:14px; width:3px;
+    background:$brand; border-radius:100px;
+  }
+}
+
+// ── Header ──────────────────────────────────────────────────────────────
+.cfg-head {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:12px;
+  padding:14px 18px 14px;
+  border-bottom:1px solid $line;
+}
+
+.cfg-head-left { display:flex; align-items:center; gap:12px; min-width:0; flex:1; }
+
+.cfg-head-icon {
+  width:32px; height:32px; border-radius:9px;
+  background:$brand-tint; color:$brand;
+  display:inline-flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  svg { width:16px; height:16px; }
+}
+
+.cfg-head-text { display:flex; flex-direction:column; min-width:0; gap:2px; }
+
+.cfg-title {
+  margin:0;
+  font-size:16px; font-weight:600; color:$ink;
+  letter-spacing:-0.2px; line-height:1.25;
+  em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+}
+
+.cfg-sub {
+  margin:0; font-size:12px; color:$muted; line-height:1.4;
+}
+
+.cfg-head-right {
+  display:flex; align-items:center; gap:12px;
+  flex-shrink:0;
+}
+
+.cfg-close {
+  width:28px; height:28px; border-radius:7px;
+  background:transparent; color:$muted;
+  border:1px solid transparent; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  transition:background 0.15s, color 0.15s, border-color 0.15s;
+  svg { width:14px; height:14px; }
+  &:hover { background:$line-soft; color:$ink; border-color:$line; }
+}
+
+// ── Body ────────────────────────────────────────────────────────────────
+.cfg-body {
+  padding:18px 18px 14px;
+  display:flex; flex-direction:column; gap:20px;
+}
+
+// ── Section ─────────────────────────────────────────────────────────────
+.cfg-section { display:flex; flex-direction:column; gap:10px; }
+
+.cfg-section-head {
+  display:flex; align-items:flex-start; justify-content:space-between;
+  gap:12px;
+}
+
+.cfg-section-title {
+  margin:0;
+  font-size:13px; font-weight:600; color:$ink;
+  letter-spacing:-0.1px;
+  em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+}
+
+.cfg-section-sub {
+  margin:2px 0 0;
+  font-size:12px; color:$muted; line-height:1.4;
+}
+
+// ── Card de camada ──────────────────────────────────────────────────────
+.cfg-card {
+  background:#fff;
+  border:1px solid $line;
+  border-radius:10px;
+  padding:12px 14px;
+  margin-bottom:8px;
+  &:last-child { margin-bottom:0; }
+}
+
+.cfg-card-head {
+  display:flex; align-items:center; gap:8px;
+  margin-bottom:10px;
+  font-size:12px; font-weight:600;
+  color:$brand;
+  svg { width:14px; height:14px; }
+  span { letter-spacing:0.2px; }
+}
+
+.cfg-card-remove {
+  margin-left:auto;
+  width:26px; height:26px; border-radius:7px;
+  background:transparent; border:1px solid transparent;
+  color:$muted; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  transition:background 0.15s, color 0.15s, border-color 0.15s;
+  svg { width:13px; height:13px; }
+  &:hover { background:$danger-bg; color:$danger; border-color:#fecaca; }
+}
+
+.cfg-grid-2 {
+  display:grid; grid-template-columns:1fr 1fr;
+  gap:12px;
+  @media (max-width:720px) { grid-template-columns:1fr; }
+}
+
+// ── Mat-form-field overrides ────────────────────────────────────────────
+.cfg ::ng-deep .mat-mdc-form-field {
+  width:100%; font-family:$font-ui; display:block;
+  .mat-mdc-text-field-wrapper { padding:0 12px; background:transparent; }
+  .mat-mdc-form-field-infix { min-height:0; padding-top:14px !important; padding-bottom:10px !important; }
+  .mat-mdc-form-field-subscript-wrapper { padding:0 12px; min-height:0; }
+}
+.cfg ::ng-deep .mdc-text-field--outlined {
+  --mdc-outlined-text-field-outline-color:#{$line};
+  --mdc-outlined-text-field-hover-outline-color:#{$brand-tint-2};
+  --mdc-outlined-text-field-focus-outline-color:#{$brand};
+  --mdc-outlined-text-field-label-text-color:#{$muted};
+  --mdc-outlined-text-field-focus-label-text-color:#{$brand};
+  --mdc-outlined-text-field-input-text-color:#{$ink};
+  --mdc-outlined-text-field-container-shape:9px;
+  --mdc-outlined-text-field-label-text-size:13px;
+}
+.cfg ::ng-deep .mat-mdc-select-arrow { color:$muted; }
+.cfg ::ng-deep .mat-mdc-select-value { color:$ink; font-size:13px; }
+
+.cfg-opt-invalid { color:rgba(0,0,0,0.42); }
+
+// ── Chips de metadados ─────────────────────────────────────────────────
+.cfg-chips { display:flex; flex-wrap:wrap; gap:6px; margin-top:8px; }
+
+.cfg-chip {
+  display:inline-flex; align-items:center; gap:5px;
+  font-size:11.5px; font-weight:500;
+  padding:3px 9px; border-radius:100px;
+  background:$line-soft; color:$ink-soft;
+  border:1px solid $line;
+  svg { width:11px; height:11px; color:$muted; }
+
+  &--mono {
+    font-family: ui-monospace, 'JetBrains Mono', monospace;
+    font-size:11px;
+    color:$brand;
+    background:$brand-tint;
+    border-color:$brand-tint-2;
+    svg { color:$brand; }
+  }
+}
+
+// ── Botões ─────────────────────────────────────────────────────────────
+.cfg-btn-primary {
+  display:inline-flex; align-items:center; gap:7px;
+  background:$brand; color:#fff;
+  border:1px solid $brand; border-radius:9px;
+  padding:8px 14px;
+  font-family:inherit; font-size:13px; font-weight:600;
+  cursor:pointer;
+  transition:background 0.15s, border-color 0.15s, transform 0.12s;
+  svg { width:13px; height:13px; }
+  &:hover:not(:disabled) { background:$brand-mid; border-color:$brand-mid; }
+  &:active:not(:disabled) { transform:scale(0.98); }
+  &:disabled { opacity:0.45; cursor:not-allowed; }
+}
+
+.cfg-btn-ghost {
+  display:inline-flex; align-items:center; gap:7px;
+  background:transparent; color:$ink-soft;
+  border:1px solid $line; border-radius:9px;
+  padding:8px 14px;
+  font-family:inherit; font-size:13px; font-weight:500;
+  cursor:pointer;
+  transition:background 0.15s, color 0.15s, border-color 0.15s;
+  svg { width:13px; height:13px; }
+  &:hover { background:$brand-tint; color:$ink; border-color:$brand-tint-2; }
+}
+
+.cfg-icon-btn {
+  width:30px; height:30px; border-radius:8px;
+  background:transparent; color:$muted;
+  border:1px solid transparent; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  transition:background 0.12s, color 0.12s, border-color 0.12s;
+  svg { width:14px; height:14px; }
+  &:hover { background:$brand-tint; color:$brand; border-color:$brand-tint-2; }
+  &.active { background:$brand; color:#fff; border-color:$brand; }
+
+  &--danger:hover { background:$danger-bg; color:$danger; border-color:#fecaca; }
+}
+
+// ── Segmented control para layout switch ───────────────────────────────
+.cfg-segment {
+  display:inline-flex; gap:2px;
+  background:$line-soft;
+  border:1px solid $line;
+  border-radius:9px;
+  padding:3px;
+}
+
+.cfg-segment-btn {
+  display:inline-flex; align-items:center; gap:6px;
+  background:transparent; color:$ink-soft;
+  border:none; border-radius:7px;
+  padding:6px 12px;
+  font-family:inherit; font-size:12.5px; font-weight:600;
+  cursor:pointer;
+  transition:background 0.15s, color 0.15s;
+  svg { width:13px; height:13px; }
+  &:hover { color:$brand; }
+  &.active { background:#fff; color:$brand; box-shadow:0 1px 2px rgba(11,37,69,0.08); }
+}
+
+// ── Editor de template ──────────────────────────────────────────────────
+.cfg-editor {
+  background:#fff;
+  border:1px solid $line;
+  border-radius:10px;
+  overflow:hidden;
+}
+
+.cfg-editor-head {
+  display:flex; align-items:center; justify-content:space-between;
+  gap:10px;
+  padding:10px 12px;
+  background:$line-soft;
+  border-bottom:1px solid $line;
+  font-size:12px; font-weight:600; color:$ink-soft;
+  letter-spacing:0.1px;
+}
+
+.cfg-code {
+  width:100%;
+  border:none; outline:none;
+  padding:14px;
+  background:#fff; color:$ink;
+  font-family: ui-monospace, 'JetBrains Mono', 'Consolas', monospace;
+  font-size:12px; line-height:1.55;
+  resize:vertical;
+  min-height:280px;
+  &:focus { background:#fefefe; }
+}
+
+// ── Status / hint / empty ──────────────────────────────────────────────
+.cfg-status {
+  display:flex; align-items:flex-start; gap:8px;
+  padding:9px 12px;
+  margin-top:10px;
+  border-radius:9px;
+  font-size:12px; line-height:1.45;
+  border:1px solid;
+  svg { width:14px; height:14px; flex-shrink:0; margin-top:1px; }
+  &--ok   { background:$success-bg; color:$success; border-color:#a7f3d0; }
+  &--err  { background:$danger-bg;  color:$danger;  border-color:#fecaca; }
+  &--warn { background:$warn-bg;    color:$warn;    border-color:#fde68a; }
+}
+
+.cfg-hint {
+  display:inline-flex; align-items:center; gap:6px;
+  font-size:11.5px; color:$warn;
+  padding:6px 10px; border-radius:100px;
+  background:$warn-bg; border:1px solid #fde68a;
+  margin-top:4px;
+  svg { width:12px; height:12px; }
+}
+
+.cfg-empty {
+  display:flex; align-items:center; gap:8px;
+  padding:14px 16px;
+  border:1.5px dashed $line;
+  border-radius:10px;
+  color:$muted; font-size:12.5px;
+  background:$line-soft;
+  svg { width:18px; height:18px; color:$muted; flex-shrink:0; }
+}
+
+.cfg-loading {
+  display:inline-flex; align-items:center; gap:8px;
+  font-size:12.5px; color:$ink-soft;
+}
+
+// ── Linha de adicionar camada (pitometria) ─────────────────────────────
+.cfg-add-row {
+  display:flex; gap:10px; align-items:flex-start;
+  .cfg-add-select { flex:1; }
+  .cfg-btn-primary { margin-top:14px; flex-shrink:0; }
+}
+
+// ── Lista de camadas espaciais (pitometria) ────────────────────────────
+.cfg-spatial-list { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
+
+.cfg-spatial-item {
+  border:1px solid $line;
+  border-radius:10px;
+  overflow:hidden;
+  background:#fff;
+}
+
+.cfg-spatial-row {
+  display:flex; align-items:center; gap:10px;
+  padding:10px 12px;
+  background:#fff;
+}
+
+.cfg-spatial-icon {
+  width:18px; height:18px; color:$brand; flex-shrink:0;
+}
+
+.cfg-spatial-text { flex:1; display:flex; flex-direction:column; min-width:0; gap:2px; }
+
+.cfg-spatial-label {
+  font-size:13px; font-weight:600; color:$ink;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+
+.cfg-spatial-sub {
+  font-size:11.5px; color:$muted;
+  strong { color:$success; font-weight:700; }
+}
+
+.cfg-spatial-warn { color:$warn; }
+
+.cfg-spatial-edit {
+  background:$brand-tint;
+  border-top:1px solid $brand-tint-2;
+  padding:12px 14px;
+  display:flex; flex-direction:column; gap:10px;
+}
+
+.cfg-spatial-edit-title {
+  font-size:10.5px; font-weight:700; letter-spacing:1.3px;
+  text-transform:uppercase; color:$brand;
+}
+
+.cfg-spatial-edit-row {
+  display:flex; gap:10px; align-items:flex-start;
+  > .mat-mdc-form-field { flex:1; }
+  .cfg-btn-primary { margin-top:14px; flex-shrink:0; }
+}
+
+// ── Footer ──────────────────────────────────────────────────────────────
+.cfg-foot {
+  display:flex; align-items:center; justify-content:flex-end;
+  gap:8px;
+  padding:12px 18px;
+  border-top:1px solid $line;
+  background:$line-soft;
+}
+
+// ── Overlay (apenas para preview/ajuda do imprimir-croqui) ─────────────
+.cfg-overlay {
+  display:none;
+  position:fixed; inset:0;
+  background:rgba(11,37,69,0.4);
+  z-index:1050;
+  align-items:center; justify-content:center;
+  padding:24px;
+  &.show { display:flex; }
+}
+
+.cfg-overlay-card {
+  background:#fff;
+  border:1px solid $line;
+  border-radius:14px;
+  box-shadow:0 24px 80px -20px rgba(11,37,69,0.4);
+  width:95vw; max-width:1200px;
+  max-height:92vh;
+  display:flex; flex-direction:column;
+  overflow:hidden;
+  position:relative;
+  padding-left:14px;
+
+  &::before {
+    content:""; position:absolute; left:0; top:14px; bottom:14px; width:3px;
+    background:$brand; border-radius:100px;
+  }
+
+  &--narrow { max-width:640px; }
+}
+
+.cfg-preview-body {
+  flex:1; min-height:0;
+  background:$bg;
+  padding:18px;
+  display:flex; align-items:stretch; justify-content:center;
+
+  iframe {
+    flex:1; min-width:0;
+    background:#fff;
+    border:1px solid $line;
+    border-radius:10px;
+    box-shadow:0 6px 18px rgba(11,37,69,0.06);
+  }
+}
+
+// ── Variáveis (ajuda do croqui) ────────────────────────────────────────
+.cfg-vars { gap:18px; }
+
+.cfg-var-group {
+  display:flex; flex-direction:column; gap:6px;
+}
+.cfg-var-label {
+  font-size:10.5px; font-weight:700; letter-spacing:1.3px;
+  text-transform:uppercase; color:$brand;
+  padding-bottom:5px;
+  border-bottom:1px solid $brand-tint-2;
+  margin-bottom:2px;
+}
+
+.cfg-var-row {
+  display:grid; grid-template-columns:220px 1fr;
+  gap:12px; align-items:flex-start;
+  padding:6px 0;
+  font-size:12.5px;
+  code {
+    font-family: ui-monospace, monospace;
+    background:$brand-tint; color:$brand;
+    padding:3px 8px; border-radius:6px;
+    font-size:11.5px;
+    border:1px solid $brand-tint-2;
+    width:fit-content;
+  }
+  span { color:$ink-soft; line-height:1.45; }
+  @media (max-width:640px) {
+    grid-template-columns:1fr;
+    gap:4px;
+  }
+}
+
+// ── Slide toggle override ──────────────────────────────────────────────
+.cfg ::ng-deep .mat-mdc-slide-toggle {
+  --mdc-switch-selected-track-color:#{$brand};
+  --mdc-switch-selected-handle-color:#fff;
+  --mdc-switch-selected-hover-track-color:#{$brand};
+  --mdc-switch-selected-focus-track-color:#{$brand};
+  --mdc-switch-selected-pressed-track-color:#{$brand};
+  .mdc-form-field { font-family:$font-ui; font-size:13px; color:$ink; }
+}

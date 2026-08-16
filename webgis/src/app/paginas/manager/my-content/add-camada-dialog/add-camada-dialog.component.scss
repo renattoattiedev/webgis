@@ -1,0 +1,19 @@
+// Estilos compartilhados em src/styles/_dialog-base.scss
+// Override do dialog em tela cheia em telas pequenas
+:host {
+  display: block;
+  min-width: 760px;
+}
+@media (max-width: 800px) {
+  :host { min-width: 0; width: 100%; }
+}
+
+.badge-publicada {
+  margin-left: 8px;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 11px;
+  font-weight: 600;
+  background: #fff3e0;
+  color: #e65100;
+}

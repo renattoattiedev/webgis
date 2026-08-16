@@ -1,0 +1,493 @@
+// Estilos compartilhados em src/styles/_dialog-base.scss
+@use 'sass:color';
+
+:host {
+  display: block;
+  width: 100%;
+  max-width: 1120px;
+}
+@media (max-width: 980px) {
+  :host { min-width: 0; width: 100%; }
+}
+
+// ── Tokens locais (espelham _dialog-base.scss) ──────────────────────────────
+$brand:        #01499B;
+$brand-mid:    #023775;
+$brand-tint:   #eef4fb;
+$brand-tint-2: #dbe7f6;
+$ink:          #0b2545;
+$ink-soft:     #5b6b85;
+$muted:        #7b8aa3;
+$line:         #e6ecf5;
+$line-soft:    #f3f6fb;
+$success:      #047857;
+$success-bg:   #ecfdf5;
+$success-line: #a7f3d0;
+$danger:       #dc2626;
+$danger-bg:    #fef2f2;
+
+$mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
+
+// Grid assimétrico — tree um pouco maior que form
+.idedlg .raster-grid {
+  grid-template-columns: 1.05fr 1fr;
+
+  @media (max-width: 900px) {
+    grid-template-columns: 1fr;
+  }
+}
+
+// ── Pane esquerdo (tree) ────────────────────────────────────────────────────
+.raster-pane {
+  display: flex;
+  flex-direction: column;
+  min-height: 380px;
+  background: linear-gradient(180deg, #fff 0%, #fafbfd 100%);
+  border: 1px solid $line;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.raster-pane-head {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 10px;
+  padding: 12px 14px 10px;
+  border-bottom: 1px solid $line-soft;
+  background: #fff;
+}
+
+.raster-pane-title {
+  display: flex; flex-direction: column; gap: 1px;
+  min-width: 0;
+}
+
+.raster-pane-eyebrow {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: $muted;
+}
+
+.raster-pane-title h3 {
+  margin: 0;
+  font-size: 13.5px; font-weight: 600; letter-spacing: -0.15px;
+  color: $ink;
+}
+
+.raster-pane-meta {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; color: $ink-soft;
+  padding: 3px 9px;
+  border-radius: 100px;
+  background: $line-soft;
+  border: 1px solid $line;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  svg { width: 11px; height: 11px; opacity: 0.7; }
+}
+
+// ── Search ──────────────────────────────────────────────────────────────────
+.raster-search {
+  position: relative;
+  margin: 10px 12px 6px;
+
+  input {
+    width: 100%;
+    height: 34px;
+    padding: 0 32px 0 32px;
+    font-family: inherit;
+    font-size: 12.5px;
+    color: $ink;
+    background: #fff;
+    border: 1px solid $line;
+    border-radius: 9px;
+    outline: none;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
+
+    &::placeholder { color: $muted; }
+    &:hover { border-color: $brand-tint-2; }
+    &:focus {
+      border-color: $brand;
+      box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.12);
+    }
+  }
+}
+
+.raster-search-icon {
+  position: absolute;
+  left: 11px; top: 50%;
+  width: 13px; height: 13px;
+  transform: translateY(-50%);
+  color: $muted;
+  pointer-events: none;
+}
+
+.raster-search-clear {
+  position: absolute;
+  right: 6px; top: 50%;
+  width: 22px; height: 22px;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  border-radius: 6px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: $muted;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+
+  svg { width: 11px; height: 11px; }
+  &:hover { background: $line-soft; color: $ink; }
+}
+
+// ── Tree body ───────────────────────────────────────────────────────────────
+.raster-tree {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 4px 8px;
+  min-height: 240px;
+  max-height: 340px;
+
+  &.is-centered {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  // scrollbar refinada
+  &::-webkit-scrollbar { width: 8px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb {
+    background: $line;
+    border-radius: 100px;
+    border: 2px solid transparent;
+    background-clip: padding-box;
+  }
+  &::-webkit-scrollbar-thumb:hover {
+    background: $brand-tint-2;
+    background-clip: padding-box;
+  }
+}
+
+.raster-tree-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  &--root { padding: 4px 0; }
+}
+
+.raster-node {
+  position: relative;
+
+  // Linhas guia da hierarquia em níveis aninhados
+  .raster-tree-list .raster-tree-list & {
+    &::before {
+      content: "";
+      position: absolute;
+      left: 16px; top: 0; bottom: 0;
+      width: 1px;
+      background: linear-gradient(180deg,
+        transparent 0,
+        $line 4px,
+        $line calc(100% - 4px),
+        transparent 100%);
+    }
+  }
+}
+
+.raster-node-row {
+  display: grid;
+  grid-template-columns: 14px 18px 1fr auto auto auto;
+  gap: 8px;
+  width: 100%;
+  align-items: center;
+  padding: 6px 10px 6px 14px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 12.5px;
+  color: $ink;
+  text-align: left;
+  border-radius: 7px;
+  transition: background 0.12s, color 0.12s;
+
+  &:hover { background: $brand-tint; }
+  &:focus-visible {
+    outline: 2px solid $brand;
+    outline-offset: -2px;
+  }
+
+  .raster-node--selected > & {
+    background: $brand;
+    color: #fff;
+    box-shadow: 0 4px 12px -4px rgba(1, 73, 155, 0.4);
+
+    .raster-node-icon--file,
+    .raster-node-icon--dir { color: #fff; background: rgba(255,255,255,0.18); }
+    .raster-node-caret { color: rgba(255,255,255,0.85); }
+    .raster-node-size {
+      background: rgba(255,255,255,0.18);
+      color: rgba(255,255,255,0.92);
+    }
+    .raster-node-badge {
+      background: rgba(255,255,255,0.18);
+      color: #fff;
+      border-color: rgba(255,255,255,0.32);
+    }
+  }
+}
+
+.raster-node-caret {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 14px; height: 14px;
+  color: $muted;
+
+  svg {
+    width: 10px; height: 10px;
+    transition: transform 0.18s ease;
+
+    &.is-open { transform: rotate(90deg); }
+  }
+
+  &--placeholder { visibility: hidden; }
+}
+
+.raster-node-icon {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 18px; height: 18px;
+  border-radius: 5px;
+  flex-shrink: 0;
+  transition: background 0.12s, color 0.12s;
+
+  &--dir {
+    color: $brand;
+    background: $brand-tint;
+  }
+  &--file {
+    color: $brand-mid;
+    background: rgba(1, 73, 155, 0.07);
+  }
+
+  svg { width: 12px; height: 12px; }
+}
+
+.raster-node-name {
+  font-weight: 500;
+  letter-spacing: -0.1px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+
+  .raster-node--dir & { font-weight: 600; }
+  .raster-node--file & {
+    font-family: $mono;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+}
+
+.raster-node-size {
+  font-family: $mono;
+  font-size: 10.5px;
+  color: $muted;
+  font-variant-numeric: tabular-nums;
+  padding: 1px 7px;
+  background: $line-soft;
+  border-radius: 100px;
+  white-space: nowrap;
+  transition: background 0.12s, color 0.12s;
+}
+
+.raster-node-badge {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 9.5px; font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 7px 2px 5px;
+  background: $success-bg;
+  color: $success;
+  border: 1px solid $success-line;
+  border-radius: 100px;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+
+  svg { width: 9px; height: 9px; }
+}
+
+.raster-node-loading {
+  display: inline-flex;
+  align-items: center;
+
+  ::ng-deep .mat-mdc-progress-spinner circle { stroke: $brand !important; }
+  .raster-node--selected ::ng-deep .mat-mdc-progress-spinner circle { stroke: #fff !important; }
+}
+
+// ── Estados (loading / error / empty) ───────────────────────────────────────
+.raster-tree-state {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 24px 20px;
+  color: $ink-soft;
+  font-size: 12.5px;
+  max-width: 320px;
+}
+
+.raster-tree-state-icon {
+  width: 36px; height: 36px; flex-shrink: 0;
+  border-radius: 10px;
+  background: $brand-tint;
+  color: $brand;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-top: 1px;
+
+  svg { width: 18px; height: 18px; }
+
+  &--soft  { background: $line-soft; color: $muted; }
+  &--danger { background: $danger-bg; color: $danger; }
+}
+
+.raster-tree-state-body {
+  flex: 1;
+  min-width: 0;
+
+  strong {
+    display: block;
+    font-size: 12.5px; font-weight: 600;
+    color: $ink;
+    margin-bottom: 2px;
+  }
+  p {
+    margin: 0 0 10px;
+    font-size: 12px; line-height: 1.5;
+    color: $ink-soft;
+
+    &:last-child { margin-bottom: 0; }
+  }
+  code {
+    font-family: $mono;
+    font-size: 11px;
+    padding: 1px 5px;
+    background: $line-soft;
+    border-radius: 4px;
+    color: $ink;
+  }
+}
+
+// Botão "tentar novamente" inline
+.raster-retry {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: inherit;
+  font-size: 11.5px; font-weight: 600;
+  padding: 5px 11px;
+  border: 1px solid $line;
+  background: #fff;
+  color: $ink-soft;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+
+  svg { width: 11px; height: 11px; }
+
+  &:hover {
+    background: $brand-tint;
+    color: $brand;
+    border-color: $brand-tint-2;
+  }
+}
+
+// ── Selected preview (rodapé do pane esquerdo) ──────────────────────────────
+.raster-selected {
+  display: flex; align-items: center; gap: 12px;
+  padding: 11px 14px;
+  border-top: 1px solid $line;
+  background: #fff;
+  position: relative;
+
+  // Linha decorativa fina, segue a marca
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; top: -1px; height: 1px;
+    background: linear-gradient(90deg, transparent, $brand-tint-2 35%, $brand-tint-2 65%, transparent);
+    opacity: 0.85;
+    pointer-events: none;
+  }
+
+  &--empty {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+}
+
+.raster-selected-mark {
+  width: 26px; height: 26px;
+  border-radius: 8px;
+  background: $brand;
+  color: #fff;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 10px -3px rgba(1, 73, 155, 0.45);
+
+  svg { width: 13px; height: 13px; }
+}
+
+.raster-selected-body {
+  display: flex; flex-direction: column; min-width: 0; gap: 2px;
+  flex: 1;
+}
+
+.raster-selected-label {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: $muted;
+}
+
+.raster-selected-path {
+  font-family: $mono;
+  font-size: 11.5px;
+  color: $ink;
+  background: $line-soft;
+  padding: 2px 8px;
+  border-radius: 5px;
+  border: 1px solid $line;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.raster-selected-meta {
+  font-size: 11px;
+  color: $ink-soft;
+  font-variant-numeric: tabular-nums;
+
+  .raster-selected-meta-pub {
+    color: $success;
+    font-weight: 600;
+  }
+}
+
+.raster-selected-hint {
+  font-size: 12px;
+  color: $muted;
+  line-height: 1.4;
+
+  code {
+    font-family: $mono;
+    font-size: 10.5px;
+    padding: 1px 5px;
+    background: $line-soft;
+    border-radius: 4px;
+    color: $ink-soft;
+  }
+}
+
+// ── Pane direito (form) ─────────────────────────────────────────────────────
+.raster-form {
+  display: flex; flex-direction: column;
+  min-width: 0;
+
+  .idedlg-section-title:first-child { margin-top: 0; }
+}

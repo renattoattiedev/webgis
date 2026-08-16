@@ -1,0 +1,109 @@
+<div class="consulta-pitometria-container">
+  <div
+    #draggableWindow
+    class="consulta-pitometria-card"
+    [class.minimized]="isMinimized"
+    [class.dragging]="isDragging"
+    [ngStyle]="getWindowStyle()"
+  >
+    <!-- Header -->
+    <div *ngIf="!isMinimized"
+      class="consulta-pitometria-header"
+      (mousedown)="onHeaderMouseDown($event)"
+    >
+      <div class="title-wrap">
+        <mat-icon>analytics</mat-icon>
+        <span>Consulta Pitometria</span>
+      </div>
+
+      <div class="window-controls">
+        <button type="button" class="cep-icon-btn no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); minimizeWindow()"
+          matTooltip="Minimizar">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button type="button" class="cep-icon-btn cep-icon-btn--close no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); fechar()"
+          matTooltip="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Beacon (minimizado) -->
+    <div class="win-beacon" *ngIf="isMinimized" (click)="maximizeWindow()">
+      <div class="beacon-icon-wrap"><mat-icon>analytics</mat-icon></div>
+      <span class="beacon-label">Consulta Pit.</span>
+    </div>
+
+    <!-- Body -->
+    <div class="window-content" *ngIf="!isMinimized">
+      <form [formGroup]="form" class="filtro-form" (ngSubmit)="consultar()">
+
+        <!-- Código SIMP -->
+        <div class="campo-grupo">
+          <label class="campo-label">
+            Código SIMP
+            <span class="auto-badge" matTooltip="Clique em um ponto no mapa para preencher automaticamente">AUTO</span>
+          </label>
+          <input class="campo-input" formControlName="codSimp" placeholder="Ex: PM-0042" />
+        </div>
+
+        <!-- Matrícula -->
+        <div class="campo-grupo">
+          <label class="campo-label">Matrícula</label>
+          <input class="campo-input" formControlName="matricula" placeholder="Ex: 123456" />
+        </div>
+
+        <!-- Número OS -->
+        <div class="campo-grupo">
+          <label class="campo-label">Número OS</label>
+          <input class="campo-input" formControlName="numeroOs" placeholder="Ex: OS-2024-001" />
+        </div>
+
+        <!-- Datas -->
+        <div class="datas-row">
+          <div class="campo-grupo">
+            <label class="campo-label">Data Início</label>
+            <input class="campo-input" type="date" formControlName="dataInicio" />
+          </div>
+          <div class="campo-grupo">
+            <label class="campo-label">Data Fim</label>
+            <input class="campo-input" type="date" formControlName="dataFim" />
+          </div>
+        </div>
+
+        <!-- Ações -->
+        <div class="acoes">
+          <button
+            type="submit"
+            class="btn-consultar no-drag"
+            [disabled]="consultarDesabilitado || carregando"
+            (mousedown)="$event.stopPropagation()"
+          >
+            <mat-spinner *ngIf="carregando" diameter="14" class="spinner-inline"></mat-spinner>
+            <mat-icon *ngIf="!carregando">search</mat-icon>
+            {{ carregando ? 'Consultando...' : 'CONSULTAR' }}
+          </button>
+          <button
+            type="button"
+            class="btn-limpar no-drag"
+            (mousedown)="$event.stopPropagation()"
+            (click)="limpar()"
+          >
+            LIMPAR
+          </button>
+        </div>
+
+      </form>
+
+      <!-- Dica clique no mapa -->
+      <div class="dica-mapa">
+        <mat-icon>touch_app</mat-icon>
+        <span>Clique em um ponto da camada para preencher o código</span>
+      </div>
+    </div>
+  </div>
+</div>

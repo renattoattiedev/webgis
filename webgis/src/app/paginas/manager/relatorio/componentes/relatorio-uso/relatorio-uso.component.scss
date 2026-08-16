@@ -1,0 +1,154 @@
+.ru-wrapper { display: flex; flex-direction: column; gap: 0; }
+
+.ru-header {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: white;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+
+  @media print { position: static; padding: 8px 0; border-bottom: 2px solid #01499B; }
+}
+
+.ru-title { font-weight: 700; color: #1e3a5f; font-size: 15px; }
+
+.ru-filters {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-left: auto;
+  flex-wrap: wrap;
+
+  @media print { display: none; }
+}
+
+.ru-preset {
+  padding: 4px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  background: white;
+  font-size: 11px;
+  cursor: pointer;
+  color: #374151;
+  transition: all 0.15s;
+
+  &.active, &:hover { background: #01499B; color: white; border-color: #01499B; }
+}
+
+.ru-date {
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 11px;
+  color: #374151;
+}
+
+.ru-loading { padding: 40px; text-align: center; color: #6b7280; font-size: 13px; }
+
+.ru-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  padding: 16px 20px 0;
+
+  @media (max-width: 900px) { grid-template-columns: repeat(2, 1fr); }
+  @media print { grid-template-columns: repeat(4, 1fr); gap: 8px; }
+}
+
+.ru-kpi {
+  background: white;
+  border-radius: 8px;
+  padding: 14px 16px;
+  border-left: 4px solid #01499B;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+
+  &--blue  { border-color: #01499B; }
+  &--green { border-color: #2e7d32; .ru-kpi-value { color: #2e7d32; } }
+  &--amber { border-color: #b45309; .ru-kpi-value { color: #b45309; } }
+  &--purple { border-color: #7c3aed; .ru-kpi-value { color: #7c3aed; } }
+}
+
+.ru-kpi-label { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
+.ru-kpi-value { font-size: 26px; font-weight: 700; color: #01499B; margin: 4px 0; }
+.ru-kpi-sub { font-size: 10px; color: #6b7280; &.up { color: #2e7d32; } &.down { color: #dc2626; } }
+
+.ru-charts {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 12px;
+  padding: 12px 20px;
+
+  @media (max-width: 800px) { grid-template-columns: 1fr; }
+  @media print { grid-template-columns: 2fr 1fr; }
+}
+
+.ru-chart-card {
+  background: white;
+  border-radius: 8px;
+  padding: 14px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+}
+
+.ru-chart-title { font-size: 11px; font-weight: 700; color: #1e3a5f; margin-bottom: 10px; }
+
+.ru-ranking { display: flex; flex-direction: column; gap: 6px; }
+.ru-ranking-item { display: flex; align-items: center; gap: 8px; }
+.ru-rank-num { font-size: 10px; color: #9ca3af; width: 14px; flex-shrink: 0; }
+.ru-rank-nome { flex: 1; font-size: 11px; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ru-rank-val { font-size: 11px; font-weight: 700; color: #01499B; }
+
+.ru-table-card {
+  margin: 0 20px 20px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+  overflow: hidden;
+
+  @media print { margin: 0; box-shadow: none; border: 1px solid #e5e7eb; }
+}
+
+.ru-table-title { padding: 10px 14px; border-bottom: 1px solid #f3f4f6; font-size: 11px; font-weight: 700; color: #1e3a5f; }
+
+.ru-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11px;
+
+  thead tr { background: #f8fafc; }
+  th { padding: 8px 14px; text-align: left; font-weight: 600; color: #6b7280; cursor: pointer; user-select: none; white-space: nowrap; }
+  td { padding: 7px 14px; color: #374151; border-top: 1px solid #f3f4f6; }
+  tbody tr:nth-child(even) { background: #fafafa; }
+  .num { text-align: right; }
+  .blue { color: #01499B; font-weight: 600; }
+  .purple { color: #7c3aed; }
+  .muted { color: #6b7280; }
+  .empty { text-align: center; color: #9ca3af; padding: 20px; }
+}
+
+.sort-icon { font-size: 9px; margin-left: 2px; }
+
+.ru-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 10px;
+  border-top: 1px solid #f3f4f6;
+  font-size: 12px;
+  color: #374151;
+
+  button {
+    border: 1px solid #d1d5db;
+    border-radius: 4px;
+    background: white;
+    padding: 2px 8px;
+    cursor: pointer;
+    font-size: 14px;
+    &:disabled { opacity: 0.4; cursor: not-allowed; }
+  }
+}

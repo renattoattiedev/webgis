@@ -1,0 +1,240 @@
+<div class="bottom-sheet-panel" [class.expanded]="conteudoService.attributeTableisExpanded">
+
+  <!-- Handle bar -->
+  <div class="panel-handle" (click)="mostrarTabelaAtributos()">
+    <div class="handle-pill"></div>
+    <span class="handle-label">Tabela de Atributos</span>
+    <button type="button" class="handle-close-btn" (mousedown)="$event.stopPropagation()" (click)="$event.stopPropagation(); mostrarTabelaAtributos()">
+      <mat-icon>keyboard_arrow_down</mat-icon>
+    </button>
+  </div>
+
+  <mat-tab-group animationDuration="0ms">
+
+    <!-- Abas DW -->
+    <ng-container *ngFor="let aba of conteudoService.abasDw">
+      <mat-tab>
+        <ng-template mat-tab-label>
+          <mat-icon>analytics</mat-icon>
+          <span class="tab-label-text">Consulta Pitometria DW</span>
+          <button mat-icon-button class="tab-close-btn" (click)="conteudoService.removerAbaDw(aba.nome); cdr.detectChanges()">
+            <mat-icon>close</mat-icon>
+          </button>
+        </ng-template>
+        <ng-template matTabContent>
+          <div class="tbar">
+            <div class="tbar-group">
+              <button type="button" class="tbar-btn" [matMenuTriggerFor]="menuOpcoesDw" title="Opções">
+                <mat-icon>tune</mat-icon>
+              </button>
+              <mat-menu #menuOpcoesDw="matMenu" panelClass="wg-menu">
+                <button mat-menu-item (click)="toggleShowSelected(aba.nome)">
+                  <mat-icon>{{ showOnlySelected[aba.nome] ? 'visibility_off' : 'filter_list' }}</mat-icon>
+                  <span>{{ showOnlySelected[aba.nome] ? 'Mostrar Todos os Registros' : 'Mostrar Registros Selecionados' }}</span>
+                </button>
+                <button mat-menu-item (click)="openColumnSelector(aba.nome)">
+                  <mat-icon>view_column</mat-icon>
+                  <span>Mostrar/Ocultar Colunas</span>
+                </button>
+              </mat-menu>
+
+              <button type="button" class="tbar-btn" [matMenuTriggerFor]="menuExportarDw" title="Exportar dados">
+                <mat-icon>download</mat-icon>
+              </button>
+              <mat-menu #menuExportarDw="matMenu" panelClass="wg-menu">
+                <button mat-menu-item (click)="exportShapeFile(aba.nome)">
+                  <mat-icon>folder_zip</mat-icon><span>Exportar Shapefile</span>
+                </button>
+                <button mat-menu-item (click)="exportKml(aba.nome)">
+                  <mat-icon>public</mat-icon><span>Exportar KML</span>
+                </button>
+                <button mat-menu-item (click)="exportGeoJson(aba.nome)">
+                  <mat-icon>data_object</mat-icon><span>Exportar GeoJSON</span>
+                </button>
+                <button mat-menu-item (click)="exportTableData(aba.nome)">
+                  <mat-icon>table_view</mat-icon><span>Exportar CSV</span>
+                </button>
+              </mat-menu>
+            </div>
+
+            <div class="tbar-group">
+              <button type="button" class="tbar-btn tbar-btn--danger" title="Limpar Seleção" (click)="clearObjects(aba.nome)">
+                <mat-icon>clear_all</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <section tabindex="0">
+            <cdk-virtual-scroll-viewport appendOnly itemSize="36" class="table-viewport">
+              <div class="example-container tab">
+                <div class="tab-header tab-row">
+                  <div *ngFor="let col of tabData[aba.nome]?.columns" class="tab-cell">
+                    <ng-container *ngIf="col === 'menu'">&nbsp;</ng-container>
+                    <ng-container *ngIf="col !== 'geometry' && col !== 'menu'">{{ col }}</ng-container>
+                  </div>
+                </div>
+                <div *cdkVirtualFor="let row of getDataSource(aba.nome)"
+                  class="tab-row"
+                  [ngClass]="{'selected': isRowSelected(row, aba.nome)}"
+                  (click)="selecionarLinhaDw(row)">
+                  <div *ngFor="let col of tabData[aba.nome]?.columns" class="tab-cell">
+                    <ng-container *ngIf="col === 'menu'">
+                      <mat-icon [matMenuTriggerFor]="dwRowMenu" class="row-menu-icon">more_vert</mat-icon>
+                      <mat-menu #dwRowMenu="matMenu" panelClass="wg-menu wg-menu--row">
+                        <button mat-menu-item (click)="toggleRowSelection(row, aba.nome)">
+                          <mat-icon>check</mat-icon>
+                          <span>{{ selectedRows.has(row) ? 'Deselecionar' : 'Selecionar' }}</span>
+                        </button>
+                        <button mat-menu-item (click)="zoomToGeometry(row.geometry)" [disabled]="!row.geometry">
+                          <mat-icon>zoom_in</mat-icon><span>Zoom in</span>
+                        </button>
+                        <button mat-menu-item (click)="addRemoveMarkerToGeometry(row.geometry, aba.nome)" [disabled]="!row.geometry">
+                          <mat-icon>location_on</mat-icon>
+                          <span>{{ isMarkerAdded(row.geometry) ? 'Remover Marcador' : 'Adicionar um marcador' }}</span>
+                        </button>
+                      </mat-menu>
+                    </ng-container>
+                    <ng-container *ngIf="col !== 'geometry' && col !== 'menu'">{{ row[col] }}</ng-container>
+                  </div>
+                </div>
+              </div>
+            </cdk-virtual-scroll-viewport>
+          </section>
+        </ng-template>
+      </mat-tab>
+    </ng-container>
+
+    <!-- Abas de camadas/mapas -->
+    <ng-container *ngFor="let dado of conteudoService.dadosAdicionais">
+      <ng-container *ngIf="dado?.tipoConteudo === 'mapa' && dado.tableAttribute">
+        <ng-container *ngFor="let camada of dado.camadas">
+          <ng-container *ngIf="camada.tableAttribute">
+            <mat-tab>
+              <ng-template mat-tab-label>
+                <mat-icon>map</mat-icon>
+                <span class="tab-label-text">{{ dado.tituloConteudo + ' : ' + camada.nomeCamada }}</span>
+                <button mat-icon-button class="tab-close-btn" (click)="removeTableAttributes(camada.nomeCamada, dado.tipoConteudo)">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </ng-template>
+              <ng-template matTabContent>
+                <ng-container *ngTemplateOutlet="layerContent; context: { layerName: camada.nomeCamada }"></ng-container>
+              </ng-template>
+            </mat-tab>
+          </ng-container>
+        </ng-container>
+      </ng-container>
+      <ng-container *ngIf="dado.tipoConteudo === 'camada' && dado.tableAttribute">
+        <mat-tab>
+          <ng-template mat-tab-label>
+            <mat-icon>layers</mat-icon>
+            <span class="tab-label-text">{{ dado.tituloConteudo.replace('content:', '') }}</span>
+            <button mat-icon-button class="tab-close-btn" (click)="removeTableAttributes(dado.nomeConteudo, dado.tipoConteudo)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </ng-template>
+          <ng-template matTabContent>
+            <ng-container *ngTemplateOutlet="layerContent; context: { layerName: dado.nomeConteudo }"></ng-container>
+          </ng-template>
+        </mat-tab>
+      </ng-container>
+    </ng-container>
+
+  </mat-tab-group>
+
+  <ng-template #layerContent let-layerName="layerName">
+    <div class="tbar">
+      <div class="tbar-group">
+        <button type="button" class="tbar-btn" [matMenuTriggerFor]="menu" title="Opções">
+          <mat-icon>tune</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu" panelClass="wg-menu">
+          <button mat-menu-item (click)="toggleShowSelected(layerName)">
+            <mat-icon>{{ showOnlySelected[layerName] ? 'visibility_off' : 'filter_list' }}</mat-icon>
+            <span>{{ showOnlySelected[layerName] ? 'Mostrar Todos os Registros' : 'Mostrar Registros Selecionados' }}</span>
+          </button>
+          <button mat-menu-item (click)="filterDataDialog(layerName)">
+            <mat-icon>manage_search</mat-icon><span>Filtro</span>
+          </button>
+          <button mat-menu-item (click)="openColumnSelector(layerName)">
+            <mat-icon>view_column</mat-icon><span>Mostrar/Ocultar Colunas</span>
+          </button>
+        </mat-menu>
+
+        <button type="button" class="tbar-btn" [matMenuTriggerFor]="menu_exportar" title="Exportar dados">
+          <mat-icon>download</mat-icon>
+        </button>
+        <mat-menu #menu_exportar="matMenu" panelClass="wg-menu">
+          <button mat-menu-item (click)="exportShapeFile(layerName)">
+            <mat-icon>folder_zip</mat-icon><span>Exportar Shapefile</span>
+          </button>
+          <button mat-menu-item (click)="exportKml(layerName)">
+            <mat-icon>public</mat-icon><span>Exportar KML</span>
+          </button>
+          <button mat-menu-item (click)="exportGeoJson(layerName)">
+            <mat-icon>data_object</mat-icon><span>Exportar GeoJSON</span>
+          </button>
+          <button mat-menu-item (click)="exportTableData(layerName)">
+            <mat-icon>table_view</mat-icon><span>Exportar CSV</span>
+          </button>
+        </mat-menu>
+      </div>
+
+      <div class="tbar-group">
+        <button type="button" class="tbar-btn" title="Filtrar por extensão do mapa" (click)="filterMapExtent(layerName)">
+          <mat-icon>crop_free</mat-icon>
+        </button>
+        <button type="button" class="tbar-btn" title="Recarregar" (click)="recarregarTabela(layerName)">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+
+      <div class="tbar-group">
+        <button type="button" class="tbar-btn tbar-btn--danger" title="Limpar Seleção" (click)="clearObjects(layerName)">
+          <mat-icon>clear_all</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <section tabindex="0">
+      <cdk-virtual-scroll-viewport appendOnly itemSize="36" class="table-viewport">
+        <div class="example-container tab">
+          <div class="tab-header tab-row">
+            <div *ngFor="let column of tabData[layerName]?.columns" class="tab-cell">
+              <ng-container *ngIf="column === 'menu'">&nbsp;</ng-container>
+              <ng-container *ngIf="column !== 'geometry' && column !== 'menu'">
+                {{ conteudoService.translateAttributeNameToLabel(getLayerName(layerName), column) }}
+              </ng-container>
+            </div>
+          </div>
+          <div *cdkVirtualFor="let row of getDataSource(layerName)"
+            class="tab-row"
+            [ngClass]="{'selected': isRowSelected(row, layerName)}">
+            <div *ngFor="let column of tabData[layerName]?.columns" class="tab-cell">
+              <ng-container *ngIf="column === 'menu'">
+                <mat-icon [matMenuTriggerFor]="rowMenu" class="row-menu-icon">more_vert</mat-icon>
+                <mat-menu #rowMenu="matMenu" panelClass="wg-menu wg-menu--row">
+                  <button mat-menu-item (click)="toggleRowSelection(row, layerName)">
+                    <mat-icon>check</mat-icon>
+                    <span>{{ selectedRows.has(row) ? 'Deselecionar' : 'Selecionar' }}</span>
+                  </button>
+                  <button mat-menu-item (click)="zoomToGeometry(row.geometry)">
+                    <mat-icon>zoom_in</mat-icon><span>Zoom in</span>
+                  </button>
+                  <button mat-menu-item (click)="addRemoveMarkerToGeometry(row.geometry, layerName)">
+                    <mat-icon>location_on</mat-icon>
+                    <span>{{ isMarkerAdded(row.geometry) ? 'Remover Marcador' : 'Adicionar um marcador' }}</span>
+                  </button>
+                </mat-menu>
+              </ng-container>
+              <ng-container *ngIf="column !== 'geometry' && column !== 'menu'">
+                {{ row[column] }}
+              </ng-container>
+            </div>
+          </div>
+        </div>
+      </cdk-virtual-scroll-viewport>
+    </section>
+  </ng-template>
+
+</div>

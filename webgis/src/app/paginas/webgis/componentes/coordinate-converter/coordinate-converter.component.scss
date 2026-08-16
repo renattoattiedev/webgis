@@ -1,0 +1,583 @@
+// ─── Variables ─────────────────────────────────────────────────────────────
+
+$blue:        #01499B;
+$blue-light:  rgba(1, 73, 155, 0.08);
+$blue-border: rgba(1, 73, 155, 0.22);
+$text:        #1e3a5f;
+$muted:       #6b7280;
+
+// ─── Container ─────────────────────────────────────────────────────────────
+
+.converter-container {
+  position: relative;
+}
+
+// ─── Window ────────────────────────────────────────────────────────────────
+
+.converter-card {
+  position: fixed;
+  width: 340px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+  z-index: 1200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s ease;
+
+  &.minimized {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    &:hover {
+      width: 200px;
+      border-radius: 20px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+    }
+  }
+
+  &.dragging {
+    transition: none !important;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+    cursor: grabbing !important;
+    z-index: 9999 !important;
+    user-select: none;
+  }
+}
+
+// ─── Header ────────────────────────────────────────────────────────────────
+
+.converter-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(1, 73, 155, 0.06);
+  border-bottom: 1px solid $blue-border;
+  cursor: grab;
+  user-select: none;
+  min-height: 42px;
+  box-sizing: border-box;
+  flex-shrink: 0;
+
+  .minimized & {
+    border-bottom: none;
+    cursor: pointer;
+  }
+}
+
+.title-wrap {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: $text;
+  font-size: 12px;
+  font-weight: 700;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $blue;
+  }
+}
+
+// ─── Window controls ──────────────────────────────────────────────────────
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  pointer-events: auto;
+}
+
+.cep-icon-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text;
+  transition: background 0.15s;
+  pointer-events: auto;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.07);
+  }
+
+  &--close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+}
+
+// ─── Body ──────────────────────────────────────────────────────────────────
+
+.window-content {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  max-height: 75vh;
+}
+
+// ─── Section label ─────────────────────────────────────────────────────────
+
+.section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: $blue;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// ─── Divider ───────────────────────────────────────────────────────────────
+
+.divider {
+  height: 1px;
+  background: rgba(0, 0, 0, 0.07);
+}
+
+// ─── Input de coordenadas ──────────────────────────────────────────────────
+
+.input-wrap {
+  position: relative;
+}
+
+.coord-input {
+  width: 100%;
+  box-sizing: border-box;
+  height: 32px;
+  border: 1px solid #d0d7e3;
+  border-radius: 7px;
+  padding: 0 9px;
+  font-size: 12px;
+  color: $text;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: 'Fira Code', monospace;
+
+  &:focus {
+    border-color: $blue;
+  }
+
+  &::placeholder {
+    color: $muted;
+    font-family: inherit;
+  }
+}
+
+.input-badge {
+  position: absolute;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 9px;
+  background: $blue-light;
+  color: $blue;
+  border: 1px solid $blue-border;
+  border-radius: 4px;
+  padding: 1px 5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  pointer-events: none;
+}
+
+.coord-progress {
+  border-radius: 2px;
+  height: 2px;
+}
+
+.input-error {
+  font-size: 11px;
+  color: #d32f2f;
+  margin-top: -4px;
+}
+
+// ─── Action row ────────────────────────────────────────────────────────────
+
+.action-row {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.action-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  border: 1px solid $blue-border;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  font-size: 11px;
+  font-weight: 600;
+  color: $text;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex: 1;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover:not(:disabled) {
+    background: $blue-light;
+  }
+
+  &.active {
+    background: $blue;
+    border-color: $blue;
+    color: #fff;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+// ─── Details panel ─────────────────────────────────────────────────────────
+
+.details-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 8px 10px;
+  background: $blue-light;
+  border: 1px solid $blue-border;
+  border-radius: 7px;
+}
+
+.detail-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 11px;
+}
+
+.detail-label {
+  color: $muted;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 10px;
+  letter-spacing: 0.4px;
+}
+
+.detail-value {
+  color: $text;
+  font-weight: 700;
+  font-family: 'Fira Code', monospace;
+  font-size: 11px;
+}
+
+// ─── Sugestões ─────────────────────────────────────────────────────────────
+
+.suggestions {
+  border: 1px solid $blue-border;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.suggestion-title {
+  padding: 5px 10px;
+  font-size: 10px;
+  font-weight: 700;
+  color: $blue;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  background: $blue-light;
+}
+
+.suggestion-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  font-size: 12px;
+  color: $text;
+  cursor: pointer;
+  transition: background 0.12s;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+    color: $blue;
+  }
+
+  &:hover {
+    background: $blue-light;
+  }
+}
+
+// ─── Settings panel ────────────────────────────────────────────────────────
+
+.settings-panel {
+  padding: 8px 10px;
+  background: $blue-light;
+  border-radius: 7px;
+}
+
+.settings-text {
+  margin: 0;
+  font-size: 11px;
+  color: $muted;
+  line-height: 1.5;
+}
+
+// ─── Formats list ──────────────────────────────────────────────────────────
+
+.formats-list {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.format-card {
+  border: 1px solid $blue-border;
+  border-radius: 8px;
+  overflow: hidden;
+
+  &.hidden {
+    display: none;
+  }
+}
+
+.format-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 8px 6px 10px;
+  background: $blue-light;
+}
+
+.format-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: $text;
+  flex: 1;
+}
+
+.format-actions {
+  display: flex;
+  align-items: center;
+  gap: 1px;
+}
+
+.fmt-icon-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text;
+  transition: background 0.12s;
+
+  mat-icon {
+    font-size: 14px;
+    width: 14px;
+    height: 14px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.07);
+  }
+
+  &--settings:hover {
+    color: $blue;
+  }
+
+  &--close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+}
+
+// ─── Format body ───────────────────────────────────────────────────────────
+
+.format-body {
+  padding: 8px 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  background: #fff;
+}
+
+.format-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.format-field {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.field-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: $blue;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.field-text {
+  font-family: 'Fira Code', monospace;
+  font-size: 12px;
+  color: $text;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+// ─── Format edit ───────────────────────────────────────────────────────────
+
+.format-edit {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 8px;
+  background: $blue-light;
+  border-radius: 6px;
+  margin-top: 2px;
+}
+
+.edit-row {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.edit-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: $blue;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.edit-input {
+  width: 100%;
+  box-sizing: border-box;
+  border: 1px solid #d0d7e3;
+  border-radius: 6px;
+  padding: 5px 8px;
+  font-size: 12px;
+  color: $text;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s;
+  font-family: inherit;
+
+  &:focus {
+    border-color: $blue;
+  }
+}
+
+.edit-textarea {
+  resize: vertical;
+  min-height: 48px;
+}
+
+.edit-help {
+  font-size: 10px;
+  color: $muted;
+  line-height: 1.5;
+}
+
+.btn-reset {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: #fff;
+  color: $blue;
+  border: 1px solid $blue-border;
+  border-radius: 6px;
+  height: 28px;
+  padding: 0 10px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: flex-start;
+
+  mat-icon {
+    font-size: 13px;
+    width: 13px;
+    height: 13px;
+  }
+
+  &:hover {
+    background: $blue-light;
+  }
+}
+
+// ─── Beacon (minimized) ────────────────────────────────────────────────────
+
+.win-beacon {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  overflow: hidden;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.beacon-icon-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $blue;
+  }
+}
+
+.beacon-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: $text;
+  white-space: nowrap;
+  opacity: 0;
+  padding-right: 12px;
+  transition: opacity 0.18s ease 0.14s;
+}
+
+.converter-card.minimized:hover .beacon-label {
+  opacity: 1;
+}

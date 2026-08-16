@@ -1,0 +1,74 @@
+.registry_login:
+  before_script:
+    - >
+      echo "${REGISTRY_PASS}" |
+      docker login ${REGISTRY_HOST}
+      --username ${REGISTRY_USER} --password-stdin
+
+variables:
+  GIT_SUBMODULE_STRATEGY: recursive
+
+workflow:
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+      variables:
+        DEPLOY_ENVIRONMENT: "develop"
+    - if: $CI_COMMIT_BRANCH == "staging"
+      variables:
+        DEPLOY_ENVIRONMENT: "staging"
+    - if: $CI_COMMIT_BRANCH == "master"
+      variables:
+        DEPLOY_ENVIRONMENT: "production"
+
+stages:
+  - dockerize
+  - deploy
+
+dockerize_api:
+  stage: dockerize
+  extends: .registry_login
+  script:
+    - APP_VERSION=$(grep version package.json | awk -F \" '{print $4}')
+    - DOCKER_API_IMAGE_TAG=registry.cesan.com.br/cesan/api-webgis:${APP_VERSION}
+    - echo "DOCKER_API_IMAGE_TAG=${DOCKER_API_IMAGE_TAG}" >> docker.env
+    - docker image build -t ${DOCKER_API_IMAGE_TAG} -f docker/Dockerfile.api .
+    - docker image push ${DOCKER_API_IMAGE_TAG}
+  artifacts:
+    reports:
+      dotenv: docker.env
+  tags:
+    - swarm
+
+dockerize_geoserver:
+  stage: dockerize
+  extends: .registry_login
+  script:
+    - DOCKER_GEOSERVER_IMAGE_TAG=registry.cesan.com.br/cesan/geoserver:2.26.x
+    - echo "DOCKER_GEOSERVER_IMAGE_TAG=${DOCKER_GEOSERVER_IMAGE_TAG}" >> docker.env
+    - docker image build -t ${DOCKER_GEOSERVER_IMAGE_TAG} -f docker/Dockerfile.geoserver .
+    - docker image push ${DOCKER_GEOSERVER_IMAGE_TAG}
+  artifacts:
+    reports:
+      dotenv: docker.env
+  tags:
+    - swarm
+
+deploy:
+  stage: deploy
+  extends: .registry_login
+  dependencies:
+    - dockerize_api
+    - dockerize_geoserver
+  rules:
+    - if: $CI_COMMIT_BRANCH == "develop"
+    - if: $CI_COMMIT_BRANCH == "staging"
+    - if: $CI_COMMIT_BRANCH == "master"
+      when: manual
+  script:
+    - >
+      docker --context $DEPLOY_ENVIRONMENT stack deploy \
+        --detach=true \
+        --with-registry-auth -c docker/stack.yml gis
+  environment: ${DEPLOY_ENVIRONMENT}
+  tags:
+    - swarm

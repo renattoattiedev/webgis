@@ -1,0 +1,280 @@
+@import 'node_modules/ol/ol.css';
+
+$cesan-blue: #01499B;
+$glass-btn-bg: rgba(255, 255, 255, 0.08);
+$glass-btn-border: rgba(255, 255, 255, 0.15);
+$header-icon-color: #c5cae9;
+$bg-transparent-white: rgba(255, 255, 255, 0.8);
+
+.mat-drawer, .mat-drawer-content {
+  background-color: $bg-transparent-white;
+}
+
+.example-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  overflow: hidden;
+}
+
+// ── Header unificado ──────────────────────────────────────────────────────────
+.app-header {
+  background: $cesan-blue;
+  display: flex;
+  align-items: center;
+  padding: 0 14px;
+  gap: 10px;
+  min-height: 52px;
+  flex-shrink: 0;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  z-index: 100;
+  box-sizing: border-box;
+}
+
+// ── Launcher pill (substitui hamburguer + brand) ───────────────────────────────
+.launcher-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px 5px 6px;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(255, 255, 255, 1);
+  border-radius: 10px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.25), 0 1px 3px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.18s, box-shadow 0.18s, transform 0.12s;
+  outline: none;
+
+  &:hover {
+    background: #fff;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.28), 0 1px 4px rgba(0, 0, 0, 0.18);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.20);
+  }
+}
+
+.launcher-pill-icon {
+  width: 30px;
+  height: 30px;
+  border-radius: 7px;
+  background: $cesan-blue;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(1, 73, 155, 0.35);
+}
+
+.launcher-pill-text {
+  color: $cesan-blue;
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  font-family: system-ui, sans-serif;
+}
+
+
+.header-divider {
+  width: 1px;
+  height: 38px;
+  background: rgba(255, 255, 255, 0.18);
+  flex-shrink: 0;
+}
+
+.header-spacer {
+  flex: 1 1 auto;
+}
+
+.header-actions {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.header-btn {
+  background: $glass-btn-bg;
+  border: 1px solid $glass-btn-border;
+  border-radius: 6px;
+  color: $header-icon-color;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s ease, border-color 0.15s ease;
+  outline: none;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: inherit;
+  }
+
+  &:hover {
+    background: rgba(255, 255, 255, 0.18);
+    border-color: rgba(255, 255, 255, 0.3);
+    color: #fff;
+  }
+
+  &:active {
+    background: rgba(255, 255, 255, 0.26);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+  }
+}
+
+// ── User pill ─────────────────────────────────────────────────────────────────
+.wg-user-pill {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 10px 4px 4px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.20);
+  border-radius: 24px;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: background 0.15s;
+
+  &:hover { background: rgba(255,255,255,0.16); }
+}
+
+.wg-user-avatar {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #fff;
+  color: $cesan-blue;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.wg-user-name {
+  font-size: 12.5px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.88);
+  max-width: 120px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.wg-user-chevron {
+  width: 12px;
+  height: 12px;
+  color: rgba(255,255,255,0.55);
+  transition: transform 0.15s;
+  flex-shrink: 0;
+
+  &.open { transform: rotate(180deg); }
+}
+
+.wg-dropdown {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 210px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 32px rgba(1,73,155,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid #e6ecf5;
+  overflow: hidden;
+  z-index: 500;
+}
+
+.wg-dropdown-header {
+  padding: 11px 16px 8px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #7b8aa3;
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
+  border-bottom: 1px solid #f0f4f9;
+}
+
+.wg-dropdown-divider {
+  height: 1px;
+  background: #f0f4f9;
+  margin: 4px 0;
+}
+
+.wg-dropdown-item {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 16px;
+  background: none;
+  border: none;
+  text-align: left;
+  font-size: 13px;
+  color: #0b2545;
+  cursor: pointer;
+  font-family: inherit;
+  font-weight: 500;
+  transition: background 0.12s;
+
+  svg { width: 14px; height: 14px; color: #7b8aa3; flex-shrink: 0; }
+
+  &:hover { background: #eef4fb; }
+
+  &--danger {
+    color: #dc2626;
+    svg { color: #dc2626; }
+    &:hover { background: #fef2f2; }
+  }
+}
+
+.wg-login-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 6px 14px;
+  background: rgba(255,255,255,0.10);
+  border: 1px solid rgba(255,255,255,0.24);
+  border-radius: 20px;
+  color: rgba(255,255,255,0.88);
+  font-size: 12.5px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  svg { width: 14px; height: 14px; }
+  &:hover { background: rgba(255,255,255,0.18); }
+}
+
+// ── Sidenav ───────────────────────────────────────────────────────────────────
+.sidenav {
+  width: 350px !important;
+}
+
+.example-sidenav-container {
+  flex: 1;
+}
+
+.map-content {
+  position: relative;
+}

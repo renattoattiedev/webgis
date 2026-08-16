@@ -1,0 +1,1046 @@
+// ── Design tokens ────────────────────────────────────────────────────────────
+$blue:        #01499B;
+$blue-light:  rgba(1, 73, 155, 0.08);
+$blue-border: rgba(1, 73, 155, 0.22);
+$text:        #1e3a5f;
+$muted:       #6b7280;
+$divider:     rgba(0, 0, 0, 0.07);
+
+// ── Host container ────────────────────────────────────────────────────────────
+.imprimir-vistoria-container {
+  pointer-events: none;
+}
+
+// ── Floating window ───────────────────────────────────────────────────────────
+.vistoria-card {
+  position: fixed;
+  width: 680px;
+  height: 520px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+  z-index: 1200;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  outline: none;
+
+  // Angular Material density CSS custom properties
+  --mat-form-field-container-height: 34px;
+  --mat-form-field-outlined-container-height: 34px;
+  --mat-select-trigger-height: 34px;
+  --mat-option-min-height: 30px;
+  --mat-chip-height: 26px;
+
+  * { box-sizing: border-box; }
+
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s ease;
+
+  &.minimized {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    &:hover {
+      width: 200px;
+      border-radius: 20px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+    }
+  }
+
+  &.dragging {
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+    cursor: grabbing !important;
+    z-index: 9999;
+    transition: none !important;
+    user-select: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+
+    * {
+      cursor: grabbing !important;
+      user-select: none !important;
+      -webkit-user-select: none !important;
+      -moz-user-select: none !important;
+      -ms-user-select: none !important;
+    }
+  }
+}
+
+body.dragging,
+body.dragging * {
+  cursor: grabbing !important;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.vistoria-header {
+  padding: 10px 12px;
+  background: rgba(1, 73, 155, 0.06);
+  border-bottom: 1px solid $blue-border;
+  cursor: grab;
+  user-select: none;
+  min-height: 42px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.title-wrap {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: $text;
+  font-size: 12px;
+  font-weight: 700;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $blue;
+  }
+}
+
+// ── Window control buttons ────────────────────────────────────────────────────
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+.cv-icon-btn {
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $text;
+  transition: background 0.15s;
+  padding: 0;
+  pointer-events: auto;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    line-height: 16px;
+  }
+
+  &:hover {
+    background: rgba(0, 0, 0, 0.07);
+  }
+
+  &--close:hover {
+    background: rgba(239, 68, 68, 0.1);
+    color: #ef4444;
+  }
+}
+
+// ── Window body ───────────────────────────────────────────────────────────────
+.window-content {
+  flex: 1 1 auto;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.window-content > mat-card-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 0 !important;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+
+  &::-webkit-scrollbar       { width: 8px; }
+  &::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+  &::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+  &::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+}
+
+// ── Angular Material tab group ────────────────────────────────────────────────
+::ng-deep .mat-tab-group {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+::ng-deep .mat-tab-header {
+  flex-shrink: 0;
+  border-bottom: 1px solid $blue-border;
+  min-height: 32px;
+}
+
+::ng-deep .mat-ink-bar {
+  background-color: $blue !important;
+  height: 2px !important;
+}
+
+::ng-deep .mat-tab-label.mat-tab-label-active .mat-tab-label-content,
+::ng-deep .mat-tab-label.mat-tab-label-active {
+  color: $blue !important;
+}
+
+::ng-deep .mat-tab-label {
+  min-width: 64px !important;
+  padding: 0 6px !important;
+  height: 28px !important;
+  font-size: 11px !important;
+  opacity: 1 !important;
+}
+
+::ng-deep .mat-tab-label .mat-icon {
+  font-size: 14px !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+  flex: 1;
+  overflow-y: scroll !important;
+  overflow-x: hidden !important;
+  min-height: 0;
+  position: relative;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+
+  &::-webkit-scrollbar       { width: 8px !important; display: block !important; visibility: visible !important; }
+  &::-webkit-scrollbar-track { background: #f1f1f1 !important; border-radius: 4px !important; }
+  &::-webkit-scrollbar-thumb { background: #c1c1c1 !important; border-radius: 4px !important; }
+  &::-webkit-scrollbar-thumb:hover { background: #a8a8a8 !important; }
+}
+
+::ng-deep .mat-tab-body {
+  height: auto !important;
+  min-height: 100% !important;
+  overflow: visible !important;
+}
+
+::ng-deep .mat-tab-body-content {
+  height: auto !important;
+  min-height: calc(100vh - 300px) !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+// ── Tab content areas ─────────────────────────────────────────────────────────
+.tab-content {
+  height: auto !important;
+  overflow: visible !important;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+}
+
+.tab-label { margin-left: 2px; }
+
+// ── Consulta tab ──────────────────────────────────────────────────────────────
+.consulta-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow: hidden;
+  min-height: 0;
+}
+
+.consulta-row {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tipo-consulta-group {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  min-height: 32px;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.tipo-consulta-group mat-radio-button { font-size: 12px; margin-right: 6px; }
+
+.search-container {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  width: 100%;
+  position: relative;
+  z-index: 10 !important;
+}
+
+.search-field {
+  flex: 1;
+  max-width: 300px;
+  min-width: 200px;
+
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper {
+    display: none !important;
+  }
+}
+
+.seq-ss-field {
+  max-width: 200px;
+  min-width: 170px;
+  flex: 1;
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.field-hint {
+  font-size: 10.5px;
+  color: #9ca3af;
+}
+
+.select-wrap {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: rgba(1, 73, 155, 0.35);
+    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.07);
+  }
+}
+
+::ng-deep .select-wrap {
+  .mat-mdc-select { display: block; padding: 7px 10px; }
+  .mat-mdc-select-trigger { display: flex; align-items: center; width: 100%; height: auto; min-height: unset; }
+  .mat-mdc-select-value { flex: 1; min-width: 0; font-size: 12px; font-family: system-ui, sans-serif; color: #374151; }
+  .mat-mdc-select-placeholder { color: #9ca3af; font-size: 12px; }
+  .mat-mdc-select-arrow-wrapper { height: auto; transform: none !important; flex-shrink: 0; padding-left: 8px; }
+  .mat-mdc-select-arrow { color: #9ca3af; }
+  .mat-mdc-select-ripple, .mat-ripple { display: none; }
+  .mat-mdc-select:focus { outline: none; }
+}
+
+.search-button {
+  height: 36px;
+  flex-shrink: 0;
+  padding: 0 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+// ── Localização tab ───────────────────────────────────────────────────────────
+.localizacao-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-height: 0;
+}
+
+.localizacao-form {
+  flex-shrink: 0;
+  margin-bottom: 6px;
+}
+
+.form-row {
+  display: flex;
+  gap: 8px !important;
+  align-items: flex-end;
+  margin-bottom: 4px !important;
+  flex-wrap: wrap;
+  z-index: 10 !important;
+  position: relative !important;
+
+  &.cidade-row {
+    margin-bottom: 4px !important;
+    align-items: flex-start !important;
+  }
+}
+
+.localidade-field {
+  flex: 1;
+  position: relative !important;
+  z-index: 1000 !important;
+  min-width: 340px !important;
+  max-width: 480px !important;
+  width: 100%;
+
+  ::ng-deep .mat-form-field {
+    min-width: 340px !important;
+    max-width: 480px !important;
+    width: 100%;
+    font-size: 14px !important;
+    background: #fff !important;
+    border-radius: 8px !important;
+    box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06) !important;
+    border: 1px solid #e0e4ea !important;
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    padding: 0.4em 0 !important;
+    font-size: 14px !important;
+  }
+
+  ::ng-deep .mat-form-field-label {
+    font-size: 13px !important;
+    color: $blue !important;
+    font-weight: 600 !important;
+  }
+
+  ::ng-deep .mat-input-element {
+    font-size: 13px !important;
+    padding: 6px 0 !important;
+    background: #fff !important;
+    color: #222 !important;
+  }
+
+  ::ng-deep .mat-form-field-suffix button {
+    width: 32px !important;
+    height: 32px !important;
+    font-size: 18px !important;
+  }
+}
+
+.listar-checkbox-inline {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-top: 0;
+  height: 40px;
+}
+
+.listar-button {
+  height: 36px;
+  padding: 0 14px;
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  min-width: 120px !important;
+
+  &[disabled] {
+    background-color: #e0e0e0 !important;
+    color: #999 !important;
+
+    mat-icon { color: #999 !important; }
+  }
+}
+
+.logradouro-field { flex: 2; min-width: 200px; }
+.logradouro-maior { flex: 3; min-width: 300px; max-width: 600px; }
+.bairro-field     { width: 100%; max-width: 250px; flex: 1; }
+
+// ── Bottom fixed area ─────────────────────────────────────────────────────────
+.bottom-fixed {
+  background: rgba(255, 255, 255, 0.97);
+  border-top: 1px solid $divider;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  flex-shrink: 0;
+}
+
+.selection-fixed {
+  align-self: stretch;
+  margin-bottom: 0 !important;
+  padding: 8px 12px 0;
+}
+
+// ── Registros box ─────────────────────────────────────────────────────────────
+.registros-selecionados {
+  background: rgba(1, 73, 155, 0.03);
+  border: 1px solid rgba(1, 73, 155, 0.12);
+  border-radius: 10px;
+  padding: 8px;
+  height: 160px;
+  max-height: 160px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.registros-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 6px;
+  flex-shrink: 0;
+  height: 22px;
+}
+
+.registros-header h4 {
+  margin: 0;
+  color: $text;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-actions { display: flex; align-items: center; gap: 6px; }
+
+.contador {
+  background: $blue-light;
+  color: $blue;
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 11px;
+  font-weight: 600;
+}
+
+.lista-selecionados {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  border: 1px solid $divider;
+  border-radius: 6px;
+  background: white;
+  min-height: 0;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+
+  &::-webkit-scrollbar       { width: 8px; }
+  &::-webkit-scrollbar-track { background: #f1f1f1; border-radius: 4px; }
+  &::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 4px; }
+  &::-webkit-scrollbar-thumb:hover { background: #a8a8a8; }
+}
+
+// ── Registro items ────────────────────────────────────────────────────────────
+.registro-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  min-height: 32px;
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: background 0.12s;
+  animation: slideIn 0.2s ease;
+
+  &:last-child { border-bottom: none; }
+
+  &:hover { background: rgba(1, 73, 155, 0.04); }
+
+  &.selected {
+    background: rgba(1, 73, 155, 0.06);
+    border-left: 3px solid $blue;
+  }
+}
+
+.registro-info {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: 1;
+  font-size: 13px;
+  overflow: hidden;
+}
+
+.registro-tipo {
+  font-weight: 600;
+  color: $blue;
+  font-size: 11px;
+  text-transform: uppercase;
+  min-width: 60px;
+  flex-shrink: 0;
+}
+
+.registro-codigo {
+  font-weight: 500;
+  color: $text;
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.registro-nome {
+  color: $muted;
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.ss-ficha-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  margin: 0 8px;
+  flex-shrink: 0;
+}
+
+.ss-ficha-label {
+  font-size: 12px;
+  color: #4b5563;
+  font-weight: 500;
+  user-select: none;
+}
+
+.ss-toggle-item {
+  margin: 0;
+  transform: scale(0.8);
+  flex-shrink: 0;
+}
+
+.remove-button {
+  width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+  color: #ef4444 !important;
+  flex-shrink: 0;
+
+  &:hover { background-color: rgba(239, 68, 68, 0.1) !important; }
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+}
+
+// ── Empty state ───────────────────────────────────────────────────────────────
+.empty-state,
+.estado-vazio {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  min-height: 80px;
+  color: $muted;
+  font-style: italic;
+  font-size: 12px;
+  padding: 12px;
+  text-align: center;
+
+  mat-icon { font-size: 22px; width: 22px; height: 22px; margin-bottom: 4px; opacity: 0.4; }
+  p     { margin: 2px 0; }
+  small { font-size: 10px; }
+}
+
+// ── Footer buttons ────────────────────────────────────────────────────────────
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  border-top: 1px solid $divider;
+  background: rgba(255, 255, 255, 0.97);
+  flex-shrink: 0;
+  box-shadow: none;
+}
+
+.footer-action-button {
+  display: inline-flex !important;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px;
+  height: 32px;
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 7px;
+  border: 1px solid $blue-border;
+  background: white;
+  color: $blue;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+
+  &:hover:not(:disabled) { background: $blue-light; }
+
+  &:disabled {
+    background: #f3f4f6;
+    color: #bdbdbd;
+    border-color: #e5e7eb;
+    cursor: not-allowed;
+  }
+
+  // danger variant (Limpar Tudo)
+  &:first-child {
+    border-color: rgba(239, 68, 68, 0.3);
+    color: #ef4444;
+
+    &:hover:not(:disabled) { background: rgba(239, 68, 68, 0.06); }
+  }
+
+  &.primary {
+    background: $blue;
+    color: white;
+    border-color: $blue;
+    font-weight: 700;
+
+    &:hover:not(:disabled) { background: #013d82; border-color: #013d82; }
+
+    &:disabled { background: #bdbdbd; border-color: #bdbdbd; color: white; }
+  }
+}
+
+// ── Angular Material form field overrides ─────────────────────────────────────
+::ng-deep .mat-form-field {
+  line-height: 1.2 !important;
+  background-color: white !important;
+  z-index: 1000 !important;
+  position: relative !important;
+}
+
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0.2em !important;
+  background-color: white !important;
+  border-radius: 4px !important;
+  border: 1px solid #ddd !important;
+}
+
+::ng-deep .mat-form-field-infix {
+  padding: 0.2em 0 !important;
+  border-top: 0.2em solid transparent !important;
+  background-color: white !important;
+  color: #333 !important;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+  padding: 4px 0 !important;
+}
+
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  min-height: 0 !important;
+  padding-top: 0 !important;
+}
+
+::ng-deep .mat-mdc-chip-set,
+::ng-deep mat-chip-grid {
+  margin: 0 !important;
+}
+
+::ng-deep .mat-mdc-input-element {
+  font-size: 13px !important;
+  line-height: 20px !important;
+}
+
+::ng-deep .mat-mdc-select-trigger {
+  height: 30px !important;
+}
+
+::ng-deep .mat-mdc-option {
+  min-height: 30px !important;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+}
+
+::ng-deep .mat-mdc-radio-button .mdc-label,
+::ng-deep .mat-mdc-checkbox .mdc-label {
+  font-size: 12px !important;
+}
+
+::ng-deep .mat-mdc-chip {
+  min-height: 26px !important;
+}
+
+::ng-deep .mat-select {
+  background-color: white !important;
+  color: #333 !important;
+  font-weight: 500 !important;
+  z-index: 1001 !important;
+  position: relative !important;
+}
+
+::ng-deep .mat-select-value  { color: #333 !important; font-weight: 500 !important; }
+::ng-deep .mat-select-placeholder { color: #666 !important; font-weight: 400 !important; }
+::ng-deep .mat-select-arrow  { color: #666 !important; transition: transform 0.2s ease !important; }
+
+::ng-deep .mat-select[aria-expanded="true"] .mat-select-arrow {
+  transform: rotate(180deg) !important;
+}
+
+::ng-deep .mat-select-panel {
+  background-color: white !important;
+  border: 1px solid #ddd !important;
+  border-radius: 4px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  z-index: 99999 !important;
+  max-height: 250px !important;
+  overflow-y: auto !important;
+}
+
+::ng-deep .mat-option {
+  color: #333 !important;
+  font-weight: 500 !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  background-color: white !important;
+
+  &:hover { background-color: #f5f5f5 !important; }
+  &.mat-selected { background-color: $blue !important; color: white !important; }
+}
+
+// ── Autocomplete overlay ──────────────────────────────────────────────────────
+::ng-deep .mat-autocomplete-panel {
+  min-width: 320px !important;
+  max-width: 440px !important;
+  box-shadow: 0 6px 24px rgba(1, 73, 155, 0.12) !important;
+  border-radius: 8px !important;
+  border: 1px solid #d1d5db !important;
+  background: #fff !important;
+  font-size: 14px !important;
+  padding: 2px 0 !important;
+  z-index: 99999 !important;
+  animation: fadeInDown 0.2s ease-out;
+
+  .mat-option {
+    min-height: 36px !important;
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+  }
+}
+
+::ng-deep .cdk-overlay-container,
+::ng-deep .cdk-overlay-pane {
+  z-index: 99999 !important;
+}
+
+// ── OL Popup ──────────────────────────────────────────────────────────────────
+::ng-deep .ol-popup {
+  position: absolute;
+  background-color: white;
+  border-radius: 8px;
+  border: 1px solid $blue-border;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  z-index: 9999;
+  min-width: 280px;
+  max-width: 350px;
+}
+
+.popup-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: rgba(1, 73, 155, 0.06);
+  border-bottom: 1px solid $blue-border;
+  border-radius: 8px 8px 0 0;
+
+  strong {
+    color: $text;
+    font-size: 13px;
+    font-weight: 700;
+  }
+}
+
+.popup-close {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: $muted;
+  padding: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+  transition: background 0.15s, color 0.15s;
+
+  &:hover { background: rgba(239, 68, 68, 0.1); color: #ef4444; }
+}
+
+.popup-body { padding: 10px 14px; }
+
+.info-row {
+  display: flex;
+  margin-bottom: 6px;
+  font-size: 12px;
+
+  &:last-child { margin-bottom: 0; }
+}
+
+.label  { font-weight: 600; color: $text; min-width: 80px; flex-shrink: 0; }
+.value  { color: #333; word-break: break-word; }
+
+.popup-footer {
+  padding: 8px 14px 10px;
+  border-top: 1px solid $divider;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.popup-print-button {
+  background-color: $blue;
+  color: white;
+  border: none;
+  border-radius: 7px;
+  padding: 0 14px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  transition: background 0.15s;
+  min-width: 90px;
+  justify-content: center;
+
+  mat-icon { font-size: 15px; width: 15px; height: 15px; }
+
+  &:hover:not(:disabled) { background: #013d82; }
+  &:disabled { background: #bdbdbd; cursor: not-allowed; }
+}
+
+// ── Animations ────────────────────────────────────────────────────────────────
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+// ── Responsive ────────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .card-actions {
+    flex-direction: column;
+    gap: 8px;
+    padding: 10px;
+    height: auto;
+  }
+
+  .footer-action-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .search-container { flex-direction: column; align-items: stretch; }
+  .form-row         { flex-direction: column; }
+
+  .localidade-field,
+  .logradouro-field,
+  .bairro-field {
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .listar-button {
+    width: 100% !important;
+    height: 52px !important;
+    font-size: 16px !important;
+  }
+
+  ::ng-deep .mat-autocomplete-panel {
+    max-height: 250px !important;
+    min-width: 280px !important;
+
+    .mat-option {
+      padding: 14px 16px !important;
+      font-size: 16px !important;
+      min-height: 52px !important;
+    }
+  }
+}
+
+@media (max-width: 600px) {
+  .localidade-field,
+  .localidade-field ::ng-deep .mat-form-field,
+  ::ng-deep .mat-autocomplete-panel {
+    min-width: 98vw !important;
+    max-width: 98vw !important;
+    font-size: 15px !important;
+  }
+}
+
+// ── Dark mode (keep autocomplete readable) ────────────────────────────────────
+@media (prefers-color-scheme: dark) {
+  ::ng-deep .mat-autocomplete-panel {
+    background-color: #2d2d2d !important;
+    border-color: #555 !important;
+
+    .mat-option {
+      background-color: #2d2d2d !important;
+      color: #fff !important;
+      border-bottom-color: #444 !important;
+
+      &:hover    { background-color: #3d3d3d !important; }
+      &.mat-selected { background-color: $blue !important; color: white !important; }
+    }
+  }
+}
+
+// ─── Beacon (minimized) ────────────────────────────────────────────────────
+
+.win-beacon {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  overflow: hidden;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.beacon-icon-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 16px;
+    width: 16px;
+    height: 16px;
+    color: $blue;
+  }
+}
+
+.beacon-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: $text;
+  white-space: nowrap;
+  opacity: 0;
+  padding-right: 12px;
+  transition: opacity 0.18s ease 0.14s;
+}
+
+.vistoria-card.minimized:hover .beacon-label {
+  opacity: 1;
+}

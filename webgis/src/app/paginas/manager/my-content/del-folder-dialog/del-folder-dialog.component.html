@@ -1,0 +1,53 @@
+<div class="idedlg idedlg--danger">
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+          <path d="M10 11v6M14 11v6"/>
+        </svg>
+      </div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Excluir pasta</h2>
+        <p class="idedlg-sub">Esta ação não pode ser desfeita</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+      <div class="idedlg-note tone-warn">
+        <div class="idedlg-note-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+            <line x1="12" y1="9" x2="12" y2="13"/>
+            <line x1="12" y1="17" x2="12.01" y2="17"/>
+          </svg>
+        </div>
+        <div class="idedlg-note-body">
+          <strong>Deseja realmente excluir esta pasta?</strong>
+          <p>Os conteúdos que estavam nela voltarão para o nível raiz e poderão ser realocados depois.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" [mat-dialog-close]="false" type="button">Cancelar</button>
+      <button class="idedlg-btn idedlg-btn-danger" [mat-dialog-close]="true" type="button" cdkFocusInitial>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="3 6 5 6 21 6"/>
+          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+        </svg>
+        Sim, excluir
+      </button>
+    </footer>
+  </div>
+</div>

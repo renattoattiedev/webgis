@@ -1,0 +1,8 @@
+// Estilos compartilhados em src/styles/_dialog-base.scss
+:host {
+  display: block;
+  min-width: 760px;
+}
+@media (max-width: 800px) {
+  :host { min-width: 0; width: 100%; }
+}

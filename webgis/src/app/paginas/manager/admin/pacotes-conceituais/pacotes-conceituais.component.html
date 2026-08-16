@@ -1,0 +1,93 @@
+<div class="ad-list">
+  <div class="al-top">
+    <div class="al-top-left">
+      <h2 class="al-title">Pacotes <em>conceituais</em></h2>
+      <span class="al-count">{{ dataSourcePacotesConceituais.data.length }} pacotes</span>
+    </div>
+    <div class="al-search">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input placeholder="Buscar por nome…" (keyup)="aplicarFiltroNome($event)"/>
+    </div>
+    <button class="al-add" (click)="openAddDialog()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Novo pacote
+    </button>
+  </div>
+  <div class="al-table-wrap">
+    <table mat-table [dataSource]="dataSourcePacotesConceituais" class="al-table">
+      <ng-container matColumnDef="tituloPacoteConceitual">
+        <th mat-header-cell *matHeaderCellDef>Pacote</th>
+        <td mat-cell *matCellDef="let p">
+          <div class="al-cell-title">{{ p.tituloPacoteConceitual }}</div>
+          <div class="al-cell-sub">{{ p.nomePacoteConceitual }}</div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="nomePacoteConceitual">
+        <th mat-header-cell *matHeaderCellDef>Nome interno</th>
+        <td mat-cell *matCellDef="let p" style="font-family: ui-monospace, monospace; font-size:12px; color:#5b6b85">{{ p.nomePacoteConceitual }}</td>
+      </ng-container>
+      <ng-container matColumnDef="criadoEm">
+        <th mat-header-cell *matHeaderCellDef>Criação</th>
+        <td mat-cell *matCellDef="let p">
+          <div class="al-cell-date">{{ p.criadoEm | date: 'dd/MM/yyyy' }}<span>{{ p.criadoEm | date: 'HH:mm' }}</span></div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="nomeUsrCriacao">
+        <th mat-header-cell *matHeaderCellDef>Criado por</th>
+        <td mat-cell *matCellDef="let p">
+          <div class="al-user-pill" [matTooltip]="p.nomeUsrCriacao || ''">
+            <div class="av">{{ (p.nomeUsrCriacao || '?').charAt(0).toUpperCase() }}</div>
+            <span>{{ p.nomeUsrCriacao }}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="updatedAt">
+        <th mat-header-cell *matHeaderCellDef>Alteração</th>
+        <td mat-cell *matCellDef="let p">
+          <div class="al-cell-date">{{ p.updatedAt | date: 'dd/MM/yyyy' }}<span>{{ p.updatedAt | date: 'HH:mm' }}</span></div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="nomeUsrAlteracao">
+        <th mat-header-cell *matHeaderCellDef>Alterado por</th>
+        <td mat-cell *matCellDef="let p">
+          <div class="al-user-pill" [matTooltip]="p.nomeUsrAlteracao || ''">
+            <div class="av">{{ (p.nomeUsrAlteracao || '?').charAt(0).toUpperCase() }}</div>
+            <span>{{ p.nomeUsrAlteracao }}</span>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="validadoGeoserver">
+        <th mat-header-cell *matHeaderCellDef>GeoServer</th>
+        <td mat-cell *matCellDef="let p">
+          <span class="al-status ok" *ngIf="p.validadoGeoserver === true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+            Validado
+          </span>
+          <span class="al-status fail" *ngIf="p.validadoGeoserver === false">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+            Não validado
+          </span>
+          <span class="al-status unknown" *ngIf="p.validadoGeoserver === null || p.validadoGeoserver === undefined">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+            Indefinido
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="acao">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let p">
+          <button class="al-row-icon" [matMenuTriggerFor]="menu" matTooltip="Ações">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="openEditDialog(p)"><mat-icon>edit</mat-icon><span>Editar</span></button>
+            <button mat-menu-item class="al-menu-danger" (click)="openDeleteDialog(p)"><mat-icon>delete</mat-icon><span>Excluir</span></button>
+          </mat-menu>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.is-deleted]="row.deletedAt !== null"></tr>
+    </table>
+  </div>
+  <mat-paginator class="al-paginator" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+</div>

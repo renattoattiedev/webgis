@@ -1,0 +1,116 @@
+.config-dialog {
+  width: 420px;
+  max-width: 95vw;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-bottom: 1px solid #eee;
+  cursor: move;
+}
+
+.dialog-header h3 { margin: 0; font-size: 16px; }
+
+.dialog-content { padding: 12px 16px; display: flex; flex-direction: column; gap: 12px; }
+
+.section { padding: 8px; }
+.section-title { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; font-weight: 600; }
+.aux-list { display: flex; flex-direction: column; gap: 8px; }
+.aux-item { display: flex; align-items: center; gap: 10px; padding: 6px 4px; border-radius: 6px; }
+.aux-thumb { width: 28px; height: 28px; border-radius: 50%; border: 2px solid #4ea9ff; object-fit: cover; }
+.aux-layer-icon { color: #333; }
+.aux-info { display: flex; justify-content: space-between; align-items: center; flex: 1; }
+.aux-title { font-size: 14px; font-weight: 500; color: #222; }
+.aux-actions { display: flex; align-items: center; }
+.empty { color: #777; font-size: 12px; }
+.options { display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }
+.basemap-field { width: 220px; }
+.escala-field { width: 180px; }
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.select-wrap {
+  width: 100%;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: rgba(1, 73, 155, 0.35);
+    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.07);
+  }
+}
+
+::ng-deep .select-wrap {
+  .mat-mdc-select { display: block; padding: 7px 10px; }
+  .mat-mdc-select-trigger { display: flex; align-items: center; width: 100%; height: auto; min-height: unset; }
+  .mat-mdc-select-value { flex: 1; min-width: 0; font-size: 12px; font-family: system-ui, sans-serif; color: #374151; }
+  .mat-mdc-select-placeholder { color: #9ca3af; font-size: 12px; }
+  .mat-mdc-select-arrow-wrapper { height: auto; transform: none !important; flex-shrink: 0; padding-left: 8px; }
+  .mat-mdc-select-arrow { color: #9ca3af; }
+  .mat-mdc-select-ripple, .mat-ripple { display: none; }
+  .mat-mdc-select:focus { outline: none; }
+}
+.seq-field { width: auto; max-width: 180px; }
+.seq-input { width: 130px; height: 30px; }
+.config-dialog {
+  --mat-form-field-container-height: 34px;
+  --mat-form-field-outlined-container-height: 34px;
+  --mat-select-trigger-height: 34px;
+  --mat-option-min-height: 30px;
+}
+
+/* Compact Material form fields inside dialog */
+::ng-deep .mat-form-field {
+  line-height: 1.2 !important;
+}
+::ng-deep .mat-form-field-wrapper {
+  padding-bottom: 0.2em !important;
+}
+::ng-deep .mat-form-field-infix,
+::ng-deep .mat-mdc-form-field-infix {
+  padding: 4px 0 !important;
+  border-top: 0.2em solid transparent !important;
+}
+::ng-deep .mat-mdc-form-field-subscript-wrapper {
+  min-height: 0 !important;
+  padding-top: 0 !important;
+}
+::ng-deep .mat-mdc-input-element {
+  font-size: 13px !important;
+  line-height: 20px !important;
+}
+::ng-deep .mat-mdc-select-trigger {
+  height: 30px !important;
+}
+::ng-deep .mat-mdc-option {
+  min-height: 30px !important;
+  padding: 6px 10px !important;
+  font-size: 12px !important;
+}
+::ng-deep .mat-mdc-radio-button .mdc-label,
+::ng-deep .mat-mdc-checkbox .mdc-label {
+  font-size: 12px !important;
+}
+.hint { font-size: 12px; color: #777; }
+
+.dialog-footer { display: flex; align-items: center; gap: 8px; padding: 8px 16px; border-top: 1px solid #eee; }
+.spacer { flex: 1; }

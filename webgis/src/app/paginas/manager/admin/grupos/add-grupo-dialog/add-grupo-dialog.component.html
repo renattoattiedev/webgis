@@ -1,0 +1,57 @@
+<form #form="ngForm" (ngSubmit)="submitTema(form)" class="idedlg">
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Adicionar <em>grupo</em></h2>
+        <p class="idedlg-sub">Crie um grupo de camadas dentro de um tema</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+      <mat-form-field appearance="outline">
+        <mat-label>Nome do grupo</mat-label>
+        <input matInput name="nome_tema" [(ngModel)]="grupoCamadas.grupoNome" (ngModelChange)="onNomeChange()" cdkFocusInitial>
+      </mat-form-field>
+
+      <div class="idedlg-sigla-row">
+        <app-grupo-avatar-badge
+          [grupos]="[{ id: 'preview', nome: grupoCamadas.grupoNome || 'Novo grupo', sigla: grupoCamadas.grupoSigla || '--' }]"
+        ></app-grupo-avatar-badge>
+        <mat-form-field appearance="outline" class="idedlg-sigla-field">
+          <mat-label>Sigla</mat-label>
+          <input matInput name="sigla" maxlength="2" [(ngModel)]="grupoCamadas.grupoSigla" (ngModelChange)="onSiglaChange()">
+        </mat-form-field>
+      </div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tema</mat-label>
+        <mat-select name="tema" [(ngModel)]="grupoCamadas.grupoTema">
+          <mat-option *ngFor="let tema of temas" [value]="tema.id">{{ tema.tituloTema }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Dono do grupo</mat-label>
+        <mat-select name="dono" [(ngModel)]="donoId">
+          <mat-option [value]="undefined">Eu (criador)</mat-option>
+          <mat-option *ngFor="let usuario of usuarios" [value]="usuario.id">{{ usuario.nome }}</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" (click)="onClose()" type="button">Cancelar</button>
+      <button class="idedlg-btn idedlg-btn-primary" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg> Criar grupo</button>
+    </footer>
+  </div>
+</form>

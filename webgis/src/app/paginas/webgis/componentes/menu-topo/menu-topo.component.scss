@@ -1,0 +1,119 @@
+// ── Variáveis ────────────────────────────────────────────────────────────────
+$glass-bg:          rgba(255, 255, 255, 0.08);
+$glass-bg-hover:    rgba(255, 255, 255, 0.22);
+$glass-bg-active:   rgba(255, 255, 255, 0.30);
+$glass-border:      rgba(255, 255, 255, 0.18);
+$glass-border-hover:rgba(255, 255, 255, 0.32);
+$label-color:       #c5cae9;
+$separator-color:   rgba(255, 255, 255, 0.15);
+$icon-size:         20px;
+
+// ── Container (inline dentro do app-header) ───────────────────────────────────
+.ribbon-container {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+// ── Separador vertical ────────────────────────────────────────────────────────
+.ribbon-separator {
+  width: 1px;
+  background: $separator-color;
+  height: 24px;
+  margin: 0 3px;
+  flex-shrink: 0;
+}
+
+// ── Grupo ─────────────────────────────────────────────────────────────────────
+.ribbon-group {
+  background: $glass-bg;
+  border: 1px solid $glass-border;
+  border-radius: 8px;
+  padding: 4px 5px;
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  transition: border-color 0.15s ease;
+
+  &:hover {
+    border-color: $glass-border-hover;
+  }
+}
+
+.ribbon-group-tools {
+  display: flex;
+  gap: 2px;
+  align-items: center;
+}
+
+// ── Botão de ferramenta ───────────────────────────────────────────────────────
+.tool-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  padding: 5px 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, transform 0.1s ease;
+  outline: none;
+
+  mat-icon {
+    font-size: $icon-size;
+    width: $icon-size;
+    height: $icon-size;
+    color: $label-color;
+    transition: color 0.15s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  &:hover:not(:disabled):not(.tool-btn--disabled) {
+    background: $glass-bg-hover;
+    border-color: $glass-border-hover;
+
+    mat-icon {
+      color: #fff;
+    }
+  }
+
+  &:active:not(:disabled):not(.tool-btn--disabled) {
+    background: $glass-bg-active;
+    transform: translateY(1px);
+  }
+
+  &:focus-visible {
+    outline: 2px solid rgba(255, 255, 255, 0.6);
+    outline-offset: 2px;
+  }
+
+  &--disabled,
+  &:disabled {
+    opacity: 0.32;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &--active {
+    background: $glass-bg-active;
+    border-color: $glass-border-hover;
+
+    mat-icon {
+      color: #fff;
+    }
+  }
+}
+
+// ── Responsividade ────────────────────────────────────────────────────────────
+@media (max-width: 768px) {
+  .ribbon-container {
+    gap: 3px;
+  }
+
+  .tool-btn {
+    padding: 5px 5px;
+  }
+}

@@ -1,0 +1,532 @@
+$blue: #01499B;
+$blue-light: rgba(1, 73, 155, 0.08);
+$blue-border: rgba(1, 73, 155, 0.22);
+$text: #1e3a5f;
+$muted: #6b7280;
+$divider: rgba(0, 0, 0, 0.07);
+
+.cep-window {
+  position: fixed;
+  width: 380px;
+  max-width: calc(100vw - 24px);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.72);
+  border-radius: 14px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.16);
+  z-index: 1200;
+  font-family: system-ui, sans-serif;
+  font-size: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-radius 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.2s ease;
+
+  &.minimized {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    overflow: hidden;
+
+    &:hover {
+      width: 200px;
+      border-radius: 20px;
+      box-shadow: 0 6px 24px rgba(0, 0, 0, 0.22);
+    }
+  }
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.cep-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(1, 73, 155, 0.06);
+  border-bottom: 1px solid $blue-border;
+  cursor: grab;
+  user-select: none;
+  &:active { cursor: grabbing; }
+}
+
+.cep-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  color: $text;
+  font-size: 12px;
+  font-weight: 700;
+  svg { color: $blue; flex-shrink: 0; }
+}
+
+.cep-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.cep-icon-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border: none;
+  background: transparent;
+  border-radius: 7px;
+  cursor: pointer;
+  color: $muted;
+  transition: background 0.12s, color 0.12s;
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+  &:hover { background: rgba(0,0,0,0.07); color: $text; }
+  &--close:hover { background: rgba(239,68,68,0.1); color: #ef4444; }
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────
+
+.cep-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  max-height: 75vh;
+}
+
+.cep-section {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.cep-section-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: $blue;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 2px;
+}
+
+.cep-divider {
+  height: 1px;
+  background: $divider;
+  flex-shrink: 0;
+}
+
+// ── Mode tabs ─────────────────────────────────────────────────────────────────
+
+.cep-mode-tabs {
+  display: flex;
+  gap: 6px;
+}
+
+.mode-tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 6px 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 8px;
+  background: white;
+  font-size: 11px;
+  font-weight: 500;
+  color: $muted;
+  cursor: pointer;
+  transition: all 0.13s;
+  mat-icon { font-size: 15px; width: 15px; height: 15px; }
+  &:hover { border-color: $blue-border; color: $blue; }
+  &--active { background: $blue-light; border-color: $blue; color: $blue; font-weight: 700; }
+}
+
+// ── Draw buttons ──────────────────────────────────────────────────────────────
+
+.cep-draw-btns {
+  display: flex;
+  gap: 6px;
+}
+
+.draw-btn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 8px;
+  border: 1px dashed $blue-border;
+  border-radius: 8px;
+  background: $blue-light;
+  color: $blue;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.13s;
+  mat-icon { font-size: 20px; width: 20px; height: 20px; }
+  &:hover:not(:disabled) { background: rgba(1,73,155,0.14); border-style: solid; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+// ── Form fields ───────────────────────────────────────────────────────────────
+
+.cep-field {
+  width: 100%;
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper { min-height: 0; }
+}
+
+.field-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  width: 100%;
+  margin-bottom: 8px;
+}
+
+.field-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: $muted;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+
+.select-wrap {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: $blue-border;
+    box-shadow: 0 0 0 3px $blue-light;
+  }
+}
+
+::ng-deep .select-wrap {
+  .mat-mdc-select { display: block; padding: 7px 10px; }
+  .mat-mdc-select-trigger { display: flex; align-items: center; width: 100%; height: auto; min-height: unset; }
+  .mat-mdc-select-value { flex: 1; min-width: 0; font-size: 12px; font-family: system-ui, sans-serif; color: #374151; }
+  .mat-mdc-select-placeholder { color: #9ca3af; font-size: 12px; }
+  .mat-mdc-select-arrow-wrapper { height: auto; transform: none !important; flex-shrink: 0; padding-left: 8px; }
+  .mat-mdc-select-arrow { color: #9ca3af; }
+  .mat-mdc-select-ripple, .mat-ripple { display: none; }
+  .mat-mdc-select:focus { outline: none; }
+}
+
+// ── Action btn ────────────────────────────────────────────────────────────────
+
+.cep-action-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: $blue;
+  color: white;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.13s;
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+  &:hover:not(:disabled) { background: #013d82; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+// ── Hints ─────────────────────────────────────────────────────────────────────
+
+.cep-hint {
+  font-size: 10px;
+  color: $muted;
+  padding: 6px 8px;
+  border-radius: 6px;
+  background: rgba(0,0,0,0.03);
+  border: 1px solid rgba(0,0,0,0.07);
+
+  &--active {
+    color: $blue;
+    background: $blue-light;
+    border-color: $blue-border;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    mat-icon { font-size: 13px; width: 13px; height: 13px; }
+  }
+
+  &--ok {
+    color: #2e7d32;
+    background: rgba(46,125,50,0.07);
+    border-color: rgba(46,125,50,0.25);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    mat-icon { font-size: 13px; width: 13px; height: 13px; }
+  }
+}
+
+.cep-empty {
+  font-size: 11px;
+  color: $muted;
+  text-align: center;
+  padding: 10px;
+  border: 1.5px dashed rgba(0,0,0,0.12);
+  border-radius: 8px;
+}
+
+// ── Date row ──────────────────────────────────────────────────────────────────
+
+.cep-date-row {
+  display: flex;
+  gap: 8px;
+  .cep-date-field { flex: 1; ::ng-deep .mat-mdc-form-field-subscript-wrapper { min-height: 0; } }
+}
+
+// ── Two-col layout ────────────────────────────────────────────────────────────
+
+.cep-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+
+  > * {
+    min-width: 0;
+  }
+}
+
+// ── Checkboxes ────────────────────────────────────────────────────────────────
+
+.cep-check {
+  font-size: 11px;
+  --mdc-checkbox-selected-checkmark-color: #ffffff;
+  --mdc-checkbox-selected-focus-icon-color: #01499B;
+  --mdc-checkbox-selected-hover-icon-color: #01499B;
+  --mdc-checkbox-selected-icon-color: #01499B;
+  --mdc-checkbox-selected-pressed-icon-color: #01499B;
+  --mdc-checkbox-unselected-hover-icon-color: #01499B;
+  --mdc-checkbox-unselected-focus-icon-color: #01499B;
+  --mdc-checkbox-unselected-pressed-icon-color: #01499B;
+  ::ng-deep .mdc-label { font-size: 12px; color: #374151; }
+  ::ng-deep .mdc-checkbox { transform: scale(0.85); }
+}
+
+// ── Radio list (estatística) ──────────────────────────────────────────────────
+
+.cep-radio-list {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cep-radio-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 12px;
+  color: #374151;
+  transition: background 0.1s;
+
+  input[type="checkbox"] {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    accent-color: $blue;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+
+  &:hover { background: rgba(0,0,0,0.04); }
+
+  &--active {
+    background: $blue-light;
+    color: $text;
+    font-weight: 600;
+  }
+}
+
+// ── Cor da legenda ────────────────────────────────────────────────────────────
+
+.cep-cor-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  .cep-field { flex: 1; }
+}
+
+.cep-cor-preview {
+  width: 28px;
+  height: 28px;
+  border-radius: 7px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.cep-cor-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.cep-cor-dot {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+// ── Legenda rampa ─────────────────────────────────────────────────────────────
+
+.cep-legenda-rampa {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cep-legenda-item {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.cep-legenda-cor {
+  display: inline-block;
+  width: 18px;
+  height: 13px;
+  border-radius: 3px;
+  flex-shrink: 0;
+  border: 1px solid rgba(0,0,0,0.1);
+}
+
+.cep-legenda-label {
+  font-size: 10px;
+  color: $text;
+}
+
+// ── Loading ───────────────────────────────────────────────────────────────────
+
+.cep-loading {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: $blue;
+  padding: 2px 0;
+
+  &--inline {
+    padding: 4px 0 6px;
+    color: rgba(255,255,255,0.55);
+  }
+}
+
+// ── Footer ────────────────────────────────────────────────────────────────────
+
+.cep-footer {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}
+
+.cep-clear-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 7px;
+  background: white;
+  font-size: 11px;
+  color: $muted;
+  cursor: pointer;
+  transition: all 0.12s;
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  &:hover:not(:disabled) { border-color: #ef4444; color: #ef4444; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+.cep-results-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 7px 10px;
+  border: 1px solid $blue-border;
+  border-radius: 7px;
+  background: white;
+  font-size: 11px;
+  font-weight: 600;
+  color: $blue;
+  cursor: pointer;
+  transition: all 0.12s;
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+  &:hover:not(:disabled) { background: $blue-light; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+.cep-consultar-btn {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: $blue;
+  color: white;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.13s;
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+  &:hover:not(:disabled) { background: #013d82; }
+  &:disabled { opacity: 0.4; cursor: not-allowed; }
+}
+
+// ─── Beacon (minimized) ────────────────────────────────────────────────────
+
+.win-beacon {
+  display: flex;
+  align-items: center;
+  height: 40px;
+  overflow: hidden;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.beacon-icon-wrap {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg { color: $blue; }
+}
+
+.beacon-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: $text;
+  white-space: nowrap;
+  opacity: 0;
+  padding-right: 12px;
+  transition: opacity 0.18s ease 0.14s;
+}
+
+.cep-window.minimized:hover .beacon-label {
+  opacity: 1;
+}

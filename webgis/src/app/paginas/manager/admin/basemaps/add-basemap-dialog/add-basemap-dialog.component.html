@@ -1,0 +1,66 @@
+<form #form="ngForm" (ngSubmit)="submitBasemap(form)" class="idedlg">
+
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg></div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Adicionar <em>basemap</em></h2>
+        <p class="idedlg-sub">Selecione um mapa publicado para usar como camada base</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+      <div class="idedlg-grid">
+        <div class="idedlg-col">
+          <div class="idedlg-section-title">Mapa</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Mapa publicado</mat-label>
+            <mat-select name="mapaSelecionado" [(ngModel)]="mapaSelecionado"
+                        (selectionChange)="onMapaSelecionado($event.value)" required>
+              <mat-option *ngFor="let mapa of mapasPublicados" [value]="mapa">
+                {{ getMapaLabel(mapa) }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <input type="hidden" name="name" [(ngModel)]="basemap.name">
+          <input type="hidden" name="source" [(ngModel)]="basemap.source">
+        </div>
+
+        <div class="idedlg-col">
+          <div class="idedlg-section-title">Configuração</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Ordem</mat-label>
+            <input matInput name="order" type="number" [(ngModel)]="basemap.order" required min="0">
+            <mat-hint>Inteiros começando em 0</mat-hint>
+          </mat-form-field>
+
+          <div style="display:flex; flex-direction:column; gap:10px; margin-top:8px">
+            <mat-slide-toggle name="isDefault" [(ngModel)]="basemap.isDefault">
+              <span style="font-size:13px; color:#0b2545; font-weight:500">Definir como padrão</span>
+            </mat-slide-toggle>
+            <mat-slide-toggle name="isActive" [(ngModel)]="basemap.isActive">
+              <span style="font-size:13px; color:#0b2545; font-weight:500">Ativo</span>
+            </mat-slide-toggle>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" (click)="onClose()" type="button">Cancelar</button>
+      <button class="idedlg-btn idedlg-btn-primary" type="submit"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg> Criar basemap</button>
+    </footer>
+  </div>
+</form>

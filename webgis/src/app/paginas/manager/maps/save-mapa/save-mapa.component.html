@@ -1,0 +1,105 @@
+<form [formGroup]="mapaForm" (ngSubmit)="onSubmit()" class="idedlg">
+
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
+      </div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Salvar <em>mapa</em></h2>
+        <p class="idedlg-sub">Preencha os metadados para publicar este mapa</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+
+      <div class="idedlg-section-title">Identificação</div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nome do mapa</mat-label>
+        <input matInput formControlName="nomeMapa" name="nomeMapa" required>
+        <mat-error *ngIf="mapaForm.get('nomeMapa')?.hasError('required') && mapaForm.get('nomeMapa')?.touched">
+          Nome do mapa é obrigatório.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Título do mapa</mat-label>
+        <input matInput formControlName="tituloMapa" name="tituloMapa" required>
+        <mat-error *ngIf="mapaForm.get('tituloMapa')?.hasError('required') && mapaForm.get('tituloMapa')?.touched">
+          Título é obrigatório.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição do mapa</mat-label>
+        <textarea matInput rows="4" formControlName="descricaoMapa" name="descricaoMapa" required></textarea>
+        <mat-error *ngIf="mapaForm.get('descricaoMapa')?.hasError('required') && mapaForm.get('descricaoMapa')?.touched">
+          Descrição é obrigatória.
+        </mat-error>
+        <mat-error *ngIf="mapaForm.get('descricaoMapa')?.hasError('minlength') && mapaForm.get('descricaoMapa')?.touched">
+          A descrição deve ter no mínimo 10 caracteres.
+        </mat-error>
+      </mat-form-field>
+
+      <div class="idedlg-section-title">Categorização</div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nível de compartilhamento</mat-label>
+        <mat-select formControlName="nivelCompartilhamentoMapa" required>
+          <mat-option *ngFor="let compartilhamento of niveisCompartilhamento" [value]="compartilhamento.id">
+            {{ compartilhamento.descricaoNivelCompartilhamento }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="mapaForm.get('nivelCompartilhamentoMapa')?.hasError('required') && mapaForm.get('nivelCompartilhamentoMapa')?.touched">
+          O nível de compartilhamento é obrigatório.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tema</mat-label>
+        <mat-select name="tema" formControlName="temaMapa" (selectionChange)="fetchGruposCamadasPorTema($event.value)" required>
+          <mat-option *ngFor="let tema of temas" [value]="tema.id">{{ tema.tituloTema }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="mapaForm.get('temaMapa')?.hasError('required') && mapaForm.get('temaMapa')?.touched">
+          O tema é obrigatório.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Grupo</mat-label>
+        <mat-select name="grupo" formControlName="grupoMapa" [(ngModel)]="mapa.grupoMapa" required>
+          <mat-option *ngFor="let grupo of gruposCamadas" [value]="grupo.id">{{ grupo.grupoNome }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="mapaForm.get('grupoMapa')?.hasError('required') && mapaForm.get('grupoMapa')?.touched">
+          O grupo é obrigatório.
+        </mat-error>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" (click)="cancel()" type="button">Cancelar</button>
+      <button class="idedlg-btn idedlg-btn-primary" type="submit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+          <polyline points="17 21 17 13 7 13 7 21"/>
+          <polyline points="7 3 7 8 15 8"/>
+        </svg>
+        Salvar mapa
+      </button>
+    </footer>
+  </div>
+</form>

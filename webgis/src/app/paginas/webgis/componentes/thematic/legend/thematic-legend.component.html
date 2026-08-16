@@ -1,0 +1,32 @@
+<div class="thematic-legend" *ngIf="model">
+  <div class="thematic-legend-title" *ngIf="model.title">{{ model.title }}</div>
+  <div class="thematic-legend-label">{{ model.spec.label }}</div>
+
+  <ng-container *ngIf="model.mode === 'classes'; else continuousLegend">
+    <div
+      class="thematic-legend-bar"
+      [style.background]="model.gradientCss"
+      [attr.aria-hidden]="true"
+    ></div>
+    <div class="thematic-legend-classes">
+      <div class="thematic-legend-class" *ngFor="let item of model.classes">
+        <span
+          class="thematic-legend-swatch"
+          [style.background]="item.color"
+        ></span>
+        <span class="thematic-legend-class-label">{{ item.label }}</span>
+      </div>
+    </div>
+  </ng-container>
+
+  <ng-template #continuousLegend>
+    <div
+      class="thematic-legend-bar"
+      [style.background]="model.gradientCss"
+      [attr.aria-label]="model.spec.label"
+    ></div>
+    <div class="thematic-legend-ticks">
+      <span *ngFor="let tick of model.ticks">{{ tick.label }}</span>
+    </div>
+  </ng-template>
+</div>

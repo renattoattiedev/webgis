@@ -1,0 +1,64 @@
+<div class="gr-page">
+  <div class="gr-head">
+    <h1>Configurações <em>do sistema</em></h1>
+    <p>Edite parâmetros gerais da plataforma. Configurações sensíveis exigem permissão adicional para edição.</p>
+  </div>
+
+  <div *ngIf="isLoading" class="gr-loading">
+    <mat-spinner diameter="32"></mat-spinner>
+    <span>Carregando configurações…</span>
+  </div>
+
+  <form [formGroup]="configForm" *ngIf="!isLoading" class="gr-form">
+    <section class="gr-group" *ngFor="let group of groupedConfigData">
+      <h2 class="gr-group-title">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
+        {{ group.grupoKey }}
+      </h2>
+
+      <div class="gr-items">
+        <div *ngFor="let item of group.items" class="gr-item">
+
+          <div *ngIf="isSensitiveAndLocked(item)" class="gr-field">
+            <label>
+              <span>{{ item.key }}</span>
+              <span class="gr-badge gr-badge--locked" matTooltip="Configuração sensível — acesso restrito">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                Bloqueado
+              </span>
+            </label>
+            <input class="gr-input gr-input--locked" [value]="item.displayValue" readonly/>
+          </div>
+
+          <div *ngIf="isSensitiveAndEditable(item)" class="gr-field">
+            <label>
+              <span>{{ item.key }}</span>
+              <span class="gr-badge gr-badge--sensitive" matTooltip="Configuração sensível — manter sigilo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                Sensível
+              </span>
+            </label>
+            <div class="gr-input-row">
+              <input class="gr-input" [formControlName]="item.key"/>
+              <button type="button" class="gr-edit-btn" (click)="editSensitiveConfig(item)" matTooltip="Editar valor real">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+              </button>
+            </div>
+          </div>
+
+          <div *ngIf="!item.isSensitive" class="gr-field">
+            <label>
+              <span>{{ item.key }}</span>
+              <span class="gr-badge gr-badge--public" matTooltip="Configuração pública">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/></svg>
+                Pública
+              </span>
+            </label>
+            <input class="gr-input" [formControlName]="item.key"/>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  </form>
+</div>

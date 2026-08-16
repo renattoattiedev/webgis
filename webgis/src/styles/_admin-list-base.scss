@@ -1,0 +1,227 @@
+// ─── Estilos compartilhados das LISTAS do Admin ──────────────────────────
+// Importe uma vez no styles.scss global:
+//   @use './styles/admin-list-base';
+// Reutilizado por: temas, grupos, pacotes-conceituais, basemaps.
+
+$brand:#01499B; $brand-mid:#023775; $brand-tint:#eef4fb; $brand-tint-2:#dbe7f6;
+$ink:#0b2545; $ink-soft:#5b6b85; $muted:#7b8aa3; $line:#e6ecf5; $line-soft:#f0f4f9;
+$bg:#f6f8fc; $danger:#dc2626; $success:#047857; $gold:#eab308;
+$font-ui:'Geist',system-ui,sans-serif;
+$font-serif:'Instrument Serif',Georgia,serif;
+
+.ad-list {
+  font-family:$font-ui; color:$ink;
+
+  // Cap defensivo p/ qualquer SVG dentro do .ad-list — evita SVGs
+  // gigantes (largura herdada) se algum seletor mais específico falhar.
+  svg {
+    max-width: 24px;
+    max-height: 24px;
+    flex-shrink: 0;
+  }
+
+  // Header
+  .al-top {
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    padding-bottom:18px; border-bottom:1px solid $line; margin-bottom:6px;
+    flex-wrap:wrap;
+  }
+  .al-top-left { display:flex; align-items:center; gap:12px; flex:1; min-width:240px; }
+  .al-title {
+    font-size:18px; font-weight:600; color:$ink; letter-spacing:-0.3px;
+    margin:0;
+    em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+  }
+  .al-count {
+    display:inline-flex; align-items:center; justify-content:center;
+    background:$brand-tint; color:$brand;
+    font-size:11.5px; font-weight:700;
+    padding:3px 9px; border-radius:100px;
+  }
+  .al-search {
+    display:flex; align-items:center; gap:8px;
+    background:$line-soft; border:1px solid $line; border-radius:10px;
+    padding:8px 12px; width:320px; min-width:200px;
+    transition:background 0.15s, border-color 0.15s, box-shadow 0.15s;
+    &:focus-within { background:#fff; border-color:$brand; box-shadow:0 0 0 3px rgba(1,73,155,0.08); }
+    svg { width:15px; height:15px; color:$muted; flex-shrink:0; }
+    input {
+      flex:1; border:none; outline:none; background:transparent;
+      font-family:inherit; font-size:13.5px; color:$ink; min-width:0;
+      &::placeholder { color:$muted; }
+    }
+  }
+  .al-add {
+    display:inline-flex; align-items:center; gap:7px;
+    background:$brand; color:#fff;
+    border:1px solid $brand; border-radius:10px;
+    padding:8px 14px;
+    font-family:inherit; font-size:13px; font-weight:600;
+    cursor:pointer;
+    transition:background 0.15s;
+    svg { width:14px; height:14px; }
+    &:hover { background:$brand-mid; border-color:$brand-mid; }
+  }
+
+  // Tabela
+  .al-table-wrap { overflow-x:auto; }
+
+  .al-table {
+    width:100%; background:#fff; font-family:$font-ui;
+
+    ::ng-deep .mat-mdc-header-row { background:$line-soft; min-height:42px; }
+    ::ng-deep .mat-mdc-header-cell {
+      color:$muted;
+      font-size:11px; font-weight:700; letter-spacing:1.2px;
+      text-transform:uppercase;
+      border-bottom:1px solid $line;
+      padding:0 14px;
+    }
+    ::ng-deep .mat-mdc-row {
+      transition:background 0.1s; min-height:58px;
+      &:hover { background:$brand-tint; }
+      &.is-deleted {
+        opacity:0.55;
+        .al-cell-title { text-decoration:line-through; color:$muted; }
+      }
+    }
+    ::ng-deep .mat-mdc-cell {
+      color:$ink; border-bottom:1px solid $line-soft;
+      padding:10px 14px; font-size:13px; vertical-align:middle;
+    }
+  }
+
+  .al-cell-title { font-weight:600; color:$ink; }
+  .al-cell-sub { font-size:11.5px; color:$muted; margin-top:2px; }
+  .al-cell-date {
+    font-size:12px; color:$ink-soft; line-height:1.35;
+    span { display:block; color:$muted; font-size:11px; }
+  }
+
+  .al-user-pill {
+    display:inline-flex; align-items:center; gap:6px;
+    background:$line-soft; padding:3px 10px 3px 3px; border-radius:100px;
+    .av {
+      width:22px; height:22px; border-radius:50%; background:$brand; color:#fff;
+      font-size:10px; font-weight:700;
+      display:inline-flex; align-items:center; justify-content:center;
+    }
+    span { font-size:11.5px; color:$ink-soft; font-weight:500; }
+  }
+
+  .al-status {
+    display:inline-flex; align-items:center; gap:5px;
+    font-size:11px; font-weight:600;
+    padding:3px 9px; border-radius:100px;
+    border:1px solid;
+    svg { width:12px; height:12px; }
+    &.ok      { background:#ecfdf5; color:$success; border-color:#a7f3d0; }
+    &.fail    { background:#fef2f2; color:$danger;  border-color:#fecaca; }
+    &.unknown { background:$line-soft; color:$muted; border-color:$line; }
+  }
+
+  .al-row-icon {
+    width:30px; height:30px; border-radius:8px;
+    background:transparent; border:1px solid transparent;
+    color:$ink-soft; cursor:pointer;
+    display:inline-flex; align-items:center; justify-content:center;
+    transition:background 0.12s, color 0.12s, border-color 0.12s;
+    svg { width:14px; height:14px; }
+    &:hover { background:$brand-tint; color:$brand; border-color:$brand-tint-2; }
+    &.danger:hover { background:#fef2f2; color:$danger; border-color:#fecaca; }
+  }
+
+  // Mat-menu danger item override
+  ::ng-deep .al-menu-danger {
+    color:$danger;
+    mat-icon { color:$danger; }
+  }
+
+  // Paginator
+  .al-paginator {
+    border-top:1px solid $line; background:#fff;
+    ::ng-deep .mat-mdc-paginator-container {
+      padding:8px 6px; color:$muted; font-size:12.5px;
+    }
+    ::ng-deep .mat-mdc-icon-button {
+      color:$ink-soft;
+      &:hover:not(:disabled) { background:$brand-tint; color:$brand; }
+    }
+  }
+
+  // Slide toggle override (basemaps)
+  ::ng-deep .mat-mdc-slide-toggle {
+    --mdc-switch-selected-track-color:#{$brand};
+    --mdc-switch-selected-handle-color:#fff;
+    --mdc-switch-selected-hover-track-color:#{$brand};
+    --mdc-switch-selected-focus-track-color:#{$brand};
+    --mdc-switch-selected-pressed-track-color:#{$brand};
+  }
+
+  // Order input (basemaps)
+  .al-order-input {
+    width:64px; padding:6px 8px;
+    border:1px solid $line; border-radius:7px;
+    font-family:inherit; font-size:13px; color:$ink;
+    background:#fff; outline:none;
+    transition:border-color 0.15s, box-shadow 0.15s;
+    &:focus { border-color:$brand; box-shadow:0 0 0 3px rgba(1,73,155,0.1); }
+  }
+
+  // Thumb (basemaps)
+  .al-thumb {
+    width:80px; height:48px; border-radius:7px;
+    object-fit:cover;
+    border:1px solid $line;
+    display:block;
+  }
+
+  // Cards (componentes)
+  .al-cards-grid {
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:16px;
+    padding-top:20px;
+  }
+  .al-card {
+    background:#fff; border:1px solid $line; border-radius:14px;
+    padding:18px;
+    transition:transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    display:flex; flex-direction:column; gap:12px;
+    &:hover {
+      transform:translateY(-2px); border-color:$brand-tint-2;
+      box-shadow:0 10px 28px rgba(1,73,155,0.10);
+    }
+  }
+  .al-card-head { display:flex; align-items:center; gap:12px; }
+  .al-card-icon {
+    width:36px; height:36px; border-radius:10px;
+    background:$brand-tint; color:$brand;
+    display:inline-flex; align-items:center; justify-content:center;
+    svg { width:17px; height:17px; }
+  }
+  .al-card-title { font-size:14.5px; font-weight:600; color:$ink; margin:0; letter-spacing:-0.2px; }
+  .al-card-desc { font-size:12.5px; color:$ink-soft; line-height:1.5; margin:0; }
+  .al-card-action {
+    display:inline-flex; align-items:center; gap:6px;
+    background:#fff; color:$brand;
+    border:1px solid $brand-tint-2; border-radius:9px;
+    padding:8px 12px;
+    font-family:inherit; font-size:12.5px; font-weight:600;
+    cursor:pointer;
+    transition:background 0.15s;
+    svg { width:13px; height:13px; }
+    &:hover { background:$brand-tint; }
+  }
+
+  // Header section (componentes)
+  .al-page-head {
+    margin-bottom:20px;
+    h1 {
+      margin:0 0 6px;
+      font-size:22px; font-weight:600; color:$ink; letter-spacing:-0.4px;
+      em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+    }
+    p { margin:0; font-size:13.5px; color:$ink-soft; line-height:1.55; max-width:680px; }
+  }
+}

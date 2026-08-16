@@ -1,0 +1,134 @@
+// Estilos compartilhados em src/styles/_dialog-base.scss
+
+$brand:        #01499B;
+$brand-mid:    #023775;
+$brand-tint:   #eef4fb;
+$brand-tint-2: #dbe7f6;
+$ink:          #0b2545;
+$ink-soft:     #5b6b85;
+$muted:        #7b8aa3;
+$line:         #e6ecf5;
+$line-soft:    #f0f4f9;
+$success:      #047857;
+$success-bg:   #ecfdf5;
+
+:host {
+  display: block;
+  min-width: 720px;
+
+  @media (max-width: 800px) { min-width: 0; width: 100%; }
+}
+
+.add-dados-body { padding: 0 18px 8px; }
+
+.add-dados-tabs {
+  font-family: 'Geist', system-ui, sans-serif;
+
+  ::ng-deep .mat-mdc-tab-header {
+    border-bottom: 1px solid $line;
+    --mdc-secondary-navigation-tab-container-height: 40px;
+  }
+  ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+    font-size: 13px; font-weight: 600; color: $ink-soft;
+  }
+  ::ng-deep .mat-mdc-tab--active .mdc-tab__text-label { color: $brand !important; }
+  ::ng-deep .mdc-tab-indicator__content--underline {
+    border-color: $brand !important;
+    border-top-width: 2.5px !important;
+  }
+  ::ng-deep .mat-mdc-tab-body-content { overflow-y: auto; }
+}
+
+.ad-tab-body {
+  padding: 12px 4px 4px;
+  max-height: 52vh;
+  overflow-y: auto;
+  display: flex; flex-direction: column; gap: 6px;
+}
+
+.ad-row {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  gap: 12px;
+  align-items: center;
+  padding: 8px 10px;
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 10px;
+  transition: background 0.12s, border-color 0.12s;
+
+  &:hover { background: $line-soft; border-color: $brand-tint-2; }
+
+  &.added {
+    background: $success-bg;
+    border-color: #a7f3d0;
+  }
+}
+
+.ad-thumb {
+  width: 44px; height: 44px; border-radius: 9px;
+  overflow: hidden;
+  background: $line-soft; border: 1px solid $line;
+  flex-shrink: 0;
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+
+.ad-row-text {
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 0;
+}
+
+.ad-row-title {
+  font-size: 13.5px; font-weight: 600; color: $ink;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.ad-row-tags {
+  display: flex; flex-wrap: wrap; gap: 5px;
+}
+
+.ad-tag {
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.5px;
+  text-transform: uppercase;
+  padding: 2px 7px; border-radius: 100px;
+  background: $line-soft; color: $ink-soft;
+  border: 1px solid $line;
+
+  &.type-vec { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &.type-ras { background: #fff7e6; color: #b35a00; border-color: #ffe0b3; }
+}
+
+.ad-toggle {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: $brand; color: #fff;
+  border: 1px solid $brand;
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-family: inherit; font-size: 12px; font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  svg { width: 12px; height: 12px; }
+
+  &:hover { background: $brand-mid; border-color: $brand-mid; }
+
+  &.is-added {
+    background: $success; border-color: $success;
+    &:hover { background: #065f46; border-color: #065f46; }
+  }
+}
+
+.ad-empty {
+  display: flex; flex-direction: column; align-items: center;
+  padding: 36px 16px;
+  text-align: center;
+  color: $muted;
+  font-size: 13px;
+
+  .ad-empty-icon {
+    width: 44px; height: 44px; border-radius: 13px;
+    background: $brand-tint; color: $brand;
+    display: inline-flex; align-items: center; justify-content: center;
+    margin-bottom: 10px;
+    svg { width: 22px; height: 22px; }
+  }
+}

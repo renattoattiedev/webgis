@@ -1,0 +1,19 @@
+<div class="search-container">
+  <div class="search-input-container">
+      <input type="text" 
+             [(ngModel)]="address" 
+             (keyup)="onKeyup()" 
+             placeholder="Digite o endereço"
+             class="custom-input" />
+  </div>
+  
+  <button class="search-btn" (click)="searchAddress(address)" title="Buscar">
+    <mat-icon>search</mat-icon>
+  </button>
+
+  <ul *ngIf="suggestions.length > 0" class="suggestions">
+    <li *ngFor="let suggestion of suggestions" (click)="selectSuggestion(suggestion)">
+      {{ suggestion.display_name }}
+    </li>
+  </ul>
+</div>

@@ -1,0 +1,178 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Grupos — IDE CESAN
+// Header/busca/grade de cards vêm de .ad-list (src/styles/_admin-list-base.scss,
+// importado globalmente em styles.scss). Aqui ficam só a sidebar de temas
+// (sem equivalente no partial) e os elementos exclusivos do card de grupo
+// (avatar, stats, pills de visibilidade/membership, botão de participação).
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use '../../../../styles/admin-list-base' as base;
+
+:host {
+  display: block;
+  background: base.$bg;
+  font-family: base.$font-ui;
+  color: base.$ink;
+}
+
+* { box-sizing: border-box; }
+
+// ── Layout (sidebar + conteúdo) ─────────────────────────────────────────────
+.gp-page {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  padding: 20px 32px 40px;
+  min-height: calc(100vh - 60px - 53px);
+}
+
+// ── Sidebar de temas (sem equivalente no partial) ───────────────────────────
+.gp-filters {
+  display: flex; flex-direction: column; gap: 12px;
+  align-self: flex-start;
+  position: sticky; top: 134px;
+  max-height: calc(100vh - 134px - 20px);
+  overflow-y: auto;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: base.$line; border-radius: 100px; }
+}
+
+.gp-panel {
+  background: #fff;
+  border: 1px solid base.$line;
+  border-radius: 14px;
+  padding: 16px 16px 14px;
+  box-shadow: 0 2px 8px rgba(11,37,69,0.04);
+}
+
+.gp-panel-head {
+  display: flex; align-items: center; margin-bottom: 12px;
+}
+
+.gp-panel-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.8px;
+  text-transform: uppercase; color: base.$muted;
+}
+
+.gp-list {
+  display: flex; flex-direction: column; gap: 2px;
+  margin: 0 -4px;
+}
+
+.gp-list-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 8px;
+  font-size: 13px; color: base.$ink-soft;
+  cursor: pointer; user-select: none;
+  border: 1px solid transparent;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+
+  &:hover { background: base.$brand-tint; color: base.$ink; }
+  &.active {
+    background: base.$brand-tint; color: base.$brand; font-weight: 600;
+    border-color: base.$brand-tint-2;
+    .gp-count { background: base.$brand; color: #fff; }
+  }
+}
+
+.gp-list-label {
+  flex: 1;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.gp-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 20px; padding: 0 6px;
+  border-radius: 100px;
+  background: base.$line-soft; color: base.$ink-soft;
+  font-size: 10.5px; font-weight: 700;
+  transition: background 0.12s, color 0.12s;
+}
+
+// ── Painel de conteúdo — card que hospeda o .ad-list compartilhado ─────────
+.gp-main {
+  background: #fff;
+  border: 1px solid base.$line;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(11,37,69,0.04);
+  display: flex; flex-direction: column;
+  min-width: 0;
+  align-self: flex-start;
+  padding: 0 22px 26px;
+
+  .al-top { padding: 18px 0; margin: 0 0 6px; }
+  .al-cards-grid { padding-top: 4px; }
+}
+
+// ── Card de grupo — extensões sobre .al-card do partial ────────────────────
+.gp-card { cursor: pointer; }
+
+.gp-card-titles {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.gp-card-stats {
+  display: flex;
+  gap: 14px;
+  font-size: 12px;
+  color: base.$ink-soft;
+}
+
+.gp-card-foot {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.gp-pill {
+  font-size: 11px; font-weight: 600;
+  border: 1px solid base.$line;
+  border-radius: 100px;
+  padding: 3px 9px;
+  color: base.$ink-soft;
+  background: base.$line-soft;
+
+  &--member { background: #ecfdf5; border-color: #a7f3d0; color: base.$success; }
+}
+
+.gp-btn {
+  margin-left: auto;
+  font-size: 12px; font-weight: 600;
+  font-family: inherit;
+  border: 1px solid base.$brand;
+  color: base.$brand;
+  background: #fff;
+  border-radius: 8px;
+  padding: 5px 11px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s;
+
+  &:hover { background: base.$brand; color: #fff; }
+}
+
+.gp-empty {
+  color: base.$muted;
+  font-size: 14px;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+// ── Responsive ──────────────────────────────────────────────────────────────
+@media (max-width: 1280px) {
+  .gp-page { padding: 16px 20px 32px; gap: 16px; }
+}
+@media (max-width: 1024px) {
+  .gp-page { grid-template-columns: 1fr; }
+  .gp-filters {
+    position: static; max-height: none;
+  }
+}
+@media (max-width: 768px) {
+  .gp-main .al-top { flex-direction: column; align-items: stretch; }
+  .al-search { width: 100%; }
+}

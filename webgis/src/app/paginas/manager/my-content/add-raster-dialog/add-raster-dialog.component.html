@@ -1,0 +1,318 @@
+<form [formGroup]="camadaForm" (ngSubmit)="onSubmit()" class="idedlg">
+
+  <!-- HEADER -->
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <rect x="3" y="3" width="7" height="7"/>
+          <rect x="14" y="3" width="7" height="7"/>
+          <rect x="3" y="14" width="7" height="7"/>
+          <rect x="14" y="14" width="7" height="7"/>
+        </svg>
+      </div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Publicação de camada <em>raster</em></h2>
+        <p class="idedlg-sub">Selecione um GeoTIFF do repositório e configure os metadados</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <!-- BODY -->
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+      <div class="idedlg-grid raster-grid">
+
+        <!-- COLUNA ESQUERDA — TREE -->
+        <section class="raster-pane">
+          <div class="raster-pane-head">
+            <div class="raster-pane-title">
+              <span class="raster-pane-eyebrow">Fonte</span>
+              <h3>Repositório raster</h3>
+            </div>
+            <span class="raster-pane-meta" *ngIf="!rootLoading && !rootError && treeRoots.length > 0">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M3 7h18M3 12h18M3 17h18"/>
+              </svg>
+              {{ treeRoots.length }} {{ treeRoots.length === 1 ? 'item' : 'itens' }}
+            </span>
+          </div>
+
+          <!-- Search -->
+          <div class="raster-search">
+            <svg class="raster-search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="7"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+            <input
+              type="text"
+              [(ngModel)]="searchTerm"
+              [ngModelOptions]="{ standalone: true }"
+              placeholder="Buscar na árvore expandida…"
+              autocomplete="off"
+            />
+            <button
+              *ngIf="searchTerm"
+              type="button"
+              class="raster-search-clear"
+              (click)="searchTerm = ''"
+              aria-label="Limpar busca"
+            >
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+              </svg>
+            </button>
+          </div>
+
+          <!-- Tree body -->
+          <div class="raster-tree" [class.is-centered]="rootLoading || rootError || (!treeRoots || treeRoots.length === 0)">
+
+            <!-- Loading -->
+            <div class="raster-tree-state" *ngIf="rootLoading">
+              <mat-progress-spinner mode="indeterminate" diameter="22" strokeWidth="2"></mat-progress-spinner>
+              <div class="raster-tree-state-body">
+                <strong>Lendo repositório…</strong>
+                <p>Acessando o NFS compartilhado.</p>
+              </div>
+            </div>
+
+            <!-- Error -->
+            <div class="raster-tree-state raster-tree-state--error" *ngIf="!rootLoading && rootError">
+              <div class="raster-tree-state-icon raster-tree-state-icon--danger">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 8v4M12 16h.01"/>
+                </svg>
+              </div>
+              <div class="raster-tree-state-body">
+                <strong>Repositório indisponível</strong>
+                <p>{{ rootError }}</p>
+                <button type="button" class="raster-retry" (click)="retryRoot()">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 12a9 9 0 1 0 3-6.7"/>
+                    <polyline points="3 4 3 10 9 10"/>
+                  </svg>
+                  Tentar novamente
+                </button>
+              </div>
+            </div>
+
+            <!-- Empty -->
+            <div class="raster-tree-state" *ngIf="!rootLoading && !rootError && (!treeRoots || treeRoots.length === 0)">
+              <div class="raster-tree-state-icon raster-tree-state-icon--soft">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M3 7l9-4 9 4-9 4-9-4z"/>
+                  <path d="M3 12l9 4 9-4"/>
+                  <path d="M3 17l9 4 9-4"/>
+                </svg>
+              </div>
+              <div class="raster-tree-state-body">
+                <strong>Repositório vazio</strong>
+                <p>Nenhum arquivo <code>.tif</code> foi encontrado. Quando um arquivo for depositado no NFS, ele aparecerá aqui automaticamente.</p>
+              </div>
+            </div>
+
+            <!-- Tree nodes -->
+            <ul *ngIf="!rootLoading && !rootError && treeRoots.length > 0"
+                class="raster-tree-list raster-tree-list--root">
+              <ng-container *ngFor="let node of treeRoots">
+                <ng-container *ngTemplateOutlet="treeNode; context: { $implicit: node, depth: 0 }"></ng-container>
+              </ng-container>
+            </ul>
+
+            <ng-template #treeNode let-node let-depth="depth">
+              <li class="raster-node"
+                  *ngIf="isVisible(node)"
+                  [class.raster-node--dir]="node.type === 'dir'"
+                  [class.raster-node--file]="node.type === 'file'"
+                  [class.raster-node--selected]="node === selectedNode"
+                  [class.raster-node--published]="node.alreadyPublished">
+
+                <button
+                  type="button"
+                  class="raster-node-row"
+                  [style.paddingLeft.px]="14 + depth * 16"
+                  (click)="node.type === 'dir' ? toggleNode(node) : selectNode(node)"
+                  [attr.aria-expanded]="node.type === 'dir' ? !!node.expanded : null">
+
+                  <!-- Caret -->
+                  <span class="raster-node-caret" *ngIf="node.type === 'dir'; else fileCaret">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                         [class.is-open]="node.expanded">
+                      <polyline points="9 6 15 12 9 18"/>
+                    </svg>
+                  </span>
+                  <ng-template #fileCaret>
+                    <span class="raster-node-caret raster-node-caret--placeholder"></span>
+                  </ng-template>
+
+                  <!-- Icon -->
+                  <span class="raster-node-icon"
+                        [class.raster-node-icon--dir]="node.type === 'dir'"
+                        [class.raster-node-icon--file]="node.type === 'file'">
+                    <svg *ngIf="node.type === 'dir'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                      <path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7z"/>
+                    </svg>
+                    <svg *ngIf="node.type === 'file'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">
+                      <rect x="4" y="4" width="6" height="6" rx="1"/>
+                      <rect x="14" y="4" width="6" height="6" rx="1"/>
+                      <rect x="4" y="14" width="6" height="6" rx="1"/>
+                      <rect x="14" y="14" width="6" height="6" rx="1"/>
+                    </svg>
+                  </span>
+
+                  <span class="raster-node-name">{{ node.name }}</span>
+
+                  <span class="raster-node-size" *ngIf="node.type === 'file' && node.size != null">
+                    {{ formatSize(node.size) }}
+                  </span>
+
+                  <span class="raster-node-badge"
+                        *ngIf="node.type === 'file' && node.alreadyPublished"
+                        matTooltip="Camada já publicada — submeter pedirá confirmação para sobrescrever"
+                        matTooltipPosition="left">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                      <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    publicado
+                  </span>
+
+                  <span class="raster-node-loading" *ngIf="node.loading">
+                    <mat-progress-spinner mode="indeterminate" diameter="14" strokeWidth="2"></mat-progress-spinner>
+                  </span>
+                </button>
+
+                <!-- Children -->
+                <ul class="raster-tree-list" *ngIf="node.type === 'dir' && node.expanded && node.children && node.children.length > 0">
+                  <ng-container *ngFor="let child of node.children">
+                    <ng-container *ngTemplateOutlet="treeNode; context: { $implicit: child, depth: depth + 1 }"></ng-container>
+                  </ng-container>
+                </ul>
+              </li>
+            </ng-template>
+          </div>
+
+          <!-- Selected preview -->
+          <footer class="raster-selected" *ngIf="selectedNode; else noSel">
+            <div class="raster-selected-mark">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6">
+                <polyline points="20 6 9 17 4 12"/>
+              </svg>
+            </div>
+            <div class="raster-selected-body">
+              <span class="raster-selected-label">Selecionado</span>
+              <code class="raster-selected-path">{{ selectedNode.relativePath }}</code>
+              <span class="raster-selected-meta" *ngIf="selectedNode.size != null">
+                {{ formatSize(selectedNode.size) }}
+                <span class="raster-selected-meta-pub" *ngIf="selectedNode.alreadyPublished">· já publicado</span>
+              </span>
+            </div>
+          </footer>
+          <ng-template #noSel>
+            <footer class="raster-selected raster-selected--empty">
+              <span class="raster-selected-label">Selecionado</span>
+              <span class="raster-selected-hint">Clique em um <code>.tif</code> da árvore para selecionar</span>
+            </footer>
+          </ng-template>
+        </section>
+
+        <!-- COLUNA DIREITA — FORM -->
+        <section class="raster-form">
+          <div class="idedlg-section-title">Identificação</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Título da camada</mat-label>
+            <input matInput formControlName="titulo_camada" required />
+            <mat-error *ngIf="camadaForm.get('titulo_camada')?.hasError('required') && camadaForm.get('titulo_camada')?.touched">
+              O título é obrigatório.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Descrição da camada</mat-label>
+            <textarea matInput rows="3" formControlName="descricao_camada" required></textarea>
+            <mat-error *ngIf="camadaForm.get('descricao_camada')?.hasError('required') && camadaForm.get('descricao_camada')?.touched">
+              A descrição é obrigatória.
+            </mat-error>
+            <mat-error *ngIf="camadaForm.get('descricao_camada')?.hasError('minlength') && camadaForm.get('descricao_camada')?.touched">
+              A descrição deve ter no mínimo 10 caracteres.
+            </mat-error>
+          </mat-form-field>
+
+          <div class="idedlg-section-title">Categorização</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nível de compartilhamento</mat-label>
+            <mat-select formControlName="nivelCompartilhamento" required>
+              <mat-option *ngFor="let n of niveisCompartilhamento" [value]="n.id">
+                {{ n.descricaoNivelCompartilhamento }}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="camadaForm.get('nivelCompartilhamento')?.hasError('required') && camadaForm.get('nivelCompartilhamento')?.touched">
+              Obrigatório.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tema</mat-label>
+            <mat-select formControlName="tema" (selectionChange)="fetchGruposCamadasPorTema($event.value)" required>
+              <mat-option *ngFor="let tema of temas" [value]="tema.id">{{ tema.tituloTema }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="camadaForm.get('tema')?.hasError('required') && camadaForm.get('tema')?.touched">
+              Obrigatório.
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Grupo</mat-label>
+            <mat-select formControlName="grupo" required>
+              <mat-option *ngFor="let grupo of gruposCamadas" [value]="grupo.id">{{ grupo.grupoNome }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="camadaForm.get('grupo')?.hasError('required') && camadaForm.get('grupo')?.touched">
+              Obrigatório.
+            </mat-error>
+          </mat-form-field>
+
+          <div class="idedlg-section-title">Metadados</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Endereço dos metadados</mat-label>
+            <input matInput formControlName="metadados" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Termos de uso</mat-label>
+            <input matInput formControlName="termos_uso" />
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Tags</mat-label>
+            <input matInput formControlName="tags" />
+          </mat-form-field>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- ACTIONS -->
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" (click)="onClose()" type="button">Cancelar</button>
+      <button
+        class="idedlg-btn idedlg-btn-primary"
+        type="submit"
+        [disabled]="!selectedNode || camadaForm.invalid">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14"/>
+          <polyline points="13 6 19 12 13 18"/>
+        </svg>
+        Publicar camada
+      </button>
+    </footer>
+  </div>
+</form>

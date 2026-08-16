@@ -1,0 +1,42 @@
+<div class="scale-bar-container" 
+     #scaleBar
+     (dblclick)="onDoubleClick()"
+     [class.editing]="isEditing">
+  
+  <div *ngIf="!isEditing" class="scale-display">
+    <div class="scale-text">
+      {{ currentScale }}
+    </div>
+    <div class="scale-hint">
+      Duplo clique para editar
+    </div>
+  </div>
+
+  <div *ngIf="isEditing" class="scale-edit">
+    <div class="edit-label">Escala 1:</div>
+    <input
+      #scaleInput
+      type="text"
+      [(ngModel)]="editingValue"
+      (keydown)="onKeyPress($event)"
+      (blur)="onBlur()"
+      (input)="onInputChange($event)"
+      class="scale-input"
+      placeholder="Ex: 50000"
+    />
+    <div class="edit-buttons">
+      <button mat-icon-button 
+              (click)="confirmEdit()" 
+              class="white"
+              title="Confirmar">
+        ✓
+      </button>
+      <button mat-icon-button 
+              (click)="cancelEdit()" 
+              class="white"
+              title="Cancelar">
+        ✕
+      </button>
+    </div>
+  </div>
+</div>

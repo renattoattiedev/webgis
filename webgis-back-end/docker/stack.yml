@@ -1,0 +1,78 @@
+version: '3.7'
+
+services:
+  api:
+    image: "${DOCKER_API_IMAGE_TAG}"
+    user: "0:0"
+    labels:
+      - "br.com.cesan.app=gis"
+      - "io.portainer.accesscontrol.teams=gis"
+    environment:
+      - "DATABASE_URL=${DATABASE_URL}"
+      - "DB_HOST=${DB_HOST}"
+      - "DB_NAME=${DB_NAME}"
+      - "DB_PASSWORD=${DB_PASSWORD}"
+      - "DB_PORT=${DB_PORT}"
+      - "DB_SCHEMA=${DB_SCHEMA}"
+      - "DB_USER=${DB_USER}"
+      - "PORT=${API_PORT}"
+      - "DW_DB_HOST=${DW_DB_HOST}"
+      - "DW_DB_USER=${DW_DB_USER}"
+      - "DW_DB_PASSWORD=${DW_DB_PASSWORD}"
+      - "DW_DB_DATABASE=${DW_DB_DATABASE}"
+      - "DW_DB_INSTANCE=${DW_DB_INSTANCE}"
+      - "RASTER_BASE_PATH=/raster"
+      - "GEOSERVER_RASTER_PATH=/opt/geoserver_data/raster"
+      - "ENTRA_TENANT_ID=${ENTRA_TENANT_ID}"
+      - "ENTRA_CLIENT_ID=${ENTRA_CLIENT_ID}"
+      - "ENTRA_CLIENT_SECRET=${ENTRA_CLIENT_SECRET}"
+      - "ENTRA_REDIRECT_URI=${ENTRA_REDIRECT_URI}"
+    volumes:
+      - gis_raster:/raster:rw
+      - gis_data:/data
+      - /nfs/swarm/gis/geoserver/data:/opt/geoserver_data
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8856:${API_PORT}"
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 4096M
+
+  geoserver:
+    image: "${DOCKER_GEOSERVER_IMAGE_TAG}"
+    labels:
+      - "br.com.cesan.app=gis"
+      - "io.portainer.accesscontrol.teams=gis"
+    environment:
+      - "GEOSERVER_ADMIN_USER=${GEOSERVER_ADMIN_USER}"
+      - "GEOSERVER_ADMIN_PASSWORD=${GEOSERVER_ADMIN_PASSWORD}"
+      - "CATALINA_OPTS=-Dorg.geoserver.require.ssl=true"
+      - "GEOSERVER_CSRF_DISABLED=true"
+      - "PROXY_BASE_URL=${PROXY_BASE_URL}"
+    volumes:
+      - /nfs/swarm/gis/geoserver/data:/opt/geoserver_data
+      - gis_raster:/opt/geoserver_data/raster:ro
+      - /etc/localtime:/etc/localtime:ro
+    ports:
+      - "8857:8080"
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+
+volumes:
+  gis_data:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=nfs-storage.cesan.com.br,nfsvers=4.1,hard,timeo=600,retrans=2,rsize=1048576,wsize=1048576,noatime
+      device: ":/${DEPLOY_ENVIRONMENT}_gis_data"
+  gis_raster:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: addr=nfs-storage.cesan.com.br,nfsvers=4.1,hard,timeo=600,retrans=2,rsize=1048576,wsize=1048576,noatime
+      device: ":/${DEPLOY_ENVIRONMENT}_gis_raster"

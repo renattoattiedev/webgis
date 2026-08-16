@@ -1,0 +1,32 @@
+<div class="ev-page">
+  <div class="ev-card">
+
+    <div class="ev-icon ev-icon--success">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+        <polyline points="22 4 12 14.01 9 11.01"/>
+      </svg>
+    </div>
+
+    <h2 class="ev-title" mat-dialog-title>E-mail verificado!</h2>
+
+    <mat-dialog-content class="mat-typography">
+      <p class="ev-sub">
+        Seu endereço de e-mail foi confirmado com sucesso.<br>
+        Você já pode acessar sua conta normalmente.
+      </p>
+    </mat-dialog-content>
+
+    <mat-dialog-actions align="center">
+      <button class="ev-btn" mat-dialog-close (click)="navigateToLogin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+        Ir para o login
+      </button>
+    </mat-dialog-actions>
+
+  </div>
+</div>

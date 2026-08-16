@@ -1,0 +1,263 @@
+<div class="gd-page" *ngIf="grupo">
+
+  <!-- Cabeçalho -->
+  <div class="gd-header">
+    <button class="gd-back" (click)="voltar.emit()" matTooltip="Voltar">←</button>
+    <div class="gd-avatar">{{ iniciais(grupo.nome) }}</div>
+    <div class="gd-titles">
+      <span class="gd-nome">{{ grupo.nome }}</span>
+      <span class="gd-sub">
+        {{ grupo.temaNome }} · Dono: {{ grupo.donoNome }} ·
+        {{ grupo.qtdMembros }} membros · {{ labelItens(grupo) }}
+      </span>
+    </div>
+    <div class="gd-actions">
+      <span class="gd-pill" *ngIf="grupo.membership === 'dono'">Dono</span>
+      <span class="gd-pill" *ngIf="grupo.membership === 'membro'">Membro ✓</span>
+      <span class="gd-pill" *ngIf="grupo.membership === 'pendente'">Solicitação enviada</span>
+      <button class="gd-btn"
+              *ngIf="!grupo.membership && grupo.politicaParticipacao === 'aberto'"
+              (click)="participar()">Participar</button>
+      <button class="gd-btn"
+              *ngIf="!grupo.membership && grupo.politicaParticipacao === 'solicitacao'"
+              (click)="solicitar()">Solicitar participação</button>
+      <button class="gd-btn gd-btn--ghost"
+              *ngIf="grupo.membership === 'membro' && !isAdmin"
+              (click)="sairDoGrupo()">Sair do grupo</button>
+    </div>
+  </div>
+
+  <!-- Abas -->
+  <div class="gd-tabs">
+    <button class="gd-tab" [class.active]="abaAtiva === 'conteudo'" (click)="selecionarAba('conteudo')">
+      Conteúdo ({{ conteudo.length }})
+    </button>
+    <button class="gd-tab" [class.active]="abaAtiva === 'membros'" (click)="selecionarAba('membros')">
+      Membros ({{ membros.length }})
+    </button>
+    <button class="gd-tab" *ngIf="grupo.podeGerenciar"
+            [class.active]="abaAtiva === 'config'" (click)="selecionarAba('config')">
+      Configurações
+    </button>
+  </div>
+
+  <!-- Conteúdo -->
+  <div class="gd-body" *ngIf="abaAtiva === 'conteudo'">
+    <div class="gd-empty" *ngIf="conteudo.length === 0">Nenhum item visível neste grupo.</div>
+    <div class="gd-conteudo-actions" *ngIf="podeAdicionarItens">
+      <button class="gd-btn" (click)="abrirAdicionarItemDialog()">+ Adicionar item</button>
+    </div>
+    <div class="gd-grid">
+      <article class="gd-item" *ngFor="let item of conteudo; trackBy: trackByItemId"
+               tabindex="0"
+               role="button"
+               [attr.aria-label]="'Ver detalhes de ' + nomeItem(item)"
+               (click)="toggleRightSidenav(item)"
+               (keydown.enter)="toggleRightSidenav(item)"
+               (keydown.space)="$event.preventDefault(); toggleRightSidenav(item)">
+
+        <div class="gd-thumb" [attr.data-item-id]="getItemId(item)">
+          <ng-container *ngIf="item.nomeCamada || item.nomeMapa; else gdNoImage">
+            <div *ngIf="isThumbnailLoading(item)" class="gd-thumb-state">
+              <div class="gd-spinner"></div>
+              <span>Carregando…</span>
+            </div>
+
+            <div *ngIf="hasThumbnailError(item) && !isThumbnailLoading(item)" class="gd-thumb-state gd-thumb-state--error">
+              <span>Não foi possível carregar</span>
+              <button class="gd-retry-btn"
+                      (click)="$event.stopPropagation(); item.tipo === 'mapa' ? reloadCompositeMapThumbnail(item) : reloadThumbnail(item)"
+                      (keydown.enter)="$event.stopPropagation()"
+                      (keydown.space)="$event.stopPropagation()">
+                Tentar novamente
+              </button>
+            </div>
+
+            <img *ngIf="getThumbnailUrlOptimized(item) && !hasThumbnailError(item)"
+                 class="gd-thumb-img"
+                 [src]="getThumbnailUrlOptimized(item)"
+                 alt="Miniatura"
+                 (load)="onImageLoad(item)"
+                 (error)="onImageError(item)" />
+
+            <div *ngIf="!getThumbnailUrlOptimized(item) && !isThumbnailLoading(item) && !hasThumbnailError(item)"
+                 class="gd-thumb-state gd-thumb-state--placeholder">
+              <span>{{ item.tipo }}</span>
+            </div>
+          </ng-container>
+          <ng-template #gdNoImage>
+            <div class="gd-thumb-state gd-thumb-state--placeholder">
+              <span>Sem camadas</span>
+            </div>
+          </ng-template>
+
+          <button class="gd-thumb-refresh"
+                  (click)="$event.stopPropagation(); item.tipo === 'mapa' ? reloadCompositeMapThumbnail(item) : reloadThumbnail(item)"
+                  (keydown.enter)="$event.stopPropagation()"
+                  (keydown.space)="$event.stopPropagation()"
+                  matTooltip="Recarregar miniatura">↻</button>
+        </div>
+
+        <div class="gd-item-info">
+          <span class="gd-item-tipo" [attr.data-tipo]="item.tipo">{{ item.tipo }}</span>
+          <span class="gd-item-nome" [matTooltip]="nomeItem(item)">{{ nomeItem(item) }}</span>
+          <span class="gd-item-nivel">{{ item.nivelCompartilhamento }}</span>
+          <button class="gd-item-remove-btn" *ngIf="podeDesvincular(item)"
+                  (click)="$event.stopPropagation(); removerItemDoGrupo(item)"
+                  (keydown.enter)="$event.stopPropagation()"
+                  (keydown.space)="$event.stopPropagation()"
+                  matTooltip="Remover deste grupo">🗑</button>
+          <button class="gd-item-menu-btn" *ngIf="item.podeEditar"
+                  (click)="$event.stopPropagation()"
+                  (keydown.enter)="$event.stopPropagation()"
+                  (keydown.space)="$event.stopPropagation()"
+                  [matMenuTriggerFor]="itemMenu" matTooltip="Editar">⋮</button>
+          <mat-menu #itemMenu="matMenu">
+            <button mat-menu-item (click)="openChangeOwnerDialog(item)">Mudar dono</button>
+            <button mat-menu-item *ngIf="item.tipo === 'vetorial'" (click)="openEditCamadaDialog(item)">Editar camada</button>
+            <button mat-menu-item *ngIf="item.tipo === 'raster'" (click)="openEditCamadaRasterDialog(item)">Editar camada raster</button>
+            <button mat-menu-item *ngIf="item.tipo === 'vetorial'" (click)="openEditAtributosCamadaDialog(item)">Editar atributos</button>
+            <button mat-menu-item *ngIf="item.tipo === 'mapa'" (click)="openEditMetadadosMapaDialog(item)">Editar metadados</button>
+          </mat-menu>
+        </div>
+      </article>
+    </div>
+  </div>
+
+  <!-- Membros -->
+  <div class="gd-body" *ngIf="abaAtiva === 'membros'">
+
+    <div class="gd-add-membro" *ngIf="grupo.podeGerenciar">
+      <select [(ngModel)]="novoMembroId">
+        <option value="">Adicionar membro…</option>
+        <option *ngFor="let u of usuariosDisponiveis" [value]="u.id">{{ u.nome }} — {{ u.email }}</option>
+      </select>
+      <button class="gd-btn" [disabled]="!novoMembroId" (click)="adicionarMembro()">Adicionar</button>
+    </div>
+
+    <div class="gd-section" *ngIf="grupo.podeGerenciar && pendentes.length > 0">
+      <div class="gd-section-title">Solicitações pendentes</div>
+      <div class="gd-membro" *ngFor="let p of pendentes">
+        <div class="gd-avatar gd-avatar--sm">{{ iniciais(p.nome) }}</div>
+        <div class="gd-membro-info">
+          <span>{{ p.nome }}</span>
+          <small>{{ p.email }}</small>
+        </div>
+        <button class="gd-btn" (click)="responder(p, true)">Aprovar</button>
+        <button class="gd-btn gd-btn--ghost" (click)="responder(p, false)">Recusar</button>
+      </div>
+    </div>
+
+    <div class="gd-section">
+      <div class="gd-membro">
+        <div class="gd-avatar gd-avatar--sm">{{ iniciais(grupo.donoNome) }}</div>
+        <div class="gd-membro-info">
+          <span>{{ grupo.donoNome }}</span>
+          <small>Dono do grupo</small>
+        </div>
+      </div>
+      <div class="gd-membro" *ngFor="let m of membros">
+        <div class="gd-avatar gd-avatar--sm">{{ iniciais(m.nome) }}</div>
+        <div class="gd-membro-info">
+          <span>{{ m.nome }}</span>
+          <small>{{ m.email }}</small>
+        </div>
+        <button class="gd-btn gd-btn--ghost" *ngIf="grupo.podeGerenciar && m.perfil !== 'Admin'"
+                (click)="removerMembro(m)">Remover</button>
+      </div>
+      <div class="gd-empty" *ngIf="membros.length === 0">Nenhum membro além do dono.</div>
+    </div>
+  </div>
+
+  <!-- Configurações -->
+  <div class="gd-body gd-config" *ngIf="abaAtiva === 'config' && grupo.podeGerenciar">
+
+    <div class="gd-field">
+      <label>Nome do grupo</label>
+      <input type="text" [(ngModel)]="config.nome" />
+    </div>
+
+    <div class="gd-field">
+      <label>Tema</label>
+      <select [(ngModel)]="config.temaId">
+        <option *ngIf="temaAtualAusenteDaLista" [value]="grupo.temaId">{{ grupo.temaNome }} (atual)</option>
+        <option *ngFor="let t of temas" [value]="t.id">{{ t.tituloTema }}</option>
+      </select>
+    </div>
+
+    <div class="gd-field">
+      <label>Quem pode visualizar o grupo</label>
+      <select [(ngModel)]="config.visibilidade">
+        <option value="membros">Apenas os membros</option>
+        <option value="organizacao">Todos na organização</option>
+        <option value="publico">Todos (público)</option>
+      </select>
+    </div>
+
+    <div class="gd-field">
+      <label>Quem pode participar do grupo</label>
+      <select [(ngModel)]="config.politicaParticipacao">
+        <option value="convite">Apenas convites (dono/admin adiciona)</option>
+        <option value="solicitacao">Por solicitação e aprovação</option>
+        <option value="aberto">Qualquer pessoa</option>
+      </select>
+    </div>
+
+    <div class="gd-field gd-field--check">
+      <label>
+        <input type="checkbox" [(ngModel)]="config.membrosContribuem"/>
+        Todos os membros podem contribuir e atualizar itens do grupo
+      </label>
+      <small>Desmarcado: apenas o dono (e Admins) atualizam os itens.</small>
+    </div>
+
+    <div class="gd-field">
+      <label>Dono do grupo</label>
+      <select [(ngModel)]="config.donoId">
+        <option [value]="grupo.donoId">{{ grupo.donoNome }} (atual)</option>
+        <option *ngFor="let m of membrosParaTransferenciaDono" [value]="m.userId">{{ m.nome }} — {{ m.email }}</option>
+      </select>
+      <small>Ao transferir, o dono atual vira membro do grupo. Apenas membros já no grupo podem ser escolhidos.</small>
+    </div>
+
+    <button class="gd-btn gd-btn--primary" [disabled]="salvandoConfig" (click)="salvarConfig()">
+      {{ salvandoConfig ? 'Salvando…' : 'Salvar configurações' }}
+    </button>
+
+    <div class="gd-field gd-danger-zone">
+      <label>Excluir grupo</label>
+      <small *ngIf="!mostrarMoverItens">{{ grupo.qtdItens > 0 ? 'Este grupo tem ' + grupo.qtdItens + ' itens — mova-os antes de excluir.' : 'Este grupo não tem itens associados.' }}</small>
+      <button class="gd-btn gd-btn--danger" *ngIf="!mostrarMoverItens"
+              [disabled]="excluindoGrupo" (click)="excluirGrupo()">
+        {{ excluindoGrupo ? 'Excluindo…' : 'Excluir grupo' }}
+      </button>
+
+      <div *ngIf="mostrarMoverItens" class="gd-mover-itens">
+        <label>Mover {{ grupo.qtdItens }} itens para:</label>
+        <select [(ngModel)]="grupoDestinoMoverItens">
+          <option value="">Selecione um grupo…</option>
+          <option *ngFor="let g of gruposDestinoMoverItens" [value]="g.id">{{ g.nome }}</option>
+        </select>
+        <div class="gd-mover-itens-actions">
+          <button class="gd-btn gd-btn--danger" [disabled]="!grupoDestinoMoverItens || movendoItens"
+                  (click)="moverItensEExcluir()">
+            {{ movendoItens ? 'Movendo…' : 'Mover e excluir' }}
+          </button>
+          <button class="gd-btn gd-btn--ghost" [disabled]="movendoItens" (click)="cancelarMoverItens()">
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Sidebar de detalhe -->
+  <aside class="gd-details-drawer" [class.opened]="isRightSidenavOpened">
+    <app-details *ngIf="selectedContent"
+                 [content]="$any(selectedContent)"
+                 (closeSidenav)="closeSidenav()"></app-details>
+  </aside>
+  <div class="gd-details-overlay" *ngIf="isRightSidenavOpened" (click)="closeSidenav()"></div>
+</div>
+
+<div class="gd-loading" *ngIf="carregando && !grupo">Carregando grupo…</div>

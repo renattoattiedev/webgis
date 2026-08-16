@@ -1,0 +1,354 @@
+<div class="oc-page" [class.filters-collapsed]="!isLeftSidenavOpened">
+
+  <!-- ── Sidebar esquerda — filtros ──────────────────────────────────────── -->
+  <aside class="oc-filters" [class.opened]="isLeftSidenavOpened">
+
+    <!-- Tipo -->
+    <section class="oc-panel">
+      <div class="oc-panel-head"><span class="oc-panel-title">Tipo de conteúdo</span></div>
+      <div class="oc-chips">
+        <button class="oc-chip oc-chip--all"
+                [class.active]="!selectedContentType"
+                (click)="clearContentTypeFilter()">Todos</button>
+        <button class="oc-chip"
+                [class.active]="selectedContentType === 'vetorial'"
+                (click)="toggleFilterByContentType('vetorial')">Vetoriais</button>
+        <button class="oc-chip"
+                [class.active]="selectedContentType === 'raster'"
+                (click)="toggleFilterByContentType('raster')">Raster</button>
+        <button class="oc-chip"
+                [class.active]="selectedContentType === 'mapa'"
+                (click)="toggleFilterByContentType('mapa')">Mapas</button>
+      </div>
+    </section>
+
+    <!-- Temas -->
+    <section class="oc-panel">
+      <div class="oc-panel-head"><span class="oc-panel-title">Temas</span></div>
+      <div class="oc-chips">
+        <button class="oc-chip oc-chip--all"
+                [class.active]="selectedTemaIds.size === 0"
+                (click)="clearTemaFilters()">Todos</button>
+        <button class="oc-chip"
+                *ngFor="let tema of dataSourceTema"
+                [class.active]="selectedTemaIds.has(tema.id)"
+                (click)="toggleTemaFilter(tema.id)">{{ tema.tituloTema }}</button>
+      </div>
+    </section>
+
+    <!-- Grupos -->
+    <section class="oc-panel">
+      <div class="oc-panel-head"><span class="oc-panel-title">Grupos</span></div>
+      <div class="oc-chips">
+        <button class="oc-chip oc-chip--all"
+                [class.active]="selectedGrupoIds.size === 0"
+                (click)="clearGrupoFilters()">Todos</button>
+        <button class="oc-chip"
+                *ngFor="let grupo of dataSourceGrupos"
+                [class.active]="selectedGrupoIds.has(grupo.id)"
+                (click)="toggleGrupoFilter(grupo.id)">{{ grupo.grupoNome }}</button>
+      </div>
+    </section>
+
+    <!-- Refinamentos -->
+    <section class="oc-panel">
+      <div class="oc-panel-head"><span class="oc-panel-title">Refinamentos</span></div>
+
+      <div class="oc-fav-row">
+        <span class="oc-fav-label">Somente favoritos</span>
+        <button class="oc-fav-toggle"
+                [class.on]="isFavoriteFilterActive"
+                (click)="toggleFavoriteFilter()"
+                [attr.title]="isFavoriteFilterActive ? 'Desativar' : 'Ativar'">
+          <svg viewBox="0 0 24 24"
+               [attr.fill]="isFavoriteFilterActive ? 'currentColor' : 'none'"
+               stroke="currentColor" stroke-width="2">
+            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="oc-divider"></div>
+
+      <div class="oc-sub-title">Visualizações</div>
+      <div class="oc-range-row">
+        <div class="oc-field">
+          <label>Mín</label>
+          <input type="number" placeholder="0" [(ngModel)]="minVisualizacoes"/>
+        </div>
+        <div class="oc-field">
+          <label>Máx</label>
+          <input type="number" placeholder="∞" [(ngModel)]="maxVisualizacoes"/>
+        </div>
+        <button class="oc-btn-primary" (click)="filtrarPorVisualizacoes()" matTooltip="Aplicar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="22" y1="2" x2="11" y2="13"/>
+            <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+        </button>
+      </div>
+
+      <div class="oc-divider"></div>
+
+      <div class="oc-sub-title">Última modificação</div>
+      <mat-form-field class="oc-date-range" appearance="outline">
+        <mat-date-range-input [rangePicker]="picker">
+          <input matStartDate placeholder="Início" [(ngModel)]="dataInicio">
+          <input matEndDate placeholder="Fim" [(ngModel)]="dataFim">
+        </mat-date-range-input>
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-date-range-picker #picker></mat-date-range-picker>
+      </mat-form-field>
+
+      <div class="oc-foot">
+        <button class="oc-btn-primary stretch" (click)="applyFilter()">Aplicar filtros</button>
+        <button class="oc-btn-ghost" (click)="clearFilter()">Limpar</button>
+      </div>
+    </section>
+
+  </aside>
+
+  <!-- ── Conteúdo principal ──────────────────────────────────────────────── -->
+  <section class="oc-main">
+
+    <!-- Action bar -->
+    <div class="oc-main-top">
+      <div class="oc-main-top-left">
+        <button class="oc-icon-btn" (click)="toggleLeftSidenav()" matTooltip="Filtros">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="7" y1="12" x2="17" y2="12"/>
+            <line x1="10" y1="18" x2="14" y2="18"/>
+          </svg>
+        </button>
+        <div class="oc-main-title">Minha <em>organização</em></div>
+        <span class="oc-badge-count">{{ (filteredContent || []).length }} itens</span>
+      </div>
+
+      <div class="oc-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input placeholder="Buscar por nome…" (keyup)="aplicarFiltroNome($event)"/>
+      </div>
+
+      <div class="oc-main-top-actions">
+        <button class="oc-action-btn" (click)="loadAllThumbnails()" matTooltip="Carregar todas as miniaturas">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
+          Carregar miniaturas
+        </button>
+      </div>
+    </div>
+
+    <!-- Grid de cards -->
+    <div class="oc-grid-wrap">
+      <ng-container *ngIf="filteredContent && filteredContent.length > 0; else emptyState">
+        <div class="oc-grid">
+          <article class="oc-card"
+                   *ngFor="let item of filteredContent; trackBy: trackByItemId">
+
+            <!-- Thumbnail -->
+            <div class="oc-thumb thumbnail-container"
+                 #thumbnailContainer
+                 [attr.data-item-id]="getItemId(item)">
+
+              <span class="oc-thumb-type"
+                    [class.type-vec]="item.tipo === 'vetorial'"
+                    [class.type-ras]="item.tipo === 'raster'"
+                    [class.type-mapa]="item.tituloMapa">
+                {{ item.tituloMapa ? 'Mapa' : (item.tipo === 'raster' ? 'Raster' : 'Vetorial') }}
+              </span>
+
+              <ng-container *ngIf="item.nomeCamada || (item.camadas && item.camadas.length > 0); else noImage">
+                <!-- Loading -->
+                <div *ngIf="isThumbnailLoading(item)" class="oc-thumb-state">
+                  <div class="oc-spinner"></div>
+                  <span>Carregando…</span>
+                </div>
+
+                <!-- Erro -->
+                <div *ngIf="hasThumbnailError(item) && !isThumbnailLoading(item)" class="oc-thumb-state oc-thumb-state--error">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                  </svg>
+                  <span>Não foi possível carregar</span>
+                  <button class="oc-retry-btn"
+                          (click)="item.nomeMapa ? reloadCompositeMapThumbnail(item) : reloadThumbnail(item)">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="23 4 23 10 17 10"/>
+                      <polyline points="1 20 1 14 7 14"/>
+                      <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                    </svg>
+                    Tentar novamente
+                  </button>
+                </div>
+
+                <!-- Imagem -->
+                <img *ngIf="getThumbnailUrlOptimized(item) && !hasThumbnailError(item)"
+                     class="oc-thumb-img"
+                     [src]="getThumbnailUrlOptimized(item)"
+                     alt="Miniatura"
+                     (load)="onImageLoad(item)"
+                     (error)="onImageError(item)" />
+
+                <!-- Placeholder enquanto não está visível -->
+                <div *ngIf="!getThumbnailUrlOptimized(item) && !isThumbnailLoading(item) && !hasThumbnailError(item)"
+                     class="oc-thumb-state oc-thumb-state--placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                    <polyline points="21 15 16 10 5 21"/>
+                  </svg>
+                </div>
+              </ng-container>
+
+              <ng-template #noImage>
+                <div class="oc-thumb-state oc-thumb-state--placeholder">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                    <rect x="3" y="3" width="18" height="18" rx="2"/>
+                    <line x1="3" y1="9" x2="21" y2="9"/>
+                    <line x1="9" y1="21" x2="9" y2="9"/>
+                  </svg>
+                  <span>Sem camadas</span>
+                </div>
+              </ng-template>
+
+              <!-- Botão de refresh sobre o thumb -->
+              <button class="oc-thumb-refresh"
+                      (click)="item.nomeMapa ? reloadCompositeMapThumbnail(item) : reloadThumbnail(item)"
+                      matTooltip="Recarregar miniatura">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <polyline points="23 4 23 10 17 10"/>
+                  <polyline points="1 20 1 14 7 14"/>
+                  <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+                </svg>
+              </button>
+            </div>
+
+            <!-- Body -->
+            <div class="oc-card-body">
+              <h3 class="oc-card-title" [matTooltip]="item.tituloCamada || item.tituloMapa">
+                <svg class="oc-card-title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <ng-container *ngIf="item.tituloMapa">
+                    <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+                    <line x1="8" y1="2" x2="8" y2="18"/>
+                    <line x1="16" y1="6" x2="16" y2="22"/>
+                  </ng-container>
+                  <ng-container *ngIf="!item.tituloMapa && item.tipo === 'vetorial'">
+                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                  </ng-container>
+                  <ng-container *ngIf="!item.tituloMapa && item.tipo === 'raster'">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                  </ng-container>
+                </svg>
+                {{ item.tituloCamada || item.tituloMapa }}
+              </h3>
+
+              <div class="oc-card-meta">
+                <div class="oc-meta-row">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="4" width="18" height="18" rx="2"/>
+                    <line x1="16" y1="2" x2="16" y2="6"/>
+                    <line x1="8" y1="2" x2="8" y2="6"/>
+                    <line x1="3" y1="10" x2="21" y2="10"/>
+                  </svg>
+                  <span>{{ item.updatedAt | date: 'dd/MM/yyyy' }}</span>
+                </div>
+                <div class="oc-meta-row">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                    <circle cx="12" cy="12" r="3"/>
+                  </svg>
+                  <span>{{ acessosPorCamada[item.id] || 0 }} acessos</span>
+                </div>
+                <app-grupo-avatar-badge
+                  [grupos]="item.grupos || []"
+                  [max]="3"
+                  (grupoClick)="onGrupoBadgeClick($event)"
+                ></app-grupo-avatar-badge>
+              </div>
+            </div>
+
+            <!-- Footer -->
+            <div class="oc-card-foot">
+              <button class="oc-details-btn" (click)="toggleRightSidenav(item)">
+                Detalhes
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+                  <line x1="5" y1="12" x2="19" y2="12"/>
+                  <polyline points="12 5 19 12 12 19"/>
+                </svg>
+              </button>
+
+              <div class="oc-card-icons">
+                <span class="oc-share"
+                      [class.publico]="item.nivelCompartilhamento === 'Público'"
+                      [class.privado]="item.nivelCompartilhamento === 'Privado'"
+                      [class.inst]="item.nivelCompartilhamento !== 'Público' && item.nivelCompartilhamento !== 'Privado'"
+                      [matTooltip]="item.nivelCompartilhamento">
+                  <svg *ngIf="item.nivelCompartilhamento === 'Público'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10A15.3 15.3 0 0 1 8 12a15.3 15.3 0 0 1 4-10z"/>
+                  </svg>
+                  <svg *ngIf="item.nivelCompartilhamento === 'Privado'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <svg *ngIf="item.nivelCompartilhamento !== 'Público' && item.nivelCompartilhamento !== 'Privado'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>
+                  </svg>
+                </span>
+
+                <button class="oc-star"
+                        [class.on]="item.favorito"
+                        (click)="item.tipo === 'raster' ? toggleFavoriteRaster(item) : (item.tituloMapa ? toggleFavoriteMapa(item) : toggleFavoriteCamada(item))"
+                        [matTooltip]="item.favorito ? 'Desfavoritar' : 'Favoritar'">
+                  <svg viewBox="0 0 24 24"
+                       [attr.fill]="item.favorito ? 'currentColor' : 'none'"
+                       stroke="currentColor" stroke-width="2">
+                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                  </svg>
+                </button>
+
+                <span class="oc-user-chip" [matTooltip]="'Criado por ' + item.usrCriacao">
+                  {{ (item.usrCriacao || '?').charAt(0).toUpperCase() }}
+                </span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </ng-container>
+
+      <ng-template #emptyState>
+        <div class="oc-empty">
+          <div class="oc-empty-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+              <circle cx="11" cy="11" r="7"/>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <div class="oc-empty-title">Nada encontrado</div>
+          <div class="oc-empty-sub">Tente ajustar os filtros ou a busca por nome.</div>
+        </div>
+      </ng-template>
+    </div>
+  </section>
+
+  <!-- ── Drawer direito — detalhes ───────────────────────────────────────── -->
+  <aside class="oc-details-drawer" [class.opened]="isRightSidenavOpened">
+    <app-details *ngIf="selectedContent"
+                 [content]="selectedContent"
+                 (closeSidenav)="closeSidenav()"></app-details>
+  </aside>
+  <div class="oc-details-overlay" *ngIf="isRightSidenavOpened" (click)="closeSidenav()"></div>
+</div>

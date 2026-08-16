@@ -1,0 +1,96 @@
+// ─── Geral ───────────────────────────────────────────────────────────
+$brand:#01499B; $brand-mid:#023775; $brand-tint:#eef4fb; $brand-tint-2:#dbe7f6;
+$ink:#0b2545; $ink-soft:#5b6b85; $muted:#7b8aa3; $line:#e6ecf5; $line-soft:#f0f4f9;
+$gold:#eab308; $danger:#dc2626;
+$font-ui:'Geist',system-ui,sans-serif;
+$font-serif:'Instrument Serif',Georgia,serif;
+
+:host { display:block; font-family:$font-ui; color:$ink; }
+
+.gr-page { display:flex; flex-direction:column; gap:24px; }
+
+.gr-head {
+  h1 { margin:0 0 6px; font-size:22px; font-weight:600; color:$ink; letter-spacing:-0.4px;
+    em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+  }
+  p { margin:0; font-size:13.5px; color:$ink-soft; line-height:1.55; max-width:680px; }
+}
+
+.gr-loading {
+  display:flex; align-items:center; gap:12px; padding:48px;
+  color:$ink-soft; font-size:13.5px;
+  justify-content:center;
+}
+
+.gr-form { display:flex; flex-direction:column; gap:20px; }
+
+.gr-group {
+  background:#fff; border:1px solid $line; border-radius:14px;
+  padding:18px 20px;
+  box-shadow:0 1px 3px rgba(11,37,69,0.03);
+}
+
+.gr-group-title {
+  display:flex; align-items:center; gap:8px;
+  margin:0 0 16px;
+  font-size:13px; font-weight:700; letter-spacing:1.4px;
+  text-transform:uppercase; color:$brand;
+  svg { width:14px; height:14px; }
+  border-bottom:1px solid $line; padding-bottom:12px;
+}
+
+.gr-items {
+  display:grid; grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+  gap:14px;
+}
+
+.gr-field {
+  display:flex; flex-direction:column; gap:6px;
+  label {
+    display:flex; align-items:center; justify-content:space-between;
+    font-size:12px; font-weight:600; color:$ink-soft;
+    > span:first-child {
+      font-family: ui-monospace, monospace;
+      color:$ink;
+    }
+  }
+}
+
+.gr-input {
+  width:100%; height:38px;
+  background:#fff;
+  border:1px solid $line; border-radius:9px;
+  padding:0 12px;
+  font-family:inherit; font-size:13px; color:$ink;
+  outline:none;
+  transition:border-color 0.15s, box-shadow 0.15s, background 0.15s;
+  &:focus { border-color:$brand; box-shadow:0 0 0 3px rgba(1,73,155,0.1); }
+  &--locked {
+    background:$line-soft; color:$muted; cursor:not-allowed;
+    font-family: ui-monospace, monospace; font-size:12px;
+  }
+}
+
+.gr-input-row { display:flex; gap:6px; align-items:center; }
+
+.gr-edit-btn {
+  width:38px; height:38px; border-radius:9px;
+  background:$brand-tint; color:$brand;
+  border:1px solid $brand-tint-2; cursor:pointer;
+  display:inline-flex; align-items:center; justify-content:center;
+  flex-shrink:0;
+  svg { width:14px; height:14px; }
+  &:hover { background:$brand-tint-2; }
+}
+
+.gr-badge {
+  display:inline-flex; align-items:center; gap:4px;
+  font-size:10px; font-weight:700; letter-spacing:0.6px;
+  text-transform:uppercase;
+  padding:2px 7px; border-radius:100px;
+  border:1px solid;
+  svg { width:10px; height:10px; }
+  &--public    { background:$brand-tint;  color:$brand;  border-color:$brand-tint-2; }
+  &--sensitive { background:#fffbeb;      color:#b45309; border-color:#fde68a; }
+  &--locked    { background:#fef2f2;      color:$danger; border-color:#fecaca; }
+}

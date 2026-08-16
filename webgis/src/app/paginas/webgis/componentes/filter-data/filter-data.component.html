@@ -1,0 +1,162 @@
+<div class="filter-dialog">
+
+  <!-- Header -->
+  <div class="dialog-header">
+    <div class="header-left">
+      <div class="header-icon">
+        <mat-icon>manage_search</mat-icon>
+      </div>
+      <div class="header-info">
+        <span class="header-title">Filtro de Dados</span>
+        <span class="header-layer">{{ data.nomeCamada }}</span>
+      </div>
+    </div>
+    <button type="button" class="close-btn" (click)="fecharDialogo()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <!-- Body -->
+  <div class="dialog-body">
+
+    <!-- Campos + Valores -->
+    <div class="top-panels">
+
+      <!-- Campos -->
+      <div class="panel">
+        <div class="panel-header">
+          <mat-icon>list_alt</mat-icon>
+          <span class="panel-title">Campos</span>
+          <span class="panel-hint">duplo clique para inserir</span>
+        </div>
+        <mat-list class="item-list">
+          <mat-list-item
+            *ngFor="let campo of conteudoService.getAtributosDeCamadaEspecifica(data.nomeCamada)"
+            (dblclick)="onSelectCampo(campo)"
+            [class.item-selected]="campo === ultimoCampoSelecionado">
+            {{ conteudoService.translateAttributeNameToLabel(data.nomeCamada, campo) }}
+          </mat-list-item>
+        </mat-list>
+      </div>
+
+      <!-- Valores -->
+      <div class="panel">
+        <div class="panel-header">
+          <mat-icon>tag</mat-icon>
+          <span class="panel-title">Valores</span>
+          <span class="panel-hint">duplo clique para inserir</span>
+        </div>
+        <div class="search-box">
+          <mat-icon>search</mat-icon>
+          <input type="text" placeholder="Buscar valor..." (input)="handleSearch($event)">
+        </div>
+        <mat-list class="item-list item-list--values">
+          <mat-list-item
+            *ngFor="let valor of valoresFiltrados"
+            (dblclick)="onSelectValor(valor)">
+            {{ valor }}
+          </mat-list-item>
+        </mat-list>
+        <div class="value-actions">
+          <button type="button" class="val-btn" (click)="getSampleData()">
+            <mat-icon>view_list</mat-icon>
+            Amostra
+          </button>
+          <button type="button" class="val-btn" (click)="getAllData()">
+            <mat-icon>select_all</mat-icon>
+            Tudo
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Operadores -->
+    <div class="operators-section">
+      <span class="section-label">Operadores</span>
+      <div class="op-groups">
+
+        <div class="op-group">
+          <span class="op-group-label">Comparação</span>
+          <div class="op-pills">
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">=</button>
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">!=</button>
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">&lt;</button>
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">&gt;</button>
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">&lt;=</button>
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">&gt;=</button>
+          </div>
+        </div>
+
+        <div class="op-group">
+          <span class="op-group-label">Texto</span>
+          <div class="op-pills">
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">LIKE</button>
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">ILIKE</button>
+          </div>
+        </div>
+
+        <div class="op-group">
+          <span class="op-group-label">Conjunto</span>
+          <div class="op-pills">
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">IN</button>
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">NOT IN</button>
+          </div>
+        </div>
+
+        <div class="op-group">
+          <span class="op-group-label">Nulo</span>
+          <div class="op-pills">
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">IS NULL</button>
+            <button type="button" class="op-pill" (click)="onSelectOperador($event)">IS NOT NULL</button>
+          </div>
+        </div>
+
+        <div class="op-group">
+          <span class="op-group-label">Lógicos</span>
+          <div class="op-pills">
+            <button type="button" class="op-pill op-pill--logic" (click)="onSelectOperador($event)">AND</button>
+            <button type="button" class="op-pill op-pill--logic" (click)="onSelectOperador($event)">OR</button>
+            <button type="button" class="op-pill op-pill--logic" (click)="onSelectOperador($event)">NOT</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Expressão -->
+    <div class="expression-section">
+      <div class="expr-header">
+        <span class="section-label">Expressão de filtragem</span>
+        <span class="expr-status"
+          [class.expr-status--valid]="isValidExpression"
+          [class.expr-status--invalid]="textoExpressao.length > 0 && !isValidExpression">
+          <mat-icon>{{ isValidExpression ? 'check_circle' : (textoExpressao.length > 0 ? 'error' : 'radio_button_unchecked') }}</mat-icon>
+          {{ isValidExpression ? 'Válida' : (textoExpressao.length > 0 ? 'Inválida' : 'Aguardando') }}
+        </span>
+      </div>
+      <textarea
+        id="expressao-filtragem-text"
+        class="expr-textarea"
+        [class.expr-textarea--invalid]="textoExpressao.length > 0 && !isValidExpression"
+        placeholder='Ex: "campo" = &apos;valor&apos; AND "outro" > 10'
+        [(ngModel)]="textoExpressao"
+        (ngModelChange)="validarExpressao()">
+      </textarea>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <div class="dialog-footer">
+    <button type="button" class="footer-btn footer-btn--ghost" (click)="limpar()">
+      <mat-icon>delete_sweep</mat-icon>
+      Limpar
+    </button>
+    <button type="button" class="footer-btn footer-btn--primary" (click)="filtrar()" [disabled]="!isValidExpression">
+      <mat-icon>filter_alt</mat-icon>
+      Filtrar
+    </button>
+  </div>
+
+</div>

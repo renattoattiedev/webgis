@@ -1,0 +1,51 @@
+FROM docker.osgeo.org/geoserver:2.26.x
+
+# Configuração de logging no início
+ENV CATALINA_OPTS="-Dorg.apache.catalina.level=SEVERE -Dcom.amazonaws.level=ERROR"
+ENV GEOSERVER_OPTS="-Dorg.geoserver.level=INFO -Dorg.geotools.level=ERROR"
+ENV AWS_OPTS="-Dcom.amazonaws.internal.S3AbortableInputStream.level=ERROR -Dorg.geotools.s3.S3Connector.level=ERROR"
+ENV AWS_REGION=us-east-1
+ENV AWS_DEFAULT_REGION=us-east-1
+ENV AWS_ACCESS_KEY_ID=vHWQPjUujJwsKuadTpBT
+ENV AWS_SECRET_ACCESS_KEY=wjTlhKuV0yk2lpwarb9bBaWhyDO1atSXVty9JpK8
+ENV S3_FORCE_PATH_STYLE=true
+
+# Criar e configurar arquivo de logging
+RUN echo "org.geotools.s3.S3Connector.level = ERROR" > /usr/local/tomcat/conf/logging.properties && \
+    echo "com.amazonaws.internal.S3AbortableInputStream.level = ERROR" >> /usr/local/tomcat/conf/logging.properties && \
+    echo "com.amazonaws.services.s3.level = ERROR" >> /usr/local/tomcat/conf/logging.properties
+
+# Ajustar permissões para o diretório temporário
+RUN chmod 1777 /tmp
+
+# Instalar o unzip e o curl para descompactar o plugin
+RUN apt-get update && apt-get install -y unzip curl && rm -rf /var/lib/apt/lists/*
+
+# Baixar e instalar o plugin GWC S3 usando curl e unzip, sobrescrevendo arquivos existentes
+RUN curl -L https://sourceforge.net/projects/geoserver/files/GeoServer/2.26.0/extensions/geoserver-2.26.0-gwc-s3-plugin.zip/download -o gwc-s3-plugin.zip \
+    && unzip -o gwc-s3-plugin.zip -d /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/ \
+    && rm gwc-s3-plugin.zip
+
+RUN curl -L https://build.geoserver.org/geoserver/2.26.x/community-latest/geoserver-2.26-SNAPSHOT-s3-geotiff-plugin.zip -o s3-geotiff-plugin.zip \
+    && unzip -o s3-geotiff-plugin.zip -d /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/ \
+    && rm s3-geotiff-plugin.zip 
+
+RUN curl -L https://build.geoserver.org/geoserver/2.26.x/community-latest/geoserver-2.26-SNAPSHOT-cog-s3-plugin.zip -o goc-s3-plugin.zip \
+    && unzip -o goc-s3-plugin.zip -d /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/ \
+    && rm goc-s3-plugin.zip
+
+RUN curl -L https://build.geoserver.org/geoserver/2.26.x/community-latest/geoserver-2.26-SNAPSHOT-cog-http-plugin.zip -o goc-plugin.zip \
+    && unzip -o goc-plugin.zip -d /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/ \
+    && rm goc-plugin.zip
+
+# Configurar permissões para a pasta lib
+RUN chmod -R 755 /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/
+
+# Copiar o arquivo de configuração s3
+COPY docker/s3.properties /opt/geoserver_data/
+
+# Copiar o arquivo ehcache para o diretório correto no contêiner
+COPY docker/ehcache-ee-2.10.8.4.2.jar /usr/local/tomcat/webapps/geoserver/WEB-INF/lib/
+
+# Criar diretório para cache do GWC S3
+RUN mkdir -p /opt/geoserver_data/gwc-s3 && chmod -R 755 /opt/geoserver_data/gwc-s3

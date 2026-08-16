@@ -1,0 +1,149 @@
+// ── Design tokens ─────────────────────────────────────────────────────────────
+$blue:        #01499B;
+$blue-light:  rgba(1, 73, 155, 0.07);
+$blue-border: rgba(1, 73, 155, 0.18);
+$text:        #1e3a5f;
+$muted:       #6b7280;
+
+// ── Dialog wrapper ────────────────────────────────────────────────────────────
+.dialog-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: 320px;
+  background: #fff;
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.dialog-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 12px;
+  background: rgba(1, 73, 155, 0.05);
+  border-bottom: 1px solid $blue-border;
+  flex-shrink: 0;
+}
+
+.dialog-header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.dialog-icon-wrap {
+  width: 28px;
+  height: 28px;
+  background: $blue;
+  border-radius: 7px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon {
+    font-size: 15px;
+    width: 15px;
+    height: 15px;
+    color: white;
+  }
+}
+
+.dialog-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: $text;
+}
+
+.dialog-close-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $muted;
+  transition: background 0.15s, color 0.15s;
+  padding: 0;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+
+  &:hover { background: rgba(239, 68, 68, 0.08); color: #ef4444; }
+}
+
+// ── Action buttons ────────────────────────────────────────────────────────────
+.dialog-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  flex-shrink: 0;
+}
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  border: none;
+  border-radius: 7px;
+  background: $blue;
+  color: #fff;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+
+  mat-icon { font-size: 14px; width: 14px; height: 14px; }
+
+  &:hover { background: #013d82; }
+
+  &--outline {
+    background: transparent;
+    color: $muted;
+    border: 1px solid rgba(0, 0, 0, 0.12);
+
+    &:hover { background: rgba(0, 0, 0, 0.05); color: $text; }
+  }
+}
+
+// ── Column list ───────────────────────────────────────────────────────────────
+.dialog-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 4px 0;
+  scrollbar-width: thin;
+  scrollbar-color: #c1c1c1 transparent;
+
+  &::-webkit-scrollbar       { width: 6px; }
+  &::-webkit-scrollbar-track { background: transparent; }
+  &::-webkit-scrollbar-thumb { background: #c1c1c1; border-radius: 3px; }
+}
+
+::ng-deep .mat-mdc-list-option {
+  min-height: 34px !important;
+  font-size: 12px !important;
+  color: #374151 !important;
+  border-radius: 6px;
+  margin: 1px 6px;
+
+  &:hover { background: $blue-light !important; }
+
+  &.mdc-list-item--selected {
+    color: $text !important;
+    background: $blue-light !important;
+  }
+}
+
+::ng-deep .mat-mdc-list-option.mat-accent {
+  --mdc-checkbox-selected-icon-color: #01499B;
+  --mdc-checkbox-selected-focus-icon-color: #01499B;
+  --mdc-checkbox-selected-hover-icon-color: #01499B;
+  --mdc-checkbox-selected-pressed-icon-color: #01499B;
+}

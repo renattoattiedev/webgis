@@ -1,0 +1,301 @@
+<!-- ── Wrapper inline (sem overlay) ───────────────────────────────────────── -->
+<div class="cfg">
+
+  <!-- Header -->
+  <header class="cfg-head">
+    <div class="cfg-head-left">
+      <div class="cfg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="6 9 6 2 18 2 18 9"/>
+          <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/>
+          <rect x="6" y="14" width="12" height="8"/>
+        </svg>
+      </div>
+      <div class="cfg-head-text">
+        <h2 class="cfg-title">Imprimir <em>croqui</em></h2>
+        <p class="cfg-sub">Configure camadas, layouts e templates para impressão</p>
+      </div>
+    </div>
+    <div class="cfg-head-right">
+      <mat-slide-toggle [(ngModel)]="habilitado">Habilitado</mat-slide-toggle>
+      <button class="cfg-close" (click)="fecharConfig()" type="button" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Body -->
+  <div class="cfg-body">
+
+    <!-- Camada alvo (Demais consultas) -->
+    <section class="cfg-section">
+      <header class="cfg-section-head">
+        <div>
+          <h3 class="cfg-section-title">Camada alvo · Demais consultas</h3>
+          <p class="cfg-section-sub">Camada que recebe a consulta padrão</p>
+        </div>
+      </header>
+
+      <div class="cfg-card">
+        <div class="cfg-card-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="3"/>
+          </svg>
+          <span>Alvo</span>
+        </div>
+
+        <div class="cfg-grid-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Camada</mat-label>
+            <mat-select [(ngModel)]="camadaAlvoConfig.camadaId" (ngModelChange)="onCamadaAlvoChange($event)">
+              <mat-option *ngFor="let c of camadasDisponiveis" [value]="c.id">{{ c.tituloCamada }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Campo-chave</mat-label>
+            <mat-select [(ngModel)]="camadaAlvoConfig.campoChave"
+                        [disabled]="camadaAlvoConfig.carregandoAtributos || camadaAlvoConfig.atributosDisponiveis.length === 0">
+              <mat-option *ngIf="camadaAlvoConfig.carregandoAtributos" disabled>Carregando…</mat-option>
+              <mat-option *ngFor="let a of camadaAlvoConfig.atributosDisponiveis" [value]="a.nomeAtributo">
+                {{ a.nomeAtributo }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="cfg-chips" *ngIf="getCamadaById(camadaAlvoConfig.camadaId) as sel">
+          <span class="cfg-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>{{ sel.temaCamadaNome }}</span>
+          <span class="cfg-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/></svg>{{ sel.grupoCamadaNome }}</span>
+          <span class="cfg-chip cfg-chip--mono"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/></svg>{{ sel.nomeCamada }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Camada alvo SS -->
+    <section class="cfg-section">
+      <header class="cfg-section-head">
+        <div>
+          <h3 class="cfg-section-title">Camada alvo · Solicitação de Serviço</h3>
+          <p class="cfg-section-sub">Camada usada nas consultas via SS</p>
+        </div>
+      </header>
+
+      <div class="cfg-card">
+        <div class="cfg-card-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <span>Alvo SS</span>
+        </div>
+
+        <div class="cfg-grid-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Camada SS</mat-label>
+            <mat-select [(ngModel)]="camadaAlvoSsConfig.camadaId" (ngModelChange)="onCamadaAlvoSsChange($event)">
+              <mat-option *ngFor="let c of camadasDisponiveis" [value]="c.id">{{ c.tituloCamada }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Campo-chave SS</mat-label>
+            <mat-select [(ngModel)]="camadaAlvoSsConfig.campoChave"
+                        [disabled]="camadaAlvoSsConfig.carregandoAtributos || camadaAlvoSsConfig.atributosDisponiveis.length === 0">
+              <mat-option *ngIf="camadaAlvoSsConfig.carregandoAtributos" disabled>Carregando…</mat-option>
+              <mat-option *ngFor="let a of camadaAlvoSsConfig.atributosDisponiveis" [value]="a.nomeAtributo">
+                {{ a.nomeAtributo }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="cfg-chips" *ngIf="getCamadaById(camadaAlvoSsConfig.camadaId) as selSs">
+          <span class="cfg-chip">{{ selSs.temaCamadaNome }}</span>
+          <span class="cfg-chip">{{ selSs.grupoCamadaNome }}</span>
+          <span class="cfg-chip cfg-chip--mono">{{ selSs.nomeCamada }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Camadas auxiliares -->
+    <section class="cfg-section">
+      <header class="cfg-section-head">
+        <div>
+          <h3 class="cfg-section-title">Camadas auxiliares</h3>
+          <p class="cfg-section-sub">Camadas adicionais incluídas no croqui</p>
+        </div>
+        <button class="cfg-btn-ghost" (click)="addCamadaConfig()" type="button">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar camada
+        </button>
+      </header>
+
+      <div class="cfg-card" *ngFor="let cfg of auxCamadasConfigs; let i = index">
+        <div class="cfg-card-head">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+          <span>Camada {{ i + 1 }}</span>
+          <button class="cfg-card-remove" (click)="removeCamadaConfig(i)" type="button" matTooltip="Remover">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+          </button>
+        </div>
+        <div class="cfg-grid-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Camada</mat-label>
+            <mat-select [(ngModel)]="cfg.camadaId" (ngModelChange)="onAuxCamadaChange(i, $event)">
+              <mat-option *ngFor="let c of camadasDisponiveis" [value]="c.id">{{ c.tituloCamada }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="cfg-chips" *ngIf="getCamadaById(cfg.camadaId) as sel">
+          <span class="cfg-chip">{{ sel.temaCamadaNome }}</span>
+          <span class="cfg-chip">{{ sel.grupoCamadaNome }}</span>
+          <span class="cfg-chip cfg-chip--mono">{{ sel.nomeCamada }}</span>
+        </div>
+      </div>
+
+      <div class="cfg-empty" *ngIf="auxCamadasConfigs.length === 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
+        </svg>
+        Nenhuma camada auxiliar configurada
+      </div>
+    </section>
+
+    <!-- Layouts -->
+    <section class="cfg-section">
+      <header class="cfg-section-head">
+        <div>
+          <h3 class="cfg-section-title">Templates de <em>layout</em></h3>
+          <p class="cfg-section-sub">Edite os HTMLs do croqui e da solicitação de serviço</p>
+        </div>
+        <div class="cfg-segment">
+          <button class="cfg-segment-btn" [class.active]="activeLayout === 'croqui'" (click)="setActiveLayout('croqui')" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/><line x1="8" y1="2" x2="8" y2="18"/><line x1="16" y1="6" x2="16" y2="22"/></svg>
+            Croqui
+          </button>
+          <button class="cfg-segment-btn" [class.active]="activeLayout === 'formulario'" (click)="setActiveLayout('formulario')" type="button">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+            Solicitação de Serviço
+          </button>
+        </div>
+      </header>
+
+      <!-- Croqui -->
+      <div class="cfg-editor" *ngIf="activeLayout === 'croqui'">
+        <div class="cfg-editor-head">
+          <span>Template HTML do croqui</span>
+          <button class="cfg-icon-btn" (click)="abrirAjudaVariaveis()" type="button" matTooltip="Variáveis disponíveis">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            Variáveis
+          </button>
+        </div>
+        <textarea class="cfg-code" [(ngModel)]="croquiHtml" rows="16"
+                  placeholder="Digite o código HTML do template do croqui…"></textarea>
+      </div>
+
+      <!-- Formulário -->
+      <div class="cfg-editor" *ngIf="activeLayout === 'formulario'">
+        <div class="cfg-editor-head">
+          <span>Template HTML da Solicitação de Serviço</span>
+        </div>
+        <textarea class="cfg-code" [(ngModel)]="formularioHtml" rows="16"
+                  placeholder="Digite o template da Solicitação de Serviço (HTML)…"></textarea>
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="cfg-foot">
+    <button class="cfg-btn-ghost" (click)="visualizarPreview(activeLayout)" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+      Preview do layout
+    </button>
+    <button class="cfg-btn-primary" (click)="salvarConfiguracao()" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Salvar configuração
+    </button>
+  </footer>
+</div>
+
+<!-- Modal de Preview (mantido em overlay para mostrar o iframe sobre tudo) -->
+<div class="cfg-overlay" [class.show]="showPreview" (click)="fecharPreview()">
+  <div class="cfg-overlay-card" (click)="$event.stopPropagation()">
+    <header class="cfg-head">
+      <div class="cfg-head-left">
+        <div class="cfg-head-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </div>
+        <div class="cfg-head-text">
+          <h2 class="cfg-title">Preview · {{ activeLayout === 'croqui' ? 'Croqui' : 'Solicitação de Serviço' }}</h2>
+          <p class="cfg-sub">Visualização renderizada do template</p>
+        </div>
+      </div>
+      <button class="cfg-close" (click)="fecharPreview()" type="button" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </header>
+    <div class="cfg-preview-body">
+      <iframe *ngIf="safePreviewUrl" [src]="safePreviewUrl" frameborder="0"></iframe>
+      <div *ngIf="!safePreviewUrl" class="cfg-empty">Carregando preview…</div>
+    </div>
+    <footer class="cfg-foot">
+      <button class="cfg-btn-ghost" (click)="fecharPreview()" type="button">Fechar</button>
+    </footer>
+  </div>
+</div>
+
+<!-- Modal de Variáveis -->
+<div class="cfg-overlay" [class.show]="showAjudaVariaveis" (click)="fecharAjudaVariaveis()">
+  <div class="cfg-overlay-card cfg-overlay-card--narrow" (click)="$event.stopPropagation()">
+    <header class="cfg-head">
+      <div class="cfg-head-left">
+        <div class="cfg-head-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+        </div>
+        <div class="cfg-head-text">
+          <h2 class="cfg-title">Variáveis <em>disponíveis</em></h2>
+          <p class="cfg-sub">Use estas chaves no seu template HTML</p>
+        </div>
+      </div>
+      <button class="cfg-close" (click)="fecharAjudaVariaveis()" type="button" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </header>
+    <div class="cfg-body cfg-vars">
+      <div class="cfg-var-group">
+        <div class="cfg-var-label">Cabeçalho</div>
+        <div class="cfg-var-row"><code>{{"{{"}}MAP_TITLE{{"}}"}}</code><span>Título do croqui com matrícula</span></div>
+        <div class="cfg-var-row"><code>{{"{{"}}MAP_SUBTITLE{{"}}"}}</code><span>Subtítulo com nome do imóvel/proprietário</span></div>
+        <div class="cfg-var-row"><code>{{"{{"}}AUTHOR{{"}}"}}</code><span>Responsável pela geração</span></div>
+      </div>
+      <div class="cfg-var-group">
+        <div class="cfg-var-label">Mapa</div>
+        <div class="cfg-var-row"><code>{{"{{"}}MAP_CONTENT{{"}}"}}</code><span>Imagem do mapa (obrigatório)</span></div>
+        <div class="cfg-var-row"><code>{{"{{"}}COORD_BOTTOM_RIGHT{{"}}"}}</code><span>Coordenadas do canto inferior direito</span></div>
+      </div>
+      <div class="cfg-var-group">
+        <div class="cfg-var-label">Escala</div>
+        <div class="cfg-var-row"><code>{{"{{"}}SCALE{{"}}"}}</code><span>Ex.: "1:1000"</span></div>
+        <div class="cfg-var-row"><code>{{"{{"}}SCALE_1{{"}}"}} … {{"{{"}}SCALE_5{{"}}"}}</code><span>Marcas da régua de escala</span></div>
+      </div>
+      <div class="cfg-var-group">
+        <div class="cfg-var-label">Legenda</div>
+        <div class="cfg-var-row"><code>{{"{{"}}LEGEND_ITEMS{{"}}"}}</code><span>Itens com símbolos das camadas ativas</span></div>
+      </div>
+      <div class="cfg-var-group">
+        <div class="cfg-var-label">Dados geográficos</div>
+        <div class="cfg-var-row"><code>{{"{{"}}PROJECTION{{"}}"}}</code><span>Ex.: "EPSG:4326"</span></div>
+        <div class="cfg-var-row"><code>{{"{{"}}DATUM{{"}}"}}</code><span>Ex.: "WGS84"</span></div>
+      </div>
+      <div class="cfg-var-group">
+        <div class="cfg-var-label">Informações</div>
+        <div class="cfg-var-row"><code>{{"{{"}}DATE{{"}}"}}</code><span>Data e hora da geração</span></div>
+        <div class="cfg-var-row"><code>{{"{{"}}DATA_SOURCE{{"}}"}}</code><span>Fonte dos dados</span></div>
+      </div>
+    </div>
+    <footer class="cfg-foot">
+      <button class="cfg-btn-primary" (click)="fecharAjudaVariaveis()" type="button">Entendi</button>
+    </footer>
+  </div>
+</div>

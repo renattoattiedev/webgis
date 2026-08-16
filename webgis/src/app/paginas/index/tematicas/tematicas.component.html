@@ -1,0 +1,48 @@
+<div class="temas-grid" *ngIf="carregando">
+  <div class="tema-card tema-card--skeleton" *ngFor="let _ of skeletonCount">
+    <div class="tema-header">
+      <div class="sk tema-icon"></div>
+      <div class="sk sk--line"></div>
+    </div>
+    <div class="tema-groups">
+      <div class="sk sk--chip"></div>
+      <div class="sk sk--chip sk--chip-md"></div>
+      <div class="sk sk--chip sk--chip-lg"></div>
+    </div>
+    <div class="tema-footer">
+      <div class="sk sk--foot"></div>
+    </div>
+  </div>
+</div>
+
+<div class="temas-empty" *ngIf="!carregando && temas.length === 0">
+  <p>Nenhum tema cadastrado.</p>
+</div>
+
+<div class="temas-grid" *ngIf="!carregando && temas.length > 0">
+  <div class="tema-card" *ngFor="let tema of temas">
+    <div class="tema-header">
+      <div class="tema-icon">{{ inicialTema(tema.tituloTema) }}</div>
+      <div class="tema-name">{{ tema.tituloTema }}</div>
+    </div>
+
+    <div class="tema-groups" *ngIf="tema.grupos && tema.grupos.length > 0">
+      <span class="tema-chip" *ngFor="let grupo of tema.grupos">
+        {{ grupo.grupoNome }}
+      </span>
+    </div>
+    <div class="tema-no-groups" *ngIf="!tema.grupos || tema.grupos.length === 0">
+      Sem grupos cadastrados
+    </div>
+
+    <div class="tema-footer">
+      <span class="tema-count">
+        {{ tema.grupos.length }} grupo{{ tema.grupos.length === 1 ? '' : 's' }}
+      </span>
+      <svg class="tema-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </div>
+  </div>
+</div>

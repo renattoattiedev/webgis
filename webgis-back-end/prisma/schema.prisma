@@ -1,0 +1,670 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Mapas {
+  COD_MAPA_ID                  String               @id @default(uuid())
+  COD_GRUPO_ID                 String
+  COD_NIVEL_COMPATILHAMENTO    String
+  NOM_NOME_MAPA                String
+  DSC_TITULO                   String
+  DSC_DESCRICAO                String
+  DSC_BOUNDING_BOX             String?
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  DHS_INCLUSAO                 DateTime             @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime?            @updatedAt
+  DHS_EXCLUSAO                 DateTime?
+  BOL_CARREGAMENTO_DEFAULT     Boolean?             @default(false)
+  favoritos_mapas              FavoritosMapas[]
+  logs                         MapasLog[]
+  grupos_mapas                 Grupo                @relation(fields: [COD_GRUPO_ID], references: [COD_GRUPO_ID])
+  folders_mapas                FoldersMapas[]
+  mapas_camadas                MapasCamadas[]
+  mapas_camadas_raster         MapasCamadasRaster[]
+  grupos_adicionais            MapaGrupoAdicional[]
+
+  @@map("TP_MAPAS")
+}
+
+model MapasCamadas {
+  COD_MAPA_CAMADA_ID     String                @id @default(uuid())
+  COD_CAMADA_ID          String
+  COD_MAPA_ID            String
+  NUM_ORDEM_RENDERIZACAO Int
+  filtros                MapasCamadasFiltros[]
+  camadas                Camadas               @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID], onDelete: Cascade)
+  mapas                  Mapas                 @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID], onDelete: Cascade)
+
+  @@map("TR_MAPAS_CAMADAS")
+}
+
+model MapasCamadasFiltros {
+  COD_FILTRO_ID      String       @id @default(uuid())
+  COD_MAPA_CAMADA_ID String
+  DSC_FILTRO         String
+  mapas_camadas      MapasCamadas @relation(fields: [COD_MAPA_CAMADA_ID], references: [COD_MAPA_CAMADA_ID])
+
+  @@map("TD_MAPAS_CAMADAS_FILTROS")
+}
+
+model MapasCamadasRaster {
+  COD_MAPA_CAMADA_RASTER_ID String        @id @default(uuid())
+  COD_CAMADA_RASTER_ID      String
+  COD_MAPA_ID               String
+  NUM_ORDEM_RENDERIZACAO    Int
+  camadas_raster            CamadasRaster @relation(fields: [COD_CAMADA_RASTER_ID], references: [COD_CAMADA_RASTER_ID], onDelete: Cascade)
+  mapas                     Mapas         @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID], onDelete: Cascade)
+
+  @@map("TR_MAPAS_CAMADAS_RASTER")
+}
+
+model User {
+  COD_USER_ID                    String         @id @default(uuid())
+  NOM_USER                       String
+  COD_PERFIL_USER                String
+  DSC_EMAIL                      String         @unique
+  DSC_PASSWORD                   String?
+  COD_ENTRA_OBJECT_ID            String?        @unique
+  DSC_AUTH_PROVIDER              String         @default("local")
+  DHS_ULTIMA_AUTENTICACAO        DateTime?
+  NUM_LOGINS                     Int            @default(0)
+  COD_USUARIO_CRIACAO            String?
+  COD_USUARIO_ULTIMA_ALTERACAO   String?
+  COD_USUARIO_EXCLUSAO           String?
+  DHS_EXCLUSAO                   DateTime?
+  DHS_INCLUSAO                   DateTime       @default(now())
+  DHS_ULTIMA_ALTERACAO           DateTime?      @updatedAt
+  DSC_EMAIL_VERIFICATION_TOKEN   String?        @unique
+  DSC_EMAIL_VERIFICATION_EXPIRES DateTime?
+  BOL_EMAIL_VERIFIED             Boolean        @default(false)
+  DSC_RESET_PASSWORD_TOKEN       String?        @unique
+  DHS_EXPIRES_RESET_PASSWORD     DateTime?
+  perfil_user                    PerfilUser     @relation(fields: [COD_PERFIL_USER], references: [COD_PERFIL_USER])
+  grupo_membros                  GrupoMembros[]
+
+  @@map("TP_USER")
+}
+
+model PerfilUser {
+  DSC_PERFIL      String
+  COD_PERFIL_USER String @id @default(uuid())
+  user            User[]
+
+  @@map("TA_PERFIL_USER")
+}
+
+model Temas {
+  COD_TEMA_ID                  String    @id @default(uuid())
+  NOM_NOME_TEMA                String
+  COD_USUARIO_CRIACAO          String?
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime  @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime? @updatedAt
+  GruposCamadas                Grupo[]
+
+  @@map("TA_TEMAS")
+}
+
+model Grupo {
+  COD_GRUPO_ID                     String                       @id @default(uuid())
+  NOM_NOME_GRUPO                   String
+  SGL_GRUPO_ID                     String                       @unique @db.VarChar(2)
+  COD_USUARIO_CRIACAO              String
+  COD_USUARIO_ULTIMA_ALTERACAO     String?
+  COD_USUARIO_EXCLUSAO             String?
+  DHS_EXCLUSAO                     DateTime?
+  COD_TEMA_ID                      String
+  DHS_INCLUSAO                     DateTime                     @default(now())
+  DHS_ULTIMA_ALTERACAO             DateTime?                    @updatedAt
+  COD_USUARIO_DONO                 String?
+  DSC_VISIBILIDADE                 String                       @default("organizacao")
+  DSC_POLITICA_PARTICIPACAO        String                       @default("convite")
+  BOL_MEMBROS_CONTRIBUEM           Boolean                      @default(false)
+  temas                            Temas                        @relation(fields: [COD_TEMA_ID], references: [COD_TEMA_ID])
+  camadas                          Camadas[]
+  camadas_raster                   CamadasRaster[]
+  mapas                            Mapas[]
+  membros                          GrupoMembros[]
+  camadas_grupos_adicionais        CamadaGrupoAdicional[]
+  camadas_raster_grupos_adicionais CamadaRasterGrupoAdicional[]
+  mapas_grupos_adicionais          MapaGrupoAdicional[]
+
+  @@map("TA_GRUPO")
+}
+
+model Folders {
+  COD_FOLDER_ID          String                 @id @default(uuid())
+  DSC_FOLDER             String
+  COD_USUARIO_CRIACAO    String
+  folders_camadas        FoldersCamadas[]
+  folders_camadas_raster FoldersCamadasRaster[]
+  folders_mapas          FoldersMapas[]
+
+  @@map("TA_FOLDERS")
+}
+
+model Camadas {
+  COD_CAMADA_ID                String                 @id @default(uuid())
+  NOM_NOME                     String
+  DSC_TITULO                   String
+  DSC_DESCRICAO                String
+  DSC_LINK_METADADOS           String
+  TXT_TERMOS_DE_USO            String
+  COD_NIVEL_COMPATILHAMENTO    String
+  COD_GRUPO_ID                 String
+  TXT_TAGS                     String
+  COD_PACOTE_CONCEITUAL_ID     String
+  DSC_FONTE_DADOS_CAMADA       String
+  DSC_BOUNDING_BOX             String?
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  FLG_CAMADA_ATIVA             Boolean                @default(true)
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime               @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime?              @updatedAt
+  BOL_CARREGAMENTO_DEFAULT     Boolean?               @default(false)
+  DSC_STATUS                   String?                @default("published")
+  DSC_ERROR_MSG                String?                @db.VarChar(500)
+  atributos                    Atributos[]
+  grupos_camadas               Grupo                  @relation(fields: [COD_GRUPO_ID], references: [COD_GRUPO_ID])
+  nivel_compartilhamento       NivelCompartilhamento  @relation(fields: [COD_NIVEL_COMPATILHAMENTO], references: [COD_NIVEL_COMPATILHAMENTO])
+  pacotes_conceituais          PacotesConceituais     @relation(fields: [COD_PACOTE_CONCEITUAL_ID], references: [COD_PACOTE_CONCEITUAL_ID])
+  favoritos_camadas            FavoritosCamadas[]
+  logs                         CamadasLog[]
+  creditos                     Creditos[]
+  folders_camadas              FoldersCamadas[]
+  mapas_camadas                MapasCamadas[]
+  grupos_adicionais            CamadaGrupoAdicional[]
+  publicacoes                  PublicacaoCamada[]
+
+  @@map("TP_CAMADAS")
+}
+
+model CamadasRaster {
+  COD_CAMADA_RASTER_ID         String                       @id @default(uuid())
+  NOM_NOME                     String
+  DSC_FONTE_DADOS_CAMADA       String?
+  DSC_TITULO                   String
+  DSC_DESCRICAO                String
+  DSC_LINK_METADADOS           String
+  TXT_TERMOS_DE_USO            String
+  COD_NIVEL_COMPATILHAMENTO    String
+  COD_GRUPO_ID                 String
+  TXT_TAGS                     String
+  DSC_BOUNDING_BOX             String?
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  FLG_CAMADA_ATIVA             Boolean                      @default(true)
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime                     @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime?                    @updatedAt
+  BOL_CARREGAMENTO_DEFAULT     Boolean?                     @default(false)
+  DSC_STATUS                   String?                      @default("published")
+  NUM_UPLOAD_PROGRESS          Int?                         @default(0)
+  DSC_ERROR_MSG                String?                      @db.VarChar(500)
+  DSC_SEED_STATUS              String?                      @default("idle")
+  NUM_SEED_PROGRESS            Int?                         @default(0)
+  DSC_COG_PERFIL               String?                      @db.VarChar(40)
+  grupos_camadas_raster        Grupo                        @relation(fields: [COD_GRUPO_ID], references: [COD_GRUPO_ID])
+  nivel_compartilhamento       NivelCompartilhamento        @relation(fields: [COD_NIVEL_COMPATILHAMENTO], references: [COD_NIVEL_COMPATILHAMENTO])
+  favoritos_camadas_raster     FavoritosCamadasRaster[]
+  logs                         CamadasRasterLog[]
+  folders_camadas_raster       FoldersCamadasRaster[]
+  mapas_camadas_raster         MapasCamadasRaster[]
+  grupos_adicionais            CamadaRasterGrupoAdicional[]
+  publicacoes                  PublicacaoCamadaRaster[]
+
+  @@map("TP_CAMADAS_RASTER")
+}
+
+model FoldersCamadas {
+  COD_FOLDER_CAMADADA_ID String  @id @default(uuid())
+  COD_FOLDER_ID          String
+  COD_CAMADA_ID          String
+  camadas                Camadas @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID], onDelete: Cascade)
+  folders                Folders @relation(fields: [COD_FOLDER_ID], references: [COD_FOLDER_ID], onDelete: Cascade)
+
+  @@map("TR_FOLDERS_CAMADAS")
+}
+
+model FoldersCamadasRaster {
+  COD_FOLDER_CAMADADA_RASTER_ID String        @id @default(uuid())
+  COD_FOLDER_ID                 String
+  COD_CAMADA_RASTER_ID          String
+  camadas_raster                CamadasRaster @relation(fields: [COD_CAMADA_RASTER_ID], references: [COD_CAMADA_RASTER_ID], onDelete: Cascade)
+  folders                       Folders       @relation(fields: [COD_FOLDER_ID], references: [COD_FOLDER_ID], onDelete: Cascade)
+
+  @@map("TR_FOLDERS_CAMADAS_RASTER")
+}
+
+model FoldersMapas {
+  COD_FOLDER_MAPA_ID String  @id @default(uuid())
+  COD_FOLDER_ID      String
+  COD_MAPA_ID        String
+  folders            Folders @relation(fields: [COD_FOLDER_ID], references: [COD_FOLDER_ID], onDelete: Cascade)
+  mapas              Mapas   @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID], onDelete: Cascade)
+
+  @@map("TR_FOLDERS_MAPAS")
+}
+
+model PacotesConceituais {
+  COD_PACOTE_CONCEITUAL_ID     String    @id @default(uuid())
+  NOM_NOME_PACOTE_CONCEITUAL   String
+  DSC_TITULO                   String
+  DSC_HOST                     String
+  DSC_PORT                     String
+  DSC_DATABASE                 String
+  DSC_SCHEMA                   String
+  DSC_USER                     String
+  DSC_PASSWORD                 String
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime  @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime? @updatedAt
+  camadas                      Camadas[]
+
+  @@map("TA_PACOTES_CONCEITUAIS")
+}
+
+model NivelCompartilhamento {
+  COD_NIVEL_COMPATILHAMENTO    String          @id @default(uuid())
+  DSC_NIVEL_COMPATILHAMENTO    String
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime        @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime?       @updatedAt
+  camadas                      Camadas[]
+  camdas_raster                CamadasRaster[]
+
+  @@map("TA_NIVEL_COMPARTILHAMENTO")
+}
+
+model Instituicoes {
+  COD_INSTITUICAO_ID           String     @id @default(uuid())
+  NOM_INTITUICAO               String
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime   @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime?  @updatedAt
+  creditos                     Creditos[]
+
+  @@map("TA_INSTITUICOES")
+}
+
+model Atributos {
+  COD_ATRIBUTO_ID              String    @id @default(uuid())
+  COD_CAMADA_ID                String
+  NOM_NOME_ATRIBUTO            String
+  DSC_LABEL_ATRIBUTO           String?
+  DSC_TIPO                     String?
+  NUM_TAMANHO                  String?
+  FLG_VISIVEL                  Boolean
+  TXT_DESCRICAO                String?
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  NUM_ORDEM_RENDERIZACAO       Int?
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime  @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime? @updatedAt
+  camadas                      Camadas   @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID])
+
+  @@map("TP_ATRIBUTOS")
+}
+
+model Creditos {
+  COD_INSTITUICAO_ID String
+  COD_CAMADA_ID      String
+  camadas            Camadas      @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID])
+  instituicoes       Instituicoes @relation(fields: [COD_INSTITUICAO_ID], references: [COD_INSTITUICAO_ID])
+
+  @@unique([COD_INSTITUICAO_ID, COD_CAMADA_ID], name: "UNIQUE_CREDITOS")
+  @@map("TR_CREDITOS")
+}
+
+model CamadasLog {
+  COD_LOG_ID    String   @id @default(uuid())
+  COD_CAMADA_ID String
+  DHS_ACESSO    DateTime @default(now())
+  camadas       Camadas  @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID])
+
+  @@map("TP_LOG_CAMADAS")
+}
+
+model CamadasRasterLog {
+  COD_LOG_ID           String        @id @default(uuid())
+  COD_CAMADA_RASTER_ID String
+  DHS_ACESSO           DateTime      @default(now())
+  camadas_raster       CamadasRaster @relation(fields: [COD_CAMADA_RASTER_ID], references: [COD_CAMADA_RASTER_ID])
+
+  @@map("TP_LOG_CAMADAS_RASTER")
+}
+
+model MapasLog {
+  COD_LOG_ID  String   @id @default(uuid())
+  COD_MAPA_ID String
+  DHS_ACESSO  DateTime @default(now())
+  mapas       Mapas    @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID])
+
+  @@map("TP_LOG_MAPAS")
+}
+
+model FavoritosCamadas {
+  COD_FAVORITO_ID String   @id @default(uuid())
+  COD_USER_ID     String
+  COD_CAMADA_ID   String
+  DHS_INCLUSAO    DateTime @default(now())
+  camadas         Camadas  @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID])
+
+  @@unique([COD_USER_ID, COD_CAMADA_ID], name: "UNIQUE_USER_CAMADA_FAVORITOS")
+  @@map("TP_FAVORITOS_CAMADAS")
+}
+
+model FavoritosCamadasRaster {
+  COD_FAVORITO_ID      String        @id @default(uuid())
+  COD_USER_ID          String
+  COD_CAMADA_RASTER_ID String
+  DHS_INCLUSAO         DateTime      @default(now())
+  camadas_raster       CamadasRaster @relation(fields: [COD_CAMADA_RASTER_ID], references: [COD_CAMADA_RASTER_ID])
+
+  @@unique([COD_USER_ID, COD_CAMADA_RASTER_ID], name: "UNIQUE_USER_CAMADA_RASTER_FAVORITOS")
+  @@map("TP_FAVORITOS_CAMADAS_RASTER")
+}
+
+model FavoritosMapas {
+  COD_FAVORITO_ID String   @id @default(uuid())
+  COD_USER_ID     String
+  COD_MAPA_ID     String
+  DHS_INCLUSAO    DateTime @default(now())
+  mapas           Mapas    @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID])
+
+  @@unique([COD_USER_ID, COD_MAPA_ID], name: "UNIQUE_USER_MAPA_FAVORITOS")
+  @@map("TP_FAVORITOS_MAPAS")
+}
+
+model Config {
+  COD_CONFIG_ID                String    @id @default(uuid())
+  NUM_GRUPO_ORDER              Int
+  NUM_KEY_ORDER                Int
+  DSC_GRUPO_KEY                String
+  DSC_KEY                      String    @unique
+  DSC_VALUE                    String?
+  FLG_SENSIVEL                 Boolean   @default(false)
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime  @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime? @updatedAt
+
+  @@map("TP_CONFIG")
+}
+
+model Basemap {
+  COD_BASEMAP_ID               String    @id @default(uuid())
+  NOM_NOME_BASEMAP             String
+  DSC_THUMBNAIL                String?
+  DSC_SOURCE                   String
+  JSON_WMS_PARAMS              Json?
+  NUM_ORDEM                    Int       @default(0)
+  BOL_DEFAULT                  Boolean   @default(false)
+  FLG_ATIVO                    Boolean   @default(true)
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  DHS_EXCLUSAO                 DateTime?
+  DHS_INCLUSAO                 DateTime  @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime? @updatedAt
+
+  @@index([NOM_NOME_BASEMAP])
+  @@map("TP_BASEMAPS")
+}
+
+model UserPreference {
+  COD_USER_PREFERENCE_ID String    @id @default(uuid())
+  COD_USER_ID            String
+  SELECTED_LAYERS        Json?
+  ZOOM                   Int?
+  CENTER_X               Float?
+  EXTENT                 Json?
+  DHS_INCLUSAO           DateTime  @default(now())
+  DHS_ULTIMA_ALTERACAO   DateTime? @updatedAt
+
+  @@map("TP_USER_PREFERENCE")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model spatial_ref_sys {
+  srid      Int     @id
+  auth_name String? @db.VarChar(256)
+  auth_srid Int?
+  srtext    String? @db.VarChar(2048)
+  proj4text String? @db.VarChar(2048)
+}
+
+model SicatCidade {
+  cd_cidade    BigInt
+  cd_municipio BigInt
+  dc_cidade    String?
+
+  // Relações
+  imoveis     SicatImovel[]
+  bairros     SicatBairro[]
+  logradouros SicatLogradouro[]
+
+  @@id([cd_cidade])
+  @@map("webgis_sicat_cidade")
+}
+
+model SicatBairro {
+  cd_cidade        BigInt
+  cd_bairro        BigInt
+  dc_bairro        String?
+  cd_mun_impressao BigInt?
+
+  // Relações
+  cidade  SicatCidade   @relation(fields: [cd_cidade], references: [cd_cidade])
+  imoveis SicatImovel[]
+
+  @@id([cd_cidade, cd_bairro])
+  @@map("webgis_sicat_bairro")
+}
+
+model SicatLogradouro {
+  cd_cidade        BigInt
+  cd_logradouro    BigInt
+  sigla_logradouro String?
+  dc_logradouro    String?
+
+  // Relações
+  cidade  SicatCidade   @relation(fields: [cd_cidade], references: [cd_cidade])
+  imoveis SicatImovel[]
+
+  @@id([cd_cidade, cd_logradouro])
+  @@map("webgis_sicat_logradouro")
+}
+
+model SicatCliente {
+  nome_cliente_interno String?
+  cpf_cnpj             String?
+  cd_cliente           BigInt  @id
+  tipo_cliente         String?
+
+  // Relação com imóveis
+  imoveis SicatImovel[]
+
+  @@map("webgis_sicat_cliente")
+}
+
+model SicatImovel {
+  matricula_imovel     BigInt    @id
+  dv                   BigInt?
+  cliente_especial     String?
+  data_ligacao_agua    DateTime?
+  data_ligacao_esgoto  DateTime?
+  numero_economias     BigInt?
+  tratamento_esgoto    String?
+  ciclo_leitura        BigInt?
+  seq_rota             BigInt?
+  cep                  BigInt?
+  cd_logradouro        BigInt?
+  cd_cidade            BigInt?
+  cd_bairro            BigInt?
+  row_version          BigInt?
+  numero_endereco      String?
+  complemento_endereco String?
+  grupo_consumo        BigInt?
+  cd_cliente           BigInt?
+  categoria            BigInt?
+  otr_fonte            BigInt?
+  tp_ligacao_agua      BigInt?
+  sit_ligacao_agua     BigInt?
+  sit_ligacao_esgoto   BigInt?
+
+  // Relações
+  cliente    SicatCliente?    @relation(fields: [cd_cliente], references: [cd_cliente])
+  cidade     SicatCidade?     @relation(fields: [cd_cidade], references: [cd_cidade])
+  bairro     SicatBairro?     @relation(fields: [cd_cidade, cd_bairro], references: [cd_cidade, cd_bairro])
+  logradouro SicatLogradouro? @relation(fields: [cd_cidade, cd_logradouro], references: [cd_cidade, cd_logradouro])
+
+  @@map("webgis_sicat_imovel")
+}
+
+model Componente {
+  COD_COMPONENTE_ID   String  @id @default(uuid())
+  NOM_NOME_COMPONENTE String
+  DSC_DESCRICAO       String?
+  JSON_CONFIGURACAO   Json // Configurações específicas do componente
+  FLG_HABILITADO      Boolean @default(true)
+
+  @@map("TP_COMPONENTE")
+}
+
+model SicatHidrometroImovel {
+  matricula_imovel  BigInt
+  codigo_hidrometro String
+
+  @@id([matricula_imovel, codigo_hidrometro])
+  @@map("webgis_sicat_hidrometro_imovel")
+}
+
+model SolicitacaoServicos {
+  num_ss          String
+  servico         String?
+  operacional     String?
+  unidade         String?
+  cliente         String?
+  cpf_cnpj        String?
+  matricula       String?
+  dv              BigInt?
+  hidrometro      String?
+  logradouro      String?
+  num_imovel      String?
+  telefone        String?
+  bairro          String?
+  referencia      String?
+  obs             String?
+  cd_atendimento  BigInt?
+  ref_atendimento BigInt?
+  seq_ss          BigInt
+
+  @@id([num_ss, seq_ss])
+  @@map("webgis_integracao_solicitacao_servico")
+}
+
+model GrupoMembros {
+  COD_GRUPO_MEMBRO_ID          String    @id @default(uuid())
+  COD_GRUPO_ID                 String
+  COD_USER_ID                  String
+  DSC_STATUS                   String    @default("membro")
+  COD_USUARIO_CRIACAO          String
+  COD_USUARIO_ULTIMA_ALTERACAO String?
+  COD_USUARIO_EXCLUSAO         String?
+  DHS_INCLUSAO                 DateTime  @default(now())
+  DHS_ULTIMA_ALTERACAO         DateTime? @updatedAt
+  DHS_EXCLUSAO                 DateTime?
+  grupo                        Grupo     @relation(fields: [COD_GRUPO_ID], references: [COD_GRUPO_ID], onDelete: Cascade)
+  user                         User      @relation(fields: [COD_USER_ID], references: [COD_USER_ID])
+
+  // Unique inclui soft-deletados de propósito: re-entrada reativa a linha existente (não insere nova)
+  @@unique([COD_GRUPO_ID, COD_USER_ID])
+  @@map("TR_GRUPO_MEMBROS")
+}
+
+model CamadaGrupoAdicional {
+  COD_CAMADA_ID String
+  COD_GRUPO_ID  String
+  DHS_INCLUSAO  DateTime @default(now())
+  camada        Camadas  @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID], onDelete: Cascade)
+  grupo         Grupo    @relation(fields: [COD_GRUPO_ID], references: [COD_GRUPO_ID], onDelete: Cascade)
+
+  @@id([COD_CAMADA_ID, COD_GRUPO_ID])
+  @@map("TR_CAMADAS_GRUPOS_ADICIONAIS")
+}
+
+model CamadaRasterGrupoAdicional {
+  COD_CAMADA_RASTER_ID String
+  COD_GRUPO_ID         String
+  DHS_INCLUSAO         DateTime      @default(now())
+  camadaRaster         CamadasRaster @relation(fields: [COD_CAMADA_RASTER_ID], references: [COD_CAMADA_RASTER_ID], onDelete: Cascade)
+  grupo                Grupo         @relation(fields: [COD_GRUPO_ID], references: [COD_GRUPO_ID], onDelete: Cascade)
+
+  @@id([COD_CAMADA_RASTER_ID, COD_GRUPO_ID])
+  @@map("TR_CAMADAS_RASTER_GRUPOS_ADICIONAIS")
+}
+
+model MapaGrupoAdicional {
+  COD_MAPA_ID  String
+  COD_GRUPO_ID String
+  DHS_INCLUSAO DateTime @default(now())
+  mapa         Mapas    @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID], onDelete: Cascade)
+  grupo        Grupo    @relation(fields: [COD_GRUPO_ID], references: [COD_GRUPO_ID], onDelete: Cascade)
+
+  @@id([COD_MAPA_ID, COD_GRUPO_ID])
+  @@map("TR_MAPAS_GRUPOS_ADICIONAIS")
+}
+
+model PublicacaoCamada {
+  COD_PUBLICACAO_ID String   @id @default(uuid())
+  COD_CAMADA_ID     String
+  DSC_OPERACAO      String
+  DSC_STATUS        String
+  DSC_ERROR_MSG     String?  @db.VarChar(500)
+  TXT_MUDANCAS      String?
+  COD_USUARIO       String
+  DHS_PUBLICACAO    DateTime @default(now())
+  camadas           Camadas  @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID])
+
+  @@map("TP_PUBLICACOES_CAMADA")
+}
+
+model PublicacaoCamadaRaster {
+  COD_PUBLICACAO_ID    String        @id @default(uuid())
+  COD_CAMADA_RASTER_ID String
+  DSC_OPERACAO         String
+  DSC_STATUS           String
+  DSC_ERROR_MSG        String?       @db.VarChar(500)
+  TXT_MUDANCAS         String?
+  COD_USUARIO          String
+  DHS_PUBLICACAO       DateTime      @default(now())
+  camadasRaster        CamadasRaster @relation(fields: [COD_CAMADA_RASTER_ID], references: [COD_CAMADA_RASTER_ID])
+
+  @@map("TP_PUBLICACOES_CAMADA_RASTER")
+}

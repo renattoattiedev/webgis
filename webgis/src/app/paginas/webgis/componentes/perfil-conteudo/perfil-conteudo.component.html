@@ -1,0 +1,156 @@
+<div class="side-panel" [ngClass]="{'expanded': conteudoService.perfilPanel}">
+  <div class="drawer-panel">
+
+    <!-- ── Header ──────────────────────────────────────────────────────────── -->
+    <div class="panel-header">
+      <div class="panel-title">
+        <span class="title-icon">
+          <mat-icon>{{ isMapa ? 'map' : 'layers' }}</mat-icon>
+        </span>
+        <span class="title-text">{{ isMapa ? mapa?.tituloMapa : camada?.tituloCamada }}</span>
+      </div>
+      <button class="close-btn" (click)="closeExpandPerfilPanel()" title="Fechar">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <!-- ── Tabs ────────────────────────────────────────────────────────────── -->
+    <div class="panel-body">
+      <mat-tab-group class="profile-tabs">
+
+        <!-- Info -->
+        <mat-tab label="Info">
+          <div class="tab-content">
+
+            <!-- Descrição -->
+            <p class="description" *ngIf="!isMapa && camada?.descricaoCamada">
+              {{ camada?.descricaoCamada }}
+            </p>
+            <p class="description" *ngIf="isMapa && mapa?.descricaoMapa">
+              {{ mapa?.descricaoMapa }}
+            </p>
+
+            <!-- Info pairs – camada -->
+            <ng-container *ngIf="!isMapa && camada">
+              <div class="info-section">
+                <div class="info-row" *ngFor="let info of getCamadaInfo()">
+                  <span class="info-label">{{ info.label }}</span>
+                  <span class="info-value">{{ info.value }}</span>
+                </div>
+
+                <div class="info-row">
+                  <span class="info-label">Compartilhamento</span>
+                  <span class="info-value share-value">
+                    <ng-container [ngSwitch]="camada.nivelCompartilhamento">
+                      <span *ngSwitchCase="'Público'" class="share-badge share-badge--public">
+                        <mat-icon>public</mat-icon> Público
+                      </span>
+                      <span *ngSwitchCase="'Privado'" class="share-badge share-badge--private">
+                        <mat-icon>lock</mat-icon> Privado
+                      </span>
+                      <span *ngSwitchCase="'Institucional'" class="share-badge share-badge--institutional">
+                        <mat-icon>business</mat-icon> Institucional
+                      </span>
+                    </ng-container>
+                  </span>
+                </div>
+
+                <div class="info-row info-row--tags" *ngIf="camada.tags">
+                  <span class="info-label">Tags</span>
+                  <span class="info-value">
+                    <span class="tag-list">
+                      <span class="tag-chip" *ngFor="let tag of camada.tags.split(',')">{{ tag.trim() }}</span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Info pairs – mapa -->
+            <ng-container *ngIf="isMapa && mapa">
+              <div class="info-section">
+                <div class="info-row" *ngFor="let info of [
+                  { label: 'Tema',              value: mapa.temaMapaNome },
+                  { label: 'Grupo',             value: mapa.grupoMapaNome },
+                  { label: 'Criado em',         value: (mapa.criadoEm | date:'dd/MM/yyyy') },
+                  { label: 'Últ. atualização',  value: (mapa.updatedAt | date:'dd/MM/yyyy') },
+                  { label: 'Criado por',        value: mapa.usrCriacao }
+                ]">
+                  <span class="info-label">{{ info.label }}</span>
+                  <span class="info-value">{{ info.value }}</span>
+                </div>
+
+                <div class="info-row">
+                  <span class="info-label">Compartilhamento</span>
+                  <span class="info-value share-value">
+                    <ng-container [ngSwitch]="mapa.nivelCompartilhamento">
+                      <span *ngSwitchCase="'Público'" class="share-badge share-badge--public">
+                        <mat-icon>public</mat-icon> Público
+                      </span>
+                      <span *ngSwitchCase="'Privado'" class="share-badge share-badge--private">
+                        <mat-icon>lock</mat-icon> Privado
+                      </span>
+                      <span *ngSwitchCase="'Institucional'" class="share-badge share-badge--institutional">
+                        <mat-icon>business</mat-icon> Institucional
+                      </span>
+                    </ng-container>
+                  </span>
+                </div>
+
+                <div class="info-row info-row--tags">
+                  <span class="info-label">Camadas</span>
+                  <span class="info-value">
+                    <span class="tag-list">
+                      <span class="tag-chip" *ngFor="let sub of mapa.camadas">{{ sub.tituloCamada }}</span>
+                      <span class="tag-chip tag-chip--raster" *ngFor="let sub of mapa.camadasRaster">{{ sub.tituloCamada }}</span>
+                    </span>
+                  </span>
+                </div>
+              </div>
+            </ng-container>
+
+          </div>
+        </mat-tab>
+
+        <!-- Atributos -->
+        <ng-container *ngIf="isMapa || (camada && camada.tipo === 'camada')">
+          <mat-tab label="Atributos">
+            <div class="tab-content">
+              <ng-container *ngFor="let grupo of getCamadaAtributos()">
+                <p class="attr-group-title">{{ grupo.camada }}</p>
+                <div class="attr-table">
+                  <div class="attr-header">
+                    <span>Atributo</span>
+                    <span>Tipo</span>
+                  </div>
+                  <div class="attr-row" *ngFor="let atributo of grupo.atributos">
+                    <span class="attr-name">{{ atributo.label }}</span>
+                    <span class="attr-type">{{ atributo.value }}</span>
+                  </div>
+                </div>
+              </ng-container>
+            </div>
+          </mat-tab>
+        </ng-container>
+
+      </mat-tab-group>
+    </div>
+
+    <!-- ── Legenda ──────────────────────────────────────────────────────────── -->
+    <div class="legend-footer" *ngIf="getLegendaPorCamada().length > 0">
+      <div class="legend-header">
+        <mat-icon>palette</mat-icon>
+        <span>Legenda</span>
+      </div>
+      <div class="legend-list">
+        <div class="legend-item" *ngFor="let legenda of getLegendaPorCamada()">
+          <p class="legend-layer-name">{{ legenda.camada }}</p>
+          <img *ngIf="legenda.legendUrl" [src]="legenda.legendUrl" alt="Legenda"
+               (error)="legenda.legendUrl = null" class="legend-image"/>
+          <p *ngIf="!legenda.legendUrl" class="legend-unavailable">Legenda não disponível</p>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

@@ -1,0 +1,173 @@
+<div class="pu-dialog">
+
+  <div class="pu-header">
+    <div class="pu-header-icon">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+        <circle cx="12" cy="7" r="4"/>
+      </svg>
+    </div>
+    <span class="pu-header-title" mat-dialog-title>Perfil do Usuário</span>
+    <button class="pu-close" type="button" (click)="onClose()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+        <line x1="18" y1="6" x2="6" y2="18"/>
+        <line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </div>
+
+  <div mat-dialog-content class="pu-content">
+
+    <div class="pu-spinner" *ngIf="loading">
+      <mat-spinner diameter="44"></mat-spinner>
+    </div>
+
+    <mat-tab-group *ngIf="!loading" class="pu-tabs" animationDuration="200ms">
+
+      <!-- Tab: Informações Pessoais -->
+      <mat-tab label="Informações Pessoais">
+        <form [formGroup]="userForm" class="pu-form">
+
+          <div class="pu-field">
+            <label class="pu-label">Nome</label>
+            <div class="pu-input-wrap">
+              <svg class="pu-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                <circle cx="12" cy="7" r="4"/>
+              </svg>
+              <input class="pu-input pu-input--readonly" formControlName="nome" readonly placeholder="—">
+            </div>
+          </div>
+
+          <div class="pu-field">
+            <label class="pu-label">E-mail</label>
+            <div class="pu-input-wrap">
+              <svg class="pu-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                <polyline points="22,6 12,13 2,6"/>
+              </svg>
+              <input class="pu-input" formControlName="email" type="email" placeholder="seu@email.com">
+            </div>
+          </div>
+
+          <div class="pu-field">
+            <label class="pu-label">Perfil</label>
+            <div class="pu-input-wrap">
+              <svg class="pu-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+              </svg>
+              <input class="pu-input pu-input--readonly" formControlName="perfil" readonly placeholder="—">
+            </div>
+          </div>
+
+          <div class="pu-actions">
+            <button class="pu-btn-primary" type="button" (click)="onChangeEmail()">
+              Alterar e-mail
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </div>
+
+        </form>
+      </mat-tab>
+
+      <!-- Tab: Alterar Senha -->
+      <mat-tab label="Alterar Senha">
+        <form [formGroup]="passwordForm" (ngSubmit)="onChangePassword()" class="pu-form">
+
+          <div class="pu-field">
+            <label class="pu-label">Senha atual</label>
+            <div class="pu-input-wrap">
+              <svg class="pu-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input class="pu-input pu-input--padded-r"
+                     [type]="hideCurrentPassword ? 'password' : 'text'"
+                     formControlName="currentPassword"
+                     placeholder="••••••••">
+              <button type="button" class="pu-eye"
+                      (click)="hideCurrentPassword = !hideCurrentPassword">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+            <span class="pu-error"
+                  *ngIf="passwordForm.get('currentPassword')?.invalid && passwordForm.get('currentPassword')?.touched">
+              Senha atual é obrigatória
+            </span>
+          </div>
+
+          <div class="pu-field">
+            <label class="pu-label">Nova senha</label>
+            <div class="pu-input-wrap">
+              <svg class="pu-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input class="pu-input pu-input--padded-r"
+                     [type]="hideNewPassword ? 'password' : 'text'"
+                     formControlName="newPassword"
+                     placeholder="••••••••">
+              <button type="button" class="pu-eye"
+                      (click)="hideNewPassword = !hideNewPassword">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="pu-field">
+            <label class="pu-label">Confirmar nova senha</label>
+            <div class="pu-input-wrap">
+              <svg class="pu-input-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+              </svg>
+              <input class="pu-input pu-input--padded-r"
+                     [type]="hideConfirmPassword ? 'password' : 'text'"
+                     formControlName="confirmPassword"
+                     placeholder="••••••••">
+              <button type="button" class="pu-eye"
+                      (click)="hideConfirmPassword = !hideConfirmPassword">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                  <circle cx="12" cy="12" r="3"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="pu-pwd-reqs">
+            <div class="pu-pwd-req" [class.pu-pwd-req--ok]="passwordValidation.minLength">8+ caracteres</div>
+            <div class="pu-pwd-req" [class.pu-pwd-req--ok]="passwordValidation.uppercase">Maiúscula</div>
+            <div class="pu-pwd-req" [class.pu-pwd-req--ok]="passwordValidation.lowercase">Minúscula</div>
+            <div class="pu-pwd-req" [class.pu-pwd-req--ok]="passwordValidation.number">Número</div>
+            <div class="pu-pwd-req" [class.pu-pwd-req--ok]="passwordValidation.specialChar">Especial ({{ specialChars }})</div>
+            <div class="pu-pwd-req" [class.pu-pwd-req--ok]="passwordValidation.passwordsMatch">Senhas iguais</div>
+          </div>
+
+          <div class="pu-actions">
+            <button class="pu-btn-primary" type="submit"
+                    [disabled]="passwordForm.invalid || loading || !isPasswordValid()">
+              Alterar senha
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                <line x1="5" y1="12" x2="19" y2="12"/>
+                <polyline points="12 5 19 12 12 19"/>
+              </svg>
+            </button>
+          </div>
+
+        </form>
+      </mat-tab>
+
+    </mat-tab-group>
+
+  </div>
+</div>

@@ -1,0 +1,402 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Grupo detalhe — cabeçalho + abas Conteúdo / Membros / Configurações
+// Reusa os tokens de src/styles/_admin-list-base.scss.
+// ─────────────────────────────────────────────────────────────────────────────
+
+@use '../../../../styles/admin-list-base' as base;
+
+:host {
+  display: block;
+  background: base.$bg;
+  font-family: base.$font-ui;
+  color: base.$ink;
+}
+
+* { box-sizing: border-box; }
+
+.gd-page {
+  padding: 20px 32px 40px;
+  min-height: calc(100vh - 60px - 53px);
+}
+
+.gd-loading {
+  padding: 40px;
+  text-align: center;
+  color: base.$muted;
+  font-size: 13.5px;
+}
+
+// ── Cabeçalho ────────────────────────────────────────────────────────────────
+.gd-header {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 18px;
+  margin-bottom: 6px;
+  border-bottom: 1px solid base.$line;
+}
+
+.gd-back {
+  width: 34px; height: 34px; border-radius: 9px;
+  background: #fff; border: 1px solid base.$line;
+  color: base.$ink-soft; font-size: 16px; line-height: 1;
+  cursor: pointer; flex-shrink: 0;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  &:hover { background: base.$brand-tint; color: base.$brand; border-color: base.$brand-tint-2; }
+}
+
+.gd-avatar {
+  width: 44px; height: 44px; border-radius: 12px;
+  background: base.$brand; color: #fff;
+  font-size: 15px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+
+  &--sm {
+    width: 32px; height: 32px; border-radius: 50%;
+    font-size: 12px;
+  }
+}
+
+.gd-titles {
+  display: flex; flex-direction: column; gap: 3px;
+  flex: 1; min-width: 0;
+}
+
+.gd-nome {
+  font-size: 18px; font-weight: 600; color: base.$ink; letter-spacing: -0.3px;
+}
+
+.gd-sub {
+  font-size: 12.5px; color: base.$ink-soft;
+}
+
+.gd-actions {
+  display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+}
+
+.gd-pill {
+  display: inline-flex; align-items: center;
+  background: base.$brand-tint; color: base.$brand;
+  font-size: 11.5px; font-weight: 700;
+  padding: 5px 11px; border-radius: 100px;
+}
+
+// ── Botões ───────────────────────────────────────────────────────────────────
+.gd-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: base.$brand; color: #fff;
+  border: 1px solid base.$brand; border-radius: 9px;
+  padding: 7px 14px;
+  font-family: inherit; font-size: 12.5px; font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  white-space: nowrap;
+
+  &:hover:not(:disabled) { background: base.$brand-mid; border-color: base.$brand-mid; }
+  &:disabled { opacity: 0.55; cursor: not-allowed; }
+
+  &--ghost {
+    background: #fff; color: base.$ink-soft; border-color: base.$line;
+    &:hover:not(:disabled) { background: base.$line-soft; color: base.$danger; border-color: base.$danger; }
+  }
+
+  &--primary { padding: 9px 18px; font-size: 13px; }
+
+  &--danger {
+    background: #fff; color: base.$danger; border-color: base.$danger;
+    &:hover:not(:disabled) { background: base.$danger; color: #fff; }
+  }
+}
+
+.gd-danger-zone {
+  margin-top: 24px; padding-top: 20px;
+  border-top: 1px solid base.$line;
+
+  small { display: block; color: base.$ink-soft; margin-bottom: 10px; }
+}
+
+.gd-mover-itens {
+  display: flex; flex-direction: column; gap: 8px;
+
+  label { font-size: 13px; font-weight: 600; color: base.$ink; }
+
+  select {
+    max-width: 420px;
+    padding: 8px 10px; border: 1px solid base.$line; border-radius: 9px;
+    font-family: inherit; font-size: 13px; color: base.$ink;
+  }
+}
+
+.gd-mover-itens-actions {
+  display: flex; gap: 8px;
+}
+
+// ── Abas ─────────────────────────────────────────────────────────────────────
+.gd-tabs {
+  display: flex; gap: 4px;
+  border-bottom: 1px solid base.$line;
+  margin-bottom: 20px;
+}
+
+.gd-tab {
+  background: none; border: none; cursor: pointer;
+  font-family: inherit; font-size: 13.5px; font-weight: 600;
+  color: base.$muted;
+  padding: 12px 16px;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.15s, border-color 0.15s;
+
+  &:hover { color: base.$ink; }
+  &.active { color: base.$brand; border-bottom-color: base.$brand; }
+}
+
+.gd-body { padding-top: 4px; }
+
+.gd-empty {
+  padding: 24px; text-align: center;
+  color: base.$muted; font-size: 13px;
+  background: #fff; border: 1px dashed base.$line; border-radius: 12px;
+}
+
+// ── Conteúdo (grid de itens) ─────────────────────────────────────────────────
+.gd-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 12px;
+}
+
+.gd-item {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: #fff; border: 1px solid base.$line; border-radius: 12px;
+}
+
+.gd-item-tipo {
+  align-self: flex-start;
+  font-size: 10.5px; font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 3px 8px; border-radius: 100px;
+  background: base.$brand-tint; color: base.$brand;
+
+  &[data-tipo="Raster"] { background: #fef3c7; color: #92400e; }
+  &[data-tipo="Mapa"] { background: #ecfdf5; color: base.$success; }
+}
+
+.gd-item-nome {
+  font-size: 13.5px; font-weight: 600; color: base.$ink;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+
+.gd-item-nivel {
+  font-size: 11.5px; color: base.$muted;
+}
+
+// ── Membros ──────────────────────────────────────────────────────────────────
+.gd-add-membro {
+  display: flex; gap: 8px; margin-bottom: 20px;
+
+  select {
+    flex: 1; max-width: 420px;
+    padding: 8px 10px; border: 1px solid base.$line; border-radius: 9px;
+    font-family: inherit; font-size: 13px; color: base.$ink;
+    background: #fff;
+  }
+}
+
+.gd-section {
+  background: #fff; border: 1px solid base.$line; border-radius: 12px;
+  margin-bottom: 16px; overflow: hidden;
+}
+
+.gd-section-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+  text-transform: uppercase; color: base.$muted;
+  padding: 12px 16px; background: base.$line-soft;
+  border-bottom: 1px solid base.$line;
+}
+
+.gd-membro {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 16px;
+  border-bottom: 1px solid base.$line-soft;
+  &:last-child { border-bottom: none; }
+}
+
+.gd-membro-info {
+  display: flex; flex-direction: column; flex: 1; min-width: 0;
+  span { font-size: 13px; font-weight: 600; color: base.$ink; }
+  small { font-size: 11.5px; color: base.$muted; }
+}
+
+// ── Configurações ────────────────────────────────────────────────────────────
+.gd-config {
+  max-width: 480px;
+  display: flex; flex-direction: column; gap: 18px;
+}
+
+.gd-field {
+  display: flex; flex-direction: column; gap: 6px;
+
+  label {
+    font-size: 12.5px; font-weight: 600; color: base.$ink;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  select {
+    padding: 9px 10px; border: 1px solid base.$line; border-radius: 9px;
+    font-family: inherit; font-size: 13px; color: base.$ink;
+    background: #fff;
+  }
+
+  small { font-size: 11.5px; color: base.$muted; }
+
+  &--check {
+    label { font-weight: 500; }
+    input[type="checkbox"] { width: 15px; height: 15px; accent-color: base.$brand; }
+  }
+}
+
+// ── Thumbnail no card do grupo ──────────────────────────────────────────────
+.gd-item-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 12px;
+  position: relative;
+}
+
+.gd-thumb {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: linear-gradient(135deg, #c8d8ed 0%, #e6eef8 100%);
+  overflow: hidden;
+}
+
+.gd-thumb-img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gd-thumb-state {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: base.$muted;
+  font-size: 12px;
+
+  &--placeholder {
+    background: #fff;
+  }
+
+  &--error {
+    background: base.$line-soft;
+    color: base.$danger;
+  }
+}
+
+.gd-spinner {
+  width: 24px;
+  height: 24px;
+  border: 2.5px solid base.$brand-tint-2;
+  border-top-color: base.$brand;
+  border-radius: 50%;
+  animation: gd-spin 0.8s linear infinite;
+}
+
+@keyframes gd-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.gd-retry-btn {
+  margin-top: 4px;
+  background: #fff;
+  color: base.$brand;
+  border: 1px solid base.$brand-tint-2;
+  border-radius: 100px;
+  padding: 5px 12px;
+  font-family: inherit;
+  font-size: 11.5px;
+  font-weight: 600;
+  cursor: pointer;
+  &:hover {
+    background: base.$brand-tint;
+  }
+}
+
+.gd-thumb-refresh {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  width: 26px;
+  height: 26px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.95);
+  border: none;
+  color: base.$ink-soft;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.15s;
+
+  &:hover {
+    color: base.$brand;
+  }
+}
+
+.gd-item:hover .gd-thumb-refresh {
+  opacity: 1;
+}
+
+// ── Sidebar de detalhe ───────────────────────────────────────────────────────
+.gd-details-drawer {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 620px;
+  max-width: 95vw;
+  background: #fff;
+  z-index: 1000;
+  border-left: 1px solid base.$line;
+  box-shadow: -20px 0 60px -20px rgba(11, 37, 69, 0.18);
+  transform: translateX(100%);
+  transition: transform 0.28s cubic-bezier(0.32, 0.72, 0, 1);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+
+  &.opened {
+    transform: translateX(0);
+  }
+}
+
+.gd-details-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 37, 69, 0.18);
+  backdrop-filter: blur(2px);
+  z-index: 999;
+}
+
+.gd-item-remove-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: base.$danger;
+  padding: 2px 4px;
+}

@@ -1,0 +1,40 @@
+<div class="idedlg idedlg--success">
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polyline points="23 4 23 10 17 10"/>
+          <polyline points="1 20 1 14 7 14"/>
+          <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+        </svg>
+      </div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Recuperar camada</h2>
+        <p class="idedlg-sub">A camada voltará a aparecer no catálogo</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+      <p>Deseja realmente recuperar esta camada? Ela voltará a ficar disponível para uso e visualização.</p>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" [mat-dialog-close]="false" type="button">Não</button>
+      <button class="idedlg-btn idedlg-btn-success" [mat-dialog-close]="true" type="button" cdkFocusInitial>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Sim, recuperar
+      </button>
+    </footer>
+  </div>
+</div>

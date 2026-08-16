@@ -1,0 +1,47 @@
+<div class="idedlg">
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <polyline points="17 11 19 13 23 9"/>
+        </svg>
+      </div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Mudar Proprietário do conteúdo</h2>
+        <p class="idedlg-sub">Transferir a propriedade para outro usuário</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+      <mat-form-field appearance="outline">
+        <mat-label>Selecione um novo Proprietário</mat-label>
+        <mat-select [(ngModel)]="user" name="user">
+          <mat-option *ngFor="let user of filteredUsers" [value]="user">
+            {{ user.nome }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" [mat-dialog-close]="null" type="button">Cancelar</button>
+      <button class="idedlg-btn idedlg-btn-primary" [mat-dialog-close]="user" type="button" cdkFocusInitial>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Transferir
+      </button>
+    </footer>
+  </div>
+</div>

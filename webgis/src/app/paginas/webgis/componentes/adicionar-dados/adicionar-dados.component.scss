@@ -1,0 +1,277 @@
+$blue:        #01499B;
+$blue-light:  rgba(1, 73, 155, 0.07);
+$blue-border: rgba(1, 73, 155, 0.18);
+$text:        #1e3a5f;
+$muted:       #6b7280;
+$divider:     rgba(0, 0, 0, 0.06);
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  font-family: system-ui, sans-serif;
+  background: #fff;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 14px 10px;
+  border-bottom: 1px solid $divider;
+  flex-shrink: 0;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  color: $text;
+
+  mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+    color: $blue;
+  }
+}
+
+.icon-btn {
+  width: 30px;
+  height: 30px;
+  border: 1px solid $blue-border;
+  border-radius: 7px;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $muted;
+  transition: background 0.13s, color 0.13s, border-color 0.13s;
+
+  mat-icon { font-size: 16px; width: 16px; height: 16px; }
+
+  &:hover { background: $blue-light; color: $blue; border-color: $blue-border; }
+}
+
+// ── Filtros ───────────────────────────────────────────────────────────────────
+
+.filter-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px 12px;
+  border-bottom: 1px solid $divider;
+  flex-shrink: 0;
+}
+
+// Select wrap (padrão cortina-camadas)
+.select-wrap {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 8px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: $blue-border;
+    box-shadow: 0 0 0 3px $blue-light;
+  }
+}
+
+::ng-deep .select-wrap {
+  .mat-mdc-select { display: block; padding: 7px 10px; }
+  .mat-mdc-select-trigger { display: flex; align-items: center; width: 100%; height: auto; min-height: unset; }
+  .mat-mdc-select-value { flex: 1; min-width: 0; font-size: 12px; font-family: system-ui, sans-serif; color: #374151; }
+  .mat-mdc-select-placeholder { color: #9ca3af; font-size: 12px; }
+  .mat-mdc-select-arrow-wrapper { height: auto; transform: none !important; flex-shrink: 0; padding-left: 8px; }
+  .mat-mdc-select-arrow { color: $muted; }
+  .mat-mdc-select-ripple, .mat-ripple { display: none; }
+  .mat-mdc-select:focus { outline: none; }
+}
+
+// Search input
+.search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 8px;
+  padding: 6px 10px;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: $blue-border;
+    box-shadow: 0 0 0 3px $blue-light;
+  }
+}
+
+.search-icon {
+  font-size: 16px;
+  width: 16px;
+  height: 16px;
+  color: $muted;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 12px;
+  color: $text;
+  background: transparent;
+  font-family: system-ui, sans-serif;
+
+  &::placeholder { color: #9ca3af; }
+}
+
+// ── Body ──────────────────────────────────────────────────────────────────────
+
+.body-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px 8px 16px;
+}
+
+// ── Expansion panels ──────────────────────────────────────────────────────────
+
+::ng-deep {
+  .group-panel {
+    border-radius: 8px !important;
+    margin-bottom: 6px !important;
+    border: 1px solid $divider !important;
+    box-shadow: none !important;
+
+    &.mat-expanded { border-color: $blue-border !important; }
+
+    .mat-expansion-panel-body { padding: 0 !important; }
+
+    // suppress internal Material dividers that can ghost when panels are removed
+    .mat-expansion-panel-header-description,
+    mat-divider, .mat-divider { display: none !important; }
+  }
+
+  mat-accordion { display: block; }
+  mat-accordion > .mat-expansion-panel + .mat-expansion-panel { margin-top: 0 !important; }
+
+  .group-header {
+    min-height: 42px !important;
+    padding: 0 12px !important;
+    border-radius: 8px !important;
+    background: rgba(1, 73, 155, 0.03) !important;
+
+    .mat-expansion-panel-header-title { margin: 0; }
+  }
+
+  .group-title {
+    .mdc-label, .mat-slide-toggle-content {
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      color: $text !important;
+    }
+  }
+
+  // Toggle color
+  .mat-mdc-slide-toggle.mat-accent {
+    --mdc-switch-selected-track-color: #{$blue};
+    --mdc-switch-selected-handle-color: #fff;
+    --mdc-switch-selected-hover-track-color: #{$blue};
+    --mdc-switch-selected-focus-track-color: #{$blue};
+    --mdc-switch-selected-pressed-track-color: #{$blue};
+  }
+}
+
+// ── Layer item ────────────────────────────────────────────────────────────────
+
+.layer-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px 12px;
+  border-bottom: 1px solid $divider;
+  transition: background 0.12s;
+
+  &:last-child { border-bottom: none; }
+  &:hover { background: rgba(0, 0, 0, 0.02); }
+}
+
+.layer-thumb {
+  flex-shrink: 0;
+}
+
+.thumb-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  object-fit: cover;
+  border: 1px solid $blue-border;
+}
+
+.thumb-placeholder {
+  width: 36px;
+  height: 36px;
+  border-radius: 7px;
+  border: 1px solid $blue-border;
+  background: $blue-light;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: $blue; }
+
+  &.loading { background: rgba(1, 73, 155, 0.05); }
+  &.error { background: rgba(239, 68, 68, 0.06); border-color: rgba(239, 68, 68, 0.25);
+    mat-icon { color: #ef4444; } }
+}
+
+.spin { animation: spin 1s linear infinite; }
+@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+
+.layer-info {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  min-width: 0;
+
+  ::ng-deep .mdc-label {
+    font-size: 12px !important;
+    color: #374151 !important;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 160px;
+  }
+}
+
+.layer-type-badge {
+  width: 22px;
+  height: 22px;
+  border-radius: 5px;
+  background: $blue-light;
+  border: 1px solid $blue-border;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon { font-size: 13px; width: 13px; height: 13px; color: $blue; }
+
+  &--raster {
+    background: rgba(120, 80, 200, 0.07);
+    border-color: rgba(109, 40, 217, 0.2);
+    mat-icon { color: #6d28d9; }
+  }
+
+  &--mapa {
+    background: rgba(0, 120, 80, 0.07);
+    border-color: rgba(6, 95, 70, 0.2);
+    mat-icon { color: #065f46; }
+  }
+}

@@ -1,0 +1,137 @@
+<form #form="ngForm" (ngSubmit)="submitPacote(form)" class="idedlg">
+
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Criar <em>pacote conceitual</em></h2>
+        <p class="idedlg-sub">Conexão a um esquema de banco de dados</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+
+      <!-- Loading -->
+      <div *ngIf="isLoading" style="display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; padding:48px">
+        <mat-spinner diameter="32"></mat-spinner>
+        <span style="font-size:13px; color:#5b6b85">Verificando permissões…</span>
+      </div>
+
+      <!-- Conteúdo principal -->
+      <div *ngIf="!isLoading && isAdmin" class="idedlg-grid">
+
+        <div class="idedlg-col">
+          <div class="idedlg-section-title">Identificação</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nome do pacote</mat-label>
+            <input matInput name="nome_pacote_conceitual"
+                   [(ngModel)]="pacoteConceitual.nomePacoteConceitual" required
+                   pattern="^[a-z0-9_]+$" placeholder="ex: sistema_producao">
+            <mat-hint>Apenas letras minúsculas, números e underscore</mat-hint>
+            <mat-error>Nome é obrigatório e deve seguir o padrão</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Título do pacote</mat-label>
+            <input matInput name="titulo_pacote_conceitual"
+                   [(ngModel)]="pacoteConceitual.tituloPacoteConceitual" required
+                   placeholder="ex: Sistema de Produção">
+            <mat-hint>Título amigável para exibição</mat-hint>
+            <mat-error>Título é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="idedlg-col">
+          <div class="idedlg-section-title">Conexão</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Host / servidor</mat-label>
+            <input matInput name="maquina_database" [(ngModel)]="pacoteConceitual.host" required
+                   placeholder="ex: localhost">
+        <mat-icon matSuffix matTooltip="Dado sensível">security</mat-icon>
+            <mat-error>Host é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Porta</mat-label>
+            <input matInput name="porta_database" [(ngModel)]="pacoteConceitual.port" required
+                   pattern="^[0-9]+$" placeholder="ex: 5432">
+            <mat-hint>PostgreSQL padrão: 5432</mat-hint>
+            <mat-error>Porta é obrigatória e numérica</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nome do banco</mat-label>
+            <input matInput name="nome_database" [(ngModel)]="pacoteConceitual.database" required
+                   placeholder="ex: webgis_db">
+        <mat-icon matSuffix matTooltip="Dado sensível">security</mat-icon>
+            <mat-error>Nome do banco é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Esquema</mat-label>
+            <input matInput name="esquema_database" [(ngModel)]="pacoteConceitual.schema" required
+                   placeholder="ex: public">
+            <mat-hint>Padrão: public</mat-hint>
+            <mat-error>Esquema é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Usuário</mat-label>
+            <input matInput name="usuario_database" [(ngModel)]="pacoteConceitual.user" required
+                   autocomplete="off" placeholder="ex: webgis_user">
+        <mat-icon matSuffix matTooltip="Dado sensível">security</mat-icon>
+            <mat-error>Usuário é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Senha</mat-label>
+            <input matInput name="senha_database" [(ngModel)]="pacoteConceitual.password"
+                   [type]="showPassword ? 'text' : 'password'" required
+                   autocomplete="new-password" placeholder="Senha do banco">
+            <button mat-icon-button matSuffix type="button"
+                    (click)="togglePasswordVisibility()" matTooltip="Mostrar/Ocultar">
+              <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-error>Senha é obrigatória</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <!-- Acesso negado -->
+      <div *ngIf="!isLoading && !isAdmin" class="idedlg-note tone-danger">
+        <div class="idedlg-note-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+          </svg>
+        </div>
+        <div class="idedlg-note-body">
+          <strong>Acesso negado</strong>
+          <p>Apenas administradores podem criar pacotes conceituais. Os pacotes contêm dados sensíveis de conexão com banco de dados.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div mat-dialog-actions *ngIf="!isLoading">
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" (click)="onClose()" type="button" [disabled]="isSubmitting">Cancelar</button>
+      <button class="idedlg-btn idedlg-btn-primary" type="submit"
+              [disabled]="!form.valid || !isAdmin || isSubmitting"
+              *ngIf="isAdmin">
+        <mat-spinner *ngIf="isSubmitting" diameter="14"></mat-spinner>
+        <svg *ngIf="!isSubmitting" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+        {{ isSubmitting ? 'Salvando…' : 'Criar pacote' }}
+      </button>
+    </footer>
+  </div>
+</form>

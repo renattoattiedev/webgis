@@ -1,0 +1,15 @@
+### Teste da API do GeoServer - Verificar status dos pacotes conceituais
+GET http://localhost:3333/fetch-pacotes-conceituais
+Content-Type: application/json
+
+### Teste da API SICAT - Buscar bairros com múltiplas cidades
+GET http://localhost:3333/fetch-sicat-bairros?cd_cidade=1,2,3
+Content-Type: application/json
+
+### Teste da API Componentes - Buscar todos os componentes
+GET http://localhost:3333/fetch-componentes
+Content-Type: application/json
+
+### Teste da API Componentes - Buscar componente específico por nome
+GET http://localhost:3333/get-componente-nome?nome=imprimir croqui
+Content-Type: application/json

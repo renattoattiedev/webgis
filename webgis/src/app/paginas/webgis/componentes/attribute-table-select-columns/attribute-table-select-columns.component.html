@@ -1,0 +1,37 @@
+<div class="dialog-wrapper">
+
+  <div class="dialog-header">
+    <div class="dialog-header-left">
+      <div class="dialog-icon-wrap">
+        <mat-icon>view_column</mat-icon>
+      </div>
+      <span class="dialog-title">Mostrar / Ocultar Colunas</span>
+    </div>
+    <button type="button" class="dialog-close-btn" (click)="fecharDialogo()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+
+  <div class="dialog-actions">
+    <button type="button" class="action-btn" (click)="selectAllColumns()">
+      <mat-icon>done_all</mat-icon>
+      Selecionar Tudo
+    </button>
+    <button type="button" class="action-btn action-btn--outline" (click)="deselectAllColumns()">
+      <mat-icon>remove_done</mat-icon>
+      Remover Tudo
+    </button>
+  </div>
+
+  <div class="dialog-body">
+    <mat-selection-list [(ngModel)]="selectedColumns" (ngModelChange)="updateSelectedColumns()">
+      <mat-list-option
+        *ngFor="let column of columns"
+        [value]="column"
+        [checkboxPosition]="'before'">
+        {{ this.conteudoService.translateAttributeNameToLabel(this.data.layerName, column) }}
+      </mat-list-option>
+    </mat-selection-list>
+  </div>
+
+</div>

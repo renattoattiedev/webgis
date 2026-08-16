@@ -1,0 +1,145 @@
+<!-- ── Header ─────────────────────────────────────────────────────────────── -->
+<div class="panel-header">
+  <div class="panel-title">
+    <mat-icon>storage</mat-icon>
+    <span>Adicionar Dados</span>
+  </div>
+  <button class="icon-btn" (click)="sortGrupoCamada()"
+          [title]="ordemAscendente === true ? 'Ordem A→Z' : ordemAscendente === false ? 'Ordem Z→A' : 'Ordenar'">
+    <mat-icon>{{ ordemAscendente === true ? 'arrow_upward' : ordemAscendente === false ? 'arrow_downward' : 'sort' }}</mat-icon>
+  </button>
+</div>
+
+<!-- ── Filtros ─────────────────────────────────────────────────────────────── -->
+<div class="filter-section">
+  <div class="select-wrap">
+    <mat-select [(ngModel)]="temaSelecionado" (selectionChange)="onTemaChange()" placeholder="Filtrar por tema..." panelClass="webgis-select-panel">
+      <mat-option *ngFor="let tema of conteudoService.temas" [value]="tema.id">
+        {{ tema.tituloTema }}
+      </mat-option>
+    </mat-select>
+  </div>
+
+  <div class="search-wrap">
+    <mat-icon class="search-icon">search</mat-icon>
+    <input class="search-input" type="text" placeholder="Pesquisar conteúdo..."
+           [(ngModel)]="pesquisaTermo" (input)="filtrarCamadasGrupos()"/>
+  </div>
+</div>
+
+<!-- ── Lista de grupos ────────────────────────────────────────────────────── -->
+<div class="body-container">
+  <mat-accordion *ngIf="conteudoService.grupoCamadas.length > 0">
+
+    <ng-container *ngFor="let grupo of conteudoService.grupoCamadas; trackBy: trackByGrupoId">
+      <mat-expansion-panel class="group-panel"
+        *ngIf="grupo && filtroGrupoVisivel(grupo) && (grupo.camadas.length > 0 || grupo.camadasRaster.length > 0 || grupo.mapas.length > 0)"
+        [expanded]="buscaAtiva || grupo.id === grupoSelecionado">
+
+        <mat-expansion-panel-header class="group-header">
+          <mat-panel-title class="group-title">
+            <mat-slide-toggle [checked]="grupo.visivel"
+              (change)="toggleGroup(grupo.id, $event.checked)">
+              {{ grupo.grupoNome }}
+            </mat-slide-toggle>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+
+        <!-- Camadas vetoriais -->
+        <ng-container *ngFor="let camada of grupo.camadas">
+          <div class="layer-item" *ngIf="filtroCamadaVisivel(grupo, camada)">
+            <div class="layer-thumb">
+                  <img *ngIf="getThumbnail(camada.nomeCamada, camada.boundingBox, undefined, 'camada')"
+                    class="thumb-img" [src]="getThumbnail(camada.nomeCamada, camada.boundingBox, undefined, 'camada')" alt=""/>
+                  <div *ngIf="!getThumbnail(camada.nomeCamada, camada.boundingBox, undefined, 'camada') && isThumbnailLoading(camada.nomeCamada, camada.boundingBox, undefined, 'camada')"
+                   class="thumb-placeholder loading">
+                <mat-icon class="spin">hourglass_empty</mat-icon>
+              </div>
+                  <div *ngIf="!getThumbnail(camada.nomeCamada, camada.boundingBox, undefined, 'camada') && hasThumbnailError(camada.nomeCamada, camada.boundingBox, undefined, 'camada')"
+                   class="thumb-placeholder error">
+                <mat-icon>error_outline</mat-icon>
+              </div>
+                  <div *ngIf="!getThumbnail(camada.nomeCamada, camada.boundingBox, undefined, 'camada') && !isThumbnailLoading(camada.nomeCamada, camada.boundingBox, undefined, 'camada') && !hasThumbnailError(camada.nomeCamada, camada.boundingBox, undefined, 'camada')"
+                   class="thumb-placeholder">
+                <mat-icon>layers</mat-icon>
+              </div>
+            </div>
+            <div class="layer-info">
+              <mat-slide-toggle [(ngModel)]="camada.visivel" [checked]="camada.visivel"
+                (change)="toggleCamada(grupo.id, camada.id, $event.checked)">
+                {{ camada.tituloCamada }}
+              </mat-slide-toggle>
+              <span class="layer-type-badge" title="Camada vetorial">
+                <mat-icon>layers</mat-icon>
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Camadas raster -->
+        <ng-container *ngFor="let camadaRaster of grupo.camadasRaster">
+          <div class="layer-item" *ngIf="filtroRasterVisivel(grupo, camadaRaster)">
+            <div class="layer-thumb">
+                  <img *ngIf="getThumbnail(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster')"
+                    class="thumb-img" [src]="getThumbnail(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster')" alt=""/>
+                  <div *ngIf="!getThumbnail(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster') && isThumbnailLoading(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster')"
+                   class="thumb-placeholder loading">
+                <mat-icon class="spin">hourglass_empty</mat-icon>
+              </div>
+                  <div *ngIf="!getThumbnail(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster') && hasThumbnailError(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster')"
+                   class="thumb-placeholder error">
+                <mat-icon>error_outline</mat-icon>
+              </div>
+                  <div *ngIf="!getThumbnail(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster') && !isThumbnailLoading(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster') && !hasThumbnailError(camadaRaster.nomeCamada, camadaRaster.boundingBox, camadaRaster.fonteDadosCamadaRaster, 'raster')"
+                   class="thumb-placeholder">
+                <mat-icon>image</mat-icon>
+              </div>
+            </div>
+            <div class="layer-info">
+              <mat-slide-toggle [(ngModel)]="camadaRaster.visivel" [checked]="camadaRaster.visivel"
+                (change)="toggleCamadaRaster(grupo.id, camadaRaster.id, $event.checked)">
+                {{ camadaRaster.tituloCamada }}
+              </mat-slide-toggle>
+              <span class="layer-type-badge layer-type-badge--raster" title="Camada raster">
+                <mat-icon>image</mat-icon>
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Mapas -->
+        <ng-container *ngFor="let mapa of grupo.mapas">
+          <div class="layer-item" *ngIf="filtroMapaVisivel(grupo, mapa)">
+            <div class="layer-thumb">
+                  <img *ngIf="getThumbnail(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa')"
+                    class="thumb-img" [src]="getThumbnail(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa')" alt=""/>
+                  <div *ngIf="!getThumbnail(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa') && isThumbnailLoading(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa')"
+                   class="thumb-placeholder loading">
+                <mat-icon class="spin">hourglass_empty</mat-icon>
+              </div>
+                  <div *ngIf="!getThumbnail(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa') && hasThumbnailError(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa')"
+                   class="thumb-placeholder error">
+                <mat-icon>error_outline</mat-icon>
+              </div>
+                  <div *ngIf="!getThumbnail(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa') && !isThumbnailLoading(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa') && !hasThumbnailError(mapa.nomeMapa, mapa.boundingBoxMapa, undefined, 'mapa')"
+                   class="thumb-placeholder">
+                <mat-icon>map</mat-icon>
+              </div>
+            </div>
+            <div class="layer-info">
+              <mat-slide-toggle [(ngModel)]="mapa.visivel" [checked]="mapa.visivel"
+                (change)="toggleMapa(grupo.id, mapa.id, $event.checked)">
+                {{ mapa.tituloMapa }}
+              </mat-slide-toggle>
+              <span class="layer-type-badge layer-type-badge--mapa" title="Mapa">
+                <mat-icon>map</mat-icon>
+              </span>
+            </div>
+          </div>
+        </ng-container>
+
+      </mat-expansion-panel>
+    </ng-container>
+
+  </mat-accordion>
+</div>

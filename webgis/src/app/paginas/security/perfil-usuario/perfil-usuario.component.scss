@@ -1,0 +1,282 @@
+$brand:      #01499B;
+$brand-dark: #012d6b;
+$text:       #1e3a5f;
+$muted:      #64748b;
+$border:     #d1dced;
+$success:    #16a34a;
+$error:      #dc2626;
+
+// ── Reset dialog container ────────────────────────────────────────────────────
+::ng-deep .mat-mdc-dialog-container {
+  padding: 0 !important;
+
+  .mdc-dialog__surface {
+    border-radius: 16px !important;
+    overflow: hidden !important;
+    width: fit-content !important;
+    min-width: unset !important;
+  }
+}
+
+::ng-deep .mat-mdc-dialog-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: none !important;
+}
+
+// ── Dialog wrapper ────────────────────────────────────────────────────────────
+.pu-dialog {
+  display: flex;
+  flex-direction: column;
+  width: 520px;
+  background: #fff;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+.pu-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 16px 20px;
+  background: linear-gradient(135deg, $brand 0%, $brand-dark 100%);
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.pu-header-icon {
+  width: 32px; height: 32px;
+  border-radius: 8px;
+  background: rgba(255,255,255,0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg { width: 16px; height: 16px; }
+}
+
+.pu-header-title {
+  flex: 1;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.1px;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: #fff !important;
+}
+
+.pu-close {
+  width: 32px; height: 32px;
+  border: none;
+  background: rgba(255,255,255,0.12);
+  border-radius: 8px;
+  color: rgba(255,255,255,0.85);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  transition: background 0.13s, color 0.13s;
+  flex-shrink: 0;
+
+  svg { width: 14px; height: 14px; }
+  &:hover { background: rgba(255,255,255,0.22); color: #fff; }
+}
+
+// ── Content area ─────────────────────────────────────────────────────────────
+.pu-content {
+  padding: 0 !important;
+  margin: 0 !important;
+  max-height: 70vh !important;
+  overflow-y: auto !important;
+}
+
+// ── Spinner ───────────────────────────────────────────────────────────────────
+.pu-spinner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 220px;
+}
+
+// ── Tabs ──────────────────────────────────────────────────────────────────────
+::ng-deep .pu-tabs {
+  .mat-mdc-tab-header {
+    border-bottom: 1px solid $border;
+    background: #f8fafd;
+  }
+
+  .mdc-tab__text-label {
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.1px;
+    color: $muted;
+  }
+
+  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+    color: $brand;
+  }
+
+  .mdc-tab-indicator__content--underline {
+    border-color: $brand;
+  }
+
+  .mat-mdc-tab-body-content {
+    padding: 0;
+    overflow: hidden;
+  }
+}
+
+// ── Form ──────────────────────────────────────────────────────────────────────
+.pu-form {
+  padding: 20px 24px 24px;
+}
+
+.pu-field { margin-bottom: 14px; }
+
+.pu-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  color: $text;
+  margin-bottom: 5px;
+  letter-spacing: 0.1px;
+}
+
+.pu-input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.pu-input-icon {
+  position: absolute;
+  left: 11px;
+  width: 14px; height: 14px;
+  color: #94a3b8;
+  pointer-events: none;
+}
+
+.pu-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 12px 0 38px;
+  border: 1.5px solid $border;
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: $text;
+  background: #fff;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  box-sizing: border-box;
+  font-family: inherit;
+
+  &::placeholder { color: #b0bbc9; }
+
+  &:focus {
+    border-color: $brand;
+    box-shadow: 0 0 0 3px rgba(1,73,155,0.08);
+  }
+
+  &--readonly {
+    background: #f8fafd;
+    color: $muted;
+    cursor: default;
+  }
+
+  &--padded-r { padding-right: 42px; }
+}
+
+.pu-eye {
+  position: absolute;
+  right: 2px;
+  width: 36px; height: 36px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #94a3b8;
+  border-radius: 8px;
+  padding: 0;
+  transition: color 0.13s;
+
+  svg { width: 15px; height: 15px; }
+  &:hover { color: $brand; }
+}
+
+.pu-error {
+  display: block;
+  font-size: 11.5px;
+  color: $error;
+  margin-top: 4px;
+}
+
+// ── Password requirements ─────────────────────────────────────────────────────
+.pu-pwd-reqs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5px 12px;
+  background: #f8fafd;
+  border: 1px solid $border;
+  border-radius: 10px;
+  padding: 10px 14px;
+  margin: 6px 0 18px;
+}
+
+.pu-pwd-req {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11.5px;
+  font-weight: 500;
+  color: $error;
+
+  &::before {
+    content: '✗';
+    font-size: 10px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  &--ok {
+    color: $success;
+    &::before { content: '✓'; }
+  }
+}
+
+// ── Actions ───────────────────────────────────────────────────────────────────
+.pu-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 4px;
+}
+
+.pu-btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  height: 42px;
+  padding: 0 20px;
+  background: $brand;
+  color: #fff;
+  border: none;
+  border-radius: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  font-family: inherit;
+  letter-spacing: 0.2px;
+  transition: background 0.15s, box-shadow 0.15s, transform 0.1s;
+
+  svg { width: 14px; height: 14px; }
+
+  &:hover:not(:disabled) {
+    background: $brand-dark;
+    box-shadow: 0 4px 12px rgba(1,73,155,0.28);
+  }
+
+  &:active:not(:disabled) { transform: scale(0.99); }
+  &:disabled { opacity: 0.45; cursor: not-allowed; }
+}

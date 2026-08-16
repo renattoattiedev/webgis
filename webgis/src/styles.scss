@@ -1,0 +1,793 @@
+@use './styles/dialog-base';
+@use './styles/admin-list-base.scss';
+@import 'node_modules/ol/ol.css';
+@import '@fortawesome/fontawesome-free/css/all.min.css';
+@import url('https://fonts.googleapis.com/css?family=Roboto:300,400,500&display=swap');
+@import '@angular/material/prebuilt-themes/indigo-pink.css';
+
+$font-family: Roboto, "Helvetica Neue", sans-serif;
+$background-color-tooltip: rgba(255, 255, 255, 0.8);
+$border-color-tooltip: #ccc;
+$shadow-color-tooltip: rgba(0, 0, 0, 0.3);
+$background-color-header-bar: #01499B;
+$background-color-hover-remove-marker: #e0e0e0;
+$background-color-transparent: rgba(255, 255, 255, 0.0);
+$hover-color: rgba(173, 216, 230, 0.3);
+
+html, body {
+  height: 100%;
+  background-color: #01499B!important;
+
+}
+
+
+body {
+  margin: 0;
+  font-family: $font-family;
+}
+
+.marker {
+  position: absolute;
+  background-size: cover;
+  width: 20px;
+  height: 20px;
+  transform: translate(-30%, -100%);
+}
+
+.tooltip {
+  position: absolute;
+  background-color: $background-color-tooltip;
+  border: 1px solid $border-color-tooltip;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px $shadow-color-tooltip;
+  z-index: 999;
+  width: 400px;
+  transform: translate(-50%, -100%);
+  transform-origin: bottom center;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: $background-color-tooltip transparent transparent transparent;
+  }
+
+  .header-bar {
+    background-color: $background-color-header-bar;
+    height: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 2px 5px;
+  }
+
+  .close-tooltip {
+    background: none;
+    border: none;
+    cursor: pointer;
+
+    i {
+      color: white;
+      font-size: 16px;
+    }
+  }
+
+  .content-tooltip {
+    padding: 10px;
+  }
+}
+
+/* ===== Callout labels ao redor do marcador de croqui ===== */
+.croqui-marker-wrapper {
+  position: absolute;
+  width: 300px;
+  height: 220px;
+  pointer-events: none;
+}
+
+.croqui-pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-30%, -100%);
+  pointer-events: auto;
+  cursor: pointer;
+
+  img {
+    display: block;
+    border: 0;
+  }
+}
+
+.croqui-callout {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.97);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+  padding: 5px 11px 6px;
+  white-space: nowrap;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.22), 0 1px 4px rgba(0, 0, 0, 0.12);
+  pointer-events: none;
+
+  &::after,
+  &::before {
+    content: '';
+    position: absolute;
+    width: 0;
+    height: 0;
+    border: 6px solid transparent;
+  }
+}
+
+.croqui-callout__label {
+  display: block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  margin-bottom: 1px;
+}
+
+.croqui-callout__value {
+  display: block;
+  font-size: 12px;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+
+/* Nº SS – acima e levemente à esquerda do pino */
+.croqui-callout--ss {
+  bottom: calc(50% + 50px);
+  right: calc(50% + 4px);
+
+  .croqui-callout__label { color: #1565c0; }
+
+  &::after {
+    bottom: -12px;
+    right: 18px;
+    border-top-color: rgba(0, 0, 0, 0.1);
+  }
+  &::before {
+    bottom: -10px;
+    right: 19px;
+    border-top-color: rgba(255, 255, 255, 0.97);
+    z-index: 1;
+  }
+}
+
+/* Matrícula – à direita do pino */
+.croqui-callout--mat {
+  left: calc(50% + 22px);
+  top: calc(50% - 44px);
+
+  .croqui-callout__label { color: #2e7d32; }
+
+  &::after {
+    top: 12px;
+    left: -12px;
+    border-right-color: rgba(0, 0, 0, 0.1);
+  }
+  &::before {
+    top: 13px;
+    left: -10px;
+    border-right-color: rgba(255, 255, 255, 0.97);
+    z-index: 1;
+  }
+}
+
+/* Hidrômetro – à esquerda do pino */
+.croqui-callout--hd {
+  right: calc(50% + 22px);
+  top: calc(50% - 16px);
+
+  .croqui-callout__label { color: #6a1b9a; }
+
+  &::after {
+    top: 10px;
+    right: -12px;
+    border-left-color: rgba(0, 0, 0, 0.1);
+  }
+  &::before {
+    top: 11px;
+    right: -10px;
+    border-left-color: rgba(255, 255, 255, 0.97);
+    z-index: 1;
+  }
+}
+/* ========================================================= */
+
+.remove-marker {
+  border: none;
+  background-color: #f0f0f0;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $background-color-hover-remove-marker;
+  }
+}
+
+.mat-accordion {
+  > .mat-expansion-panel-spacing:first-child,
+  > *:first-child:not(.mat-expansion-panel) .mat-expansion-panel-spacing,
+  .mat-expansion-panel:not(.mat-expanded),
+  .mat-expansion-panel:not(.mat-expansion-panel-spacing),
+  .mat-expansion-panel-spacing,
+  .mat-expansion-panel:not([class*=mat-elevation-z]) {
+    background-color: $background-color-transparent;
+  }
+
+  .mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
+    display: grid !important;
+  }
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  width: 300px;
+}
+
+.mat-drawer-inner-container {
+  width: auto;
+  height: 100%;
+  overflow: auto;
+}
+
+.mat-mdc-tab-body-content
+{
+  overflow-y: hidden!important;
+  overflow-x: hidden!important;
+}
+:root {
+  --mat-sidenav-scrim-color: transparent;
+}
+:host ::ng-deep mat-sidenav-container {
+  --mat-sidenav-scrim-color: transparent;
+}
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+
+.custom-ol-zoom-in{
+  position: absolute!important;
+  top: 30px!important;
+  left: 8px!important;
+  padding-top: 1px!important;
+  padding-right: 5px!important;
+  padding-left: 5px!important;
+  background-color: white!important;
+  border: none!important;
+  border-radius: 50%!important;
+  color: black!important;
+  font-size: 24px!important;
+  width: 40px!important;
+  height: 40px!important;
+  line-height: 40px!important;
+  text-align: center!important;
+  cursor: pointer!important;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),
+              0 3px 1px -2px rgba(0,0,0,0.12),
+              0 1px 5px 0 rgba(0,0,0,0.2)!important;
+}
+
+
+.custom-ol-zoom-out{
+  position: absolute!important;
+  top: 75px!important;
+  left: 8px!important;
+  padding-top: 1px!important;
+  padding-right: 5px!important;
+  padding-left: 5px!important;
+  background-color: white!important;
+  border: none!important;
+  border-radius: 50%!important;
+  color: black!important;
+  font-size: 24px!important;
+  width: 40px!important;
+  height: 40px!important;
+  line-height: 40px!important;
+  text-align: center!important;
+  cursor: pointer!important;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,0.14),
+              0 3px 1px -2px rgba(0,0,0,0.12),
+              0 1px 5px 0 rgba(0,0,0,0.2)!important;
+}
+
+.custom-ol-zoom-in,
+.custom-ol-zoom-out {
+  outline: none!important;
+}
+
+.map-container {
+  .ol-attribution {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    padding: 5px 10px;
+    border-radius: 5px;
+  }
+
+  .ol-custom-overviewmap,
+  .ol-custom-overviewmap.ol-uncollapsible {
+    bottom: 0;
+    left: auto;
+    right: 0;
+    top: auto;
+  }
+
+  .ol-custom-overviewmap:not(.ol-collapsed) {
+    border: 1px solid black;
+  }
+
+  .ol-custom-overviewmap .ol-overviewmap-map {
+    border: none;
+    width: 300px;
+  }
+
+  .ol-custom-overviewmap .ol-overviewmap-box {
+    border: 2px solid red;
+  }
+
+  .ol-custom-overviewmap:not(.ol-collapsed) button {
+    bottom: auto;
+    left: auto;
+    right: 1px;
+    bottom: 1px;
+  }
+}
+
+.mdc-switch:enabled .mdc-switch__track::after {
+  background-color: #01499B!important;
+}
+
+.mat-mdc-form-field{
+  width: 100%;
+}
+
+.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  width: 100%!important;
+}
+
+// ── WebGIS select panel global ────────────────────────────────────────────────
+
+// ── WebGIS — painel de todos os mat-select ────────────────────────────────────
+
+.mat-mdc-select-panel {
+  border-radius: 8px !important;
+  border: 1px solid rgba(1, 73, 155, 0.18) !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+  padding: 4px 0 !important;
+}
+
+.cdk-overlay-pane:has(.mat-mdc-select-panel) .mat-mdc-option,
+.mat-mdc-select-panel .mat-mdc-option {
+  font-size: 12px !important;
+  font-family: system-ui, sans-serif !important;
+  min-height: 34px !important;
+  padding: 0 12px !important;
+  color: #6b7280 !important;
+}
+
+.mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected {
+  background: rgba(1, 73, 155, 0.06) !important;
+  color: #1e3a5f !important;
+}
+
+.mat-mdc-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
+  background: rgba(1, 73, 155, 0.04) !important;
+}
+
+.mat-mdc-select-panel .mat-mdc-option .mdc-list-item__primary-text {
+  font-size: 12px !important;
+  font-family: system-ui, sans-serif !important;
+  color: inherit !important;
+}
+
+// ── select-wrap — trigger + seta ─────────────────────────────────────────────
+// Usado globalmente: a seta é um ::after no wrapper, a seta do Material é oculta
+
+.select-wrap {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid #9ca3af;
+    pointer-events: none;
+    transition: transform 0.2s;
+  }
+}
+
+.mat-mdc-select[aria-expanded="true"] ~ * .select-wrap::after,
+.select-wrap:has(.mat-mdc-select[aria-expanded="true"])::after {
+  transform: translateY(-50%) rotate(180deg);
+}
+
+.select-wrap .mat-mdc-select,
+.select-wrap mat-select .mat-mdc-select {
+  display: block !important;
+  padding: 7px 28px 7px 10px !important;
+}
+
+.select-wrap .mat-mdc-select-trigger {
+  display: flex !important;
+  align-items: center !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: unset !important;
+}
+
+.select-wrap .mat-mdc-select-value {
+  flex: 1 !important;
+  min-width: 0 !important;
+  font-size: 12px !important;
+  font-family: system-ui, sans-serif !important;
+  color: #374151 !important;
+}
+
+.select-wrap .mat-mdc-select-placeholder {
+  color: #9ca3af !important;
+  font-size: 12px !important;
+  font-family: system-ui, sans-serif !important;
+}
+
+.select-wrap .mat-mdc-select-arrow-wrapper {
+  display: none !important;
+}
+
+.select-wrap .mat-mdc-select-ripple,
+.select-wrap .mat-ripple {
+  display: none !important;
+}
+
+// ── WebGIS popup menus (wg-menu) ──────────────────────────────────────────────
+
+.wg-menu.mat-mdc-menu-panel {
+  border-radius: 10px !important;
+  border: 1px solid rgba(1, 73, 155, 0.14) !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10), 0 1px 6px rgba(0, 0, 0, 0.06) !important;
+  padding: 4px !important;
+  min-width: 190px !important;
+  max-width: 260px !important;
+  overflow: hidden !important;
+}
+
+.wg-menu .mat-mdc-menu-content {
+  padding: 0 !important;
+}
+
+.wg-menu .mat-mdc-menu-item {
+  height: 34px !important;
+  min-height: 34px !important;
+  border-radius: 7px !important;
+  padding: 0 10px !important;
+  margin: 1px 0 !important;
+  transition: background 0.13s !important;
+}
+
+.wg-menu .mat-mdc-menu-item .mdc-list-item__primary-text {
+  font-size: 12px !important;
+  font-family: system-ui, sans-serif !important;
+  color: #374151 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+.wg-menu .mat-mdc-menu-item mat-icon,
+.wg-menu .mat-mdc-menu-item .mat-icon {
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  color: #6b7280 !important;
+  margin-right: 0 !important;
+  flex-shrink: 0;
+}
+
+.wg-menu .mat-mdc-menu-item:not([disabled]):hover {
+  background: rgba(1, 73, 155, 0.06) !important;
+}
+
+.wg-menu .mat-mdc-menu-item:not([disabled]):hover mat-icon,
+.wg-menu .mat-mdc-menu-item:not([disabled]):hover .mat-icon {
+  color: #01499B !important;
+}
+
+.wg-menu .mat-mdc-menu-item:not([disabled]):hover .mdc-list-item__primary-text {
+  color: #1e3a5f !important;
+}
+
+.wg-menu .mat-mdc-menu-item[disabled] {
+  opacity: 0.4 !important;
+}
+
+.wg-menu .mat-mdc-menu-item .mat-mdc-menu-ripple {
+  display: none !important;
+}
+
+// Row context menu — compact
+.wg-menu--row.mat-mdc-menu-panel {
+  min-width: 170px !important;
+}
+
+// ── Marker tooltip (mk-tooltip) ───────────────────────────────────────────────
+
+.mk-tooltip {
+  position: relative;
+  width: 310px;
+  background: rgba(255, 255, 255, 0.97);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(1, 73, 155, 0.18);
+  border-radius: 12px;
+  box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.07);
+  z-index: 999;
+  overflow: visible;
+}
+
+// ── Arrow — CSS border triangle technique (same as id-balloon) ─────────────
+.mk-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+}
+
+// Balloon ABOVE marker → tip points DOWN ▼
+.mk-tooltip.mk-arrow-bottom .mk-arrow {
+  bottom: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left:  8px solid transparent;
+  border-right: 8px solid transparent;
+  border-top:   9px solid rgba(1, 73, 155, 0.18);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -10px;
+    left: -7px;
+    border-left:  7px solid transparent;
+    border-right: 7px solid transparent;
+    border-top:   8px solid rgba(255, 255, 255, 0.97);
+  }
+}
+
+// Balloon BELOW marker → tip points UP ▲
+.mk-tooltip.mk-arrow-top .mk-arrow {
+  top: -9px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left:   8px solid transparent;
+  border-right:  8px solid transparent;
+  border-bottom: 9px solid rgba(1, 73, 155, 0.18);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: -7px;
+    border-left:   7px solid transparent;
+    border-right:  7px solid transparent;
+    border-bottom: 8px solid rgba(255, 255, 255, 0.97);
+  }
+}
+
+// Balloon to the RIGHT of marker → tip points LEFT ◀
+.mk-tooltip.mk-arrow-left .mk-arrow {
+  left: -9px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top:    8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-right:  9px solid rgba(1, 73, 155, 0.18);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    left: 2px;
+    border-top:    7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-right:  8px solid rgba(255, 255, 255, 0.97);
+  }
+}
+
+// Balloon to the LEFT of marker → tip points RIGHT ▶
+.mk-tooltip.mk-arrow-right .mk-arrow {
+  right: -9px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-top:    8px solid transparent;
+  border-bottom: 8px solid transparent;
+  border-left:   9px solid rgba(1, 73, 155, 0.18);
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: -7px;
+    right: 2px;
+    border-top:    7px solid transparent;
+    border-bottom: 7px solid transparent;
+    border-left:   8px solid rgba(255, 255, 255, 0.97);
+  }
+}
+
+.mk-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: rgba(1, 73, 155, 0.05);
+  border-bottom: 1px solid rgba(1, 73, 155, 0.18);
+  border-radius: 12px 12px 0 0;
+}
+
+.mk-header-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+  flex: 1;
+}
+
+.mk-pin-icon {
+  width: 14px;
+  height: 14px;
+  color: #01499B;
+  flex-shrink: 0;
+}
+
+.mk-title {
+  font-size: 12px;
+  font-weight: 700;
+  color: #1e3a5f;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-family: system-ui, sans-serif;
+}
+
+.mk-close {
+  width: 24px;
+  height: 24px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.13s, color 0.13s;
+
+  svg { width: 14px; height: 14px; }
+
+  &:hover { background: rgba(239, 68, 68, 0.08); color: #ef4444; }
+}
+
+.mk-copy {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border: none;
+  background: transparent;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #6b7280;
+  padding: 0;
+  transition: background 0.13s, color 0.13s;
+
+  svg { width: 13px; height: 13px; }
+  &:hover { background: rgba(1, 73, 155, 0.08); color: #01499B; }
+  &--done { color: #16a34a; }
+}
+
+.mk-body { padding: 4px 0; }
+
+.mk-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 12px;
+  transition: background 0.1s;
+
+  &--alt { background: rgba(1, 73, 155, 0.025); }
+  &:hover { background: rgba(1, 73, 155, 0.07); }
+}
+
+.mk-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #6b7280;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  min-width: 80px;
+  flex-shrink: 0;
+  font-family: system-ui, sans-serif;
+}
+
+.mk-value {
+  font-size: 12px;
+  font-weight: 500;
+  color: #1e3a5f;
+  word-break: break-word;
+  flex: 1;
+  font-family: system-ui, sans-serif;
+
+  &--mono {
+    font-family: 'Courier New', monospace;
+    font-size: 11px;
+  }
+}
+
+.mk-footer {
+  padding: 6px 10px;
+  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  justify-content: flex-end;
+  border-radius: 0 0 12px 12px;
+}
+
+.mk-remove {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+  border-radius: 7px;
+  background: transparent;
+  color: #ef4444;
+  font-size: 11px;
+  font-weight: 600;
+  font-family: system-ui, sans-serif;
+  cursor: pointer;
+  transition: background 0.13s;
+
+  svg { width: 14px; height: 14px; }
+
+  &:hover { background: rgba(239, 68, 68, 0.08); }
+}
+
+/* Botão fechar do highlight "Pesquisar por camadas" (overlay no mapa) */
+.pesquisar-camadas-highlight-close {
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #757575;
+  color: white;
+  border: 1px solid #9e9e9e;
+  border-radius: 50%;
+  font-size: 12px;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+  user-select: none;
+  padding: 0;
+
+  &:hover {
+    background: #616161;
+  }
+}

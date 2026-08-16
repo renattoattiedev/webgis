@@ -1,0 +1,77 @@
+<div #popup class="id-balloon" style="display: none;">
+
+  <!-- Seta apontando para o ponto clicado -->
+  <div class="id-arrow"></div>
+
+  <!-- Com dados -->
+  <ng-container *ngIf="listaDeObjetos.length > 0">
+
+    <div class="id-header">
+      <div class="id-title-wrap">
+        <mat-icon class="id-layer-icon">layers</mat-icon>
+        <span class="id-layer-name">{{ listaDeObjetos[paginator.pageIndex]?.tituloLayer }}</span>
+      </div>
+      <div class="id-header-right">
+        <span class="id-counter" *ngIf="listaDeObjetos.length > 1">
+          {{ (paginator.pageIndex || 0) + 1 }}&thinsp;/&thinsp;{{ listaDeObjetos.length }}
+        </span>
+        <button type="button" class="id-close-btn" (click)="fecharPopup()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="id-body">
+      <ng-container *ngFor="let item of listaDeObjetos; let i = index">
+        <ng-container *ngIf="paginator.pageIndex === i">
+          <div *ngFor="let prop of item.propriedadesOrdenadas; let odd = odd"
+            class="id-prop-row"
+            [class.id-prop-row--alt]="odd">
+            <span class="id-prop-key">{{ prop.key }}</span>
+            <span class="id-prop-value">{{ prop.value }}</span>
+          </div>
+        </ng-container>
+      </ng-container>
+    </div>
+
+    <div class="id-footer">
+      <mat-paginator
+        #paginator
+        [length]="listaDeObjetos.length"
+        [pageSize]="1"
+        [hidePageSize]="true"
+        (page)="onPageChange($event)"
+        aria-label="Navegar entre feições">
+      </mat-paginator>
+      <div class="id-actions">
+        <button type="button" class="id-action-btn" title="Zoom para feição" (click)="getExtentFeature()">
+          <mat-icon>zoom_in</mat-icon>
+        </button>
+        <button type="button" class="id-action-btn" title="Adicionar marcador" (click)="addMarkerWithTooltip()">
+          <mat-icon>location_on</mat-icon>
+        </button>
+      </div>
+    </div>
+
+  </ng-container>
+
+  <!-- Sem dados -->
+  <ng-container *ngIf="listaDeObjetos.length === 0">
+    <div class="id-header">
+      <div class="id-title-wrap">
+        <mat-icon class="id-layer-icon">info_outline</mat-icon>
+        <span class="id-layer-name">Identify</span>
+      </div>
+      <button type="button" class="id-close-btn" (click)="fecharPopup()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    <div class="id-empty">
+      <mat-icon>search_off</mat-icon>
+      <p>Sem dados para essa seleção.</p>
+    </div>
+    <!-- paginator oculto para satisfazer o @ViewChild -->
+    <mat-paginator #paginator [length]="0" [pageSize]="1" style="display:none"></mat-paginator>
+  </ng-container>
+
+</div>

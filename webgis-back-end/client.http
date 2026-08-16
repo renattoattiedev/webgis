@@ -1,0 +1,594 @@
+@baseUrl = http://localhost:3333
+@authToken = {{authenticate.response.body.access_token}}
+@chunkSize = 52428800  # 50 MB em bytes
+@file = /home/renatto/Downloads/Raster_clip_Vitoria/ortos_2000_Clip_fixed.tif
+
+# @name create_account
+POST {{baseUrl}}/create-account
+Content-Type: application/json
+
+{
+  "NOM_USER": "Usuario Teste",
+  "PERFIL_USER": "7e28c1d9-e09b-46af-befb-88480b75d8e8",
+  "DSC_EMAIL": "teste2@teste.com.br",
+  "DSC_PASSWORD": "12345678R$aa",
+  "USUARIO_CRIACAO": null
+}
+
+
+###
+
+# @name authenticate
+POST {{baseUrl}}/authenticate
+Content-Type: application/json
+
+{
+  "DSC_EMAIL": "teste@teste.com.br",
+  "DSC_PASSWORD": "123456",
+  "isFromPlugin": true,
+  "secretToken": "c48afe16-b76a-4429-b2d2-0e370747d9b7"
+}
+
+###
+
+# @name get_user_perfil
+GET {{baseUrl}}/get-user-perfil
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+
+###
+
+# @name fetch_configs
+GET {{baseUrl}}/fetch-configs
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+
+# @name update_config
+PUT {{baseUrl}}/update-config
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "id": "fc87a8d1-f8f5-4125-bc69-d5aae5063397",
+  "key": "GEOSERVER_URL",
+  "value": "http://localhost:8080/geoserver"
+}
+###
+
+###
+# @name create_camadas
+POST {{baseUrl}}/create-camadas
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "NOM_NOME": "ponto_hidrante",
+  "DSC_TITULO": "Ponto de Hidrante",
+  "DSC_DESCRICAO": "",
+  "DSC_LINK_METADADOS": "",
+  "TXT_TERMOS_DE_USO": "Termos de Uso da Camada",
+  "NIVEL_COMPATILHAMENTO": "875b29a1-34a4-48ff-aa21-28dc43f27dbc",
+  "GRUPOS_CAMADAS": "7c73a937-afdb-48fc-9b23-a5c0b008c1e2",
+  "TXT_TAGS": "ponto_clandestino",
+  "PACOTES_CONCEITUAIS": "9d400c68-6186-44c2-af6f-3e536f40b70d",
+  "DSC_FONTE_DADOS_CAMADA": "Fonte de Dados da Camada",
+  "file": ""
+}
+
+###
+# @name create_folder
+POST {{baseUrl}}/create-folder
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "descricao": "Outros Testes"
+}
+
+###
+
+# @name fetch_camadas
+GET {{baseUrl}}/fetch-content-usuario
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+###
+GET {{baseUrl}}/fetch-preloaded-rasters
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+
+###
+
+# @name get_acessos_camada
+GET {{baseUrl}}/get-acessos-camada/39c17a0f-1e68-427a-9ffd-90fa07433361
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+
+###
+
+# @name fetch_atributos_camadas
+GET {{baseUrl}}/fetch-atributos-camadas/12134c2d-7767-4fec-a22d-a7f0dc3002d1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+
+###
+
+# @name fetch_atributos_camadas_manager
+GET {{baseUrl}}/fetch-atributos-manager/b98dc4d3-3b8c-4363-862c-932cf3fa195d
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch_content_grupo
+GET {{baseUrl}}/fetch-content/9867d8fc-732d-46ae-b83c-510e54026708
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_camadas_unpublished
+GET {{baseUrl}}/fetch-camadas-unpublished/bd4e591c-d53f-4c0b-ac0c-f61166a3bdbb
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+
+# @name fetch_camadas_user
+GET {{baseUrl}}/fetch-content-usuario
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_dados_camada
+POST {{baseUrl}}/fetch-camadas-dados
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "tipoConteudo": "camada",
+  "nomeCamada": "content:setor_abastecimento",
+  "atributos": [
+    "num_ss",
+    "municipio",
+    "cod_simp",
+    "globalid",
+    "obs",
+    "usuario",
+    "nome",
+    "dtatualiza",
+    "oid_origen",
+    "populacao",
+    "shape_len",
+    "shape_area",
+    "ref_ano",
+    "quan_lig_i",
+    "quan_lig_a",
+    "status_ope",
+    "dtinclusao",
+    "objectid",
+    "geom"
+  ]
+}
+
+###
+
+# @name fetch_dados_extent
+GET {{baseUrl}}/get-camadas-extent/infraestrutura/ponto_hidrante
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_dados_extent
+GET {{baseUrl}}/get-camada-vetorial-existente/ligacao
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+
+
+
+# @name fetch_pacotes_conceituais
+GET {{baseUrl}}/fetch-pacotes-conceituais
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name delete_pacotes_conceituais
+DELETE {{baseUrl}}/delete-pacote-conceitual/03389360-1f9f-470b-85ee-db53ae68ec85
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+###
+
+# @name create_pacotes_conceituais
+POST {{baseUrl}}/create-pacote-conceitual
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "tituloPacoteConceitual": "Fiscalização 2",
+  "nomePacoteConceitual": "fisc_2",
+  "host": "postgres",
+  "database": "cesan",
+  "port": "5432",
+  "schema": "camadas",
+  "user": "postgres",
+  "password": "cesan123"
+}
+
+###
+
+
+# @name update_pacotes_conceituais
+PUT {{baseUrl}}/update-pacote-conceitual
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "id": "82848d79-bb85-4800-9688-806fbf315906",
+  "tituloPacoteConceitual": "Fiscalização 2",
+  "nomePacoteConceitual": "fisc22",
+  "host": "postgres",
+  "database": "cesan",
+  "port": "5432",
+  "schema": "camadas",
+  "user": "postgres",
+  "password": "cesan123"
+}
+###
+
+###
+
+# @name fetch_nivel_compartilhamento
+GET {{baseUrl}}/fetch-nivel-compartilhamento
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+###
+
+# @name fetch_temas
+GET {{baseUrl}}/fetch-temas
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_grupo_camadas
+GET {{baseUrl}}/fetch-grupo
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_grupo_camadas_tema
+GET {{baseUrl}}/fetch-grupo/3b45819e-b5b1-456a-9c5b-772038b9efba
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name get_imagens_landsat
+GET {{baseUrl}}/satellite/landsat?startDate=2021-01-01&endDate=2021-01-09&latitude=40.7128&longitude=-74.0060
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+# @name update_folder
+PUT {{baseUrl}}/update-folder
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "COD_FOLDER_ID": "c2ffcdcf-c0f4-4be4-b4c4-405033ac9130",
+  "DSC_FOLDER": "Trabalho PRincipal 55"
+}
+
+###
+# @name associate_folder_camada
+POST {{baseUrl}}/associate-folders-camadas
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "COD_CAMADA_ID": "89be7fbd-8aa1-42a4-bd10-ce3411ac738f",
+  "COD_FOLDER_ID": "c2ffcdcf-c0f4-4be4-b4c4-405033ac9130"
+}
+
+###
+
+# @name fetch_folders_content
+GET {{baseUrl}}/fetch-folders-content/6557e81d-989b-4e3e-aa91-d9b546217e8a
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+
+# @name fetch_folders
+GET {{baseUrl}}/fetch-folders
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name delete_folders
+DELETE {{baseUrl}}/delete-folder/c2ffcdcf-c0f4-4be4-b4c4-405033ac9130
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+
+# @name recovery_password
+POST {{baseUrl}}/recovery-password
+Content-Type: application/json
+
+{
+  "email": "fulano@fulano.com.br"
+}
+
+
+###
+
+# @name reset_password
+POST {{baseUrl}}/reset-password
+Content-Type: application/json
+
+{
+  "token": "60ccb3d0-a587-4f22-9645-b25f8c26c614",
+  "password": "123456784"
+}
+
+###
+
+# @name fetch_users
+GET {{baseUrl}}/fetch-usuarios
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_users_donos_camadas
+GET {{baseUrl}}/fetch-usuarios-donos-camadas
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+
+# @name fetch_user_content
+GET {{baseUrl}}/fetch-content-usuario
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch_perfil
+GET {{baseUrl}}/fetch-perfis
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+# @name update_perfil
+PUT {{baseUrl}}/update-perfil
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "COD_USER_ID": "e1ceac93-a414-4532-8f78-a06c02d6ce1d",
+  "COD_PERFIL_USER": "eff36232-ae5e-4446-9181-c9e2dbf04c35"
+}
+
+
+###
+# @name delete_user
+DELETE {{baseUrl}}/delete-user/c000af10-97f0-4de4-b5ae-a4406929b4a9
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+# @name recovery_user
+PUT {{baseUrl}}/recovery-user/c000af10-97f0-4de4-b5ae-a4406929b4a9
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+# @name update_dono_camada
+PUT {{baseUrl}}/update-camada-owner
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "COD_CAMADA_ID": "371c2b51-fb91-4903-ba4f-0f702d81edcf",
+  "COD_NEW_OWNER": "e1ceac93-a414-4532-8f78-a06c02d6ce1d"
+}
+
+###
+# @name delete_camada
+DELETE {{baseUrl}}/delete-camada/a7ffc292-d0d4-4b54-8913-d9ac1c959e88
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+###
+# @name recovery_camada
+PUT {{baseUrl}}/recovery-camada/a7ffc292-d0d4-4b54-8913-d9ac1c959e88
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+###
+# @name update-atributos-camada
+PUT {{baseUrl}}/update-atributos-camada
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+ "descricao": "Esse é o campo valor",
+ "id":  "248ca032-f492-4820-b9f1-88f00937914a",
+ "label": "Classe Valor",
+ "visivel": false
+}
+
+###
+
+
+# @name save_mapa
+POST {{baseUrl}}/save-mapas
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+{
+  "nomeMapa": "Mapa Teste",
+  "tituloMapa": "Título do Mapa Teste",
+  "descricaoMapa": "Descrição do Mapa Teste",
+  "escalaMapa": "1:5000",
+  "nivelCompartilhamentoMapa": "1650490d-1821-4041-9bd9-cb36af3957bd",
+  "grupoMapa": "ae3eb5a4-947e-4e72-a782-47804d25defe",
+  "camadas": [
+    {
+      "nomeCamada": "ponto_hidrante",
+      "pacoteConceitual": "infraestrutura"
+    },
+    {
+      "nomeCamada": "rede_agua_tratada",
+      "pacoteConceitual": "infraestrutura"
+    }
+  ]
+}
+
+###
+# @name upload_chunk
+POST {{baseUrl}}/create-camadas-raster
+Content-Type: multipart/form-data
+Authorization: Bearer {{authToken}}
+
+# Corpo
+{
+  "file": "@file"
+}
+
+
+###
+
+# @name fetch_sicat_cidades
+GET {{baseUrl}}/fetch-sicat-cidades
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch_sicat_bairros
+GET {{baseUrl}}/fetch-sicat-bairros?codigoCidade=5800,1300,2100
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch_sicat_logradouros
+GET {{baseUrl}}/fetch-sicat-logradouros?codigoCidade=5800,1300,2100
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+
+# @name fetch-sicat-clientes
+GET {{baseUrl}}/fetch-sicat-clientes
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+
+# @name fetch-sicat-imoveis
+GET {{baseUrl}}/fetch-sicat-imoveis
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name get-sicat-imovel
+GET {{baseUrl}}/get-sicat-cliente/23288
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+
+# @name get-sicat-imovel
+GET {{baseUrl}}/get-sicat-imovel/802302
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch-croqui-endereco-filtros-completo
+GET {{baseUrl}}/fetch-croqui-endereco-filtros?cd_cidade=5000&cd_bairro=156&cd_logradouro=838
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch-croqui-endereco-filtros-cidade-bairro
+GET {{baseUrl}}/fetch-croqui-endereco-filtros?cd_cidade=5000&cd_bairro=156
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch-croqui-endereco-filtros-apenas-cidade
+GET {{baseUrl}}/fetch-croqui-endereco-filtros?cd_cidade=5000
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch-croqui-endereco-filtros-apenas-bairro
+GET {{baseUrl}}/fetch-croqui-endereco-filtros?cd_bairro=156
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch-croqui-endereco-filtros-apenas-logradouro
+GET {{baseUrl}}/fetch-croqui-endereco-filtros?cd_logradouro=838
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+# @name fetch-croqui-endereco-todos
+GET {{baseUrl}}/fetch-croqui-endereco-filtros
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+###
+
+### Teste 1: Buscar imóvel por matrícula (caso de sucesso)
+GET {{baseUrl}}/fetch-sicat-imovel/2
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+### Teste 2: Buscar imóvel com matrícula inválida (caso de erro - not found)
+GET {{baseUrl}}/fetch-sicat-imovel-by-hidrometro/1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+
+### Teste 3: Buscar imóvel com matrícula não numérica (caso de erro - bad request)
+GET {{baseUrl}}/fetch-solicitacao-servicos-detalhada/1
+Content-Type: application/json
+Authorization: Bearer {{authToken}}
+
+### Para comparar com a rota existente:
+### GET CARREGAMENTO PADRAO
+GET {{baseUrl}}/fetch-carregamento-padrao
+Content-Type: application/json

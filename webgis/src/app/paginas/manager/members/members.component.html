@@ -1,0 +1,181 @@
+<div class="mb-page">
+
+  <!-- ── Sidebar de filtros ───────────────────────────────────────────────── -->
+  <aside class="mb-filters" [class.opened]="isSidenavOpened">
+
+    <!-- Perfis -->
+    <section class="mb-panel">
+      <div class="mb-panel-head"><span class="mb-panel-title">Perfis</span></div>
+      <div class="mb-list">
+        <div class="mb-list-item"
+             [class.active]="!selectedProfileId"
+             (click)="filtrarPorPerfil('')">
+          <span class="mb-count">{{ contarUsuariosPorPerfil() }}</span>
+          <span class="mb-list-label">Todos</span>
+        </div>
+        <div class="mb-list-item"
+             *ngFor="let perfil of dataSourcePerfis"
+             [class.active]="perfil.id === selectedProfileId"
+             (click)="filtrarPorPerfil(perfil.id)">
+          <span class="mb-count">{{ contarUsuariosPorPerfil(perfil.id) }}</span>
+          <span class="mb-list-label">{{ perfil.perfil }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Última autenticação -->
+    <section class="mb-panel">
+      <div class="mb-panel-head"><span class="mb-panel-title">Última autenticação</span></div>
+      <div class="mb-chips">
+        <button class="mb-chip mb-chip--all"
+                [class.active]="selectedPeriodo === ''"
+                (click)="filtrarPorPeriodo('')">Todos</button>
+        <button class="mb-chip"
+                [class.active]="selectedPeriodo === 'hoje'"
+                (click)="filtrarPorPeriodo('hoje')">Hoje</button>
+        <button class="mb-chip"
+                [class.active]="selectedPeriodo === 'ontem'"
+                (click)="filtrarPorPeriodo('ontem')">Ontem</button>
+        <button class="mb-chip"
+                [class.active]="selectedPeriodo === 'ultimos7dias'"
+                (click)="filtrarPorPeriodo('ultimos7dias')">7 dias</button>
+        <button class="mb-chip"
+                [class.active]="selectedPeriodo === 'ultimos30dias'"
+                (click)="filtrarPorPeriodo('ultimos30dias')">30 dias</button>
+        <button class="mb-chip"
+                [class.active]="selectedPeriodo === 'nunca'"
+                (click)="filtrarPorPeriodo('nunca')">Nunca</button>
+        <button class="mb-chip"
+                [class.active]="selectedPeriodo === 'custom'"
+                (click)="mostrarCustomPeriodoPicker()">Período</button>
+      </div>
+
+      <div *ngIf="selectedPeriodo === 'custom'" class="mb-custom-period">
+        <mat-form-field appearance="outline" class="mb-date-range">
+          <mat-date-range-input [rangePicker]="picker">
+            <input matStartDate placeholder="Início" [(ngModel)]="dataInicio">
+            <input matEndDate placeholder="Fim" [(ngModel)]="dataFim">
+          </mat-date-range-input>
+          <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-date-range-picker #picker></mat-date-range-picker>
+        </mat-form-field>
+        <button class="mb-btn-primary" (click)="aplicarFiltros()">Aplicar</button>
+      </div>
+    </section>
+
+  </aside>
+
+  <!-- ── Conteúdo principal ──────────────────────────────────────────────── -->
+  <section class="mb-main">
+
+    <!-- Action bar -->
+    <div class="mb-main-top">
+      <div class="mb-main-top-left">
+        <button class="mb-icon-btn" (click)="toggleSidenav()" matTooltip="Filtros">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="7" y1="12" x2="17" y2="12"/>
+            <line x1="10" y1="18" x2="14" y2="18"/>
+          </svg>
+        </button>
+        <div class="mb-main-title">Membros <em>da organização</em></div>
+        <span class="mb-badge-count">{{ dataSourceUsuarios.data.length }} usuários</span>
+      </div>
+
+      <div class="mb-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input placeholder="Buscar por nome ou e-mail…" (keyup)="aplicarFiltroNome($event)"/>
+      </div>
+    </div>
+
+    <!-- Tabela -->
+    <div class="mb-table-wrap">
+      <table mat-table [dataSource]="dataSourceUsuarios" class="mb-table">
+
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef>Usuário</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="mb-user">
+              <div class="mb-avatar">{{ (element.nome || '?').charAt(0).toUpperCase() }}</div>
+              <div class="mb-user-text">
+                <span class="mb-user-name">{{ element.nome }}</span>
+                <span class="mb-user-email">{{ element.email }}</span>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef>E-mail</th>
+          <td mat-cell *matCellDef="let element" class="mb-cell-email">{{ element.email }}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="ultimaAutenticacao">
+          <th mat-header-cell *matHeaderCellDef>Última autenticação</th>
+          <td mat-cell *matCellDef="let element">
+            <div class="mb-date" *ngIf="element.ultimaAutenticacao; else nuncaEntrou">
+              {{ element.ultimaAutenticacao | date: 'dd/MM/yyyy' }}
+              <span>{{ element.ultimaAutenticacao | date: 'HH:mm' }}</span>
+            </div>
+            <ng-template #nuncaEntrou>
+              <span class="mb-pill-never">Nunca</span>
+            </ng-template>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="perfil">
+          <th mat-header-cell *matHeaderCellDef>Perfil</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-form-field class="mb-perfil-select" appearance="outline" subscriptSizing="dynamic">
+              <mat-select [(value)]="element.perfilId"
+                          (selectionChange)="updatePerfil(element.id, $event.value)"
+                          [disabled]="element.id === userIdAutenticado || element.dataExclusao !== null">
+                <mat-option *ngFor="let perfil of dataSourcePerfis" [value]="perfil.id">
+                  {{ perfil.perfil }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acoes">
+          <th mat-header-cell *matHeaderCellDef>Ações</th>
+          <td mat-cell *matCellDef="let element">
+            <button class="mb-row-icon danger"
+                    *ngIf="!element.dataExclusao && element.id !== userIdAutenticado"
+                    (click)="excluirUsuario(element.id)"
+                    matTooltip="Excluir usuário">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="3 6 5 6 21 6"/>
+                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/>
+                <path d="M10 11v6M14 11v6M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
+              </svg>
+            </button>
+            <button class="mb-row-icon success"
+                    *ngIf="element.dataExclusao"
+                    (click)="recuperarUsuario(element.id)"
+                    [matTooltip]="'Excluído em ' + (element.dataExclusao | date: 'dd/MM/yyyy HH:mm')">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="23 4 23 10 17 10"/>
+                <polyline points="1 20 1 14 7 14"/>
+                <path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+              </svg>
+            </button>
+            <span *ngIf="element.id === userIdAutenticado" class="mb-self-pill">Você</span>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"
+            [class.is-excluded]="row.dataExclusao !== null"></tr>
+      </table>
+    </div>
+
+    <mat-paginator class="mb-paginator"
+                   [pageSizeOptions]="[10, 20, 30]"
+                   showFirstLastButtons></mat-paginator>
+  </section>
+</div>

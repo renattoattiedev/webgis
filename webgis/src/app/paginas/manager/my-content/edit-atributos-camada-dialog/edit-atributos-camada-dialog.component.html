@@ -1,0 +1,137 @@
+<div class="idedlg idedlg--wide">
+
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="3"/>
+          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+      </div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Edição de <em>atributos</em></h2>
+        <p class="idedlg-sub">Arraste para reordenar · clique no ícone para salvar cada linha</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body atributos-body" #scrollContainer>
+      <table mat-table [dataSource]="atributos" class="atrib-table"
+             tabindex="0"
+             cdkDropList [cdkDropListData]="atributos"
+             (cdkDropListDropped)="drop($event)"
+             cdkDropListOrientation="vertical"
+             [cdkDropListSortingDisabled]="true">
+
+        <ng-container matColumnDef="ordenacao">
+          <th mat-header-cell *matHeaderCellDef>Ordem</th>
+          <td mat-cell *matCellDef="let element; let i = index">
+            <div class="atrib-order">
+              <button class="atrib-grip" cdkDragHandle title="Arrastar para reordenar" type="button">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="9" cy="6" r="1"/><circle cx="9" cy="12" r="1"/><circle cx="9" cy="18" r="1"/>
+                  <circle cx="15" cy="6" r="1"/><circle cx="15" cy="12" r="1"/><circle cx="15" cy="18" r="1"/>
+                </svg>
+              </button>
+              <span class="atrib-index">{{ i + 1 }}</span>
+              <div class="atrib-arrows">
+                <button class="atrib-arrow" (click)="moveUp(i)" [disabled]="i === 0" title="Mover para cima" type="button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polyline points="18 15 12 9 6 15"/>
+                  </svg>
+                </button>
+                <button class="atrib-arrow" (click)="moveDown(i)" [disabled]="i === atributos.length - 1" title="Mover para baixo" type="button">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+                    <polyline points="6 9 12 15 18 9"/>
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="nomeAtributo">
+          <th mat-header-cell *matHeaderCellDef>Atributo</th>
+          <td mat-cell *matCellDef="let element">
+            <span class="atrib-name">{{ element.nomeAtributo }}</span>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="label">
+          <th mat-header-cell *matHeaderCellDef>Label</th>
+          <td mat-cell *matCellDef="let element">
+            <input class="atrib-input" name="label"
+                   [(ngModel)]="element.label"
+                   (input)="element.isEdited = true"
+                   placeholder="Rótulo exibido">
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="visivel">
+          <th mat-header-cell *matHeaderCellDef>Visível</th>
+          <td mat-cell *matCellDef="let element">
+            <mat-checkbox (change)="element.isEdited = true" [(ngModel)]="element.visivel"></mat-checkbox>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="descricao">
+          <th mat-header-cell *matHeaderCellDef>Descrição</th>
+          <td mat-cell *matCellDef="let element">
+            <input class="atrib-input" name="descricao"
+                   [(ngModel)]="element.descricao"
+                   (input)="element.isEdited = true"
+                   placeholder="Descrição opcional">
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="acao">
+          <th mat-header-cell *matHeaderCellDef>Salvar</th>
+          <td mat-cell *matCellDef="let element">
+            <button class="atrib-save" (click)="salvarAtributo(element)"
+                    [class.edited]="element.isEdited"
+                    [title]="element.isEdited ? 'Salvar alterações' : 'Sem alterações'"
+                    type="button">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
+                <polyline points="17 21 17 13 7 13 7 21"/>
+                <polyline points="7 3 7 8 15 8"/>
+              </svg>
+            </button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky: true"></tr>
+        <tr #rowEl mat-row *matRowDef="let row; columns: displayedColumns; let i = index"
+            [attr.data-index]="i"
+            [class.atrib-highlight]="row.isEdited"
+            cdkDrag [cdkDragData]="row" cdkDragLockAxis="y"
+            (cdkDragMoved)="onDragMoved($event)"></tr>
+      </table>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <span class="idedlg-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="10"/>
+          <line x1="12" y1="16" x2="12" y2="12"/>
+          <line x1="12" y1="8" x2="12.01" y2="8"/>
+        </svg>
+        Linhas alteradas são marcadas em amarelo
+      </span>
+      <button class="idedlg-btn idedlg-btn-primary" (click)="onClose()" type="button">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Fechar
+      </button>
+    </footer>
+  </div>
+</div>

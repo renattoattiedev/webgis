@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Template SS - Solicitação de Serviço</title>
+    <style>
+        @page first-page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        @page croqui-page {
+            size: A4 portrait;
+            margin: 0;
+        }
+
+        @media print {
+
+            html,
+            body {
+                margin: 0 !important;
+                padding: 0 !important;
+                background: white !important;
+                /* CRÍTICO: altura exata de 2 páginas A4 — impede 3ª página em branco */
+                overflow: hidden !important;
+            }
+
+            .page {
+                margin: 0 !important;
+                margin-bottom: 0 !important;
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+
+            .page+.page {
+                page-break-before: always !important;
+                break-before: page !important;
+            }
+
+            .page:last-child,
+            .page:last-of-type {
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+
+            .page-break,
+            .page-break:last-child,
+            .page-break:last-of-type {
+                display: none !important;
+                page-break-after: avoid !important;
+                break-after: avoid !important;
+            }
+
+            .no-print {
+                display: none !important;
+            }
+
+            .page.portrait {
+                page: first-page;
+            }
+
+            /* Página 2: declara como portrait, conteúdo interno rotacionado */
+            .page.croqui-wrapper {
+                page: croqui-page;
+                /* CRÍTICO: overflow hidden impede que position:absolute
+                   do filho rotacionado extrapole o limite da página */
+                overflow: hidden !important;
+                /* Altura fixa idêntica ao @page — sem margem extra */
+                height: 297mm !important;
+                max-height: 297mm !important;
+            }
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #ccc;
+            margin: 0;
+            padding: 10mm;
+        }
+
+        @media print {
+            body {
+                padding: 0 !important;
+            }
+        }
+
+        /* Cada página impressa */
+        .page {
+            background: white;
+            margin-bottom: 10mm;
+        }
+
+        .page.portrait {
+            width: 210mm;
+            height: 297mm;
+            max-height: 297mm;
+            overflow: hidden;
+            padding: 5mm;
+            display: grid;
+            grid-template-rows: auto 1fr auto;
+            gap: 2mm;
+        }
+
+        /* Wrapper da página 2: ocupa folha A4 portrait */
+        .page.croqui-wrapper {
+            width: 210mm;
+            height: 297mm;
+            overflow: hidden;
+            position: relative;
+            padding: 0;
+        }
+
+        /* Conteúdo interno rotacionado -90°:
+           O bloco landscape (297mm × 210mm) é rotacionado e
+           transladado para caber dentro do A4 portrait (210mm × 297mm) */
+        .croqui-rotated {
+            width: 297mm;
+            height: 210mm;
+            position: absolute;
+            top: 297mm;
+            left: 0;
+            transform: rotate(-90deg);
+            transform-origin: top left;
+            padding: 5mm;
+            display: grid;
+            grid-template-columns: 1fr 75mm;
+            grid-template-rows: auto 1fr auto;
+            grid-template-areas:
+                'header header'
+                'map-area legend-area'
+                'footer footer';
+            gap: 2mm;
+            background: white;
+        }
+
+        /* Cabeçalho compartilhado */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 2px solid #333;
+            padding-bottom: 3mm;
+        }
+
+        .title-section {
+            flex: 1;
+        }
+
+        .map-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 0.5mm;
+            line-height: 1.1;
+        }
+
+        .map-subtitle {
+            font-size: 9pt;
+            color: #666;
+            font-style: italic;
+        }
+
+        .ss-number {
+            font-size: 8pt;
+            color: #333;
+            margin-top: 0.5mm;
+        }
+
+        .logo-section {
+            width: 45mm;
+            height: 10mm;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .logo-section img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        /* Rodapé compartilhado */
+        .footer {
+            border-top: 1.5px solid #333;
+            padding-top: 2mm;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 7pt;
+            color: #666;
+        }
+
+        .footer-left,
+        .footer-center,
+        .footer-right {
+            flex: 1;
+        }
+
+        .footer-center {
+            text-align: center;
+        }
+
+        .footer-right {
+            text-align: right;
+        }
+
+        .footer-item {
+            margin: 0.5mm 0;
+            line-height: 1.2;
+        }
+
+        .footer-label {
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* ===================== PÁGINA 1: Formulário SS ===================== */
+        .form-content {
+            border: 1.5px solid #333;
+            background: #fff;
+            padding: 3mm 4mm;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            column-gap: 4mm;
+            row-gap: 1.5mm;
+            overflow: hidden;
+            font-size: 7.5pt;
+        }
+
+        .form-section-title {
+            grid-column: 1 / -1;
+            font-size: 9pt;
+            font-weight: bold;
+            margin-top: 1.5mm;
+            margin-bottom: 0.5mm;
+            border-bottom: 1px solid #666;
+            padding-bottom: 1mm;
+            text-align: center;
+        }
+
+        .form-section-title:first-child {
+            margin-top: 0;
+        }
+
+        .info-item {
+            display: grid;
+            grid-template-columns: 30mm 1fr;
+            align-items: start;
+            gap: 1mm;
+        }
+
+        .info-label {
+            font-size: 7.5pt;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .info-value {
+            font-size: 7.5pt;
+            color: #333;
+        }
+
+        .info-multiline {
+            white-space: pre-wrap;
+        }
+
+        .manual-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 7.5pt;
+        }
+
+        .manual-table th,
+        .manual-table td {
+            border: 1px solid #333;
+            padding: 1mm 2mm;
+        }
+
+        .manual-table th {
+            font-weight: bold;
+            background: #fff;
+            font-size: 7.5pt;
+        }
+
+        .th-center {
+            text-align: center;
+        }
+
+        .data-row td {
+            height: 8mm;
+        }
+
+        .hid-row td {
+            height: 6mm;
+        }
+
+        .td-label {
+            vertical-align: middle;
+        }
+
+        .causas-title {
+            text-align: center;
+            padding: 1mm 2mm;
+            font-size: 7.5pt;
+        }
+
+        .causas-row td {
+            padding: 1.5mm 3mm;
+        }
+
+        .causas-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5mm 3mm;
+        }
+
+        .causa-item {
+            display: flex;
+            align-items: center;
+            gap: 2mm;
+            font-size: 7.5pt;
+            white-space: nowrap;
+        }
+
+        .chk-box {
+            display: inline-block;
+            width: 3mm;
+            height: 3mm;
+            border: 1px solid #333;
+            flex-shrink: 0;
+        }
+
+        .input-row td {
+            height: 7mm;
+            vertical-align: middle;
+        }
+
+        .inner-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .inner-table th,
+        .inner-table td {
+            border: 1px solid #333;
+            padding: 1mm 2mm;
+            font-size: 7.5pt;
+        }
+
+        .inner-table th {
+            font-weight: bold;
+        }
+
+        .dim-row td {
+            height: 7mm;
+        }
+
+        .pav-grid {
+            display: flex;
+            gap: 4mm;
+            font-size: 7.5pt;
+        }
+
+        .pav-col {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5mm;
+        }
+
+        .pav-item {
+            display: flex;
+            align-items: center;
+            gap: 1mm;
+            white-space: nowrap;
+        }
+
+        .opt {
+            letter-spacing: 0;
+        }
+
+        .croqui-note {
+            font-size: 7pt;
+            padding: 2mm;
+            line-height: 1.4;
+        }
+
+        /* ===================== PÁGINA 2: Croqui ===================== */
+        .map-area {
+            grid-area: map-area;
+            border: 1.5px solid #333;
+            position: relative;
+            background: #f0f8ff;
+            overflow: hidden;
+        }
+
+        .map-container {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .map-placeholder {
+            font-size: 20pt;
+            color: #ccc;
+        }
+
+        .coord-bottom-right {
+            position: absolute;
+            bottom: 2mm;
+            right: 2mm;
+            font-size: 7pt;
+            color: #333;
+            background: white;
+            padding: 1.5mm;
+            border: 1px solid #333;
+            z-index: 10;
+        }
+
+        .north-arrow {
+            position: absolute;
+            top: 8mm;
+            right: 8mm;
+            width: 22mm;
+            height: 22mm;
+            z-index: 10;
+        }
+
+        .north-arrow svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .scale-bar {
+            position: absolute;
+            bottom: 8mm;
+            left: 8mm;
+            background: white;
+            border: 1px solid #333;
+            padding: 2mm;
+            z-index: 10;
+        }
+
+        .scale-segments {
+            display: flex;
+            margin-bottom: 1.5mm;
+        }
+
+        .scale-segment {
+            width: 8mm;
+            height: 3mm;
+            border: 1px solid #333;
+        }
+
+        .scale-segment:nth-child(odd) {
+            background: #333;
+        }
+
+        .scale-labels {
+            display: flex;
+            font-size: 7pt;
+            justify-content: space-between;
+            width: 40mm;
+        }
+
+        .legend-area {
+            grid-area: legend-area;
+            border: 1.5px solid #333;
+            padding: 2mm;
+            background: #fff;
+            display: flex;
+            flex-direction: column;
+            gap: 1mm;
+            overflow: hidden;
+        }
+
+        .legend-title {
+            font-size: 9pt;
+            font-weight: bold;
+            margin-bottom: 1mm;
+            text-align: center;
+            border-bottom: 1px solid #666;
+            padding-bottom: 1mm;
+        }
+
+        .legend-items {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5mm;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 1.5mm;
+        }
+
+        .legend-symbol {
+            width: 5mm;
+            height: 5mm;
+            border: 1px solid #333;
+            flex-shrink: 0;
+        }
+
+        .legend-symbol.point {
+            border-radius: 50%;
+        }
+
+        .legend-symbol.line {
+            height: 2mm;
+            border: none;
+            border-bottom: 2px solid;
+        }
+
+        .legend-label {
+            font-size: 7.5pt;
+            color: #333;
+        }
+
+        .side-section {
+            border: 1px solid #999;
+            padding: 1mm 2mm;
+            border-radius: 1mm;
+        }
+
+        .section-title {
+            font-weight: bold;
+            font-size: 7.5pt;
+            text-transform: uppercase;
+            color: #222;
+            border-bottom: 1px solid #aaa;
+            padding-bottom: 0.8mm;
+            margin-bottom: 0.8mm;
+            text-align: center;
+        }
+
+        .row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1mm 2mm;
+            align-items: flex-end;
+        }
+
+        .field {
+            display: flex;
+            flex-direction: column;
+            gap: 0.3mm;
+            font-size: 7pt;
+        }
+
+        .field label {
+            font-size: 7pt;
+            color: #444;
+            white-space: nowrap;
+        }
+
+        .field .value-underline {
+            border-bottom: 1px solid #555;
+            min-width: 12mm;
+            font-size: 7pt;
+        }
+
+        .chk-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1mm 2.5mm;
+            align-items: center;
+            font-size: 7pt;
+        }
+
+        .chk-item {
+            display: flex;
+            align-items: center;
+            gap: 1mm;
+        }
+
+        .checkbox-box {
+            width: 2.5mm;
+            height: 2.5mm;
+            border: 1px solid #555;
+            display: inline-block;
+            flex-shrink: 0;
+        }
+
+        .checkbox-box.filled {
+            background: #1a56a0;
+            border-color: #1a56a0;
+        }
+
+        .diam-inline {
+            display: flex;
+            align-items: flex-end;
+            gap: 1mm;
+            font-size: 7pt;
+        }
+
+        .diam-value {
+            border-bottom: 1px solid #555;
+            min-width: 8mm;
+            text-align: center;
+        }
+
+        .linha {
+            width: 14mm;
+            height: 3px;
+            flex-shrink: 0;
+        }
+
+        .linha.azul {
+            background: #1a56a0;
+        }
+
+        .linha.tracejado {
+            background: transparent;
+            border-top: 2.5px dashed #222;
+            height: 0;
+        }
+
+        .linha.vermelho {
+            background: #cc0000;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- ================================================ -->
+    <!-- PÁGINA 1: Formulário da SS (RETRATO)             -->
+    <!-- ================================================ -->
+    <div class="page portrait">
+        <div class="header">
+            <div class="title-section">
+                <h1 class="map-title">{{SS_TITLE}}</h1>
+                <p class="map-subtitle">{{SS_SUBTITLE}}</p>
+                <div class="ss-number">SS Nº: {{SS_NUMBER}}</div>
+            </div>
+            <div class="logo-section">
+                <img src="https://www.cesan.com.br/wp-content/uploads/2022/12/logo.png" alt="Logo CESAN">
+            </div>
+        </div>
+
+        <div class="form-content">
+            <div class="form-section-title">SOLICITAÇÃO DE SERVIÇO (SS)</div>
+            <div class="info-item">
+                <div class="info-label">Operacional:</div>
+                <div class="info-value">{{OPERACIONAL}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Serviço:</div>
+                <div class="info-value">{{SERVICO_DESC}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Unidade:</div>
+                <div class="info-value">{{UNIDADE}}</div>
+            </div>
+            <div class="info-item" style="grid-column: 1 / -1;">
+                <div class="info-label">Descrição:</div>
+                <div class="info-value info-multiline">{{DESCRIPTION}}</div>
+            </div>
+
+            <div class="form-section-title">Dados do Cliente</div>
+            <div class="info-item">
+                <div class="info-label">Cliente:</div>
+                <div class="info-value">{{CLIENT_NAME}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">CPF/CNPJ:</div>
+                <div class="info-value">{{CPF_CNPJ}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Matrícula:</div>
+                <div class="info-value">{{MATRICULA}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Hidrômetro:</div>
+                <div class="info-value">{{HIDROMETRO}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Logradouro:</div>
+                <div class="info-value">{{LOGRADOURO}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Número:</div>
+                <div class="info-value">{{NUMERO}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Telefone:</div>
+                <div class="info-value">{{TELEFONE}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Bairro:</div>
+                <div class="info-value">{{BAIRRO}}</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Município:</div>
+                <div class="info-value">{{CITY}}</div>
+            </div>
+            <div class="info-item" style="grid-column: 1 / -1;">
+                <div class="info-label">Referência:</div>
+                <div class="info-value">{{REFERENCIA}}</div>
+            </div>
+            <div class="info-item" style="grid-column: 1 / -1;">
+                <div class="info-label">Observações:</div>
+                <div class="info-value info-multiline">{{OBSERVACOES}}</div>
+            </div>
+
+            <div class="form-section-title">Veículo / Hodômetro</div>
+            <div class="info-item">
+                <div class="info-label">Veículo:</div>
+                <div class="info-value" style="border-bottom:1px solid #555; min-width:60mm;">&nbsp;</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Hodômetro inicial:</div>
+                <div class="info-value" style="border-bottom:1px solid #555; min-width:30mm;">&nbsp;</div>
+            </div>
+            <div class="info-item">
+                <div class="info-label">Hodômetro final:</div>
+                <div class="info-value" style="border-bottom:1px solid #555; min-width:30mm;">&nbsp;</div>
+            </div>
+
+            <div style="grid-column: 1 / -1;">
+                <table class="manual-table">
+                    <thead>
+                        <tr>
+                            <th colspan="3" class="th-center">SERVIÇO EXECUTADO</th>
+                            <th class="th-center">Data (Início/Fim)</th>
+                            <th class="th-center">Hora</th>
+                        </tr>
+                        <tr>
+                            <th>Equipe</th>
+                            <th>Cod-Serviço</th>
+                            <th>Descrição do Serviço</th>
+                            <th></th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="data-row">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr class="hid-row">
+                            <td colspan="2" class="td-label"><strong>Hid-Instalado:</strong></td>
+                            <td class="td-label" style="text-align:center;"><strong>Cap:</strong></td>
+                            <td colspan="2" class="td-label" style="text-align:center;"><strong>Leitura:</strong></td>
+                        </tr>
+                        <tr class="hid-row">
+                            <td colspan="2" class="td-label"><strong>Hid-Instalado:</strong></td>
+                            <td class="td-label" style="text-align:center;"><strong>Cap:</strong></td>
+                            <td colspan="2" class="td-label" style="text-align:center;"><strong>Leitura:</strong></td>
+                        </tr>
+                        <tr>
+                            <td colspan="5" class="causas-title"><strong>CAUSAS DE VAZAMENTO NA REDE</strong></td>
+                        </tr>
+                        <tr class="causas-row">
+                            <td colspan="5">
+                                <div class="causas-grid">
+                                    <div class="causa-item"><span class="chk-box"></span> Corrosão</div>
+                                    <div class="causa-item"><span class="chk-box"></span> Qualidade do Material</div>
+                                    <div class="causa-item"><span class="chk-box"></span> Obra</div>
+                                    <div class="causa-item"><span class="chk-box"></span> Recobrimento Inadequado</div>
+                                    <div class="causa-item"><span class="chk-box"></span> Pressão Elevada</div>
+                                    <div class="causa-item"><span class="chk-box"></span> Tráfego Intenso</div>
+                                    <div class="causa-item"><span class="chk-box"></span> Causas Naturais</div>
+                                    <div class="causa-item"><span class="chk-box"></span> Maresia</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div style="grid-column: 1 / -1;">
+                <table class="manual-table">
+                    <tbody>
+                        <tr>
+                            <td colspan="2" class="th-center"><strong>INFORMAÇÕES DA DESCARGA</strong></td>
+                        </tr>
+                        <tr>
+                            <td style="width:30%;"><strong>Diâmetro:</strong></td>
+                            <td><strong>Local:</strong> &nbsp;&nbsp;
+                                <span class="opt">( &nbsp;)</span> Hidrante &nbsp;
+                                <span class="opt">( &nbsp;)</span> Hidrômetro / Ramal &nbsp;
+                                <span class="opt">( &nbsp;)</span> Descarga &nbsp;
+                                <span class="opt">( &nbsp;)</span> Rede
+                            </td>
+                        </tr>
+                        <tr class="input-row">
+                            <td colspan="2"><strong>Condição de água antes:</strong></td>
+                        </tr>
+                        <tr class="input-row">
+                            <td colspan="2"><strong>Condição de água depois:</strong></td>
+                        </tr>
+                        <tr class="input-row">
+                            <td colspan="2">
+                                <strong>Principal Causa da Obstrução:</strong> &nbsp;&nbsp;
+                                <span class="opt">( &nbsp;)</span> Areia &nbsp;
+                                <span class="opt">( &nbsp;)</span> Lixo &nbsp;
+                                <span class="opt">( &nbsp;)</span> Placa de Gordura &nbsp;
+                                <span class="opt">( &nbsp;)</span> Bucha &nbsp;
+                                <span class="opt">( &nbsp;)</span> Outros
+                            </td>
+                        </tr>
+                        <tr class="input-row">
+                            <td colspan="2">
+                                <strong>Serviços Complementares:</strong> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                <span class="opt">( &nbsp;)</span> Pavimentação &nbsp;&nbsp;
+                                <span class="opt">( &nbsp;)</span> Pedreiro
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" style="padding:0;">
+                                <table class="inner-table">
+                                    <thead>
+                                        <tr>
+                                            <th style="width:22%;">Comprimento</th>
+                                            <th style="width:22%;">Largura</th>
+                                            <th style="width:22%;">Profundidade</th>
+                                            <th rowspan="4" style="vertical-align:top; padding: 2mm;">
+                                                <div class="pav-grid">
+                                                    <div class="pav-col">
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span> Asfalto
+                                                        </div>
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span>
+                                                            Paralelepípedo</div>
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span>
+                                                            Reposição Aterro</div>
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span> PAV-S
+                                                        </div>
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span> Outros
+                                                        </div>
+                                                    </div>
+                                                    <div class="pav-col">
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span> Calçada
+                                                            cimento</div>
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span> Calçada
+                                                            P. Portuguesa</div>
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span>
+                                                            Retirada Entulho</div>
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span> Blokret
+                                                        </div>
+                                                        <div class="pav-item"><span class="opt">( &nbsp;)</span></div>
+                                                    </div>
+                                                </div>
+                                            </th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr class="dim-row">
+                                            <td>1</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="dim-row">
+                                            <td>2</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                        <tr class="dim-row">
+                                            <td>3</td>
+                                            <td></td>
+                                            <td></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2" class="croqui-note">
+                                <strong>CROQUI:</strong> Caso o local do vazamento não seja representado no croqui de
+                                origem (verso), favor fazer um novo croqui, com a representação de : Nome de ruas.
+                                Sentido Bairro; Local do vazamento; amarrações (Dist. testada do lote / profundidade);
+                                Diâmetro de material da rede; matrícula ou hidrômetro ou nº da residência do cliente em
+                                que a rede foi amarrada.
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer">
+            <div class="footer-left">
+                <div class="footer-item"><span class="footer-label">Autor:</span> {{AUTHOR}}</div>
+                <div class="footer-item"><span class="footer-label">Data:</span> {{DATE}}</div>
+            </div>
+            <div class="footer-center">
+                <div class="footer-item"><span class="footer-label">Projeção:</span> {{PROJECTION}}</div>
+                <div class="footer-item"><span class="footer-label">Datum:</span> {{DATUM}}</div>
+            </div>
+            <div class="footer-right">
+                <div class="footer-item"><span class="footer-label">Fonte:</span> {{DATA_SOURCE}}</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ================================================ -->
+    <!-- PÁGINA 2: Croqui rotacionado -90° em A4 portrait -->
+    <!-- ================================================ -->
+    <div class="page croqui-wrapper">
+        <!--
+            Estratégia de rotação:
+            - O conteúdo interno tem dimensões landscape: 297mm × 210mm
+            - transform-origin: top left (canto superior esquerdo do bloco)
+            - rotate(-90deg) gira no sentido anti-horário
+            - Após a rotação, o bloco fica com:
+                left = 0, top = 297mm (altura do A4 portrait)
+            - Isso encaixa perfeitamente dentro da folha portrait (210mm × 297mm)
+        -->
+        <div class="croqui-rotated">
+            <div class="header" style="grid-area: header;">
+                <div class="title-section">
+                    <h1 class="map-title">{{MAP_TITLE}}</h1>
+                    <p class="map-subtitle">{{MAP_SUBTITLE}}</p>
+                    <div class="ss-number">SS Nº: {{SS_NUMBER}}</div>
+                </div>
+                <div class="logo-section">
+                    <img src="https://www.cesan.com.br/wp-content/uploads/2022/12/logo.png" alt="Logo CESAN">
+                </div>
+            </div>
+
+            <div class="map-area">
+                <div class="map-container">
+                    {{MAP_CONTENT}}
+                </div>
+                <div class="coord-bottom-right">{{COORD_BOTTOM_RIGHT}}</div>
+                <div class="north-arrow">
+                    <svg viewBox="0 0 100 100">
+                        <polygon points="50,10 60,40 55,40 55,80 45,80 45,40 40,40" fill="#333" />
+                        <text x="50" y="95" text-anchor="middle" fill="#333" font-size="20" font-weight="bold">N</text>
+                    </svg>
+                </div>
+                <div class="scale-bar">
+                    <div class="scale-segments">
+                        <div class="scale-segment"></div>
+                        <div class="scale-segment"></div>
+                        <div class="scale-segment"></div>
+                        <div class="scale-segment"></div>
+                        <div class="scale-segment"></div>
+                    </div>
+                    <div class="scale-labels">
+                        <span>0</span>
+                        <span>{{SCALE_1}}</span>
+                        <span>{{SCALE_2}}</span>
+                        <span>{{SCALE_3}}</span>
+                        <span>{{SCALE_4}}</span>
+                        <span>{{SCALE_5}}</span>
+                    </div>
+                    <div style="text-align: center; margin-top: 1.5mm; font-size: 7pt;">Escala {{SCALE}}</div>
+                </div>
+            </div>
+
+            <div class="legend-area">
+                <div class="side-section">
+                    <div class="section-title">Dados de Origem</div>
+                    <div class="row">
+                        <div class="field"><label>SS:</label>
+                            <div class="value-underline">{{SS_NUMBER}}</div>
+                        </div>
+                        <div class="field"><label>Equipe:</label>
+                            <div class="value-underline"></div>
+                        </div>
+                        <div class="field" style="flex: 1 1 auto; min-width: 25mm;"><label>Bairro:</label>
+                            <div class="value-underline">{{BAIRRO}}</div>
+                        </div>
+                        <div class="field"><label>Data:</label>
+                            <div class="value-underline">{{DATE}}</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-section">
+                    <div class="section-title">Pavimentação</div>
+                    <div class="chk-group">
+                        <div class="chk-item"><span class="checkbox-box {{PAV_ASFALTO}}"></span> Asfalto</div>
+                        <div class="chk-item"><span class="checkbox-box {{PAV_BLOQUET}}"></span> Bloquet</div>
+                        <div class="chk-item"><span class="checkbox-box {{PAV_PARALELEPIPEDO}}"></span> Paralelepípedo
+                        </div>
+                        <div class="chk-item"><span class="checkbox-box {{PAV_PAVI_S}}"></span> PAVI-S</div>
+                        <div class="chk-item"><span class="checkbox-box {{PAV_SEM}}"></span> S. Pavimentação</div>
+                    </div>
+                </div>
+
+                <div class="side-section">
+                    <div class="section-title">Amarração</div>
+                    <div class="row">
+                        <div class="field"><label>Distância:</label>
+                            <div class="value-underline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        </div>
+                        <div class="field"><label>Prof.:</label>
+                            <div class="value-underline">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        </div>
+                        <div class="field" style="flex: 1 1 auto; min-width: 25mm;"><label>Ref.:</label>
+                            <div class="value-underline">
+                                &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="side-section">
+                    <div class="section-title">Referência da Amarração</div>
+                    <div class="chk-group">
+                        <div class="chk-item"><span class="checkbox-box"></span> Meio Fio</div>
+                        <div class="chk-item"><span class="checkbox-box"></span> Poste</div>
+                        <div class="chk-item"><span class="checkbox-box"></span> Edificação</div>
+                        <div class="chk-item"><span class="checkbox-box"></span> Calçada</div>
+                    </div>
+                </div>
+
+                <div class="side-section">
+                    <div class="section-title">Diâmetro</div>
+                    <div class="row">
+                        <div class="diam-inline"><span>Ø</span><span
+                                class="diam-value">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span>mm</span></div>
+                        <div class="diam-inline"><span>DN:</span><span
+                                class="diam-value">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span></div>
+                    </div>
+                </div>
+
+                <div class="side-section">
+                    <div class="section-title">Material</div>
+                    <div class="chk-group">
+                        <div class="chk-item"><span class="checkbox-box {{MAT_ACO}}"></span> Aço</div>
+                        <div class="chk-item"><span class="checkbox-box {{MAT_PVC}}"></span> PVC</div>
+                        <div class="chk-item"><span class="checkbox-box {{MAT_DEFOFO}}"></span> DEFoFo</div>
+                        <div class="chk-item"><span class="checkbox-box {{MAT_FERRO_GALV}}"></span> Ferro Galvanizado
+                        </div>
+                        <div class="chk-item"><span class="checkbox-box {{MAT_FOFO}}"></span> FoFo</div>
+                    </div>
+                </div>
+
+                <div class="side-section">
+                    <div class="section-title">Conservação</div>
+                    <div class="chk-group">
+                        <div class="chk-item"><span class="checkbox-box {{CONS_BOM}}"></span> Bom</div>
+                        <div class="chk-item"><span class="checkbox-box {{CONS_REGULAR}}"></span> Regular</div>
+                        <div class="chk-item"><span class="checkbox-box {{CONS_RUIM}}"></span> Ruim</div>
+                    </div>
+                </div>
+
+                <div class="side-section">
+                    <h2 class="legend-title">LEGENDA</h2>
+                    <div class="legend-items">{{LEGEND_ITEMS}}</div>
+                </div>
+
+                <div class="side-section" style="flex: 1;">
+                    <div class="section-title">Observações</div>
+                    <div
+                        style="min-height: 15mm; border: 1px dashed #aaa; padding: 2mm; font-size: 7.5pt; color: #333; height: calc(100% - 10mm);">
+                        {{OBSERVACOES}}</div>
+                </div>
+            </div>
+
+            <div class="footer" style="grid-area: footer;">
+                <div class="footer-left">
+                    <div class="footer-item"><span class="footer-label">Autor:</span> {{AUTHOR}}</div>
+                    <div class="footer-item"><span class="footer-label">Data:</span> {{DATE}}</div>
+                </div>
+                <div class="footer-center">
+                    <div class="footer-item"><span class="footer-label">Projeção:</span> {{PROJECTION}}</div>
+                    <div class="footer-item"><span class="footer-label">Datum:</span> {{DATUM}}</div>
+                </div>
+                <div class="footer-right">
+                    <div class="footer-item"><span class="footer-label">Fonte:</span> {{DATA_SOURCE}}</div>
+                    <div class="footer-item"><span class="footer-label">Escala:</span> {{SCALE}}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+
+</html>

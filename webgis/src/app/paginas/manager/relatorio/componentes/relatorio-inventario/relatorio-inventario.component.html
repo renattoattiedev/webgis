@@ -1,0 +1,85 @@
+<div class="ri-wrapper">
+
+  <div class="ri-header">
+    <span class="ri-title">Inventário de Camadas</span>
+    <div class="ri-filters">
+      <select [(ngModel)]="statusFiltro" (change)="carregar(); page = 1" class="ri-select">
+        <option value="">Todas</option>
+        <option value="true">Ativas</option>
+        <option value="false">Inativas</option>
+      </select>
+    </div>
+  </div>
+
+  <div *ngIf="loading" class="ri-loading">Carregando...</div>
+
+  <ng-container *ngIf="!loading && data">
+
+    <div class="ri-kpis">
+      <div class="ri-kpi ri-kpi--green">
+        <div class="ri-kpi-label">Vetoriais ativas</div>
+        <div class="ri-kpi-value">{{ data.kpis.ativas }}</div>
+      </div>
+      <div class="ri-kpi ri-kpi--red">
+        <div class="ri-kpi-label">Vetoriais inativas</div>
+        <div class="ri-kpi-value">{{ data.kpis.inativas }}</div>
+      </div>
+      <div class="ri-kpi ri-kpi--blue">
+        <div class="ri-kpi-label">Camadas raster</div>
+        <div class="ri-kpi-value">{{ data.kpis.raster }}</div>
+      </div>
+      <div class="ri-kpi ri-kpi--amber">
+        <div class="ri-kpi-label">Sem atributos</div>
+        <div class="ri-kpi-value">{{ data.kpis.semAtributos }}</div>
+      </div>
+    </div>
+
+    <div class="ri-charts">
+      <div class="ri-chart-card">
+        <div class="ri-chart-title">Distribuição por tema</div>
+        <div #donutEl></div>
+      </div>
+      <div class="ri-chart-card ri-chart-card--wide">
+        <div class="ri-chart-title">Camadas por nível de compartilhamento</div>
+        <div #barHEl></div>
+      </div>
+    </div>
+
+    <div class="ri-table-card">
+      <div class="ri-table-title">Inventário completo</div>
+      <table class="ri-table">
+        <thead>
+          <tr>
+            <th (click)="sort('nome')">Nome {{ sortCol === 'nome' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</th>
+            <th (click)="sort('grupo')">Grupo {{ sortCol === 'grupo' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</th>
+            <th (click)="sort('tema')">Tema {{ sortCol === 'tema' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</th>
+            <th>Compartilhamento</th>
+            <th class="num" (click)="sort('totalAtributos')">Atributos {{ sortCol === 'totalAtributos' ? (sortDir === 'asc' ? '↑' : '↓') : '↕' }}</th>
+            <th>Ativa</th>
+            <th>Criada em</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let row of tabelaPaginada">
+            <td>{{ row.nome }}</td>
+            <td class="muted">{{ row.grupo }}</td>
+            <td class="muted">{{ row.tema }}</td>
+            <td class="muted">{{ row.compartilhamento }}</td>
+            <td class="num">{{ row.totalAtributos }}</td>
+            <td><span class="badge" [class.badge--on]="row.ativa">{{ row.ativa ? 'Sim' : 'Não' }}</span></td>
+            <td class="muted">{{ row.criadaEm | date:'dd/MM/yyyy' }}</td>
+          </tr>
+          <tr *ngIf="tabelaPaginada.length === 0">
+            <td colspan="7" class="empty">Nenhuma camada encontrada</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="ri-pagination" *ngIf="totalPages > 1">
+        <button (click)="page = page - 1" [disabled]="page === 1">‹</button>
+        <span>{{ page }} / {{ totalPages }}</span>
+        <button (click)="page = page + 1" [disabled]="page === totalPages">›</button>
+      </div>
+    </div>
+
+  </ng-container>
+</div>

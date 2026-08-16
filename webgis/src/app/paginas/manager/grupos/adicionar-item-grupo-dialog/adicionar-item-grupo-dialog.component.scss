@@ -1,0 +1,72 @@
+// Estilos compartilhados em src/styles/_dialog-base.scss
+
+// ── Tokens locais (espelham _dialog-base.scss) ──────────────────────────────
+$brand:      #01499B;
+$brand-tint2: #dbe7f6;
+$ink:        #0b2545;
+$muted:      #7b8aa3;
+$line:       #e6ecf5;
+$line-soft:  #f3f6fb;
+$danger:     #dc2626;
+
+.idedlg-busca {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid $line;
+  border-radius: 8px;
+  margin-bottom: 12px;
+  box-sizing: border-box;
+  font-family: inherit;
+  font-size: 13px;
+  color: $ink;
+  outline: none;
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &::placeholder { color: $muted; }
+  &:hover { border-color: $brand-tint2; }
+  &:focus {
+    border-color: $brand;
+    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.12);
+  }
+}
+
+.idedlg-lista {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.idedlg-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background: $line-soft;
+  }
+
+  &:focus-visible {
+    outline: 2px solid $brand;
+    outline-offset: -2px;
+  }
+}
+
+.idedlg-item-tipo {
+  font-size: 11px;
+  text-transform: uppercase;
+  color: $muted;
+}
+
+.idedlg-item-loading,
+.idedlg-erro {
+  padding: 20px 0;
+  text-align: center;
+  color: $muted;
+}
+
+.idedlg-erro {
+  color: $danger;
+}

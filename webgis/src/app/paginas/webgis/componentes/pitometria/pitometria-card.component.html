@@ -1,0 +1,194 @@
+<div class="pitometria-container">
+  <div
+    #draggableWindow
+    class="pitometria-card"
+    [class.minimized]="isMinimized"
+    [class.dragging]="isDragging"
+    [ngStyle]="getWindowStyle()"
+  >
+    <!-- Header -->
+    <div *ngIf="!isMinimized"
+      class="pitometria-header"
+      (mousedown)="onHeaderMouseDown($event)"
+    >
+      <div class="title-wrap">
+        <mat-icon>water_drop</mat-icon>
+        <span>Pitometria</span>
+      </div>
+
+      <div class="window-controls">
+        <button type="button" class="cep-icon-btn no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); minimizeWindow()"
+          matTooltip="Minimizar">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button type="button" class="cep-icon-btn cep-icon-btn--close no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); fechado.emit()"
+          matTooltip="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Beacon (minimizado) -->
+    <div class="win-beacon" *ngIf="isMinimized" (click)="maximizeWindow()">
+      <div class="beacon-icon-wrap"><mat-icon>water</mat-icon></div>
+      <span class="beacon-label">Pitometria</span>
+    </div>
+
+    <!-- Body -->
+    <div class="window-content" *ngIf="!isMinimized">
+
+      <!-- ADICIONAR PONTO -->
+      <div class="section-label">Adicionar Ponto</div>
+      <div class="tipo-selector">
+        <button type="button" class="tipo-btn no-drag"
+          [class.active]="tipoSelecionado === 'VAZAO'"
+          (mousedown)="$event.stopPropagation()"
+          (click)="selecionarTipo('VAZAO')"
+          matTooltip="Clique no mapa para adicionar medição de vazão">
+          <mat-icon>waves</mat-icon>
+          Vazão
+        </button>
+        <button type="button" class="tipo-btn no-drag"
+          [class.active]="tipoSelecionado === 'PRESSAO'"
+          (mousedown)="$event.stopPropagation()"
+          (click)="selecionarTipo('PRESSAO')"
+          matTooltip="Clique no mapa para adicionar medição de pressão">
+          <mat-icon>speed</mat-icon>
+          Pressão
+        </button>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- MOVER PONTO -->
+      <div class="section-label">Mover Ponto</div>
+      <button type="button" class="mover-btn no-drag"
+        [class.mover-ativo]="moverEstado !== 'off'"
+        (mousedown)="$event.stopPropagation()"
+        (click)="moverEstado === 'off' ? ativarModoMover() : cancelarMover()"
+        [matTooltip]="moverEstado === 'off' ? 'Mover um ponto existente' : 'Cancelar modo mover'">
+        <mat-icon>open_with</mat-icon>
+        Mover
+      </button>
+
+      <div class="divider"></div>
+
+      <!-- Instrução contextual -->
+      <div class="instrucao" *ngIf="tipoSelecionado && moverEstado === 'off'">
+        <mat-icon>touch_app</mat-icon>
+        <span>Clique no mapa para cadastrar</span>
+      </div>
+
+      <div class="instrucao instrucao-mover" *ngIf="moverEstado === 'select_feature'">
+        <mat-icon>ads_click</mat-icon>
+        <span>Clique sobre o ponto que deseja mover</span>
+        <mat-spinner *ngIf="moverCarregando" diameter="12" class="mover-spinner"></mat-spinner>
+      </div>
+
+      <div class="instrucao instrucao-destino" *ngIf="moverEstado === 'select_position'">
+        <mat-icon>place</mat-icon>
+        <span>Agora clique no local de destino</span>
+        <mat-spinner *ngIf="moverCarregando" diameter="12" class="mover-spinner"></mat-spinner>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- CONTAGEM -->
+      <div class="section-label">Contagem</div>
+      <div class="legenda">
+        <div class="legenda-item">
+          <span class="legenda-icone pressao"></span>
+          <span class="legenda-texto">Vazão</span>
+          <span class="legenda-count">{{ contagem.totalVazao }}</span>
+        </div>
+        <div class="legenda-item">
+          <span class="legenda-icone vazao"></span>
+          <span class="legenda-texto">Pressão</span>
+          <span class="legenda-count">{{ contagem.totalPressao }}</span>
+        </div>
+        <div class="legenda-total">
+          Total: <strong>{{ contagem.total }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Tooltip hover (OL Overlay) — sempre no DOM, visibilidade controlada pelo overlay position -->
+  <div #hoverTooltip class="hover-tooltip">
+    <mat-icon class="hover-icon">mouse</mat-icon>
+    <span>Clique para editar</span>
+  </div>
+
+  <!-- Popup OL ancorado no mapa -->
+  <div #pitometriaPopup class="pitometria-popup" [style.display]="popupVisivel ? 'block' : 'none'">
+    <div class="popup-inner">
+      <div class="popup-header">
+        <strong>{{ popupModo === 'cadastro' ? 'Nova Medição' : 'Editar Medição' }}</strong>
+        <button type="button" class="popup-close" (click)="fecharPopup()" aria-label="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+
+      <div class="popup-body">
+        <div class="popup-loading" *ngIf="popupCarregando">
+          <mat-spinner diameter="32"></mat-spinner>
+        </div>
+
+        <ng-container *ngIf="!popupCarregando">
+          <mat-form-field appearance="outline" class="popup-field" [class.has-error]="formErros.codigoSimp">
+            <mat-label>Código SIMP</mat-label>
+            <input matInput [(ngModel)]="form.codigoSimp" maxlength="50" (input)="formErros.codigoSimp = false" />
+            <mat-hint *ngIf="formErros.codigoSimp" class="field-error-hint">Campo obrigatório</mat-hint>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="popup-field" [class.has-error]="formErros.matricula">
+            <mat-label>Matrícula</mat-label>
+            <input matInput [(ngModel)]="form.matricula" maxlength="50" (input)="formErros.matricula = false" />
+            <mat-hint *ngIf="formErros.matricula" class="field-error-hint">Campo obrigatório</mat-hint>
+          </mat-form-field>
+
+          <div class="field-group">
+            <span class="field-label">Tipo</span>
+            <div class="select-wrap">
+              <mat-select [(ngModel)]="form.tipo" panelClass="webgis-select-panel">
+                <mat-option value="VAZAO">Vazão</mat-option>
+                <mat-option value="PRESSAO">Pressão</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          <div class="confirmar-exclusao" *ngIf="confirmarExclusao">
+            <mat-icon color="warn">warning</mat-icon>
+            <span>Confirmar exclusão?</span>
+          </div>
+        </ng-container>
+      </div>
+
+      <div class="popup-actions" *ngIf="!popupCarregando">
+        <ng-container *ngIf="!confirmarExclusao">
+          <button mat-stroked-button (click)="fecharPopup()">Cancelar</button>
+          <button *ngIf="popupModo === 'edicao'" mat-stroked-button color="warn" (click)="excluir()">
+            <mat-icon>delete</mat-icon>
+            Excluir
+          </button>
+          <button mat-raised-button color="primary" (click)="salvar()">
+            <mat-icon>save</mat-icon>
+            Salvar
+          </button>
+        </ng-container>
+
+        <ng-container *ngIf="confirmarExclusao">
+          <button mat-stroked-button (click)="cancelarExclusao()">Não</button>
+          <button mat-raised-button color="warn" (click)="excluir()">
+            <mat-icon>delete_forever</mat-icon>
+            Sim, excluir
+          </button>
+        </ng-container>
+      </div>
+    </div>
+  </div>
+</div>

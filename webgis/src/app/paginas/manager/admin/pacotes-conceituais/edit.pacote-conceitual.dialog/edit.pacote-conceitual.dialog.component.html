@@ -1,0 +1,119 @@
+<form [formGroup]="editForm" class="idedlg">
+
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Editar <em>pacote conceitual</em></h2>
+        <p class="idedlg-sub">Atualize a conexão ao banco de dados</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+
+      <div *ngIf="isLoading" style="display:flex; align-items:center; justify-content:center; flex-direction:column; gap:12px; padding:48px">
+        <mat-spinner diameter="32"></mat-spinner>
+        <span style="font-size:13px; color:#5b6b85">Carregando dados seguros…</span>
+      </div>
+
+      <div *ngIf="!isLoading && isAdmin && pacoteData" class="idedlg-grid">
+
+        <div class="idedlg-col">
+          <div class="idedlg-section-title">Identificação</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nome do pacote</mat-label>
+            <input matInput formControlName="nomePacoteConceitual" pattern="^[a-z0-9_]+$"
+                   placeholder="ex: sistema_producao">
+            <mat-hint>Apenas letras minúsculas, números e underscore</mat-hint>
+            <mat-error *ngIf="editForm.get('nomePacoteConceitual')?.hasError('required')">Nome é obrigatório</mat-error>
+            <mat-error *ngIf="editForm.get('nomePacoteConceitual')?.hasError('pattern')">Use apenas letras minúsculas, números e underscore</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Título do pacote</mat-label>
+            <input matInput formControlName="tituloPacoteConceitual" placeholder="ex: Sistema de Produção">
+            <mat-hint>Título amigável para exibição</mat-hint>
+            <mat-error *ngIf="editForm.get('tituloPacoteConceitual')?.hasError('required')">Título é obrigatório</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="idedlg-col">
+          <div class="idedlg-section-title">Conexão</div>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Host / servidor</mat-label>
+            <input matInput formControlName="host" placeholder="ex: localhost">
+        <mat-icon matSuffix matTooltip="Dado sensível">security</mat-icon>
+            <mat-hint *ngIf="showOriginalData && originalData">Original: {{ originalData.host }}</mat-hint>
+            <mat-error *ngIf="editForm.get('host')?.hasError('required')">Host é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Porta</mat-label>
+            <input matInput formControlName="port" pattern="^[0-9]+$" placeholder="ex: 5432">
+            <mat-hint *ngIf="showOriginalData && originalData">Original: {{ originalData.port }}</mat-hint>
+            <mat-error *ngIf="editForm.get('port')?.hasError('required')">Porta é obrigatória</mat-error>
+            <mat-error *ngIf="editForm.get('port')?.hasError('pattern')">Porta deve ser numérica</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Nome do banco</mat-label>
+            <input matInput formControlName="database" placeholder="ex: webgis_db">
+        <mat-icon matSuffix matTooltip="Dado sensível">security</mat-icon>
+            <mat-hint *ngIf="showOriginalData && originalData">Original: {{ originalData.database }}</mat-hint>
+            <mat-error *ngIf="editForm.get('database')?.hasError('required')">Nome do banco é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Esquema</mat-label>
+            <input matInput formControlName="schema" placeholder="ex: public">
+            <mat-hint *ngIf="showOriginalData && originalData">Original: {{ originalData.schema }}</mat-hint>
+            <mat-error *ngIf="editForm.get('schema')?.hasError('required')">Esquema é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Usuário</mat-label>
+            <input matInput formControlName="user" autocomplete="off" placeholder="ex: webgis_user">
+        <mat-icon matSuffix matTooltip="Dado sensível">security</mat-icon>
+            <mat-hint *ngIf="showOriginalData && originalData">Original: {{ originalData.user }}</mat-hint>
+            <mat-error *ngIf="editForm.get('user')?.hasError('required')">Usuário é obrigatório</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Senha</mat-label>
+            <input matInput formControlName="password" [type]="showPassword ? 'text' : 'password'"
+                   autocomplete="new-password" placeholder="Nova senha">
+            <button mat-icon-button matSuffix type="button"
+                    (click)="togglePasswordVisibility()" matTooltip="Mostrar/Ocultar">
+              <mat-icon>{{showPassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+            <mat-hint *ngIf="showOriginalData">Original: ••••••••</mat-hint>
+            <mat-error *ngIf="editForm.get('password')?.hasError('required')">Senha é obrigatória</mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div mat-dialog-actions *ngIf="!isLoading">
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" (click)="onClose()" type="button" [disabled]="isSubmitting">Cancelar</button>
+      <button class="idedlg-btn idedlg-btn-primary" (click)="submitPacote()" type="button"
+              [disabled]="!editForm.valid || !hasDataChanged || !isAdmin || isSubmitting"
+              *ngIf="isAdmin">
+        <mat-spinner *ngIf="isSubmitting" diameter="14"></mat-spinner>
+        <svg *ngIf="!isSubmitting" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+        {{ isSubmitting ? 'Salvando…' : 'Salvar alterações' }}
+      </button>
+    </footer>
+  </div>
+</form>

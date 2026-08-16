@@ -1,0 +1,39 @@
+$background-color-semi-transparent: rgba(255, 255, 255, 0.8);
+$primary-color: #4DA9E7;
+
+.coordinates {
+  position: absolute;
+  bottom: 10px;
+  left: 50%;
+  background-color: $background-color-semi-transparent;
+  padding: 5px;
+  border-radius: 5px;
+  text-align: center;
+  z-index: 1000;
+  transform: translateX(-50%);
+  width: auto;
+}
+
+.olControlPanel {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  border: 0px;
+  z-index: 1000;
+  transform: translate(-50%, -50%);
+}
+
+.btn {
+  position: absolute;
+  top: 230px;
+  left: 10px;
+  padding: 1px 5px 0;
+  cursor: pointer;
+  z-index: 1000;
+  background-color: white;
+
+  &.active {
+    background-color: $primary-color;
+    color: white;
+  }
+}

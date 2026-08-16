@@ -1,0 +1,85 @@
+<app-grupo-detalhe
+  *ngIf="grupoAbertoId; else lista"
+  [grupoId]="grupoAbertoId!"
+  (voltar)="voltarDaPagina()">
+</app-grupo-detalhe>
+
+<ng-template #lista>
+<div class="gp-page">
+
+  <!-- Sidebar de temas -->
+  <aside class="gp-filters">
+    <section class="gp-panel">
+      <div class="gp-panel-head"><span class="gp-panel-title">Temas</span></div>
+      <div class="gp-list">
+        <div class="gp-list-item"
+             [class.active]="!temaSelecionadoId"
+             (click)="selecionarTema('')">
+          <span class="gp-list-label">Todos</span>
+          <span class="gp-count">{{ grupos.length }}</span>
+        </div>
+        <div class="gp-list-item"
+             *ngFor="let tema of temas"
+             [class.active]="tema.id === temaSelecionadoId"
+             (click)="selecionarTema(tema.id)">
+          <span class="gp-list-label" [matTooltip]="tema.nome">{{ tema.nome }}</span>
+          <span class="gp-count">{{ tema.qtd }}</span>
+        </div>
+      </div>
+    </section>
+  </aside>
+
+  <!-- Conteúdo — reusa .ad-list (header/busca/grid de cards) de src/styles/_admin-list-base.scss -->
+  <section class="ad-list gp-main">
+    <div class="al-top">
+      <div class="al-top-left">
+        <h2 class="al-title">Grupos <em>da organização</em></h2>
+        <span class="al-count">{{ gruposFiltrados.length }} grupos</span>
+      </div>
+      <div class="al-search">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="11" cy="11" r="7"/>
+          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        <input placeholder="Buscar grupos…" [(ngModel)]="filtroNome"/>
+      </div>
+    </div>
+
+    <div class="gp-empty" *ngIf="!carregando && gruposFiltrados.length === 0">
+      Nenhum grupo visível para você.
+    </div>
+
+    <div class="al-cards-grid" *ngIf="!carregando">
+      <div class="al-card gp-card" *ngFor="let grupo of gruposFiltrados" (click)="abrirGrupo(grupo)">
+        <div class="al-card-head">
+          <app-grupo-avatar-badge
+            [grupos]="[{ id: grupo.id, nome: grupo.nome, sigla: grupo.sigla }]"
+          ></app-grupo-avatar-badge>
+          <div class="gp-card-titles">
+            <h3 class="al-card-title" [matTooltip]="grupo.nome">{{ grupo.nome }}</h3>
+            <p class="al-card-desc">{{ grupo.temaNome }}</p>
+          </div>
+        </div>
+        <div class="gp-card-stats">
+          <span>{{ labelItens(grupo) }}</span>
+          <span>{{ grupo.qtdMembros }} membros</span>
+        </div>
+        <div class="gp-card-foot">
+          <span class="gp-pill">{{ labelVisibilidade(grupo.visibilidade) }}</span>
+
+          <span class="gp-pill gp-pill--member" *ngIf="grupo.membership === 'dono'">Dono</span>
+          <span class="gp-pill gp-pill--member" *ngIf="grupo.membership === 'membro'">Membro ✓</span>
+          <span class="gp-pill" *ngIf="grupo.membership === 'pendente'">Solicitação enviada</span>
+
+          <button class="gp-btn"
+                  *ngIf="!grupo.membership && grupo.politicaParticipacao === 'aberto'"
+                  (click)="participar(grupo, $event)">Participar</button>
+          <button class="gp-btn"
+                  *ngIf="!grupo.membership && grupo.politicaParticipacao === 'solicitacao'"
+                  (click)="solicitar(grupo, $event)">Solicitar participação</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+</ng-template>

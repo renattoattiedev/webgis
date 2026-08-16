@@ -1,0 +1,170 @@
+<!-- ── Wrapper inline (mesmo padrão do imprimir-croqui) ───────────────────── -->
+<div class="cfg">
+
+  <header class="cfg-head">
+    <div class="cfg-head-left">
+      <div class="cfg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0L12 2.69z"/>
+        </svg>
+      </div>
+      <div class="cfg-head-text">
+        <h2 class="cfg-title">Pitometria</h2>
+        <p class="cfg-sub">Camada WMS no GeoServer e camadas de consulta espacial</p>
+      </div>
+    </div>
+    <div class="cfg-head-right">
+      <mat-slide-toggle [(ngModel)]="habilitado" (ngModelChange)="onHabilitadoChange($event)">Habilitado</mat-slide-toggle>
+      <button class="cfg-close" (click)="fecharConfig()" type="button" aria-label="Fechar">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <div class="cfg-body">
+
+    <!-- Camada WMS no GeoServer -->
+    <section class="cfg-section">
+      <header class="cfg-section-head">
+        <div>
+          <h3 class="cfg-section-title">Camada WMS no <em>GeoServer</em></h3>
+          <p class="cfg-section-sub">Camada publicada que exibe os pontos de pitometria no mapa.</p>
+        </div>
+      </header>
+
+      <div class="cfg-card">
+        <div class="cfg-grid-2">
+          <mat-form-field appearance="outline">
+            <mat-label>Camada</mat-label>
+            <mat-select [(ngModel)]="camadaAlvoId" (ngModelChange)="onCamadaChange($event)">
+              <mat-option [value]="null">— Nenhuma —</mat-option>
+              <mat-option *ngFor="let c of camadasDisponiveis" [value]="c.id" [disabled]="!isCamadaCompativel(c.id)">
+                <span [class.cfg-opt-invalid]="!isCamadaCompativel(c.id)">{{ c.tituloCamada }}</span>
+                <span *ngIf="!isCamadaCompativel(c.id)"> · incompatível</span>
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="cfg-chips" *ngIf="camadaAlvoNome">
+          <span class="cfg-chip cfg-chip--mono">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+            {{ camadaAlvoNome }}
+          </span>
+        </div>
+
+        <div class="cfg-status cfg-status--ok" *ngIf="camadaAlvoId && !erroCompatibilidade">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          Camada compatível com o CRUD de Pitometria.
+        </div>
+        <div class="cfg-status cfg-status--err" *ngIf="erroCompatibilidade">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          {{ erroCompatibilidade }}
+        </div>
+        <div class="cfg-status cfg-status--warn" *ngIf="erroSemCamada">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+          {{ erroSemCamada }}
+        </div>
+      </div>
+    </section>
+
+    <!-- Consulta Espacial -->
+    <section class="cfg-section">
+      <header class="cfg-section-head">
+        <div>
+          <h3 class="cfg-section-title">Consulta espacial · <em>polígonos</em></h3>
+          <p class="cfg-section-sub">Camadas usadas como polígono de seleção na consulta espacial.</p>
+        </div>
+      </header>
+
+      <div class="cfg-add-row">
+        <mat-form-field appearance="outline" class="cfg-add-select">
+          <mat-label>Selecionar camada</mat-label>
+          <mat-select [(ngModel)]="camadaEspacialSelecionadaId">
+            <mat-option *ngFor="let c of camadasDisponiveis" [value]="c.id">{{ c.tituloCamada }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <button class="cfg-btn-primary" type="button"
+                [disabled]="!camadaEspacialSelecionadaId"
+                (click)="adicionarCamadaEspacial()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Adicionar
+        </button>
+      </div>
+
+      <div class="cfg-empty" *ngIf="camadasEspaciais.length === 0">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><polygon points="12 2 2 7 12 12 22 7 12 2"/></svg>
+        Nenhuma camada configurada. Selecione e clique em Adicionar.
+      </div>
+
+      <div class="cfg-spatial-list">
+        <div *ngFor="let item of camadasEspaciais" class="cfg-spatial-item">
+          <div class="cfg-spatial-row">
+            <svg class="cfg-spatial-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="18" height="18" rx="2"/>
+            </svg>
+            <div class="cfg-spatial-text">
+              <span class="cfg-spatial-label">{{ item.label }}</span>
+              <span class="cfg-spatial-sub">
+                {{ item.workspace }}:{{ item.nomeCamada }}
+                <ng-container *ngIf="item.campo">
+                  · campo <strong>{{ item.campo }}</strong>
+                </ng-container>
+                <span *ngIf="!item.campo" class="cfg-spatial-warn">· campo não configurado</span>
+              </span>
+            </div>
+            <button class="cfg-icon-btn" [class.active]="camadaEdicaoId === item.camadaId"
+                    (click)="abrirEdicaoCampo(item.camadaId)" type="button" matTooltip="Configurar campo">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            </button>
+            <button class="cfg-icon-btn cfg-icon-btn--danger"
+                    (click)="removerCamadaEspacial(item.camadaId)" type="button" matTooltip="Remover">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+            </button>
+          </div>
+
+          <div class="cfg-spatial-edit" *ngIf="camadaEdicaoId === item.camadaId">
+            <span class="cfg-spatial-edit-title">Campo de seleção (valores do combobox)</span>
+
+            <div class="cfg-loading" *ngIf="carregandoAtributos">
+              <mat-spinner diameter="16"></mat-spinner>
+              <span>Carregando atributos…</span>
+            </div>
+
+            <div class="cfg-spatial-edit-row" *ngIf="!carregandoAtributos">
+              <mat-form-field appearance="outline">
+                <mat-label>Atributo</mat-label>
+                <mat-select [(ngModel)]="campoEditando">
+                  <mat-option *ngFor="let a of getAtributosCamada(item.camadaId)" [value]="a.nomeAtributo">
+                    {{ a.label || a.nomeAtributo }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button class="cfg-btn-primary" type="button"
+                      [disabled]="!campoEditando"
+                      (click)="salvarCampoCamada(item.camadaId)">
+                Salvar campo
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cfg-hint">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/></svg>
+        Camadas sem geometria de polígono não serão usáveis para seleção espacial.
+      </div>
+    </section>
+
+  </div>
+
+  <footer class="cfg-foot">
+    <button class="cfg-btn-ghost" (click)="fecharConfig()" type="button">Cancelar</button>
+    <button class="cfg-btn-primary" (click)="salvar()" [disabled]="temErroBloqueante()" type="button">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Salvar configuração
+    </button>
+  </footer>
+</div>

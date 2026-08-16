@@ -1,0 +1,298 @@
+<!-- ── Navbar ─────────────────────────────────────────────────────────────── -->
+<nav class="idx-nav">
+  <div class="idx-nav-left">
+    <div class="idx-nav-logo">GISCESAN</div>
+    <div class="idx-nav-divider"></div>
+    <span class="idx-nav-title">Repositório de Dados Espaciais</span>
+    <span class="idx-nav-tag">IDE</span>
+  </div>
+
+  <div class="idx-nav-right">
+    <!-- Logado: pill com avatar + nome + dropdown -->
+    <div class="nav-user" *ngIf="isLoggedIn()" (click)="$event.stopPropagation(); toggleMenu()">
+      <div class="nav-avatar">{{ iniciais || 'U' }}</div>
+      <span class="nav-user-name">{{ nomeUsuario }}</span>
+      <svg class="nav-chevron" [class.open]="menuAberto"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+
+      <div class="nav-dropdown" *ngIf="menuAberto" (click)="$event.stopPropagation()">
+        <div class="nav-dropdown-header">{{ nomeUsuario }}</div>
+        <button class="nav-dropdown-item" (click)="mostrarPerfil()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+            <circle cx="12" cy="7" r="4"/>
+          </svg>
+          Meu Perfil
+        </button>
+        <button class="nav-dropdown-item" *ngIf="isAdminOrPublisher()"
+                (click)="goToPage('manager')">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+          </svg>
+          Painel Administrativo
+        </button>
+        <div class="nav-dropdown-divider"></div>
+        <button class="nav-dropdown-item nav-dropdown-item--danger" (click)="logout()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+            <polyline points="16 17 21 12 16 7"/>
+            <line x1="21" y1="12" x2="9" y2="12"/>
+          </svg>
+          Sair
+        </button>
+      </div>
+    </div>
+
+    <!-- Não logado: botão simples -->
+    <button class="nav-login-btn" *ngIf="!isLoggedIn()" (click)="goToPage('login')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+        <polyline points="10 17 15 12 10 7"/>
+        <line x1="15" y1="12" x2="3" y2="12"/>
+      </svg>
+      Entrar
+    </button>
+  </div>
+</nav>
+
+<!-- ── Hero ──────────────────────────────────────────────────────────────── -->
+<section class="idx-hero">
+  <!-- Fundo decorativo: retículo topográfico + halo + constelação -->
+  <svg class="idx-hero-bg" viewBox="0 0 1440 680"
+       preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="idxHalo" cx="80%" cy="20%" r="55%">
+        <stop offset="0%"   stop-color="rgba(120,170,255,0.25)"/>
+        <stop offset="100%" stop-color="rgba(120,170,255,0)"/>
+      </radialGradient>
+    </defs>
+    <rect width="1440" height="680" fill="url(#idxHalo)"/>
+
+    <!-- topográfico -->
+    <g fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1">
+      <ellipse cx="1160" cy="140" rx="60"  ry="50"/>
+      <ellipse cx="1162" cy="142" rx="92"  ry="76"/>
+      <ellipse cx="1164" cy="144" rx="124" ry="102"/>
+      <ellipse cx="1166" cy="146" rx="156" ry="128"/>
+      <ellipse cx="1168" cy="148" rx="188" ry="154"/>
+      <ellipse cx="1170" cy="150" rx="220" ry="180"/>
+      <ellipse cx="1172" cy="152" rx="252" ry="206"/>
+      <ellipse cx="1174" cy="154" rx="284" ry="232"/>
+      <ellipse cx="1176" cy="156" rx="316" ry="258"/>
+      <ellipse cx="1178" cy="158" rx="348" ry="284"/>
+    </g>
+
+    <!-- grade horizontal sutil -->
+    <g stroke="rgba(255,255,255,0.03)" stroke-width="1">
+      <line x1="0" y1="75"  x2="1440" y2="75"/>
+      <line x1="0" y1="150" x2="1440" y2="150"/>
+      <line x1="0" y1="225" x2="1440" y2="225"/>
+      <line x1="0" y1="300" x2="1440" y2="300"/>
+      <line x1="0" y1="375" x2="1440" y2="375"/>
+      <line x1="0" y1="450" x2="1440" y2="450"/>
+      <line x1="0" y1="525" x2="1440" y2="525"/>
+    </g>
+
+    <!-- constelação de pontos -->
+    <g>
+      <circle cx="220" cy="440" r="3"  fill="rgba(180,210,255,0.85)"/>
+      <circle cx="220" cy="440" r="14" fill="none" stroke="rgba(180,210,255,0.2)"/>
+      <circle cx="340" cy="400" r="2.5" fill="rgba(180,210,255,0.7)"/>
+      <circle cx="510" cy="460" r="3"   fill="rgba(180,210,255,0.85)"/>
+      <circle cx="510" cy="460" r="14"  fill="none" stroke="rgba(180,210,255,0.2)"/>
+      <circle cx="680" cy="420" r="2.5" fill="rgba(180,210,255,0.7)"/>
+      <circle cx="180" cy="540" r="2.5" fill="rgba(180,210,255,0.7)"/>
+      <circle cx="420" cy="540" r="2.5" fill="rgba(180,210,255,0.7)"/>
+    </g>
+  </svg>
+
+  <div class="idx-hero-content">
+    <div class="idx-hero-eyebrow">
+      <span class="idx-hero-pulse"></span>
+      Plataforma operacional · v1.0
+    </div>
+    <h1 class="idx-hero-title">
+      A base geoespacial<br>
+      <span class="idx-hero-title-em">do saneamento</span> capixaba.
+    </h1>
+    <p class="idx-hero-sub">
+      Visualize, analise e gerencie os dados geoespaciais da CESAN em uma plataforma
+      unificada — temas, camadas e indicadores de todo o Espírito Santo.
+    </p>
+    <div class="idx-hero-actions">
+      <button class="idx-hero-cta" (click)="acessarModulo(modules[0])">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          <line x1="8" y1="2" x2="8" y2="18"/>
+          <line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+        Acessar o WebGIS
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </button>
+      <button class="idx-hero-cta-ghost">Ver documentação</button>
+    </div>
+  </div>
+
+  <!-- Faixa de indicadores -->
+  <div class="idx-hero-stats">
+    <div class="idx-hero-stat" *ngFor="let i of indicadores; let last = last"
+         [class.is-last]="last">
+      <div class="idx-hero-stat-num">{{ i.valor }}</div>
+      <div class="idx-hero-stat-label">{{ i.label }}</div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Módulos ───────────────────────────────────────────────────────────── -->
+<section class="idx-modules">
+  <div class="idx-modules-grid">
+
+    <!-- WebGIS -->
+    <div class="idx-module idx-module--active" (click)="acessarModulo(modules[0])">
+      <div class="idx-module-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          <line x1="8" y1="2" x2="8" y2="18"/>
+          <line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+      </div>
+      <div class="idx-module-name">WebGIS</div>
+      <div class="idx-module-desc">Visualização interativa de camadas e dados geoespaciais</div>
+      <div class="idx-module-link">
+        Abrir
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="5" y1="12" x2="19" y2="12"/>
+          <polyline points="12 5 19 12 12 19"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Dados -->
+    <div class="idx-module idx-module--active" (click)="goToPage('dados')">
+      <div class="idx-module-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/>
+          <path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        </svg>
+      </div>
+      <div class="idx-module-name">Dados</div>
+      <div class="idx-module-desc">Download de conjuntos de dados geoespaciais</div>
+      <div class="idx-module-link">
+        Acessar
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M5 12h14M12 5l7 7-7 7"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Metadados -->
+    <div class="idx-module idx-module--soon">
+      <div class="idx-module-badge">Em breve</div>
+      <div class="idx-module-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+          <polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/>
+          <line x1="16" y1="17" x2="8" y2="17"/>
+          <polyline points="10 9 9 9 8 9"/>
+        </svg>
+      </div>
+      <div class="idx-module-name">Metadados</div>
+      <div class="idx-module-desc">Informações detalhadas sobre os dados disponíveis</div>
+    </div>
+
+    <!-- Dashboards -->
+    <div class="idx-module idx-module--soon">
+      <div class="idx-module-badge">Em breve</div>
+      <div class="idx-module-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <line x1="18" y1="20" x2="18" y2="10"/>
+          <line x1="12" y1="20" x2="12" y2="4"/>
+          <line x1="6"  y1="20" x2="6"  y2="14"/>
+          <line x1="2"  y1="20" x2="22" y2="20"/>
+        </svg>
+      </div>
+      <div class="idx-module-name">Dashboards</div>
+      <div class="idx-module-desc">Painéis de indicadores e análises geoespaciais</div>
+    </div>
+
+    <!-- Aplicações -->
+    <div class="idx-module idx-module--soon">
+      <div class="idx-module-badge">Em breve</div>
+      <div class="idx-module-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+          <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+          <line x1="8" y1="21" x2="16" y2="21"/>
+          <line x1="12" y1="17" x2="12" y2="21"/>
+        </svg>
+      </div>
+      <div class="idx-module-name">Aplicações</div>
+      <div class="idx-module-desc">Apps desenvolvidos pela CESAN para saneamento</div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── Temas ──────────────────────────────────────────────────────────────── -->
+<section class="idx-temas">
+  <div class="idx-section-header">
+    <div class="idx-section-header-text">
+      <div class="idx-section-label">Explorar</div>
+      <h2 class="idx-section-title">
+        Temas <span class="idx-section-title-em">disponíveis</span>
+      </h2>
+      <p class="idx-section-sub">
+        Categorias temáticas cadastradas no sistema, com seus grupos e camadas.
+      </p>
+    </div>
+    <button class="idx-section-action" (click)="goToPage('temas')">
+      Ver todos os temas
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="5" y1="12" x2="19" y2="12"/>
+        <polyline points="12 5 19 12 12 19"/>
+      </svg>
+    </button>
+  </div>
+  <app-tematicas></app-tematicas>
+</section>
+
+<!-- ── Footer ────────────────────────────────────────────────────────────── -->
+<footer class="idx-footer">
+  <div class="idx-footer-inner">
+    <span class="idx-footer-logo">CESAN</span>
+    <div class="idx-footer-divider"></div>
+    <span class="idx-footer-address">
+      Av. Gov. Bley, 186 · Ed. BEMGE, 3° Andar · Centro · Vitória, ES · CEP 29.010-150
+    </span>
+    <div class="idx-footer-spacer"></div>
+    <div class="idx-footer-links">
+      <a href="https://transparencia.sistemas.cesan.com.br/transparencia/" target="_blank">Transparência</a>
+      <a href="https://www.cesan.com.br/fale-com-a-cesan/" target="_blank">Fale com a CESAN</a>
+    </div>
+    <div class="idx-footer-social">
+      <a href="https://www.facebook.com/cesan.oficial" target="_blank" aria-label="Facebook">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/></svg>
+      </a>
+      <a href="https://www.instagram.com/cesan_oficial/" target="_blank" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+          <circle cx="12" cy="12" r="4"/>
+          <circle cx="17.5" cy="6.5" r="0.5" fill="currentColor"/>
+        </svg>
+      </a>
+      <a href="https://www.linkedin.com/company/cesan" target="_blank" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
+      </a>
+      <a href="https://www.youtube.com/@TVCesan" target="_blank" aria-label="YouTube">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.95-1.96C18.88 4 12 4 12 4s-6.88 0-8.59.46a2.78 2.78 0 0 0-1.95 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.41 19.6C5.12 20 12 20 12 20s6.88 0 8.59-.46a2.78 2.78 0 0 0 1.95-1.95A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75 15.02 15.5 12 9.75 8.98 9.75 15.02" fill="white"/></svg>
+      </a>
+    </div>
+  </div>
+</footer>

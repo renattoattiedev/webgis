@@ -1,0 +1,120 @@
+@mixin window(
+  $root: '.window-card',
+  $header: '.window-header',
+  $controls: '.window-controls',
+  $footer: '.window-footer',
+  $width: 800px,
+  $height: 650px,
+  $minW: 360px,
+  $minH: 42px,
+  $z: 1000,
+  $zDrag: 99999
+) {
+  #{$root} {
+    position: fixed;
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    box-shadow: 0 10px 24px rgba(0,0,0,.18);
+    width: $width;
+    height: $height;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: $z;
+
+    * { box-sizing: border-box; }
+  }
+
+  // Ajuste diretamente aqui para afetar todos os componentes
+  #{$root}.minimized {
+    width: $minW !important;
+    height: $minH !important; // 42px vem do parâmetro
+    border-radius: 10px !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,.18);
+    overflow: hidden;
+  }
+
+  #{$root}.dragging {
+    box-shadow: 0 14px 36px rgba(0,0,0,.28);
+    cursor: grabbing;
+    z-index: $zDrag;
+  }
+
+  #{$root} #{$header} {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    user-select: none;
+    cursor: grab;
+    background: #f7f7f9;
+    min-height: 52px;
+  }
+
+  #{$root} .title-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    color: #2f3a4a;
+  }
+
+  #{$root} #{$controls} {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  #{$root} .window-content {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    position: relative;
+  }
+
+  #{$root} #{$footer} {
+    padding: 10px 12px;
+    border-top: 2px solid #eaeaea;
+    background: #f7f7f9;
+  }
+
+  /* Estado minimizado: barra compacta com título e botão restaurar */
+  #{$root}.minimized #{$header} {
+    border-bottom: 0;
+    background: #fff;
+    min-height: $minH;
+    height: $minH;
+    padding: 6px 10px;
+  }
+
+  #{$root}.minimized .window-content,
+  #{$root}.minimized #{$footer} {
+    display: none !important;
+  }
+
+  #{$root}.minimized .title-wrap {
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  #{$root}.minimized .title-wrap .mat-icon {
+    font-size: 18px;
+    width: 18px; height: 18px;
+    color: #3f51b5;
+  }
+
+  #{$root}.minimized #{$controls} .mat-icon {
+    font-size: 16px;
+    width: 16px; height: 16px;
+  }
+
+  @media (max-width: 768px) {
+    #{$root}:not(.minimized) {
+      width: 95vw !important;
+      height: 85vh !important;
+    }
+  }
+}

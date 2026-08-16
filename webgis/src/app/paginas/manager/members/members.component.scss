@@ -1,0 +1,381 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Membros — IDE CESAN
+// Mesma identidade dos demais componentes (sidebar de filtros + tabela)
+// ─────────────────────────────────────────────────────────────────────────────
+
+$brand:        #01499B;
+$brand-mid:    #023775;
+$brand-tint:   #eef4fb;
+$brand-tint-2: #dbe7f6;
+$ink:          #0b2545;
+$ink-soft:     #5b6b85;
+$muted:        #7b8aa3;
+$line:         #e6ecf5;
+$line-soft:    #f0f4f9;
+$bg:           #f6f8fc;
+$danger:       #dc2626;
+$success:      #047857;
+
+$font-ui:    'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-serif: 'Instrument Serif', Georgia, serif;
+
+:host {
+  display: block;
+  background: $bg;
+  font-family: $font-ui;
+  color: $ink;
+}
+
+* { box-sizing: border-box; }
+
+// ── Layout ──────────────────────────────────────────────────────────────────
+.mb-page {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 20px;
+  padding: 20px 32px 40px;
+  min-height: calc(100vh - 60px - 53px);
+}
+
+// ── Sidebar ─────────────────────────────────────────────────────────────────
+.mb-filters {
+  display: flex; flex-direction: column; gap: 12px;
+  align-self: flex-start;
+  position: sticky; top: 134px;
+  max-height: calc(100vh - 134px - 20px);
+  overflow-y: auto;
+  padding-right: 4px;
+
+  &::-webkit-scrollbar { width: 6px; }
+  &::-webkit-scrollbar-thumb { background: $line; border-radius: 100px; }
+}
+
+.mb-panel {
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 14px;
+  padding: 16px 16px 14px;
+  box-shadow: 0 2px 8px rgba(11,37,69,0.04);
+}
+
+.mb-panel-head {
+  display: flex; align-items: center; margin-bottom: 12px;
+}
+
+.mb-panel-title {
+  font-size: 11px; font-weight: 700; letter-spacing: 1.8px;
+  text-transform: uppercase; color: $muted;
+}
+
+// Lista de perfis
+.mb-list {
+  display: flex; flex-direction: column; gap: 2px;
+  margin: 0 -4px;
+}
+
+.mb-list-item {
+  display: flex; align-items: center; gap: 10px;
+  padding: 8px 10px; border-radius: 8px;
+  font-size: 13px; color: $ink-soft;
+  cursor: pointer; user-select: none;
+  border: 1px solid transparent;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+
+  &:hover { background: $brand-tint; color: $ink; }
+  &.active {
+    background: $brand-tint; color: $brand; font-weight: 600;
+    border-color: $brand-tint-2;
+    .mb-count { background: $brand; color: #fff; }
+  }
+}
+
+.mb-list-label { flex: 1; }
+
+.mb-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 22px; height: 20px; padding: 0 6px;
+  border-radius: 100px;
+  background: $line-soft; color: $ink-soft;
+  font-size: 10.5px; font-weight: 700;
+  transition: background 0.12s, color 0.12s;
+}
+
+// Chips de período
+.mb-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.mb-chip {
+  background: #fff;
+  border: 1px solid $line;
+  color: $ink-soft;
+  font-family: inherit; font-size: 12px; font-weight: 500;
+  padding: 6px 11px; border-radius: 100px;
+  cursor: pointer;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &.active { background: $brand; color: #fff; border-color: $brand; font-weight: 600; }
+  &--all {
+    color: $brand; border-color: $brand-tint-2;
+    &.active { background: $brand; color: #fff; }
+  }
+}
+
+// Custom period picker
+.mb-custom-period { margin-top: 12px; display: flex; flex-direction: column; gap: 8px; }
+
+.mb-date-range {
+  width: 100%;
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
+  ::ng-deep .mdc-text-field--outlined {
+    background: #fff; border-radius: 9px;
+    --mdc-outlined-text-field-outline-color: #{$line};
+    --mdc-outlined-text-field-focus-outline-color: #{$brand};
+    --mdc-outlined-text-field-hover-outline-color: #{$brand-tint-2};
+  }
+  ::ng-deep .mat-mdc-text-field-wrapper { padding: 0 12px; }
+  ::ng-deep .mat-mdc-form-field-infix { padding: 8px 0; font-size: 12.5px; }
+}
+
+.mb-btn-primary {
+  background: $brand; color: #fff;
+  border: none; border-radius: 9px;
+  padding: 9px 14px;
+  font-family: inherit; font-size: 13px; font-weight: 600;
+  cursor: pointer; transition: background 0.15s;
+  &:hover { background: $brand-mid; }
+}
+
+.mb-icon-btn {
+  width: 32px; height: 32px; border-radius: 9px;
+  background: #fff; border: 1px solid $line;
+  color: $ink-soft;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s;
+  svg { width: 16px; height: 16px; }
+  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+}
+
+// ── Main ────────────────────────────────────────────────────────────────────
+.mb-main {
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 16px;
+  box-shadow: 0 4px 18px rgba(11,37,69,0.04);
+  display: flex; flex-direction: column;
+  min-width: 0;
+  align-self: flex-start;
+}
+
+.mb-main-top {
+  padding: 18px 22px;
+  border-bottom: 1px solid $line;
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  flex-wrap: wrap;
+}
+
+.mb-main-top-left {
+  display: flex; align-items: center; gap: 12px;
+  flex: 1; min-width: 240px;
+}
+
+.mb-main-title {
+  font-size: 18px; font-weight: 600; color: $ink; letter-spacing: -0.3px;
+  em { font-family: $font-serif; font-style: italic; font-weight: 400; color: $ink-soft; }
+}
+
+.mb-badge-count {
+  display: inline-flex; align-items: center; justify-content: center;
+  background: $brand-tint; color: $brand;
+  font-size: 11.5px; font-weight: 700;
+  padding: 3px 9px; border-radius: 100px;
+}
+
+.mb-search {
+  display: flex; align-items: center; gap: 8px;
+  background: $line-soft;
+  border: 1px solid $line;
+  border-radius: 10px;
+  padding: 8px 12px;
+  width: 320px; min-width: 200px;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    background: #fff; border-color: $brand;
+    box-shadow: 0 0 0 3px rgba(1,73,155,0.08);
+  }
+  svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
+  input {
+    flex: 1; border: none; outline: none;
+    background: transparent;
+    font-family: inherit; font-size: 13.5px; color: $ink;
+    min-width: 0;
+    &::placeholder { color: $muted; }
+  }
+}
+
+// ── Tabela ──────────────────────────────────────────────────────────────────
+.mb-table-wrap { overflow-x: auto; }
+
+.mb-table {
+  width: 100%; background: #fff; font-family: $font-ui;
+
+  ::ng-deep .mat-mdc-header-row {
+    background: $line-soft;
+    min-height: 44px;
+  }
+  ::ng-deep .mat-mdc-header-cell {
+    color: $muted;
+    font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
+    text-transform: uppercase;
+    border-bottom: 1px solid $line;
+    padding: 0 14px;
+  }
+  ::ng-deep .mat-mdc-header-cell:first-child { padding-left: 22px; }
+  ::ng-deep .mat-mdc-header-cell:last-child  { padding-right: 22px; }
+
+  ::ng-deep .mat-mdc-row {
+    transition: background 0.1s;
+    min-height: 64px;
+    &:hover { background: $brand-tint; }
+
+    &.is-excluded {
+      opacity: 0.55;
+      .mb-user-name { text-decoration: line-through; color: $muted; }
+    }
+  }
+
+  ::ng-deep .mat-mdc-cell {
+    color: $ink;
+    border-bottom: 1px solid $line-soft;
+    padding: 12px 14px;
+    font-size: 13px;
+    vertical-align: middle;
+  }
+  ::ng-deep .mat-mdc-cell:first-child { padding-left: 22px; }
+  ::ng-deep .mat-mdc-cell:last-child  { padding-right: 22px; }
+}
+
+// User cell
+.mb-user { display: flex; align-items: center; gap: 12px; min-width: 0; }
+
+.mb-avatar {
+  width: 36px; height: 36px; border-radius: 50%;
+  background: $brand; color: #fff;
+  font-size: 13px; font-weight: 700;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+
+.mb-user-text { display: flex; flex-direction: column; min-width: 0; }
+
+.mb-user-name {
+  font-size: 13.5px; font-weight: 600; color: $ink;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.mb-user-email {
+  font-size: 11.5px; color: $muted;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.mb-cell-email {
+  color: $ink-soft; font-size: 13px;
+  word-break: break-all;
+}
+
+// Date
+.mb-date {
+  font-size: 12.5px; color: $ink-soft; line-height: 1.35;
+  span { display: block; color: $muted; font-size: 11px; }
+}
+
+.mb-pill-never {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 9px; border-radius: 100px;
+  background: $line-soft; color: $muted;
+  border: 1px solid $line;
+}
+
+// Perfil select (mat-form-field inline na tabela)
+.mb-perfil-select {
+  width: 160px;
+  font-family: $font-ui;
+
+  ::ng-deep .mdc-text-field--outlined {
+    --mdc-outlined-text-field-outline-color: #{$line};
+    --mdc-outlined-text-field-focus-outline-color: #{$brand};
+    --mdc-outlined-text-field-hover-outline-color: #{$brand-tint-2};
+    --mdc-outlined-text-field-container-shape: 8px;
+  }
+  ::ng-deep .mat-mdc-form-field-infix {
+    min-height: 0;
+    padding: 8px 0 !important;
+    font-size: 12.5px;
+  }
+  ::ng-deep .mat-mdc-text-field-wrapper { padding: 0 10px; }
+  ::ng-deep .mat-mdc-select-value { color: $ink; font-size: 13px; }
+  ::ng-deep .mat-mdc-select-arrow { color: $muted; }
+  ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
+}
+
+// Row actions
+.mb-row-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: transparent; border: 1px solid transparent;
+  color: $ink-soft; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background 0.12s, color 0.12s, border-color 0.12s;
+  svg { width: 15px; height: 15px; }
+
+  &.danger {
+    color: $danger;
+    &:hover { background: #fef2f2; border-color: #fecaca; }
+  }
+  &.success {
+    color: $success;
+    &:hover { background: #ecfdf5; border-color: #a7f3d0; }
+  }
+}
+
+.mb-self-pill {
+  display: inline-flex; align-items: center;
+  font-size: 11px; font-weight: 600;
+  padding: 3px 9px; border-radius: 100px;
+  background: $brand-tint; color: $brand;
+  border: 1px solid $brand-tint-2;
+}
+
+// Paginator override
+.mb-paginator {
+  border-top: 1px solid $line;
+  background: #fff;
+  border-radius: 0 0 16px 16px;
+
+  ::ng-deep .mat-mdc-paginator-container {
+    padding: 8px 22px;
+    color: $muted;
+    font-size: 12.5px;
+  }
+  ::ng-deep .mat-mdc-icon-button {
+    color: $ink-soft;
+    &:hover:not(:disabled) { background: $brand-tint; color: $brand; }
+  }
+  ::ng-deep .mat-mdc-select { color: $ink; }
+}
+
+// ── Responsive ──────────────────────────────────────────────────────────────
+@media (max-width: 1280px) {
+  .mb-page { padding: 16px 20px 32px; gap: 16px; }
+}
+@media (max-width: 1024px) {
+  .mb-page { grid-template-columns: 1fr; }
+  .mb-filters {
+    position: static; max-height: none;
+    display: none;
+    &.opened { display: flex; }
+  }
+}
+@media (max-width: 768px) {
+  .mb-main-top { padding: 14px; gap: 10px; }
+  .mb-search { width: 100%; order: 3; }
+  .mb-table { min-width: 720px; }
+}

@@ -1,0 +1,134 @@
+<div class="example-container">
+  <!-- Header unificado -->
+  <header class="app-header">
+
+    <!-- Launcher pill (substitui hamburguer + brand) -->
+    <button class="launcher-pill" (click)="snav.toggle()" aria-label="Menu principal">
+      <div class="launcher-pill-icon">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <path d="M12 1C12 1 22 10 22 15.5C22 20.19 17.52 24 12 24C6.48 24 2 20.19 2 15.5C2 10 12 1 12 1Z"
+                fill="rgba(255,255,255,0.22)" stroke="white" stroke-width="1.4"/>
+          <line x1="7"    y1="12"   x2="17"   y2="12"   stroke="rgba(255,255,255,0.65)" stroke-width="0.9"/>
+          <line x1="7"    y1="16.5" x2="17"   y2="16.5" stroke="rgba(255,255,255,0.40)" stroke-width="0.7"/>
+          <line x1="10"   y1="9.5"  x2="10"   y2="22"   stroke="rgba(255,255,255,0.50)" stroke-width="0.8"/>
+          <line x1="14.5" y1="9.5"  x2="14.5" y2="22"   stroke="rgba(255,255,255,0.40)" stroke-width="0.7"/>
+          <circle cx="12" cy="14.5" r="2"   fill="white"/>
+          <circle cx="12" cy="14.5" r="0.9" fill="rgba(1,73,155,0.6)"/>
+        </svg>
+      </div>
+      <span class="launcher-pill-text">GISCESAN</span>
+    </button>
+
+    <!-- Divisor vertical -->
+    <div class="header-divider" *ngIf="shouldShowMenu"></div>
+
+    <!-- Ribbon inline -->
+    <app-menu-topo *ngIf="shouldShowMenu"></app-menu-topo>
+
+    <!-- Spacer -->
+    <span class="header-spacer"></span>
+
+    <!-- Busca de endereço -->
+    <app-search-address></app-search-address>
+
+    <!-- Divisor -->
+    <div class="header-divider"></div>
+
+    <!-- Preferências (apenas logado) -->
+    <app-preferencias *ngIf="isLoggedIn()"></app-preferencias>
+
+    <!-- Divisor -->
+    <div class="header-divider" *ngIf="isLoggedIn()"></div>
+
+    <!-- Ações direita -->
+    <div class="header-actions">
+      <button class="header-btn" (click)="goToPage('')" title="Página inicial" aria-label="Página inicial">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+          <polyline points="9 22 9 12 15 12 15 22"/>
+        </svg>
+      </button>
+
+      <!-- Logado: pill com avatar + nome -->
+      <div class="wg-user-pill" *ngIf="isLoggedIn()"
+           (click)="$event.stopPropagation(); toggleMenu()">
+        <div class="wg-user-avatar">{{ iniciais || 'U' }}</div>
+        <span class="wg-user-name">{{ nomeUsuario }}</span>
+        <svg class="wg-user-chevron" [class.open]="menuAberto"
+             viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <polyline points="6 9 12 15 18 9"/>
+        </svg>
+
+        <div class="wg-dropdown" *ngIf="menuAberto" (click)="$event.stopPropagation()">
+          <div class="wg-dropdown-header">{{ nomeUsuario }}</div>
+          <button class="wg-dropdown-item" (click)="mostrarPerfil()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+              <circle cx="12" cy="7" r="4"/>
+            </svg>
+            Meu Perfil
+          </button>
+          <button class="wg-dropdown-item" *ngIf="shouldShowMenu"
+                  (click)="goToPage('manager')">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+              <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+            </svg>
+            Painel Administrativo
+          </button>
+          <div class="wg-dropdown-divider"></div>
+          <button class="wg-dropdown-item wg-dropdown-item--danger" (click)="logout()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+              <polyline points="16 17 21 12 16 7"/>
+              <line x1="21" y1="12" x2="9" y2="12"/>
+            </svg>
+            Sair
+          </button>
+        </div>
+      </div>
+
+      <!-- Não logado: botão entrar -->
+      <button class="wg-login-btn" *ngIf="!isLoggedIn()" (click)="goToPage('login')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
+        Entrar
+      </button>
+    </div>
+
+  </header>
+
+  <!-- Resto do seu layout -->
+  <mat-sidenav-container class="example-sidenav-container">
+    <mat-sidenav #snav [mode]="'over'" [opened]="false" class="sidenav">
+      <mat-nav-list>
+        <mat-tab-group>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>storage</mat-icon>
+            </ng-template>
+            <app-adicionar-dados></app-adicionar-dados>
+          </mat-tab>
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>layers</mat-icon>
+            </ng-template>
+            <app-conteudos></app-conteudos>
+          </mat-tab>
+        </mat-tab-group>
+      </mat-nav-list>
+    </mat-sidenav>
+    
+    <mat-sidenav-content class="map-content">
+      <app-mapa></app-mapa>
+      <app-attribute-table></app-attribute-table>
+      <app-perfil-conteudo></app-perfil-conteudo>
+      <app-pesquisar-camadas-dialog
+        *ngIf="(pesquisarCamadasUiStore.state$ | async)?.aberto"
+      ></app-pesquisar-camadas-dialog>
+    </mat-sidenav-content>
+  </mat-sidenav-container>
+</div>

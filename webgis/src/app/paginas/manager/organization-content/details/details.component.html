@@ -1,0 +1,233 @@
+<div class="dt-wrap">
+
+  <!-- Mapa OpenLayers (sempre montado para o OL inicializar corretamente) -->
+  <div #mapContainer class="dt-map"></div>
+
+  <!-- Painel inferior -->
+  <div class="dt-panel" *ngIf="content">
+
+    <!-- Header -->
+    <header class="dt-head">
+      <div class="dt-head-left">
+        <div class="dt-head-icon">
+          <svg *ngIf="isCamada(content) && content.tipo === 'vetorial'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+          </svg>
+          <svg *ngIf="isCamada(content) && content.tipo === 'raster'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="7" height="7"/>
+            <rect x="14" y="3" width="7" height="7"/>
+            <rect x="3" y="14" width="7" height="7"/>
+            <rect x="14" y="14" width="7" height="7"/>
+          </svg>
+          <svg *ngIf="!isCamada(content)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+            <line x1="8" y1="2" x2="8" y2="18"/>
+            <line x1="16" y1="6" x2="16" y2="22"/>
+          </svg>
+        </div>
+        <div class="dt-head-text">
+          <h2 class="dt-title" [matTooltip]="getTitulo()">{{ getTitulo() }}</h2>
+          <span class="dt-sub">
+            {{ isCamada(content) ? (content.tipo === 'raster' ? 'Camada raster' : 'Camada vetorial') : 'Mapa composto' }}
+          </span>
+        </div>
+      </div>
+
+      <div class="dt-head-actions">
+        <button class="dt-icon-btn" (click)="shareConteudo()" matTooltip="Copiar URL">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/>
+            <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+            <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+          </svg>
+        </button>
+        <button class="dt-icon-btn" *ngIf="isCamada(content)" (click)="initiateDownload()" matTooltip="Download">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+        </button>
+        <a class="dt-icon-btn" *ngIf="isCamada(content) && content.tipo === 'vetorial'"
+           [href]="owsUrl" target="_blank" matTooltip="WFS / GML">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+            <polyline points="15 3 21 3 21 9"/>
+            <line x1="10" y1="14" x2="21" y2="3"/>
+          </svg>
+        </a>
+        <button class="dt-icon-btn dt-icon-btn--close" (click)="emitCloseSidenav()" matTooltip="Fechar">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Tabs (mat-tab-group com override visual) -->
+    <mat-tab-group class="dt-tabs" animationDuration="180ms">
+
+      <!-- Info -->
+      <mat-tab label="Info">
+        <div class="dt-tab-body">
+          <p class="dt-desc">{{ getDescricao() }}</p>
+
+          <dl class="dt-info-list">
+            <ng-container *ngIf="isMapa(content) && (content.camadas || content.camadasRaster)">
+              <div class="dt-info-row">
+                <dt>Camadas</dt>
+                <dd>
+                  <div class="dt-chips">
+                    <span class="dt-chip" *ngFor="let camada of combinedCamadas">{{ camada.tituloCamada }}</span>
+                  </div>
+                </dd>
+              </div>
+            </ng-container>
+
+            <div class="dt-info-row">
+              <dt>Tema</dt><dd>{{ getTemaNome() }}</dd>
+            </div>
+            <div class="dt-info-row">
+              <dt>Grupo</dt><dd>{{ getGrupoNome() }}</dd>
+            </div>
+
+            <div class="dt-info-row" *ngIf="isCamada(content)">
+              <dt>Pacote conceitual</dt><dd>{{ content.pacoteConceitualNome }}</dd>
+            </div>
+
+            <div class="dt-info-row">
+              <dt>Compartilhamento</dt>
+              <dd>
+                <span class="dt-share"
+                      [class.publico]="content.nivelCompartilhamento === 'Público'"
+                      [class.privado]="content.nivelCompartilhamento === 'Privado'"
+                      [class.inst]="content.nivelCompartilhamento !== 'Público' && content.nivelCompartilhamento !== 'Privado'">
+                  <svg *ngIf="content.nivelCompartilhamento === 'Público'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="2" y1="12" x2="22" y2="12"/>
+                    <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10A15.3 15.3 0 0 1 8 12a15.3 15.3 0 0 1 4-10z"/>
+                  </svg>
+                  <svg *ngIf="content.nivelCompartilhamento === 'Privado'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="11" width="18" height="11" rx="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                  </svg>
+                  <svg *ngIf="content.nivelCompartilhamento !== 'Público' && content.nivelCompartilhamento !== 'Privado'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>
+                  </svg>
+                  {{ content.nivelCompartilhamento }}
+                </span>
+              </dd>
+            </div>
+
+            <div class="dt-info-row" *ngIf="isCamada(content) && content.tags">
+              <dt>Tags</dt>
+              <dd>
+                <div class="dt-chips">
+                  <span class="dt-chip" *ngFor="let tag of content.tags.split(',')">{{ tag.trim() }}</span>
+                </div>
+              </dd>
+            </div>
+
+            <ng-container *ngIf="isCamada(content)">
+              <div class="dt-info-row">
+                <dt>Fonte</dt><dd>{{ content.fonteDadosCamada || '—' }}</dd>
+              </div>
+              <div class="dt-info-row">
+                <dt>Termos de uso</dt><dd>{{ content.termosDeUso || '—' }}</dd>
+              </div>
+            </ng-container>
+
+            <div class="dt-info-row">
+              <dt>Criado em</dt><dd>{{ content.criadoEm | date: 'dd/MM/yyyy' }}</dd>
+            </div>
+            <div class="dt-info-row">
+              <dt>Última atualização</dt><dd>{{ content.updatedAt | date: 'dd/MM/yyyy' }}</dd>
+            </div>
+            <div class="dt-info-row">
+              <dt>Criado por</dt>
+              <dd>
+                <span class="dt-user-pill">
+                  <span class="dt-user-av">{{ (content.usrCriacao || '?').charAt(0).toUpperCase() }}</span>
+                  {{ content.usrCriacao }}
+                </span>
+              </dd>
+            </div>
+          </dl>
+        </div>
+      </mat-tab>
+
+      <!-- Atributos -->
+      <mat-tab label="Atributos" *ngIf="(isCamada(content) && content.tipo !== 'raster') || isMapa(content)">
+        <div class="dt-tab-body">
+
+          <!-- Camada vetorial -->
+          <ng-container *ngIf="isCamada(content)">
+            <div class="dt-attr-card">
+              <div class="dt-attr-head">
+                <span>Atributo</span>
+                <span>Tipo</span>
+              </div>
+              <div class="dt-attr-row" *ngFor="let atributo of atributos">
+                <ng-container *ngIf="atributo.nomeAtributo !== 'geom'">
+                  <span class="dt-attr-name">{{ atributo.label || atributo.nomeAtributo }}</span>
+                  <span class="dt-attr-type">
+                    {{ atributo.tipo }}
+                    <span *ngIf="atributo.tipo === 'character varying' || atributo.tipo === 'char'">
+                      ({{ atributo.tamanho }})
+                    </span>
+                  </span>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+
+          <!-- Mapa: atributos de cada camada -->
+          <ng-container *ngIf="isMapa(content) && atributosMapas.length > 0">
+            <div class="dt-attr-card" *ngFor="let camadaAtributos of atributosMapas; let i = index">
+              <div class="dt-attr-card-title">{{ content.camadas[i].tituloCamada }}</div>
+              <div class="dt-attr-head">
+                <span>Atributo</span>
+                <span>Tipo</span>
+              </div>
+              <div class="dt-attr-row" *ngFor="let atributo of camadaAtributos">
+                <ng-container *ngIf="atributo.nomeAtributo !== 'geom'">
+                  <span class="dt-attr-name">{{ atributo.label || atributo.nomeAtributo }}</span>
+                  <span class="dt-attr-type">
+                    {{ atributo.tipo }}
+                    <span *ngIf="atributo.tipo === 'character varying' || atributo.tipo === 'char'">
+                      ({{ atributo.tamanho }})
+                    </span>
+                  </span>
+                </ng-container>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </mat-tab>
+
+      <!-- Legenda -->
+      <mat-tab label="Legenda">
+        <div class="dt-tab-body">
+          <ng-container *ngIf="legendUrls.length > 0; else noLegend">
+            <div class="dt-legend">
+              <div class="dt-legend-item" *ngFor="let url of legendUrls">
+                <img [src]="url" alt="Legenda"/>
+              </div>
+            </div>
+          </ng-container>
+          <ng-template #noLegend>
+            <div class="dt-empty">
+              <div class="dt-empty-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <line x1="3" y1="9" x2="21" y2="9"/>
+                </svg>
+              </div>
+              <span>Sem legendas para este conteúdo</span>
+            </div>
+          </ng-template>
+        </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>

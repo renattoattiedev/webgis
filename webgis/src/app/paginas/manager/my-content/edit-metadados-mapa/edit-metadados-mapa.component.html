@@ -1,0 +1,108 @@
+<form [formGroup]="mapaForm" (ngSubmit)="onSubmit()" class="idedlg">
+
+  <header class="idedlg-head">
+    <div class="idedlg-head-left">
+      <div class="idedlg-head-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          <line x1="8" y1="2" x2="8" y2="18"/>
+          <line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+      </div>
+      <div class="idedlg-head-text">
+        <h2 class="idedlg-title">Editar metadados do <em>mapa</em></h2>
+        <p class="idedlg-sub">Atualize identificação, compartilhamento e categorização</p>
+      </div>
+    </div>
+    <button class="idedlg-close" (click)="onClose()" type="button" aria-label="Fechar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+        <line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>
+      </svg>
+    </button>
+  </header>
+
+  <div mat-dialog-content>
+    <div class="idedlg-body">
+      <div class="idedlg-section-title">Identificação</div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nome do mapa</mat-label>
+        <input matInput formControlName="nomeMapa" readonly />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Título do mapa</mat-label>
+        <input matInput formControlName="tituloMapa" required/>
+        <mat-error *ngIf="mapaForm.get('tituloMapa')?.hasError('required') && mapaForm.get('tituloMapa')?.touched">
+          O título é obrigatório.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Descrição do mapa</mat-label>
+        <textarea matInput rows="4" formControlName="descricaoMapa" required></textarea>
+        <mat-error *ngIf="mapaForm.get('descricaoMapa')?.hasError('required') && mapaForm.get('descricaoMapa')?.touched">
+          A descrição é obrigatória.
+        </mat-error>
+        <mat-error *ngIf="mapaForm.get('descricaoMapa')?.hasError('minlength') && mapaForm.get('descricaoMapa')?.touched">
+          A descrição deve ter no mínimo 10 caracteres.
+        </mat-error>
+      </mat-form-field>
+
+      <div class="idedlg-section-title">Categorização</div>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Nível de compartilhamento</mat-label>
+        <mat-select formControlName="nivelCompartilhamentoMapa" required>
+          <mat-option *ngFor="let compartilhamento of niveisCompartilhamento" [value]="compartilhamento.id">
+            {{ compartilhamento.descricaoNivelCompartilhamento }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="mapaForm.get('nivelCompartilhamentoMapa')?.hasError('required') && mapaForm.get('nivelCompartilhamentoMapa')?.touched">
+          O nível de compartilhamento é obrigatório.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Tema</mat-label>
+        <mat-select formControlName="temaMapa" (selectionChange)="fetchGruposCamadasPorTema($event.value)" required>
+          <mat-option *ngFor="let tema of temas" [value]="tema.id">{{ tema.tituloTema }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="mapaForm.get('temaMapa')?.hasError('required') && mapaForm.get('temaMapa')?.touched">
+          O tema é obrigatório.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Grupo</mat-label>
+        <mat-select formControlName="grupoMapa" required>
+          <mat-option *ngFor="let grupo of gruposCamadas" [value]="grupo.id">{{ grupo.grupoNome }}</mat-option>
+        </mat-select>
+        <mat-error *ngIf="mapaForm.get('grupoMapa')?.hasError('required') && mapaForm.get('grupoMapa')?.touched">
+          O grupo é obrigatório.
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Grupos adicionais</mat-label>
+        <mat-select [(ngModel)]="gruposAdicionaisSelecionados" [ngModelOptions]="{standalone: true}" multiple>
+          <mat-option *ngFor="let grupo of gruposCamadas" [value]="grupo.id" [disabled]="grupo.id === mapa.grupoMapa">
+            {{ grupo.grupoNome }}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <footer class="idedlg-actions">
+      <button class="idedlg-btn idedlg-btn-ghost" (click)="onClose()" type="button">Cancelar</button>
+      <button class="idedlg-btn idedlg-btn-primary" type="submit">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+        Salvar alterações
+      </button>
+    </footer>
+  </div>
+</form>

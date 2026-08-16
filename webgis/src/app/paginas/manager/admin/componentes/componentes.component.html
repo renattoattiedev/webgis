@@ -1,0 +1,41 @@
+<div class="ad-list">
+  <div class="al-page-head">
+    <h1>Configuração de <em>componentes</em></h1>
+    <p>Configure os componentes do seu WebGIS. Ajuste parâmetros, templates e funcionalidades de cada módulo.</p>
+  </div>
+
+  <div *ngIf="showImprimirCroquiConfig" class="al-card" style="margin-bottom:24px; padding:0;">
+    <app-imprimir-croqui-config
+      [componente]="selectedComponente"
+      [habilitado]="selectedComponente?.habilitado ?? false"
+      (onClose)="fecharConfig()">
+    </app-imprimir-croqui-config>
+  </div>
+
+  <app-config-pitometria
+    *ngIf="showPitometriaConfig"
+    [isVisible]="showPitometriaConfig"
+    [componente]="selectedComponente"
+    (onClose)="fecharConfig()"
+    (onSave)="fecharConfig()">
+  </app-config-pitometria>
+
+  <div class="al-cards-grid">
+    <div *ngFor="let componente of componentes" class="al-card"
+         [style.display]="(showImprimirCroquiConfig && componente.nome && componente.nome.toLowerCase().includes('imprimir')) || (showPitometriaConfig && componente.nome && componente.nome.toLowerCase().includes('pitometria')) ? 'none' : ''">
+      <div class="al-card-head">
+        <div class="al-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+        </div>
+        <h3 class="al-card-title">{{ componente.nome }}</h3>
+      </div>
+      <p class="al-card-desc">{{ componente.descricao }}</p>
+      <div>
+        <button class="al-card-action" (click)="onConfigurar(componente.id)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+          Configurar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

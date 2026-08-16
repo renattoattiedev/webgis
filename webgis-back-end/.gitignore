@@ -1,0 +1,9 @@
+.env
+.env-dev
+.env-hom
+.env-prod
+dist
+node_modules
+upload_raster/*
+/.superpowers/
+docs/

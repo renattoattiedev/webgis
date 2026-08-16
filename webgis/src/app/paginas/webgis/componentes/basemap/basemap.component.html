@@ -1,0 +1,45 @@
+<div class="basemap-wrapper">
+  <!-- Thumbnail inline dentro da pill bar -->
+  <div class="basemap-thumb" (click)="toggleExpansion()" title="Trocar basemap" [class.active]="expanded">
+    <img [src]="defaultBasemap.thumbnail" alt="Basemap atual" class="basemap-thumb-img">
+  </div>
+
+  <!-- Painel expandido — flutua acima da pill bar -->
+  <div class="expanded-panel" *ngIf="expanded">
+
+    <div class="basemap-section" *ngIf="geoserverBasemaps.length > 0">
+      <div class="section-title">basemaps do sistema</div>
+      <div class="basemap-grid geoserver-grid">
+        <div
+          *ngFor="let basemap of geoserverBasemaps"
+          (click)="changeBasemap(basemap)"
+          class="basemap-card"
+          [class.selected]="isSelectedBasemap(basemap)">
+          <div class="basemap-image-wrap">
+            <img [src]="basemap.thumbnail" alt="Thumbnail do Basemap" class="basemap-image" [matTooltip]="'Basemap: ' + basemap.name">
+            <div class="basemap-label-overlay">{{ basemap.name }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-divider" *ngIf="geoserverBasemaps.length > 0 && externalBasemaps.length > 0"></div>
+
+    <div class="basemap-section" *ngIf="externalBasemaps.length > 0">
+      <div class="section-title">basemaps externos</div>
+      <div class="basemap-grid external-grid">
+        <div
+          *ngFor="let basemap of externalBasemaps"
+          (click)="changeBasemap(basemap)"
+          class="basemap-card"
+          [class.selected]="isSelectedBasemap(basemap)">
+          <div class="basemap-image-wrap">
+            <img [src]="basemap.thumbnail" alt="Thumbnail do Basemap" class="basemap-image" [matTooltip]="'Basemap: ' + basemap.name">
+            <div class="basemap-label-overlay">{{ basemap.name }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>

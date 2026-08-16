@@ -1,0 +1,9 @@
+<div class="preferencias-container">
+  <button mat-mini-fab color="white" (click)="salvarOuAtualizar()" [disabled]="carregando" matTooltip="Salvar/Atualizar Preferências">
+    <mat-icon>save</mat-icon>
+  </button>
+  <button mat-mini-fab color="white" (click)="remover()" [disabled]="carregando || !temPreferencia" matTooltip="Remover Preferências">
+    <mat-icon>delete</mat-icon>
+  </button>
+  <span class="status" *ngIf="temPreferencia && ultimaAtualizacao">Última atualização: {{ ultimaAtualizacao | date:'short' }}</span>
+</div>

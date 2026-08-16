@@ -1,0 +1,230 @@
+<div class="converter-container">
+  <div
+    #draggableWindow
+    class="converter-card"
+    [class.minimized]="isMinimized"
+    [class.dragging]="isDragging"
+    [ngStyle]="getWindowStyle()"
+  >
+    <!-- Header -->
+    <div *ngIf="!isMinimized"
+      class="converter-header"
+      (mousedown)="onHeaderMouseDown($event)"
+    >
+      <div class="title-wrap">
+        <mat-icon>my_location</mat-icon>
+        <span>Pesquisa por Coordenadas</span>
+      </div>
+
+      <div class="window-controls">
+        <button type="button" class="cep-icon-btn no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); minimizeWindow()"
+          matTooltip="Minimizar">
+          <mat-icon>remove</mat-icon>
+        </button>
+        <button type="button" class="cep-icon-btn cep-icon-btn--close no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); fechar()"
+          matTooltip="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Beacon (minimizado) -->
+    <div class="win-beacon" *ngIf="isMinimized" (click)="maximizeWindow()">
+      <div class="beacon-icon-wrap"><mat-icon>my_location</mat-icon></div>
+      <span class="beacon-label">Coordenadas</span>
+    </div>
+
+    <!-- Body -->
+    <div class="window-content" *ngIf="!isMinimized">
+
+      <!-- Input de coordenadas -->
+      <div class="section-label">Entrada</div>
+
+      <div class="input-wrap">
+        <input
+          class="coord-input"
+          placeholder="Digite coordenadas ou endereço"
+          [ngModel]="inputText"
+          (ngModelChange)="onInputChange($event)"
+        />
+        <div class="input-badge" *ngIf="selectedInputFormat === 'auto' && detectedFormat">
+          {{ getFormatLabel(detectedFormat) }}
+        </div>
+      </div>
+
+      <mat-progress-bar *ngIf="inputIsProcessing" mode="indeterminate" class="coord-progress"></mat-progress-bar>
+      <div class="input-error" *ngIf="inputError">{{ inputError }}</div>
+
+      <!-- Ações principais -->
+      <div class="action-row">
+        <button type="button" class="action-btn no-drag"
+          [class.active]="mapPickActive"
+          (mousedown)="$event.stopPropagation()"
+          (click)="toggleMapPick()"
+          matTooltip="Capturar do mapa">
+          <mat-icon>location_on</mat-icon>
+          <span>Capturar</span>
+        </button>
+
+        <button type="button" class="action-btn no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="clearAllInputs()"
+          matTooltip="Limpar">
+          <mat-icon>refresh</mat-icon>
+          <span>Limpar</span>
+        </button>
+
+        <button type="button" class="action-btn no-drag"
+          [disabled]="!currentCoordinate"
+          (mousedown)="$event.stopPropagation()"
+          (click)="copyAll()"
+          matTooltip="Copiar todas">
+          <mat-icon>content_copy</mat-icon>
+          <span>Copiar</span>
+        </button>
+
+        <button type="button" class="action-btn no-drag"
+          [matMenuTriggerFor]="formatsMenu"
+          (mousedown)="$event.stopPropagation()"
+          matTooltip="Adicionar formato">
+          <mat-icon>add</mat-icon>
+          <span>Formato</span>
+        </button>
+      </div>
+
+      <mat-menu #formatsMenu="matMenu">
+        <button
+          mat-menu-item
+          *ngFor="let format of formats"
+          (click)="toggleFormatVisibility(format, true)"
+          [disabled]="format.visible">
+          <span>{{ format.label }}</span>
+        </button>
+      </mat-menu>
+
+      <!-- Detalhes (quando há coordenada) -->
+      <div class="details-panel" *ngIf="currentCoordinate">
+        <div class="detail-row">
+          <span class="detail-label">Latitude</span>
+          <span class="detail-value">{{ currentCoordinate.lat | number:'1.6-6' }}</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-label">Longitude</span>
+          <span class="detail-value">{{ currentCoordinate.lon | number:'1.6-6' }}</span>
+        </div>
+      </div>
+
+      <!-- Sugestões de endereço -->
+      <div class="suggestions" *ngIf="geocodeSuggestions.length && selectedInputFormat === 'address'">
+        <div class="suggestion-title">Sugestões</div>
+        <div
+          class="suggestion-item"
+          *ngFor="let suggestion of geocodeSuggestions"
+          (click)="onSuggestionSelected(suggestion)">
+          <span>{{ suggestion.label }}</span>
+          <mat-icon>north_east</mat-icon>
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <!-- Configurações de entrada (opcional) -->
+      <div class="settings-panel" *ngIf="inputSettingsOpen">
+        <p class="settings-text">
+          O formato selecionado será usado primeiro. Se definido como Auto, o componente tenta detectar automaticamente.
+        </p>
+      </div>
+
+      <!-- Lista de formatos -->
+      <div class="section-label">Formatos</div>
+
+      <div class="formats-list">
+        <div
+          class="format-card"
+          *ngFor="let format of formats"
+          [class.hidden]="!format.visible">
+
+          <div class="format-header">
+            <span class="format-title">{{ format.label }}</span>
+            <div class="format-actions">
+              <button type="button" class="fmt-icon-btn no-drag"
+                (mousedown)="$event.stopPropagation()"
+                (click)="copyFormat(format)"
+                matTooltip="Copiar">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+              <button type="button" class="fmt-icon-btn no-drag"
+                (mousedown)="$event.stopPropagation()"
+                (click)="toggleFormatExpand(format)"
+                [matTooltip]="format.expanded ? 'Recolher' : 'Expandir'">
+                <mat-icon>{{ format.expanded ? 'expand_less' : 'expand_more' }}</mat-icon>
+              </button>
+              <button type="button" class="fmt-icon-btn fmt-icon-btn--settings no-drag"
+                (mousedown)="$event.stopPropagation()"
+                (click)="toggleFormatEditing(format)"
+                matTooltip="Configurar">
+                <mat-icon>settings</mat-icon>
+              </button>
+              <button *ngIf="format.closable"
+                type="button"
+                class="fmt-icon-btn fmt-icon-btn--close no-drag"
+                (mousedown)="$event.stopPropagation()"
+                (click)="toggleFormatVisibility(format, false)"
+                matTooltip="Remover">
+                <mat-icon>close</mat-icon>
+              </button>
+            </div>
+          </div>
+
+          <div class="format-body" *ngIf="format.expanded">
+            <div class="format-fields" *ngIf="format.fields.length; else singleField">
+              <div class="format-field" *ngFor="let field of format.fields">
+                <div class="field-label" *ngIf="field.label">{{ field.label }}</div>
+                <span class="field-text">{{ field.value }}</span>
+              </div>
+            </div>
+            <ng-template #singleField>
+              <span class="field-text">{{ format.value }}</span>
+            </ng-template>
+
+            <mat-progress-bar
+              *ngIf="format.id === 'address' && isReverseGeocoding"
+              mode="indeterminate"
+              class="coord-progress">
+            </mat-progress-bar>
+
+            <div class="format-edit" *ngIf="format.isEditing">
+              <div class="edit-row">
+                <label class="edit-label">Rótulo</label>
+                <input class="edit-input" [(ngModel)]="format.label" />
+              </div>
+              <div class="edit-row">
+                <label class="edit-label">Formato</label>
+                <textarea
+                  class="edit-input edit-textarea"
+                  rows="2"
+                  [(ngModel)]="format.pattern"
+                  (ngModelChange)="onFormatPatternChange(format)">
+                </textarea>
+              </div>
+              <div class="edit-help">
+                Tokens: {{ '{' }}{{ '{' }}latAbs{{ '}' }}{{ '}' }}, {{ '{' }}{{ '{' }}latDir{{ '}' }}{{ '}' }}, {{ '{' }}{{ '{' }}lonAbs{{ '}' }}{{ '}' }}, {{ '{' }}{{ '{' }}mgrs{{ '}' }}{{ '}' }}
+              </div>
+              <button type="button" class="btn-reset no-drag"
+                (mousedown)="$event.stopPropagation()"
+                (click)="resetFormat(format)">
+                <mat-icon>refresh</mat-icon>
+                Restaurar padrão
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

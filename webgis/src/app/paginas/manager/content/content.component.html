@@ -1,0 +1,104 @@
+<!-- ── Navbar ──────────────────────────────────────────────────────────── -->
+<nav class="mgr-nav">
+  <div class="mgr-nav-left">
+    <div class="mgr-nav-logo">CESAN</div>
+    <div class="mgr-nav-div"></div>
+    <span class="mgr-nav-title">Gestor de Conteúdo</span>
+    <span class="mgr-nav-tag">IDE</span>
+  </div>
+
+  <div class="mgr-nav-right" (click)="$event.stopPropagation()">
+    <div class="mgr-nav-user" (click)="toggleUserMenu($event)">
+      <div class="mgr-nav-avatar">{{ iniciais || 'U' }}</div>
+      <span class="mgr-nav-uname">{{ nomeUsuario || 'Usuário' }}</span>
+      <svg class="mgr-nav-chev" [class.open]="menuAberto"
+           viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+        <polyline points="6 9 12 15 18 9"/>
+      </svg>
+    </div>
+
+    <div class="mgr-nav-menu" *ngIf="menuAberto">
+      <div class="mgr-nav-menu-header">{{ nomeUsuario }}</div>
+      <button class="mgr-nav-menu-item" (click)="mostrarPerfil()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+          <circle cx="12" cy="7" r="4"/>
+        </svg>
+        Mostrar perfil
+      </button>
+      <button class="mgr-nav-menu-item" (click)="goToPage('')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M3 12l9-9 9 9"/><path d="M5 10v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V10"/>
+        </svg>
+        Home
+      </button>
+      <button class="mgr-nav-menu-item" (click)="goToPage('webgis')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+          <line x1="8" y1="2" x2="8" y2="18"/>
+          <line x1="16" y1="6" x2="16" y2="22"/>
+        </svg>
+        WebGIS
+      </button>
+      <div class="mgr-nav-menu-div"></div>
+      <button class="mgr-nav-menu-item mgr-nav-menu-item--danger" (click)="logout()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+          <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+          <polyline points="16 17 21 12 16 7"/>
+          <line x1="21" y1="12" x2="9" y2="12"/>
+        </svg>
+        Sair
+      </button>
+    </div>
+  </div>
+</nav>
+
+<!-- ── Tabs ────────────────────────────────────────────────────────────── -->
+<div class="mgr-tabs">
+  <button class="mgr-tab"
+          *ngFor="let t of visibleTabs"
+          [class.active]="activeTabLabel === t.label"
+          (click)="selectTabByLabel(t)">
+    <ng-container [ngSwitch]="t.icon">
+      <svg *ngSwitchCase="'folder'" class="mgr-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+      </svg>
+      <svg *ngSwitchCase="'org'" class="mgr-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M3 21h18M5 21V7l8-4v18M19 21V11l-6-4"/>
+      </svg>
+      <svg *ngSwitchCase="'map'" class="mgr-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
+        <line x1="8" y1="2" x2="8" y2="18"/>
+        <line x1="16" y1="6" x2="16" y2="22"/>
+      </svg>
+      <svg *ngSwitchCase="'chart'" class="mgr-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <line x1="18" y1="20" x2="18" y2="10"/>
+        <line x1="12" y1="20" x2="12" y2="4"/>
+        <line x1="6"  y1="20" x2="6"  y2="14"/>
+        <line x1="2"  y1="20" x2="22" y2="20"/>
+      </svg>
+      <svg *ngSwitchCase="'users'" class="mgr-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+        <circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+        <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+      <svg *ngSwitchCase="'gear'" class="mgr-tab-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="3"/>
+        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+      </svg>
+    </ng-container>
+    {{ t.label }}
+  </button>
+</div>
+
+<!-- ── Tab content ─────────────────────────────────────────────────────── -->
+<div class="mgr-tab-body">
+  <app-my-content           *ngIf="activeTabLabel === 'Meu Conteúdo'"></app-my-content>
+  <app-organization-content *ngIf="activeTabLabel === 'Minha Organização'"></app-organization-content>
+  <app-maps                 *ngIf="activeTabLabel === 'Mapas'"
+                            (mapaSalvo)="onMapaSalvo($event)"></app-maps>
+  <app-relatorio-page       *ngIf="activeTabLabel === 'Relatórios'"></app-relatorio-page>
+  <app-grupos-page          *ngIf="activeTabLabel === 'Grupos'"></app-grupos-page>
+  <app-admin                *ngIf="activeTabLabel === 'Administração' && perfilUser === 'Admin'"></app-admin>
+</div>

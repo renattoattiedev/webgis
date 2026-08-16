@@ -1,0 +1,497 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Maps — IDE CESAN
+// ─────────────────────────────────────────────────────────────────────────────
+
+$brand:        #01499B;
+$brand-mid:    #023775;
+$brand-deep:   #012656;
+$brand-tint:   #eef4fb;
+$brand-tint-2: #dbe7f6;
+$ink:          #0b2545;
+$ink-soft:     #5b6b85;
+$muted:        #7b8aa3;
+$line:         #e6ecf5;
+$line-soft:    #f0f4f9;
+$bg:           #f6f8fc;
+$danger:       #dc2626;
+$success:      #047857;
+
+$font-ui:    'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
+$font-serif: 'Instrument Serif', Georgia, serif;
+
+:host {
+  display: block;
+  background: $bg;
+  font-family: $font-ui;
+  color: $ink;
+}
+
+* { box-sizing: border-box; }
+
+// ── Single unified bar ──────────────────────────────────────────────────────
+.mp-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid $line;
+  position: relative; z-index: 10;
+  min-height: 56px;
+}
+
+.mp-bar-title {
+  display: flex; align-items: center; gap: 8px;
+  min-width: 0;
+  flex-shrink: 0;
+  padding: 4px 10px 4px 8px;
+  background: $line-soft;
+  border: 1px solid $line;
+  border-radius: 10px;
+}
+
+.mp-bar-icon {
+  width: 24px; height: 24px; border-radius: 6px;
+  background: $brand-tint; color: $brand;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  svg { width: 13px; height: 13px; }
+}
+
+.mp-title {
+  margin: 0; font-size: 13.5px; font-weight: 600; color: $ink;
+  letter-spacing: -0.1px; line-height: 1.2;
+  cursor: text;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  min-width: 0; max-width: 200px;
+}
+
+.mp-title-edit {
+  border: 1px solid $brand;
+  background: #fff;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-family: inherit; font-size: 13px; font-weight: 600; color: $ink;
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(1,73,155,0.1);
+  min-width: 180px;
+}
+
+.mp-title-new {
+  width: 22px; height: 22px; border-radius: 6px;
+  background: $brand; color: #fff;
+  border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s, transform 0.12s;
+  svg { width: 12px; height: 12px; }
+  &:hover { background: $brand-mid; }
+  &:active { transform: scale(0.94); }
+}
+
+.mp-bar-divider {
+  width: 1px; height: 22px;
+  background: $line;
+  flex-shrink: 0;
+}
+
+.mp-bar-spacer { flex: 1; }
+
+.mp-tool-group { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+
+.mp-tool {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; color: $ink-soft;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  padding: 7px 11px;
+  font-family: inherit; font-size: 12.5px; font-weight: 500;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  svg { width: 14px; height: 14px; }
+
+  &:hover { background: $brand-tint; color: $brand; }
+  &.active { background: $brand-tint; color: $brand; border-color: $brand-tint-2; font-weight: 600; }
+
+  &--primary {
+    background: $brand; color: #fff; font-weight: 600;
+    &:hover { background: $brand-mid; color: #fff; }
+  }
+}
+
+.mp-tool-icon {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: transparent; color: $ink-soft;
+  border: 1px solid transparent;
+  display: inline-flex; align-items: center; justify-content: center;
+  cursor: pointer; flex-shrink: 0;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  svg { width: 14px; height: 14px; }
+  &:hover { background: $brand-tint; color: $brand; }
+  &.active { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+}
+
+// ── Busca ───────────────────────────────────────────────────────────────────
+.mp-search-wrap {
+  position: relative;
+  width: 300px;
+  flex-shrink: 0;
+}
+
+.mp-search {
+  display: flex; align-items: center; gap: 8px;
+  background: $line-soft;
+  border: 1px solid $line;
+  border-radius: 100px;
+  padding: 4px 4px 4px 14px;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    background: #fff; border-color: $brand;
+    box-shadow: 0 0 0 3px rgba(1,73,155,0.1);
+  }
+
+  > svg { width: 14px; height: 14px; color: $muted; flex-shrink: 0; }
+
+  input {
+    flex: 1; border: none; outline: none;
+    background: transparent;
+    font-family: inherit; font-size: 13px; color: $ink;
+    min-width: 0;
+    &::placeholder { color: $muted; }
+  }
+}
+
+.mp-search-btn {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: $brand; color: #fff;
+  border: none; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+  svg { width: 12px; height: 12px; }
+  &:hover { background: $brand-mid; }
+}
+
+.mp-suggestions {
+  position: absolute; top: calc(100% + 6px); left: 0; right: 0;
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(11,37,69,0.15);
+  list-style: none; margin: 0; padding: 6px;
+  z-index: 100;
+  max-height: 320px; overflow-y: auto;
+
+  li {
+    display: flex; align-items: center; gap: 9px;
+    padding: 9px 10px; border-radius: 8px;
+    font-size: 13px; color: $ink;
+    cursor: pointer;
+    transition: background 0.12s;
+    svg { width: 13px; height: 13px; color: $muted; flex-shrink: 0; }
+    span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    &:hover { background: $brand-tint; color: $brand;
+      svg { color: $brand; }
+    }
+  }
+}
+
+// ── Stage ───────────────────────────────────────────────────────────────────
+.mp-stage {
+  display: flex;
+  height: calc(100vh - 60px - 53px - 56px);
+  min-height: 480px;
+  position: relative;
+}
+
+.mp-sidebar {
+  width: 0;
+  background: #fff;
+  border-right: 1px solid $line;
+  overflow: hidden;
+  transition: width 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+  flex-shrink: 0;
+  display: flex; flex-direction: column;
+
+  &.opened { width: 320px; }
+}
+
+.mp-map-wrap {
+  flex: 1; min-width: 0;
+  position: relative;
+}
+
+.mp-map-view {
+  width: 100%; height: 100%;
+  background: $line-soft;
+  position: relative;
+}
+
+// ── Controles de navegação alinhados verticalmente (canto sup. esq.) ──────────────────────────────────
+// Cada controle (zoom, home, zoom-envolope, current-location) renderiza no host
+// component. Vamos posicionar cada host absolutamente em offsets fixos.
+.mp-map-view {
+  ::ng-deep .ol-zoom,
+  ::ng-deep .custom-ol-zoom {
+    top: 16px !important;
+    left: 16px !important;
+    background: transparent !important;
+    padding: 0 !important;
+
+    button {
+      width: 40px !important; height: 40px !important;
+      border-radius: 50% !important;
+      background: #fff !important;
+      color: $ink !important;
+      box-shadow: 0 2px 8px rgba(11,37,69,0.18) !important;
+      margin-bottom: 4px !important;
+      font-size: 16px !important;
+      font-weight: 600 !important;
+      border: 1px solid $line !important;
+      &:hover { background: $brand-tint !important; color: $brand !important; }
+    }
+  }
+
+  ::ng-deep app-home {
+    position: absolute !important;
+    top: 104px !important;
+    left: 16px !important;
+  }
+
+  ::ng-deep app-zoom-envolope {
+    position: absolute !important;
+    top: 148px !important;
+    left: 16px !important;
+  }
+
+  ::ng-deep app-current-location {
+    position: absolute !important;
+    top: 192px !important;
+    left: 16px !important;
+  }
+
+  // Padroniza qualquer botão redondo dentro desses componentes
+  ::ng-deep app-home button,
+  ::ng-deep app-zoom-envolope button,
+  ::ng-deep app-current-location button {
+    width: 40px !important; height: 40px !important;
+    border-radius: 50% !important;
+    background: #fff !important;
+    color: $ink !important;
+    box-shadow: 0 2px 8px rgba(11,37,69,0.18) !important;
+    border: 1px solid $line !important;
+    display: inline-flex !important; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+    &:hover { background: $brand-tint !important; color: $brand !important; }
+  }
+}
+
+// ── Basemap thumbnail (canto inferior esquerdo) ─────────────────────────────
+.mp-map-view ::ng-deep app-basemap {
+  position: absolute;
+  left: 16px;
+  bottom: 16px;
+  z-index: 50;
+}
+
+// ── OL OverviewMap (canto inferior direito) ─────────────────────────────────
+.mp-map-view ::ng-deep .ol-overviewmap {
+  position: absolute !important;
+  right: 16px !important;
+  left: auto !important;
+  bottom: 16px !important;
+  top: auto !important;
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid $line;
+  box-shadow: 0 6px 18px rgba(11,37,69,0.18);
+
+  button {
+    background: #fff !important;
+    color: $brand !important;
+    border-radius: 6px !important;
+  }
+  .ol-overviewmap-map {
+    border: none !important;
+    background: $line-soft;
+  }
+}
+
+// ── OL Zoom controls (canto superior esquerdo, abaixo das demais ferramentas) ──
+.mp-map-view ::ng-deep .ol-zoom,
+.mp-map-view ::ng-deep .custom-ol-zoom {
+  top: 16px !important;
+  left: 16px !important;
+}
+// ── Tabs ────────────────────────────────────────────────────────────────────
+.mp-tabs {
+  flex: 1; min-height: 0;
+  display: flex; flex-direction: column;
+  font-family: $font-ui;
+
+  ::ng-deep .mat-mdc-tab-header {
+    border-bottom: 1px solid $line;
+    padding: 0 12px;
+    --mdc-secondary-navigation-tab-container-height: 42px;
+  }
+  ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
+    font-family: $font-ui;
+    font-size: 13px; font-weight: 600;
+    color: $ink-soft;
+  }
+  ::ng-deep .mat-mdc-tab--active .mdc-tab__text-label { color: $brand !important; }
+  ::ng-deep .mdc-tab-indicator__content--underline {
+    border-color: $brand !important;
+    border-top-width: 2.5px !important;
+  }
+  ::ng-deep .mat-mdc-tab-body-wrapper { flex: 1; min-height: 0; }
+  ::ng-deep .mat-mdc-tab-body-content { overflow-y: auto; }
+}
+
+.mp-tab-body { padding: 12px 14px 18px; }
+
+.mp-tab-hint {
+  font-size: 11.5px; color: $muted;
+  padding: 8px 10px; margin-bottom: 10px;
+  background: $line-soft; border-radius: 8px;
+  border: 1px dashed $line;
+}
+
+// ── Layers list ─────────────────────────────────────────────────────────────
+.mp-layers {
+  display: flex; flex-direction: column;
+  gap: 6px;
+}
+
+.mp-layer {
+  display: grid;
+  grid-template-columns: 22px 42px 1fr 28px;
+  gap: 8px;
+  align-items: center;
+  padding: 8px 8px 8px 4px;
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 10px;
+  transition: background 0.12s, border-color 0.12s, box-shadow 0.15s;
+
+  &:hover {
+    background: $line-soft;
+    border-color: $brand-tint-2;
+  }
+}
+
+.mp-layer-grip {
+  width: 22px; height: 26px; border-radius: 6px;
+  color: $muted; cursor: grab;
+  display: inline-flex; align-items: center; justify-content: center;
+  svg { width: 13px; height: 13px; }
+  &:hover { color: $brand; background: $brand-tint; }
+  &:active { cursor: grabbing; }
+}
+
+.mp-layer-thumb {
+  width: 42px; height: 42px; border-radius: 8px;
+  overflow: hidden;
+  background: $line-soft;
+  border: 1px solid $line;
+  img { width: 100%; height: 100%; object-fit: cover; display: block; }
+}
+
+.mp-layer-text {
+  display: flex; flex-direction: column; gap: 3px;
+  min-width: 0;
+}
+
+.mp-layer-title {
+  font-size: 13px; font-weight: 600; color: $ink;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+
+.mp-layer-type {
+  display: inline-flex; align-items: center;
+  width: fit-content;
+  font-size: 9.5px; font-weight: 700; letter-spacing: 0.6px;
+  text-transform: uppercase;
+  padding: 2px 7px; border-radius: 100px;
+  border: 1px solid;
+
+  &.type-vec { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &.type-ras { background: #fff7e6; color: #b35a00; border-color: #ffe0b3; }
+}
+
+.mp-layer-more {
+  width: 28px; height: 28px; border-radius: 7px;
+  background: transparent; border: 1px solid transparent;
+  color: $muted; cursor: pointer;
+  display: inline-flex; align-items: center; justify-content: center;
+  svg { width: 14px; height: 14px; }
+  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+}
+
+::ng-deep .mp-menu-danger {
+  color: $danger;
+  mat-icon { color: $danger; }
+}
+
+// CDK drag preview
+::ng-deep .cdk-drag-preview {
+  background: #fff !important;
+  border: 1px solid $brand !important;
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(1,73,155,0.18) !important;
+}
+::ng-deep .cdk-drag-placeholder { opacity: 0.3; background: $brand-tint; }
+
+// ── Empty state ─────────────────────────────────────────────────────────────
+.mp-layers-empty {
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px 18px;
+  text-align: center;
+}
+
+.mp-empty-icon {
+  width: 52px; height: 52px; border-radius: 14px;
+  background: $brand-tint; color: $brand;
+  display: inline-flex; align-items: center; justify-content: center;
+  margin-bottom: 12px;
+  svg { width: 24px; height: 24px; }
+}
+
+.mp-empty-title { font-size: 14px; font-weight: 600; color: $ink; }
+.mp-empty-sub { font-size: 12px; color: $muted; margin-top: 6px; line-height: 1.5;
+  strong { color: $brand; font-weight: 600; }
+}
+
+// ── Legend ──────────────────────────────────────────────────────────────────
+.mp-legend {
+  display: flex; flex-direction: column; gap: 12px;
+}
+.mp-legend-item {
+  border: 1px solid $line;
+  border-radius: 10px;
+  padding: 12px;
+  background: $line-soft;
+  h3 {
+    margin: 0 0 8px;
+    font-size: 12px; font-weight: 600; color: $ink;
+  }
+  img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
+}
+
+// ── Floating tool forms ─────────────────────────────────────────────────────
+.mp-floating-form {
+  position: absolute; top: 130px; right: 24px;
+  width: 280px;
+  z-index: 100;
+  background: #fff;
+  border: 1px solid $line;
+  border-radius: 14px;
+  box-shadow: 0 16px 40px -10px rgba(11,37,69,0.22), 0 4px 12px rgba(11,37,69,0.08);
+  padding: 16px;
+}
+
+// ── Responsive ──────────────────────────────────────────────────────────────
+@media (max-width: 1100px) {
+  .mp-bar { padding: 8px 14px; gap: 6px; flex-wrap: wrap; }
+  .mp-bar-title { max-width: 100%; }
+  .mp-search-wrap { order: 99; flex-basis: 100%; max-width: none; margin-top: 6px; }
+  .mp-sidebar.opened { width: 280px; }
+}

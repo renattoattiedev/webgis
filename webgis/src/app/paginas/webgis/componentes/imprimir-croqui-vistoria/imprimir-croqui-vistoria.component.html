@@ -1,0 +1,312 @@
+<div class="imprimir-vistoria-container">
+  <div #draggableWindow
+  class="vistoria-card"
+  [class.minimized]="isMinimized"
+  [class.dragging]="isDragging"
+  [ngStyle]="getWindowStyle()">
+
+    <div *ngIf="!isMinimized"
+      class="vistoria-header"
+      (mousedown)="onHeaderMouseDown($event)"
+    >
+      <div class="title-wrap">
+        <mat-icon>print</mat-icon>
+        <span>Croqui de Vistoria</span>
+      </div>
+
+      <div class="window-controls">
+        <button
+          type="button"
+          class="cv-icon-btn no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); minimizeWindow()"
+          matTooltip="Minimizar">
+          <mat-icon>remove</mat-icon>
+        </button>
+
+        <button
+          type="button"
+          class="cv-icon-btn cv-icon-btn--close no-drag"
+          (mousedown)="$event.stopPropagation()"
+          (click)="$event.stopPropagation(); cancelar()"
+          matTooltip="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <!-- Beacon (minimizado) -->
+    <div class="win-beacon" *ngIf="isMinimized" (click)="maximizeWindow()">
+      <div class="beacon-icon-wrap"><mat-icon>print</mat-icon></div>
+      <span class="beacon-label">Croqui Vistoria</span>
+    </div>
+
+    <div class="window-content" *ngIf="!isMinimized">
+      <mat-card-content>
+        <mat-tab-group>
+          <!-- Aba Consulta -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>search</mat-icon>
+              <span class="tab-label">Consulta</span>
+            </ng-template>
+
+            <div class="tab-content">
+              <div class="consulta-section">
+                <div class="consulta-row">
+                  <mat-radio-group [(ngModel)]="tipoConsulta" (change)="onTipoConsultaChange($event.value)"
+                    class="tipo-consulta-group">
+                    <mat-radio-button value="SS">SS</mat-radio-button>
+                    <mat-radio-button value="Matricula">Matrícula</mat-radio-button>
+                    <mat-radio-button value="Hidrometro">Hidrômetro</mat-radio-button>
+                  </mat-radio-group>
+
+                  <div class="search-container">
+                    <mat-form-field appearance="outline" class="search-field">
+                      <mat-label>Digite o número {{ getTipoLabel() }}</mat-label>
+                      <input matInput [(ngModel)]="codigoDigitado"
+                        placeholder="Digite o código"
+                        (ngModelChange)="onNumeroSsChange()"
+                        (keyup.enter)="adicionarRegistro()">
+                    </mat-form-field>
+
+                    <div class="field-group seq-ss-field" *ngIf="tipoConsulta === 'SS'">
+                      <span class="field-label">
+                        <span *ngIf="carregandoSequencias" style="display:flex;align-items:center;gap:6px;">
+                          <mat-spinner diameter="12"></mat-spinner> Buscando...
+                        </span>
+                        <span *ngIf="!carregandoSequencias">Sequência</span>
+                      </span>
+                      <div class="select-wrap">
+                        <mat-select [(ngModel)]="seq_ss"
+                          placeholder="Selecione"
+                          panelClass="webgis-select-panel"
+                          [disabled]="sequenciasDisponiveis.length === 0 || carregandoSequencias">
+                          <mat-option *ngFor="let seq of sequenciasDisponiveis" [value]="seq">
+                            {{ seq }}
+                          </mat-option>
+                        </mat-select>
+                      </div>
+                      <span class="field-hint" *ngIf="!carregandoSequencias && codigoDigitado.length > 0 && codigoDigitado.length < 12">
+                        Digite 12 caracteres
+                      </span>
+                    </div>
+
+                    <button mat-raised-button color="white" (click)="adicionarRegistro()"
+                      [disabled]="!codigoDigitado || buscandoDados || (tipoConsulta === 'SS' && !seq_ss)"
+                      class="search-button">
+                      <mat-icon>add</mat-icon>
+                      {{ buscandoDados ? 'Adicionando...' : 'Adicionar' }}
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <!-- Aba Localização -->
+          <mat-tab>
+            <ng-template mat-tab-label>
+              <mat-icon>place</mat-icon>
+              <span class="tab-label">Localização</span>
+            </ng-template>
+
+            <div class="tab-content">
+              <div class="localizacao-section">
+                <div class="localizacao-form">
+                  <!-- Primeira linha: Cidade + Listar -->
+                  <div class="form-row cidade-row">
+                    <mat-form-field appearance="outline" class="localidade-field">
+                      <mat-label>Cidade</mat-label>
+                      <mat-chip-grid #chipGrid aria-label="Cidades selecionadas">
+                        <mat-chip-row *ngFor="let cidade of cidadesSelecionadas" (removed)="removerCidade(cidade)">
+                          {{ cidade.cidade }}
+                          <button matChipRemove aria-label="Remover cidade">
+                            <mat-icon>cancel</mat-icon>
+                          </button>
+                        </mat-chip-row>
+                        <input #cidadeInputRef placeholder="Digite para buscar cidade..." [matAutocomplete]="autoCidade"
+                          [formControl]="cidadeControl" [matChipInputFor]="chipGrid"
+                          [matChipInputSeparatorKeyCodes]="[13,188]" [matChipInputAddOnBlur]="false"
+                          (keydown.enter)="$event.preventDefault()" />
+                      </mat-chip-grid>
+                      <mat-autocomplete #autoCidade="matAutocomplete"
+                        (optionSelected)="adicionarCidade($event.option.value)">
+                        <mat-option *ngFor="let cidade of cidadesFiltradas" [value]="cidade">
+                          {{ cidade.cidade }}
+                        </mat-option>
+                        <mat-option *ngIf="cidadesFiltradas.length === 0" disabled>
+                          Nenhuma cidade encontrada
+                        </mat-option>
+                      </mat-autocomplete>
+                    </mat-form-field>
+                    <div class="listar-checkbox-inline">
+                      <button mat-raised-button color="primary" (click)="listarPorLocalizacao()" class="listar-button"
+                        color="white" [disabled]="!podeBuscarPorLocalizacao">
+                        <mat-icon>search</mat-icon>
+                        {{ buscandoLocalizacao ? 'Buscando...' : 'Listar' }}
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Segunda linha: Logradouro, Bairro -->
+                  <div class="form-row">
+                    <mat-form-field appearance="outline" class="bairro-field">
+                      <mat-label>Bairro</mat-label>
+                      <input type="text" matInput [matAutocomplete]="autoBairro" [formControl]="bairroControl"
+                        [disabled]="bairros.length === 0"
+                        placeholder="Digite para buscar bairro...">
+                      <mat-autocomplete #autoBairro="matAutocomplete" [displayWith]="displayBairro"
+                        (optionSelected)="onBairroSelected($event.option.value)">
+                        <mat-option *ngFor="let bairro of bairrosFiltrados" [value]="bairro">
+                          {{ bairro.bairro }}
+                        </mat-option>
+                        <mat-option *ngIf="bairrosFiltrados.length === 0" disabled>
+                          Nenhum bairro disponível
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-icon matSuffix>location_on</mat-icon>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="logradouro-field logradouro-maior">
+                      <mat-label>Logradouro</mat-label>
+                      <input type="text" matInput [matAutocomplete]="autoLogradouro" [ngModel]="logradouroInput"
+                        (ngModelChange)="onLogradouroInputChange($event)" [disabled]="logradouros.length === 0"
+                        placeholder="Digite para buscar logradouro...">
+                      <mat-autocomplete #autoLogradouro="matAutocomplete" [displayWith]="displayLogradouro"
+                        (optionSelected)="logradouroSelecionado = $event.option.value">
+                        <mat-option *ngFor="let logradouro of logradourosFiltrados" [value]="logradouro">
+                          {{ logradouro.logradouroCompleto }}
+                        </mat-option>
+                        <mat-option *ngIf="logradourosFiltrados.length === 0" disabled>
+                          Nenhum logradouro disponível
+                        </mat-option>
+                      </mat-autocomplete>
+                      <mat-icon matSuffix>road</mat-icon>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+        </mat-tab-group>
+      </mat-card-content>
+
+      <!-- Wrapper fixo inferior: registros + ações -->
+      <div class="bottom-fixed">
+        <div class="selection-fixed">
+          <div class="registros-selecionados">
+            <div class="registros-header">
+              <h4>Registros Encontrados</h4>
+              <div class="header-actions">
+                <span class="contador">{{ registrosSelecionados.length }} registro(s)</span>
+              </div>
+            </div>
+
+            <div class="lista-selecionados"
+              *ngIf="registrosSelecionados && registrosSelecionados.length > 0; else estadoVazioGlobal">
+              <div class="registro-item"
+                *ngFor="let registro of registrosSelecionados; let i = index; trackBy: trackByIndex"
+                [class.selected]="isRegistroSelecionadoParaMapa(registro)"
+                (click)="onRegistroItemClick(registro)">
+                <ng-container *ngIf="getRegistroDisplay(registro) as displayInfo">
+                  <div class="registro-info">
+                    <span class="registro-tipo">{{ displayInfo.tipo }}:</span>
+                    <span class="registro-codigo">{{ displayInfo.codigo }}</span>
+                    <span class="registro-nome" *ngIf="displayInfo.nome">- {{ displayInfo.nome }}</span>
+                  </div>
+                </ng-container>
+                <div
+                  *ngIf="isRegistroConsulta(registro) && registro.tipo === 'SS'"
+                  class="ss-ficha-toggle"
+                  (click)="$event.stopPropagation()">
+                  <span class="ss-ficha-label">Ficha</span>
+                  <mat-slide-toggle
+                    [(ngModel)]="registro.imprimirDadosSS"
+                    class="ss-toggle-item"
+                    matTooltip="Imprimir dados do SS"
+                    aria-label="Imprimir ficha da SS">
+                  </mat-slide-toggle>
+                </div>
+                <button mat-icon-button (click)="removerRegistro(i)" class="remove-button" matTooltip="Remover">
+                  <mat-icon>close</mat-icon>
+                </button>
+              </div>
+            </div>
+
+            <ng-template #estadoVazioGlobal>
+              <div class="estado-vazio">
+                <mat-icon>list_alt</mat-icon>
+                <p>Nenhum registro encontrado</p>
+                <small>Use as funções de Consulta ou Localização para adicionar registros</small>
+              </div>
+            </ng-template>
+          </div>
+        </div>
+
+        <!-- Footer com botões de ação -->
+        <mat-card-actions class="card-actions">
+          <button mat-stroked-button (click)="limparTudo()" class="footer-action-button" color="white">
+            <mat-icon>delete</mat-icon>
+            Limpar Tudo
+          </button>
+
+          <button mat-stroked-button (click)="posicionarNoMapa()" class="footer-action-button" color="white"
+            [disabled]="posicionandoMapa || registrosSelecionadosParaMapaCount === 0">
+            <mat-icon>place</mat-icon>
+            {{ posicionandoMapa ? 'Posicionando...' : 'Posicionar no Mapa' }}
+          </button>
+
+          <button mat-stroked-button (click)="abrirConfigCroqui()" class="footer-action-button" color="white"
+            [disabled]="posicionandoMapa || !mapaPosicionado">
+            <mat-icon>tune</mat-icon>
+            Configurar Croqui
+          </button>
+
+          <button mat-raised-button color="white" (click)="imprimirCroqui()" [disabled]="!podeImprimir"
+            class="footer-action-button primary">
+            <mat-icon>print</mat-icon>
+            {{ loading ? 'Imprimindo...' : 'Imprimir Croqui' }}
+          </button>
+        </mat-card-actions>
+      </div>
+
+    </div>
+
+  </div>
+
+  <!-- Popup OL -->
+  <div #popup class="ol-popup" [style.display]="popupData ? 'block' : 'none'">
+    <div class="popup-content" *ngIf="popupData">
+      <div class="popup-header">
+        <strong>Informações do Imóvel</strong>
+        <button type="button" class="popup-close" (click)="closePopup()" aria-label="Fechar">×</button>
+      </div>
+      <div class="popup-body">
+        <div class="info-row" *ngIf="popupData.matricula">
+          <span class="label">Matrícula:</span>
+          <span class="value">{{ popupData.matricula }}</span>
+        </div>
+        <div class="info-row" *ngIf="popupData.hd">
+          <span class="label">Hidrômetro:</span>
+          <span class="value">{{ popupData.hd }}</span>
+        </div>
+        <div class="info-row" *ngIf="popupData.nome">
+          <span class="label">Nome:</span>
+          <span class="value">{{ popupData.nome }}</span>
+        </div>
+        <div class="info-row" *ngIf="popupData.numero">
+          <span class="label">Endereço:</span>
+          <span class="value">{{ popupData.numero }} - {{ popupData.bairro }}</span>
+        </div>
+      </div>
+      <div class="popup-footer">
+        <button type="button" class="popup-print-button" (click)="imprimirCroquiIndividual()"
+                [disabled]="loading" matTooltip="Imprimir croqui deste imóvel">
+          <mat-icon>print</mat-icon>
+          {{ loading ? 'Imprimindo...' : 'Imprimir' }}
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

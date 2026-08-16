@@ -1,0 +1,90 @@
+<div class="ribbon-container" role="toolbar" aria-label="Barra de ferramentas">
+
+  <!-- ── Grupo: Pesquisar ─────────────────────────────────────── -->
+  <div class="ribbon-group">
+    <div class="ribbon-group-tools">
+      <button class="tool-btn" (click)="onPesquisaEspacialClick()" matTooltip="Pesquisa Espacial" matTooltipPosition="below">
+        <mat-icon>travel_explore</mat-icon>
+      </button>
+      <button class="tool-btn" (click)="onPesquisarPorCamadasClick()" matTooltip="Pesquisar por camadas" matTooltipPosition="below">
+        <mat-icon>layers</mat-icon>
+      </button>
+      <button class="tool-btn" (click)="onCoordinateConverterClick()" matTooltip="Pesquisa por Coordenadas" matTooltipPosition="below">
+        <mat-icon>my_location</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <div class="ribbon-separator"></div>
+
+  <!-- ── Grupo: Imprimir ─────────────────────────────────────── -->
+  <div class="ribbon-group">
+    <div class="ribbon-group-tools">
+      <button
+        class="tool-btn"
+        [class.tool-btn--disabled]="!impressaoCroquisHabilitada"
+        [disabled]="!impressaoCroquisHabilitada"
+        (click)="onImprimirDadosVistoriaClick()"
+        matTooltip="Impressão de Croquis"
+        matTooltipPosition="below">
+        <mat-icon>print</mat-icon>
+      </button>
+    </div>
+  </div>
+
+  <!-- ── Grupo: Pitometria (permissão) ──────────────────────── -->
+  <ng-container *ngIf="pitometriaHabilitada && podeVerPitometria">
+    <div class="ribbon-separator"></div>
+    <div class="ribbon-group">
+      <div class="ribbon-group-tools">
+        <button class="tool-btn" (click)="onPitometriaClick()" matTooltip="Pitometria" matTooltipPosition="below">
+          <mat-icon>water_drop</mat-icon>
+        </button>
+        <button class="tool-btn" (click)="onConsultaPitometriaClick()" matTooltip="Consulta Pitometria DW" matTooltipPosition="below">
+          <mat-icon>analytics</mat-icon>
+        </button>
+        <button class="tool-btn" (click)="onConsultaEspacialPitometriaClick()" matTooltip="Consulta Espacial Pitometria" matTooltipPosition="below">
+          <mat-icon>travel_explore</mat-icon>
+        </button>
+      </div>
+    </div>
+  </ng-container>
+
+  <div class="ribbon-separator"></div>
+  <div class="ribbon-group">
+    <div class="ribbon-group-tools">
+      <button
+        class="tool-btn"
+        [class.tool-btn--active]="visualizacaoTematicaAtiva"
+        (click)="onVisualizacaoTematicaClick()"
+        matTooltip="Visualização temática — pressão"
+        matTooltipPosition="below"
+      >
+        <mat-icon>gradient</mat-icon>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- ── Componentes filhos ──────────────────────────────────────── -->
+<app-imprimir-croqui-vistoria *ngIf="vistoriaAtiva" (fechado)="onVistoriaFechada()">
+</app-imprimir-croqui-vistoria>
+
+<app-spatial-search *ngIf="spatialSearchAtiva" (fechado)="onSpatialSearchFechada()">
+</app-spatial-search>
+
+<app-coordinate-converter *ngIf="coordinateConverterAtivo" (fechado)="onCoordinateConverterFechado()">
+</app-coordinate-converter>
+
+<app-pitometria-card *ngIf="pitometriaAtiva" (fechado)="onPitometriaFechada()">
+</app-pitometria-card>
+
+<app-consulta-pitometria *ngIf="consultaPitometriaAtiva" (fechado)="onConsultaPitometriaFechada()">
+</app-consulta-pitometria>
+
+<app-consulta-espacial-pitometria *ngIf="consultaEspacialPitometriaAtiva" (fechado)="onConsultaEspacialPitometriaFechada()">
+</app-consulta-espacial-pitometria>
+
+<app-thematic-card *ngIf="visualizacaoTematicaAtiva" (fechado)="onVisualizacaoTematicaFechada()">
+</app-thematic-card>

@@ -1,0 +1,103 @@
+$blue: #01499B;
+$blue-light: rgba(1, 73, 155, 0.08);
+$blue-border: rgba(1, 73, 155, 0.22);
+$text: #1e3a5f;
+
+:host {
+  display: block;
+  font-family: system-ui, sans-serif;
+}
+
+// ── Header ────────────────────────────────────────────────────────────────────
+
+.panel-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.panel-title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.panel-label {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: $text;
+  letter-spacing: 0.3px;
+}
+
+// ── Options row ───────────────────────────────────────────────────────────────
+
+.options-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.field-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.field-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: $blue;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+// ── Select wrap ───────────────────────────────────────────────────────────────
+
+.select-wrap {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: border-color 0.15s, box-shadow 0.15s;
+
+  &:focus-within {
+    border-color: $blue-border;
+    box-shadow: 0 0 0 3px $blue-light;
+  }
+}
+
+::ng-deep .select-wrap {
+  .mat-mdc-select { display: block; padding: 7px 10px; }
+  .mat-mdc-select-trigger { display: flex; align-items: center; width: 100%; height: auto; min-height: unset; }
+  .mat-mdc-select-value { flex: 1; min-width: 0; font-size: 12px; font-family: system-ui, sans-serif; color: #374151; }
+  .mat-mdc-select-placeholder { color: #9ca3af; font-size: 12px; font-family: system-ui, sans-serif; }
+  .mat-mdc-select-arrow-wrapper { height: auto; transform: none !important; flex-shrink: 0; padding-left: 8px; }
+  .mat-mdc-select-arrow { color: #9ca3af; }
+  .mat-mdc-select-ripple, .mat-ripple { display: none; }
+  .mat-mdc-select:focus { outline: none; }
+}
+
+// ── Export button ─────────────────────────────────────────────────────────────
+
+.export-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 8px 12px;
+  border: none;
+  border-radius: 8px;
+  background: $blue;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background 0.15s;
+  letter-spacing: 0.3px;
+
+  &:hover { background: #013d82; }
+
+  &:active { background: #012d63; }
+}
