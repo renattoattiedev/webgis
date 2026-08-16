@@ -8,7 +8,7 @@
     "allowSyntheticDefaultImports": true,
     "esModuleInterop": true,
     "strict": true,
-    "noEmit": false,
+    "noEmit": true,
     "types": ["node"]
   },
   "include": ["vite.config.ts", "vitest.config.ts"]
