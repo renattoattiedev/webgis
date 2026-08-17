@@ -236,4 +236,11 @@ $modal-shadow-color: rgba(0, 0, 0, 0.18);
       }
     }
   }
+
+  @media (max-width: 768px) {
+    .ol-custom-overviewmap,
+    .ol-overviewmap {
+      display: none !important;
+    }
+  }
 }
