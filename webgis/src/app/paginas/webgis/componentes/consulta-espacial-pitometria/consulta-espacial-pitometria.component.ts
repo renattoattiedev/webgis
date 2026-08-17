@@ -39,10 +39,6 @@ import { MapaService } from 'src/app/services/mapa.service';
 import { ConteudoService } from 'src/app/services/api/conteudo.service';
 import { GetComponenteNomeService } from 'src/app/services/api/get-componente-nome.service';
 import { FetchContentOrganizationService } from 'src/app/services/api/fetch.content.organization.service';
-import {
-  PitometriaDwService,
-  MedicaoDw,
-} from 'src/app/services/api/pitometria-dw.service';
 import { MAT_SLIDE_TOGGLE_DEFAULT_OPTIONS } from '@angular/material/slide-toggle';
 
 interface CamadaEspacialItem {
@@ -56,7 +52,7 @@ interface CamadaEspacialItem {
   campoLabel: string;
 }
 
-const ESTATISTICAS: { value: keyof MedicaoDw; label: string }[] = [
+const ESTATISTICAS: { value: string; label: string }[] = [
   { value: 'pressaoMinima', label: 'Mínima' },
   { value: 'pressaoMedia', label: 'Média' },
   { value: 'pressaoMaxima', label: 'Máxima' },
@@ -259,14 +255,14 @@ export class ConsultaEspacialPitometriaComponent
   // ── Legenda ──────────────────────────────────────────────────────────────
   readonly estatisticas = ESTATISTICAS;
   readonly coresLegenda = CORES_LEGENDA;
-  estatisticaSelecionada: keyof MedicaoDw = 'pressaoMedia';
+  estatisticaSelecionada: string = 'pressaoMedia';
   corLegendaSelecionada = ''; // vazio = usar rampa; valor = cor fixa para todos os pins
   legendaItens: { cor: string; label: string }[] = [];
 
   // ── Estado ───────────────────────────────────────────────────────────────
   carregando = false;
   temResultados = false;
-  private ultimasMedicoes: MedicaoDw[] = [];
+  private ultimasMedicoes: any[] = [];
   ultimoPoligono: object | null = null;
 
   // ── OL layers ────────────────────────────────────────────────────────────
@@ -285,7 +281,6 @@ export class ConsultaEspacialPitometriaComponent
     private conteudoService: ConteudoService,
     private getComponenteNomeService: GetComponenteNomeService,
     private fetchContentOrganizationService: FetchContentOrganizationService,
-    private pitometriaDwService: PitometriaDwService,
     private snackBar: MatSnackBar,
   ) {
     super(cdr);
@@ -384,7 +379,7 @@ export class ConsultaEspacialPitometriaComponent
       if (this.drawLayer) map.removeLayer(this.drawLayer);
       if (this.pinsLayer) map.removeLayer(this.pinsLayer);
     }
-    this.conteudoService.removerAbaDw('consulta-espacial-pitometria-dw');
+    this.conteudoService.removerAbaDw('consulta-espacial-pitometria');
   }
 
   // ── Modo ─────────────────────────────────────────────────────────────────
@@ -588,53 +583,16 @@ export class ConsultaEspacialPitometriaComponent
     this.carregando = true;
     this.cdr.detectChanges();
 
-    const todasFontes =
-      this.fontesDadosSelecionadas.size === this.FONTES_DADOS.length;
-    this.pitometriaDwService
-      .fetchMedicoesSpatial({
-        polygon: this.ultimoPoligono,
-        dataInicio: this.dataInicio || undefined,
-        dataFim: this.dataFim || undefined,
-        medicaoPressao: this.medicaoPressao,
-        medicaoVazao: this.medicaoVazao,
-        fontesDados: todasFontes
-          ? undefined
-          : [...this.fontesDadosSelecionadas],
-        incluirOcorrencia: this.incluirOcorrencia,
-      })
-      .subscribe({
-        next: (res) => {
-          this.carregando = false;
-          if (!res.medicoes.length) {
-            this.snackBar.open(
-              'Nenhum ponto de pitometria dentro da área selecionada.',
-              'OK',
-              { duration: 4000 },
-            );
-            this.temResultados = false;
-            this.cdr.detectChanges();
-            return;
-          }
-          if (res.truncado) {
-            this.snackBar.open(
-              'Resultado limitado a 5.000 registros. Use filtros de data.',
-              'OK',
-              { duration: 6000 },
-            );
-          }
-          this.ultimasMedicoes = res.medicoes;
-          this.temResultados = true;
-          this.plotarPins(res.medicoes);
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.carregando = false;
-          this.snackBar.open('Erro ao executar consulta espacial.', 'OK', {
-            duration: 3000,
-          });
-          this.cdr.detectChanges();
-        },
-      });
+    // A consulta espacial dependia das rotas DW (/pitometria-dw/spatial), que
+    // foram removidas do backend. Mantém o componente renderizando estado vazio.
+    this.carregando = false;
+    this.temResultados = false;
+    this.snackBar.open(
+      'Consulta espacial de pitometria (DW) indisponível no momento.',
+      'OK',
+      { duration: 3000 },
+    );
+    this.cdr.detectChanges();
   }
 
   // ── Mostrar Resultados (attribute-table) ──────────────────────────────────
@@ -654,7 +612,6 @@ export class ConsultaEspacialPitometriaComponent
     this.valoresDisponiveis = [];
     this.temResultados = false;
     this.legendaItens = [];
-    this.conteudoService.removerAbaDw('consulta-espacial-pitometria-dw');
     this.cdr.detectChanges();
   }
 
@@ -665,7 +622,7 @@ export class ConsultaEspacialPitometriaComponent
 
   // ── Pins ─────────────────────────────────────────────────────────────────
 
-  private plotarPins(medicoes: MedicaoDw[]): void {
+  private plotarPins(medicoes: any[]): void {
     const map = this.mapaService.getMapa();
     if (!map) return;
     if (!map.getLayers().getArray().includes(this.pinsLayer))
@@ -757,7 +714,7 @@ export class ConsultaEspacialPitometriaComponent
 
   // ── Attribute-table ───────────────────────────────────────────────────────
 
-  private publicarNaTabelaAtributos(medicoes: MedicaoDw[]): void {
+  private publicarNaTabelaAtributos(medicoes: any[]): void {
     const rows = medicoes.map((m) => ({
       'Cod. SIMP': m.codPontoMedicao,
       Cota: m.cotaMedidor,
@@ -786,7 +743,7 @@ export class ConsultaEspacialPitometriaComponent
       'Qtd Registros',
     ];
     this.conteudoService.adicionarAbaDw(
-      'consulta-espacial-pitometria-dw',
+      'consulta-espacial-pitometria',
       rows,
       colunas,
     );

@@ -267,10 +267,6 @@ import { UpdatePitometriaGeometryUseCase } from '@/domain/pitometria/application
 import { DeletePitometriaUseCase } from '@/domain/pitometria/application/use-cases/delete-pitometria';
 import { FetchPitometriaUseCase } from '@/domain/pitometria/application/use-cases/fetch-pitometria';
 import { GetPitometriaByIdUseCase } from '@/domain/pitometria/application/use-cases/get-pitometria-by-id';
-import { FetchPitometriaDwController } from './controllers/fetch-pitometria-dw.controller';
-import { FetchPitometriaDwUseCase } from '@/domain/pitometria-dw/application/use-cases/fetch-pitometria-dw.use-case';
-import { FetchPitometriaDwSpatialController } from './controllers/fetch-pitometria-dw-spatial.controller';
-import { FetchPitometriaDwSpatialUseCase } from '@/domain/pitometria-dw/application/use-cases/fetch-pitometria-dw-spatial.use-case';
 import { FetchRelatorioUsoController } from './controllers/fetch-relatorio-uso.controller';
 import { FetchRelatorioInventarioController } from './controllers/fetch-relatorio-inventario.controller';
 import { FetchRelatorioUsuariosController } from './controllers/fetch-relatorio-usuarios.controller';
@@ -443,8 +439,6 @@ import { GetCamadaStatusController } from './controllers/get-camada-status.contr
     DeletePitometriaController,
     FetchPitometriaController,
     GetPitometriaByIdController,
-    FetchPitometriaDwController,
-    FetchPitometriaDwSpatialController,
     FetchRelatorioUsoController,
     FetchRelatorioInventarioController,
     FetchRelatorioUsuariosController,
@@ -606,8 +600,6 @@ import { GetCamadaStatusController } from './controllers/get-camada-status.contr
     DeletePitometriaUseCase,
     FetchPitometriaUseCase,
     GetPitometriaByIdUseCase,
-    FetchPitometriaDwUseCase,
-    FetchPitometriaDwSpatialUseCase,
     FetchRelatorioUsoUseCase,
     FetchRelatorioInventarioUseCase,
     FetchRelatorioUsuariosUseCase,

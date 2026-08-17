@@ -53,14 +53,14 @@ export class SeedConfig {
         NUM_KEY_ORDER: 1,
         DSC_GRUPO_KEY: 'COORDENADAS',
         DSC_KEY: 'LATITUDE',
-        DSC_VALUE: '-20.3155',
+        DSC_VALUE: '-15.7939',
       },
       {
         NUM_GRUPO_ORDER: 3,
         NUM_KEY_ORDER: 2,
         DSC_GRUPO_KEY: 'COORDENADAS',
         DSC_KEY: 'LONGITUDE',
-        DSC_VALUE: '-40.3128',
+        DSC_VALUE: '-47.8828',
       },
       {
         NUM_GRUPO_ORDER: 4,

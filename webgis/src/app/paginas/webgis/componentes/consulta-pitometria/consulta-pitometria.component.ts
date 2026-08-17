@@ -32,10 +32,6 @@ import { MapaService } from 'src/app/services/mapa.service';
 import { ConteudoService } from 'src/app/services/api/conteudo.service';
 import { GetComponenteNomeService } from 'src/app/services/api/get-componente-nome.service';
 import { FetchContentOrganizationService } from 'src/app/services/api/fetch.content.organization.service';
-import {
-  PitometriaDwService,
-  MedicaoDw,
-} from 'src/app/services/api/pitometria-dw.service';
 import ImageWMS from 'ol/source/ImageWMS';
 
 const PIN_LARANJA = '#FF9800';
@@ -103,7 +99,6 @@ export class ConsultaPitometriaComponent
     private conteudoService: ConteudoService,
     private getComponenteNomeService: GetComponenteNomeService,
     private fetchContentOrganizationService: FetchContentOrganizationService,
-    private pitometriaDwService: PitometriaDwService,
     private snackBar: MatSnackBar,
     private http: HttpClient,
   ) {
@@ -212,46 +207,15 @@ export class ConsultaPitometriaComponent
     this.carregando = true;
     this.cdr.detectChanges();
 
-    const v = this.form.value;
-    this.pitometriaDwService
-      .fetchMedicoes({
-        codSimp: v.codSimp || undefined,
-        matricula: v.matricula || undefined,
-        numeroOs: v.numeroOs || undefined,
-        dataInicio: v.dataInicio || undefined,
-        dataFim: v.dataFim || undefined,
-      })
-      .subscribe({
-        next: (res) => {
-          this.carregando = false;
-          if (!res.medicoes.length) {
-            this.snackBar.open(
-              'Nenhum registro encontrado para os filtros informados.',
-              'OK',
-              { duration: 4000 },
-            );
-            this.cdr.detectChanges();
-            return;
-          }
-          if (res.truncado) {
-            this.snackBar.open(
-              `Resultado limitado a 5.000 registros. Use filtros de data para refinar a consulta.`,
-              'OK',
-              { duration: 6000 },
-            );
-          }
-          this.plotarPins(res.medicoes);
-          this.publicarNaTabelaAtributos(res.medicoes);
-          this.cdr.detectChanges();
-        },
-        error: () => {
-          this.carregando = false;
-          this.snackBar.open('Erro ao consultar dados do DW', 'OK', {
-            duration: 3000,
-          });
-          this.cdr.detectChanges();
-        },
-      });
+    // A consulta de pitometria dependia das rotas DW (/pitometria-dw), que
+    // foram removidas do backend. Mantém o componente renderizando estado vazio.
+    this.carregando = false;
+    this.snackBar.open(
+      'Consulta de pitometria (DW) indisponível no momento.',
+      'OK',
+      { duration: 3000 },
+    );
+    this.cdr.detectChanges();
   }
 
   limpar(): void {
@@ -263,7 +227,6 @@ export class ConsultaPitometriaComponent
       dataFim: '',
     });
     this.limparPins();
-    this.conteudoService.removerAbaDw('consulta-pitometria-dw');
     this.cdr.detectChanges();
   }
 
@@ -361,7 +324,7 @@ export class ConsultaPitometriaComponent
     map.addLayer(this.pinsLayer);
   }
 
-  private plotarPins(medicoes: MedicaoDw[]): void {
+  private plotarPins(medicoes: any[]): void {
     const map = this.mapaService.getMapa();
     if (!map) return;
 
@@ -432,7 +395,7 @@ export class ConsultaPitometriaComponent
 
   // ─── Attribute-table ───────────────────────────────────────────────────────
 
-  private publicarNaTabelaAtributos(medicoes: MedicaoDw[]): void {
+  private publicarNaTabelaAtributos(medicoes: any[]): void {
     const rows = medicoes.map((m) => ({
       ...m,
       geometry:
@@ -447,7 +410,7 @@ export class ConsultaPitometriaComponent
       ? Object.keys(rows[0]).filter((k) => k !== 'geometry')
       : [];
     this.conteudoService.adicionarAbaDw(
-      'consulta-pitometria-dw',
+      'consulta-pitometria',
       rows,
       colunas,
     );

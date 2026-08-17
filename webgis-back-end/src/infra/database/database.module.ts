@@ -57,16 +57,13 @@ import { BasemapsRepository } from '@/domain/basemaps/application/repositories/b
 import { PrismaBasemapRepository } from './prisma/repositories/prisma-basemap-repository';
 import { PitometriaRepository } from '@/domain/pitometria/application/repositories/pitometria-repository';
 import { PrismaPitometriaRepository } from './prisma/repositories/prisma-pitometria-repository';
-import { PitometriaDwRepository } from '@/domain/pitometria-dw/application/repositories/pitometria-dw-repository';
-import { MssqlPitometriaDwRepository } from './mssql/repositories/mssql-pitometria-dw-repository';
-import { DwDatabaseModule } from './dw/dw-database.module';
 import { RelatoriosRepository } from '@/domain/relatorios/application/repositories/relatorios-repository';
 import { PrismaRelatoriosRepository } from './prisma/repositories/prisma-relatorios-repository';
 import { PublicacaoHistoricoRepository } from '@/domain/camadas/application/repositories/publicacao-historico-repository';
 import { PrismaPublicacaoHistoricoRepository } from './prisma/repositories/prisma-publicacao-historico-repository';
 
 @Module({
-  imports: [EnvModule, DwDatabaseModule],
+  imports: [EnvModule],
   providers: [
     PrismaService,
     {
@@ -186,10 +183,6 @@ import { PrismaPublicacaoHistoricoRepository } from './prisma/repositories/prism
       useClass: PrismaPitometriaRepository,
     },
     {
-      provide: PitometriaDwRepository,
-      useClass: MssqlPitometriaDwRepository,
-    },
-    {
       provide: RelatoriosRepository,
       useClass: PrismaRelatoriosRepository,
     },
@@ -225,7 +218,6 @@ import { PrismaPublicacaoHistoricoRepository } from './prisma/repositories/prism
     PreferencesRepository,
     BasemapsRepository,
     PitometriaRepository,
-    PitometriaDwRepository,
     RelatoriosRepository,
   ],
 })
