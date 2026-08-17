@@ -73,6 +73,10 @@ function withDefaults(entry) {
 }
 
 module.exports = {
+  '/api-proxy': withDefaults({
+    target: 'http://localhost:3333',
+    pathRewrite: { '^/api-proxy': '' },
+  }),
   '/tile-proxy': withDefaults({
     target: 'https://tile.openstreetmap.org',
     headers: {
