@@ -10,8 +10,8 @@ BEGIN
     ALTER TABLE "camadas"."TP_PITOMETRIA"
       ALTER COLUMN "GEOMETRY"
         TYPE "public".geometry(Point, 31983)
-        USING ST_Transform(
-          ST_SetSRID("GEOMETRY", 4674),
+        USING public.ST_Transform(
+          public.ST_SetSRID("GEOMETRY", 4674),
           31983
         );
   END IF;
