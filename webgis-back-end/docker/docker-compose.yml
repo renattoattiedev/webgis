@@ -5,15 +5,17 @@ services:
       context: .
       dockerfile: Dockerfile.geoserver
     container_name: geoserver-runforrest
+    environment:
+      - GEOSERVER_DATA_DIR=/opt/geoserver_data
+      - ENABLE_CORS=true
+      # Demonstração: desabilita proteção CSRF (permite UI atrás do túnel Cloudflare)
+      - GEOSERVER_CSRF_DISABLED=true
+      - JAVA_OPTS=-Dgeoserver.csrf.whitelist=* -Ds3.properties.location=/opt/geoserver_data/s3.properties -Xms1G -Xmx4G -XX:+UseG1GC -Djava.awt.headless=true -XX:+UseStringDeduplication -Dcom.amazonaws.internal.S3AbortableInputStream.level=ERROR -Daws.region=us-east-1 -Duser.home=/opt/geoserver_data -server -Dorg.geotools.referencing.forceXY=true
     ports:
       - "8080:8080"
     volumes:
       - data_geoserver:/opt/geoserver_data
       - upload_raster:/opt/geoserver_data/upload_raster
-    environment:
-      - GEOSERVER_DATA_DIR=/opt/geoserver_data
-      - ENABLE_CORS=true
-      - JAVA_OPTS=-Dgeoserver.csrf.whitelist=* -Ds3.properties.location=/opt/geoserver_data/s3.properties -Xms1G -Xmx4G -XX:+UseG1GC -Djava.awt.headless=true -XX:+UseStringDeduplication -Dcom.amazonaws.internal.S3AbortableInputStream.level=ERROR -Daws.region=us-east-1 -Duser.home=/opt/geoserver_data -server -Dorg.geotools.referencing.forceXY=true
     networks:
       - runforrest_network
     restart: always
