@@ -1,1 +1,2 @@
-FROM docker.osgeo.org/geoserver:2.26.x
+# GeoServer — versión ESTÁBLE 2.27.6 (la 2.26.x/2.26.4 presentaba bug en encoder GeoJSON charsetName)
+FROM docker.osgeo.org/geoserver:2.27.6
