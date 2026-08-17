@@ -1531,8 +1531,8 @@ export class GeoserverAPI {
         nativeName: nomeCamada,
         title: nomeCamada,
         enabled: true,
-        srs: "EPSG:31984",
-        nativeCRS: "EPSG:31984",
+        srs: "EPSG:31983",
+        nativeCRS: "EPSG:31983",
         store: {
           name: `${nomeCamada}_${fonteRaster}`,
           type: "S3GeoTiff",
@@ -1677,8 +1677,8 @@ export class GeoserverAPI {
         nativeName: nativeName ?? nomeCamada,
         title: nomeCamada,
         enabled: true,
-        srs: 'EPSG:31984',
-        nativeCRS: 'EPSG:31984',
+        srs: 'EPSG:31983',
+        nativeCRS: 'EPSG:31983',
         store: {
           name: `${nomeCamada}_${fonteRaster}`,
           type: 'GeoTIFF',

@@ -52,8 +52,8 @@ export class ThematicLayerService {
     private conteudoService: ConteudoService,
   ) {
     proj4.defs(
-      'EPSG:31984',
-      '+proj=utm +zone=24 +south +datum=WGS84 +units=m +no_defs',
+      'EPSG:31983',
+      '+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs',
     );
     register(proj4);
   }
@@ -228,7 +228,7 @@ export class ThematicLayerService {
     const format = new GeoJSON();
     const featureProjection = map.getView().getProjection().getCode();
     const detected = this.detectDataProjection(collection.features[0]);
-    const projections = [...new Set([detected, 'EPSG:3857', 'EPSG:31984', 'EPSG:4326'])];
+    const projections = [...new Set([detected, 'EPSG:3857', 'EPSG:31983', 'EPSG:4326'])];
 
     for (const dataProjection of projections) {
       try {
@@ -255,7 +255,7 @@ export class ThematicLayerService {
     if (x >= -180 && x <= 180 && y >= -90 && y <= 90) return 'EPSG:4326';
     // SIRGAS 2000 / UTM 24S — valores típicos do ES. Não confundir com Web Mercator.
     if (x >= 100000 && x <= 1000000 && y >= 6000000 && y <= 11000000) {
-      return 'EPSG:31984';
+      return 'EPSG:31983';
     }
     return 'EPSG:3857';
   }

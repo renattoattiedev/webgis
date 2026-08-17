@@ -18,14 +18,14 @@ export class SeedConfig {
         NUM_KEY_ORDER: 1,
         DSC_GRUPO_KEY: 'ENDEREÇOS BASE',
         DSC_KEY: 'BASE_URL',
-        DSC_VALUE: 'http://localhost:3333',
+        DSC_VALUE: 'https://dev-api-giscesan.cesan.com.br',
       },
       {
         NUM_GRUPO_ORDER: 1,
         NUM_KEY_ORDER: 1,
         DSC_GRUPO_KEY: 'ENDEREÇOS BASE',
         DSC_KEY: 'BASE_URL_FRONTEND',
-        DSC_VALUE: 'http://localhost:4201',
+        DSC_VALUE: 'https://dev-giscesan.cesan.com.br/',
       },
       {
         NUM_GRUPO_ORDER: 2,
@@ -46,7 +46,7 @@ export class SeedConfig {
         NUM_KEY_ORDER: 3,
         DSC_GRUPO_KEY: 'GEOSERVER',
         DSC_KEY: 'GEOSERVER_URL',
-        DSC_VALUE: 'http://geoserver-webgis:8080/geoserver',
+        DSC_VALUE: 'http://localhost:8080/geoserver',
       },
       {
         NUM_GRUPO_ORDER: 3,

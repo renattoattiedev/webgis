@@ -188,7 +188,7 @@ export class ConfigImprimirCroquiVistoriaDialogComponent implements OnInit {
     const bbox = '315476.5,7691027.0,390465.375,7895713.0';
     const width = 40;
     const height = 40;
-    const imageUrl = `${this.urlWms}/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png`;
+    const imageUrl = `${this.urlWms}/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png`;
     return imageUrl;
   }
 

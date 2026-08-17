@@ -359,7 +359,7 @@ export class ConteudosComponent implements OnInit, OnDestroy {
         const bboxObj = JSON.parse(conteudoAtivo.boundingBox);
         const extent = [bboxObj.minx, bboxObj.miny, bboxObj.maxx, bboxObj.maxy];
 
-        const extent3857 = transformExtent(extent, 'EPSG:31984', 'EPSG:3857');
+        const extent3857 = transformExtent(extent, 'EPSG:31983', 'EPSG:3857');
 
         mapView?.fit(extent3857, {
           size: mapSize,
@@ -801,7 +801,7 @@ export class ConteudosComponent implements OnInit, OnDestroy {
       const { bbox, width, height } =
         this.getThumbnailDimensions(mapBoundingBox);
       const layersString = this.getCompositeLayersParam(resolvedMap);
-      return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layersString}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png&transparent=true`;
+      return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layersString}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png&transparent=true`;
     }
 
     if (contentType === 'raster') {
@@ -813,7 +813,7 @@ export class ConteudosComponent implements OnInit, OnDestroy {
     }
 
     const { bbox, width, height } = this.getThumbnailDimensions(boundingBox);
-    return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png&transparent=true`;
+    return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png&transparent=true`;
   }
 
   private queueThumbnailLoad(imageUrl: string): void {

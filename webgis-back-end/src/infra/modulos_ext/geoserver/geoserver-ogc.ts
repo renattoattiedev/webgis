@@ -95,7 +95,7 @@ export class GeoserverOGC {
       appendBaseParams();
 
       // Map humanized attributes to actual WFS property names
-      let geometryAttr = 'geometry';
+      let geometryAttr = 'geom';
       let availableAttrs: string[] = [];
       let softDeleteAttr: string | null = null;
       try {
@@ -141,7 +141,7 @@ export class GeoserverOGC {
           const [x, y] = coords;
           params.set(
             'cql_filter',
-            `DWITHIN(${geometryAttr}, SRID=31984;POINT(${x} ${y}), ${buffer}, meters)`,
+            `DWITHIN(${geometryAttr}, SRID=31983;POINT(${x} ${y}), ${buffer}, meters)`,
           );
           usePost = true;
         }
@@ -155,7 +155,7 @@ export class GeoserverOGC {
           typeof criterio === 'string' ? JSON.parse(criterio) : criterio;
 
         let wktPolygon: string | null = null;
-        const srid = geometria?.srid ?? 31984;
+        const srid = geometria?.srid ?? 31983;
 
         if (geometria?.wkt) {
           wktPolygon = `SRID=${srid};${geometria.wkt}`;

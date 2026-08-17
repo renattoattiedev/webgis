@@ -1170,7 +1170,7 @@ export class MyContentComponent implements OnInit, AfterViewInit {
       }
     }
 
-    const imageUrl = `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png`;
+    const imageUrl = `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png`;
 
     if (!this.thumbnailUrls.has(imageUrl)) {
       this.loading.set(imageUrl, true);

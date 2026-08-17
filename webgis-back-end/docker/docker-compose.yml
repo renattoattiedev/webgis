@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.geoserver
-    container_name: geoserver-webgis
+    container_name: geoserver-cesan
     ports:
       - "8080:8080"
     volumes:
@@ -13,35 +13,65 @@ services:
     environment:
       - GEOSERVER_DATA_DIR=/opt/geoserver_data
       - ENABLE_CORS=true
-      - JAVA_OPTS=-Ds3.properties.location=/opt/geoserver_data/s3.properties -Xms1G -Xmx4G -XX:+UseG1GC -Djava.awt.headless=true -XX:+UseStringDeduplication -Dcom.amazonaws.internal.S3AbortableInputStream.level=ERROR -Daws.region=us-east-1 -Duser.home=/opt/geoserver_data -server -Dorg.geotools.referencing.forceXY=true
+      - JAVA_OPTS=-Dgeoserver.csrf.whitelist=* -Ds3.properties.location=/opt/geoserver_data/s3.properties -Xms1G -Xmx4G -XX:+UseG1GC -Djava.awt.headless=true -XX:+UseStringDeduplication -Dorg.geotools.s3.S3Connector.level=ERROR -Dcom.amazonaws.internal.S3AbortableInputStream.level=ERROR -Daws.region=us-east-1 -Duser.home=/opt/geoserver_data -server -Dorg.geotools.referencing.forceXY=true -Dcom.amazonaws.sdk.s3.enforceInputStreamReadingEnabled=false -Dorg.geotools.s3.stream.closeOnReadComplete=false
+      # - AWS_REGION=us-east-1
+      # - AWS_DEFAULT_REGION=us-east-1
+      # - S3_FORCE_PATH_STYLE=true
+      # - AWS_ACCESS_KEY_ID=vHWQPjUujJwsKuadTpBT
+      # - AWS_SECRET_ACCESS_KEY=wjTlhKuV0yk2lpwarb9bBaWhyDO1atSXVty9JpK8
+      # >>> ADICIONE ESTA LINHA ABAIXO <<<
+      # >>>>>>>>>>>>>>>><<<<<<<<<<<<<<<<<
     networks:
-      - webgis_network
+      - cesan_network
     restart: always
-    depends_on:
-      - postgres
+    # depends_on:
+    #   - postgres
+    #   # - minio
 
   postgres:
-    container_name: postgres-webgis
+    container_name: postgres-cesan
     image: postgis/postgis
     ports:
       - "5432:5432"
     environment:
       POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: webgis
+      POSTGRES_PASSWORD: cesan123
+      POSTGRES_DB: cesan
       PGDATA: /data/postgres
     volumes:
       - data_postgres:/data/postgres
       - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
-      - webgis_network
+      - cesan_network
     restart: always
 
+  # minio:
+  #   container_name: minio
+  #   image: minio/minio
+  #   ports:
+  #     - "9000:9000"
+  #     - "9001:9001"
+  #   environment:
+  #     - MINIO_ROOT_USER=vHWQPjUujJwsKuadTpBT
+  #     - MINIO_ROOT_PASSWORD=wjTlhKuV0yk2lpwarb9bBaWhyDO1atSXVty9JpK8
+  #     - MINIO_REGION=us-east-1
+  #   volumes:
+  #     - minio_data:/data
+  #   command: server /data --console-address ":9001"
+  #   networks:
+  #     - cesan_network
+  #   restart: always
+
 networks:
-  webgis_network:
+  cesan_network:
     driver: bridge
 
 volumes:
   data_geoserver:
-  data_postgres:
+    external: true
   upload_raster:
+    external: true
+  data_postgres:
+    external: true
+  minio_data:
+    external: false

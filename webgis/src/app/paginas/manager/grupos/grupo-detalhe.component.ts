@@ -691,7 +691,7 @@ export class GrupoDetalheComponent implements OnInit, AfterViewInit, OnDestroy {
     if (compositeMap) {
       const { bbox, width, height } = this.getThumbnailDimensions(boundingBox);
       const layersString = this.getCompositeLayersParam(compositeMap);
-      return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layersString}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png&transparent=true`;
+      return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layersString}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png&transparent=true`;
     }
 
     if (!layerName) {
@@ -705,7 +705,7 @@ export class GrupoDetalheComponent implements OnInit, AfterViewInit, OnDestroy {
     }
 
     const { bbox, width, height } = this.getThumbnailDimensions(boundingBox);
-    return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png&transparent=true`;
+    return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png&transparent=true`;
   }
 
   getItemId(item: ItemConteudoGrupo): string {

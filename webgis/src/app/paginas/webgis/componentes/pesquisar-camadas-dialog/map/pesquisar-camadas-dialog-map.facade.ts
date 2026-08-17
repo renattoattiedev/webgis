@@ -21,8 +21,8 @@ export class PesquisarCamadasDialogMapFacade {
 
   constructor(private mapaService: MapaService) {
     proj4.defs(
-      'EPSG:31984',
-      '+proj=utm +zone=24 +south +datum=WGS84 +units=m +no_defs',
+      'EPSG:31983',
+      '+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs',
     );
     register(proj4);
   }
@@ -65,7 +65,7 @@ export class PesquisarCamadasDialogMapFacade {
       ? featureProjection.getCode()
       : isLikely4326
         ? 'EPSG:4326'
-        : 'EPSG:31984';
+        : 'EPSG:31983';
 
     const olFeature = this.readFeature(
       geoJsonFormat,

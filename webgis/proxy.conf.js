@@ -1,10 +1,6 @@
-// Dynamic proxy configuration so devs can point to any GeoServer without editing the repo.
-// Usage:
-//   GEOSERVER_URL=http://your-geoserver-host:8080 npm run start
-// Falls back to GEOSERVER_HOST / GEOSERVER_URL from .env, then production GeoServer.
-
 const fs = require('fs');
 const path = require('path');
+const http = require('http');
 const https = require('https');
 
 function loadDotEnv() {
@@ -32,7 +28,6 @@ function loadDotEnv() {
 
 const dotenv = loadDotEnv();
 
-// Strip trailing /geoserver if present — pathRewrite adds it.
 function normalizeGeoTarget(url) {
   return String(url || '')
     .trim()
@@ -49,9 +44,9 @@ const GEO_TARGET = normalizeGeoTarget(
 
 console.log('[proxy] GeoServer target:', GEO_TARGET);
 
-// Agente sem keep-alive: evita ECONNRESET causado por conexões TLS ociosas
-// que o servidor remoto fecha enquanto o proxy ainda as considera abertas.
-const noKeepAliveAgent = new https.Agent({ keepAlive: false });
+// Agentes separados para HTTP e HTTPS
+const httpAgent = new http.Agent({ keepAlive: false });
+const httpsAgent = new https.Agent({ keepAlive: false });
 
 function onProxyError(err, req, res) {
   if (err.code === 'ECONNRESET') {
@@ -65,14 +60,14 @@ function onProxyError(err, req, res) {
 }
 
 function withDefaults(entry) {
+  const isHttps = entry.target && entry.target.startsWith('https');
   return {
     changeOrigin: true,
     timeout: 15000,
     proxyTimeout: 15000,
-    agent: noKeepAliveAgent,
+    agent: isHttps ? httpsAgent : httpAgent, // Escolhe o agente correto dinamicamente
     on: { error: onProxyError },
     ...entry,
-    // Force false: corporate SSL inspection breaks Node TLS verification.
     secure: false,
   };
 }

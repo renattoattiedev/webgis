@@ -17,16 +17,12 @@ async function bootstrap() {
 
     const allowedOrigins = [
       'http://localhost:4200',
-      'http://localhost:4201',
-      'http://127.0.0.1:4201',
-      'http://localhost:5173',
+      'https://giscesan.cesan.com.br',
+      'https://dev-giscesan.cesan.com.br',
+      'https://hom-giscesan.cesan.com.br',
     ];
 
-    // Em desenvolvimento, aceita origins de dev/túnel (ex.: trycloudflare.com) e
-    // localhost — sem precisar listar cada host temporário. (Restringir em produção.)
-    const isDev = (process.env.NODE_ENV ?? 'development') !== 'production';
-
-    console.log('🌐 CORS configured (dev=%s)', isDev);
+    console.log('🌐 CORS configured for origins:', allowedOrigins);
 
     app.enableCors({
       origin: function (origin, callback) {
@@ -36,11 +32,6 @@ async function bootstrap() {
 
         if (allowedOrigins.includes(origin)) {
           console.log('✅ Origin allowed:', origin);
-          return callback(null, true);
-        }
-
-        // Em desenvolvimento, aceita qualquer origem (testes, túnel, LAN).
-        if (isDev) {
           return callback(null, true);
         }
 

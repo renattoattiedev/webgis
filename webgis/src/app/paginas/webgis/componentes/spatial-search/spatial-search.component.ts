@@ -278,7 +278,7 @@ export class SpatialSearchComponent
 
     try {
       this.lastDrawGeometry = drawGeometry?.clone?.() ?? drawGeometry;
-      // Converter geometria para critério WFS (coordenadas em EPSG:31984 com buffer)
+      // Converter geometria para critério WFS (coordenadas em EPSG:31983 com buffer)
       const criterion = this.geometryToCriterion(drawGeometry);
 
       // Iterar todas as camadas ativas do conteúdo
@@ -330,7 +330,7 @@ export class SpatialSearchComponent
 
   /**
    * Converte geometria OL para critério WFS
-   * Transforma para EPSG:31984 e cria um buffer de 50m
+   * Transforma para EPSG:31983 e cria um buffer de 50m
    */
   private geometryToCriterion(geometry: Geometry): string {
     try {
@@ -338,14 +338,14 @@ export class SpatialSearchComponent
       const type = (geometry as any).getType?.() || '';
       if (type === 'Point') {
         const coord = (geometry as any).getCoordinates();
-        const [x84, y84] = transform(coord, 'EPSG:3857', 'EPSG:31984') as [
+        const [x84, y84] = transform(coord, 'EPSG:3857', 'EPSG:31983') as [
           number,
           number,
         ];
         const buffer = this.bufferDistance || 30;
         return `${x84},${y84};${buffer}`;
       }
-      // Para polígonos/retângulos: enviar geometria completa em EPSG:31984 (GeoJSON string)
+      // Para polígonos/retângulos: enviar geometria completa em EPSG:31983 (GeoJSON string)
       let geom = (geometry as any).clone();
 
       // Sanitização específica para freehand (muitos vértices / auto-interseções)
@@ -413,7 +413,7 @@ export class SpatialSearchComponent
       }
 
       // Transformar para destino
-      geom.transform('EPSG:3857', 'EPSG:31984');
+      geom.transform('EPSG:3857', 'EPSG:31983');
       const geo = new GeoJSON().writeGeometryObject(geom);
       return JSON.stringify(geo);
     } catch (error) {

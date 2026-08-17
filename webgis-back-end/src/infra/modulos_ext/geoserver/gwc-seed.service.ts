@@ -30,11 +30,11 @@ export interface GwcHttpClient {
   ): Promise<{ data: any }>;
 }
 
-// Brazil — EPSG:31984 (SIRGAS 2000 / UTM 24S). Register once.
-if (!proj4.defs('EPSG:31984')) {
+// Brazil — EPSG:31983 (SIRGAS 2000 / UTM 24S). Register once.
+if (!proj4.defs('EPSG:31983')) {
   proj4.defs(
-    'EPSG:31984',
-    '+proj=utm +zone=24 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
+    'EPSG:31983',
+    '+proj=utm +zone=23 +south +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
   );
 }
 

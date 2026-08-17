@@ -128,8 +128,8 @@ export class AdicionarDadosComponent implements OnDestroy {
     private thematicLayerService: ThematicLayerService,
   ) {
     proj4.defs(
-      'EPSG:31984',
-      '+proj=utm +zone=24 +south +datum=WGS84 +units=m +no_defs',
+      'EPSG:31983',
+      '+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs',
     );
     register(proj4);
 
@@ -1598,7 +1598,7 @@ export class AdicionarDadosComponent implements OnDestroy {
           const extent = [bbox.minx, bbox.miny, bbox.maxx, bbox.maxy];
           const transformedExtent = transformExtent(
             extent,
-            bbox.crs || 'EPSG:31984',
+            bbox.crs || 'EPSG:31983',
             'EPSG:3857',
           );
           mapa.getView().fit(transformedExtent, {
@@ -1703,7 +1703,7 @@ export class AdicionarDadosComponent implements OnDestroy {
           const extent = [bbox.minx, bbox.miny, bbox.maxx, bbox.maxy];
           const transformedExtent = transformExtent(
             extent,
-            bbox.crs || 'EPSG:31984',
+            bbox.crs || 'EPSG:31983',
             'EPSG:3857',
           );
           mapa.getView().fit(transformedExtent, {
@@ -2026,7 +2026,7 @@ export class AdicionarDadosComponent implements OnDestroy {
     }
 
     const { bbox, width, height } = this.getThumbnailDimensions(boundingBox);
-    return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png&transparent=true`;
+    return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png&transparent=true`;
   }
 
   private queueThumbnailLoad(imageUrl: string): void {

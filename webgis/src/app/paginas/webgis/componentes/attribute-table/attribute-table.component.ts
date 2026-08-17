@@ -1025,7 +1025,7 @@ export class AttributeTableComponent implements OnInit, OnDestroy {
   }
 
   private getCandidateProjections(mapProjection?: string): string[] {
-    const defaults = ['EPSG:31984', 'EPSG:3857', 'EPSG:4326'];
+    const defaults = ['EPSG:31983', 'EPSG:3857', 'EPSG:4326'];
     const projections = mapProjection ? [mapProjection, ...defaults] : defaults;
     return [...new Set(projections)];
   }

@@ -69,8 +69,8 @@ export class IdentifyComponent implements AfterViewInit, OnDestroy {
     private mapaService: MapaService,
   ) {
     proj4.defs(
-      'EPSG:31984',
-      '+proj=utm +zone=24 +south +datum=WGS84 +units=m +no_defs',
+      'EPSG:31983',
+      '+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs',
     );
     register(proj4);
   }
@@ -133,10 +133,10 @@ export class IdentifyComponent implements AfterViewInit, OnDestroy {
     this.posX = event.coordinate[0];
     this.posY = event.coordinate[1];
     const coordinate3857 = event.coordinate;
-    const coordinate4326: [number, number] = transform(
+    const coordinate31983: [number, number] = transform(
       coordinate3857,
       'EPSG:3857',
-      'EPSG:31984',
+      'EPSG:31983',
     ) as [number, number];
 
     const zoom = this.mapaService.getMapa()?.getView().getZoom() || 0;
@@ -145,8 +145,7 @@ export class IdentifyComponent implements AfterViewInit, OnDestroy {
     for (const objeto of this.conteudoService.dadosAdicionais) {
       try {
         if (objeto.ativo === true && objeto.popup === true) {
-          const criterioComBuffer = `${coordinate4326.join(',')};${buffer}`;
-
+          const criterioComBuffer = `${coordinate31983.join(',')};${buffer}`;
           if (objeto.tipoConteudo === 'mapa') {
             const dados = await Promise.all(
               objeto.camadas.map(async (camada: any) => {
@@ -397,7 +396,7 @@ export class IdentifyComponent implements AfterViewInit, OnDestroy {
     const vectorSource = new VectorSource({
       features: new GeoJSON()
         .readFeatures(dados, {
-          dataProjection: 'EPSG:31984',
+          dataProjection: 'EPSG:31983',
           featureProjection: 'EPSG:3857',
         })
         .map((featureLike) => {

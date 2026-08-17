@@ -109,8 +109,8 @@ export class OrganizationContentComponent
     private thumbnailCacheService: ThumbnailCacheService,
   ) {
     proj4.defs(
-      'EPSG:31984',
-      '+proj=utm +zone=24 +south +datum=WGS84 +units=m +no_defs',
+      'EPSG:31983',
+      '+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs',
     );
     register(proj4);
   }
@@ -339,7 +339,7 @@ export class OrganizationContentComponent
     if (compositeMap) {
       const { bbox, width, height } = this.getThumbnailDimensions(boundingBox);
       const layersString = this.getCompositeLayersParam(compositeMap);
-      return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layersString}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png&transparent=true`;
+      return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${layersString}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png&transparent=true`;
     }
 
     if (!layerName) {
@@ -356,7 +356,7 @@ export class OrganizationContentComponent
     }
 
     const { bbox, width, height } = this.getThumbnailDimensions(boundingBox);
-    return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31984&styles=&format=image/png&transparent=true`;
+    return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=${bbox}&width=${width}&height=${height}&srs=EPSG:31983&styles=&format=image/png&transparent=true`;
   }
   toggleLeftSidenav() {
     this.isLeftSidenavOpened = !this.isLeftSidenavOpened;

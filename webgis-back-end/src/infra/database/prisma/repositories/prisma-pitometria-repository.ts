@@ -12,7 +12,7 @@ export class PrismaPitometriaRepository implements PitometriaRepository {
   constructor(private prisma: PrismaService) {}
 
   // Coordenadas do OpenLayers chegam em EPSG:3857 (Web Mercator).
-  // O banco armazena em EPSG:31984 (SIRGAS 2000 / UTM zone 24S).
+  // O banco armazena em EPSG:31983 (SIRGAS 2000 / UTM zone 24S).
   // Nas leituras, transformamos de volta para 3857 para o frontend posicionar overlays.
 
   async findById(id: string): Promise<Pitometria | null> {
@@ -79,7 +79,7 @@ export class PrismaPitometriaRepository implements PitometriaRepository {
         ${pitometria.codigoSimp},
         ${pitometria.matricula},
         ${pitometria.tipo}::"camadas"."TipoPitometria",
-        ST_Transform(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 3857), 31984),
+        ST_Transform(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 3857), 31983),
         ${pitometria.usuarioCriacao},
         ${pitometria.criadoEm}
       )
@@ -110,7 +110,7 @@ export class PrismaPitometriaRepository implements PitometriaRepository {
     await this.prisma.$executeRaw`
       UPDATE "camadas"."pitometria"
       SET
-        geometry                = ST_Transform(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 3857), 31984),
+        geometry                = ST_Transform(ST_SetSRID(ST_MakePoint(${longitude}, ${latitude}), 3857), 31983),
         cod_usuario_atualizacao = ${usuarioAtualizacao},
         dhs_atualizacao         = NOW()
       WHERE "cod_pitometria_id" = ${id}

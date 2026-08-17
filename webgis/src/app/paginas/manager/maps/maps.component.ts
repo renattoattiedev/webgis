@@ -169,14 +169,14 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
     private snackBar: MatSnackBar,
   ) {
     proj4.defs(
-      'EPSG:31984',
-      '+proj=utm +zone=24 +south +datum=WGS84 +units=m +no_defs',
+      'EPSG:31983',
+      '+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs',
     );
     register(proj4);
 
-    const projection31984 = getProjection('EPSG:31984');
-    if (!projection31984) {
-      console.error('Projeção EPSG:31984 não está registrada corretamente.');
+    const projection31983 = getProjection('EPSG:31983');
+    if (!projection31983) {
+      console.error('Projeção EPSG:31983 não está registrada corretamente.');
     }
   }
 
@@ -622,18 +622,18 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   save(mapaAtual: Mapas, tituloEditado?: string) {
     const boundingBox3857 = this.getMapBoundingBox();
 
-    const boundingBox31984 = this.convertBoundingBox(
+    const boundingBox31983 = this.convertBoundingBox(
       boundingBox3857,
       'EPSG:3857',
-      'EPSG:31984',
+      'EPSG:31983',
     );
 
     const boundingBoxMapa = {
-      minx: boundingBox31984[0],
-      miny: boundingBox31984[1],
-      maxx: boundingBox31984[2],
-      maxy: boundingBox31984[3],
-      crs: 'EPSG:31984',
+      minx: boundingBox31983[0],
+      miny: boundingBox31983[1],
+      maxx: boundingBox31983[2],
+      maxy: boundingBox31983[3],
+      crs: 'EPSG:31983',
     };
 
     mapaAtual.boundingBoxMapa = JSON.stringify(boundingBoxMapa);
@@ -698,13 +698,13 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
     } else {
       const boundingBox3857 = this.getMapBoundingBox();
 
-      const boundingBox31984 = this.convertBoundingBox(
+      const boundingBox31983 = this.convertBoundingBox(
         boundingBox3857,
         'EPSG:3857',
-        'EPSG:31984',
+        'EPSG:31983',
       );
 
-      this.mapaAtual.boundingBoxMapa = boundingBox31984.join(',');
+      this.mapaAtual.boundingBoxMapa = boundingBox31983.join(',');
       this.addedCamadas.forEach((camada, index) => {
         camada.ordemRenderizacao = index;
       });
@@ -879,7 +879,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
       fullLayerName += `_${fonteDadosCamadaRaster}`;
     }
 
-    const imageUrl = `${this.urlWms}/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=315476.5,7691027.0,390465.375,7895713.0&width=40&height=40&srs=EPSG:31984&styles=&format=image/png`;
+    const imageUrl = `${this.urlWms}/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=${fullLayerName}&bbox=315476.5,7691027.0,390465.375,7895713.0&width=40&height=40&srs=EPSG:31983&styles=&format=image/png`;
     return imageUrl;
   }
 
@@ -1022,12 +1022,12 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
         }
 
         const [transformedMinx, transformedMiny] = proj4(
-          'EPSG:31984',
+          'EPSG:31983',
           'EPSG:3857',
           [minx, miny],
         );
         const [transformedMaxx, transformedMaxy] = proj4(
-          'EPSG:31984',
+          'EPSG:31983',
           'EPSG:3857',
           [maxx, maxy],
         );

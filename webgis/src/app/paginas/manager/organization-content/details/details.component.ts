@@ -99,8 +99,8 @@ export class DetailsComponent implements AfterViewInit, OnDestroy, OnChanges {
     private fetchConfigService: FetchConfigsService,
   ) {
     proj4.defs(
-      'EPSG:31984',
-      '+proj=utm +zone=24 +south +datum=WGS84 +units=m +no_defs',
+      'EPSG:31983',
+      '+proj=utm +zone=23 +south +datum=WGS84 +units=m +no_defs',
     );
     proj4.defs('EPSG:4326', '+proj=longlat +datum=WGS84 +no_defs');
     proj4.defs(
@@ -514,11 +514,11 @@ export class DetailsComponent implements AfterViewInit, OnDestroy, OnChanges {
       try {
         const boundingBox = JSON.parse(this.content.boundingBoxMapa);
 
-        const [minx, miny] = proj4('EPSG:31984', 'EPSG:3857', [
+        const [minx, miny] = proj4('EPSG:31983', 'EPSG:3857', [
           boundingBox.minx,
           boundingBox.miny,
         ]);
-        const [maxx, maxy] = proj4('EPSG:31984', 'EPSG:3857', [
+        const [maxx, maxy] = proj4('EPSG:31983', 'EPSG:3857', [
           boundingBox.maxx,
           boundingBox.maxy,
         ]);
@@ -549,7 +549,7 @@ export class DetailsComponent implements AfterViewInit, OnDestroy, OnChanges {
       const extent = [bbox.minx, bbox.miny, bbox.maxx, bbox.maxy];
       const extent3857 = transformExtent(
         extent,
-        bbox.crs || 'EPSG:31984',
+        bbox.crs || 'EPSG:31983',
         'EPSG:3857',
       );
 
@@ -620,11 +620,11 @@ export class DetailsComponent implements AfterViewInit, OnDestroy, OnChanges {
       try {
         const view = this.map.getView();
         const currentExtent = view.calculateExtent(this.map.getSize() || []);
-        const [minX, minY] = proj4('EPSG:3857', 'EPSG:31984', [
+        const [minX, minY] = proj4('EPSG:3857', 'EPSG:31983', [
           currentExtent[0],
           currentExtent[1],
         ]);
-        const [maxX, maxY] = proj4('EPSG:3857', 'EPSG:31984', [
+        const [maxX, maxY] = proj4('EPSG:3857', 'EPSG:31983', [
           currentExtent[2],
           currentExtent[3],
         ]);
@@ -638,7 +638,7 @@ export class DetailsComponent implements AfterViewInit, OnDestroy, OnChanges {
         }
 
         const bbox = `${minX},${minY},${maxX},${maxY}`;
-        return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=content:${layerName}&bbox=${bbox}&width=768&height=560&srs=EPSG:31984&styles=&format=image/png`;
+        return `/geoserver-proxy/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=content:${layerName}&bbox=${bbox}&width=768&height=560&srs=EPSG:31983&styles=&format=image/png`;
       } catch (error) {
         return this.getDefaultDownloadUrl(layerName);
       }
@@ -683,7 +683,7 @@ export class DetailsComponent implements AfterViewInit, OnDestroy, OnChanges {
   }
 
   private getDefaultDownloadUrl(layerName: string): string {
-    return `${this.urlWms}/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=content:${layerName}&bbox=357765.33228664903,7751439.342910469,373099.93228754157,7762623.34291112&width=768&height=560&srs=EPSG:31984&styles=&format=image/png`;
+    return `${this.urlWms}/content/wms?service=WMS&version=1.1.0&request=GetMap&layers=content:${layerName}&bbox=357765.33228664903,7751439.342910469,373099.93228754157,7762623.34291112&width=768&height=560&srs=EPSG:31983&styles=&format=image/png`;
   }
 
   generateOWSUrl(): string {

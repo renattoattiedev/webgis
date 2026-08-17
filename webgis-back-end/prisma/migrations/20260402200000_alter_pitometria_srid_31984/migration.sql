@@ -1,8 +1,5 @@
--- Altera a coluna GEOMETRY de geometry(Point,4674) para geometry(Point,31984)
+-- Altera a coluna GEOMETRY de geometry(Point,4674) para geometry(Point,31983)
 -- Executado apenas se a tabela existir (idempotente).
-
--- Garante que o tipo geometry (PostGIS, em public) fique visível no schema camadas
-SET search_path = "camadas", public;
 
 DO $$
 BEGIN
@@ -12,10 +9,10 @@ BEGIN
   ) THEN
     ALTER TABLE "camadas"."TP_PITOMETRIA"
       ALTER COLUMN "GEOMETRY"
-        TYPE geometry(Point, 31984)
+        TYPE "public".geometry(Point, 31983)
         USING ST_Transform(
           ST_SetSRID("GEOMETRY", 4674),
-          31984
+          31983
         );
   END IF;
 END $$;

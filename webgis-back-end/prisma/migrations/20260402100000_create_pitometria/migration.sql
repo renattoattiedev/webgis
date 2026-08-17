@@ -1,8 +1,7 @@
 -- CreateSchema
-CREATE SCHEMA IF NOT EXISTS "camadas";
+CREATE EXTENSION IF NOT EXISTS postgis WITH SCHEMA "public";
 
--- Garante que o tipo geometry (PostGIS, em public) fique visível no schema camadas
-SET search_path = "camadas", public;
+CREATE SCHEMA IF NOT EXISTS "camadas";
 
 -- CreateEnum
 CREATE TYPE "camadas"."TipoPitometria" AS ENUM ('VAZAO', 'PRESSAO');
@@ -13,7 +12,7 @@ CREATE TABLE "camadas"."TP_PITOMETRIA" (
     "COD_SIMP"                TEXT NOT NULL,
     "MATRICULA"               TEXT NOT NULL,
     "TIPO"                    "camadas"."TipoPitometria" NOT NULL,
-    "GEOMETRY"                geometry(Point, 31984),
+    "GEOMETRY"                "public".geometry(Point, 31983),
     "COD_USUARIO_CRIACAO"     TEXT NOT NULL,
     "DHS_CRIACAO"             TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "COD_USUARIO_ATUALIZACAO" TEXT,

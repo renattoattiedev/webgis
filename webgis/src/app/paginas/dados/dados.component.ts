@@ -36,7 +36,7 @@ export interface ItemCatalogo {
   temaNome: string;
   tags: string | null;
   linkMetadados: string | null;
-  boundingBox: string | null; // JSON {minx,miny,maxx,maxy} em EPSG:31984
+  boundingBox: string | null; // JSON {minx,miny,maxx,maxy} em EPSG:31983
   atualizadoRaw: string;
   atualizadoFmt: string;
   acessos: number;
@@ -201,7 +201,7 @@ function buildMapThumbnailUrl(mapa: Mapas): string {
   return (
     `${GS_BASE}/wms?service=WMS&version=1.1.0&request=GetMap` +
     `&layers=${layers}&bbox=${bbox}&width=${w}&height=${h}` +
-    `&srs=EPSG:31984&styles=&format=image/png&transparent=true`
+    `&srs=EPSG:31983&styles=&format=image/png&transparent=true`
   );
 }
 
@@ -219,7 +219,7 @@ function thumbUrl(item: ItemCatalogo): string {
   return (
     `${GS_BASE}/wms?service=WMS&version=1.1.0&request=GetMap` +
     `&layers=${fullLayer}&bbox=${bbox}&width=${w}&height=${h}` +
-    `&srs=EPSG:31984&styles=&format=image/png&transparent=true`
+    `&srs=EPSG:31983&styles=&format=image/png&transparent=true`
   );
 }
 

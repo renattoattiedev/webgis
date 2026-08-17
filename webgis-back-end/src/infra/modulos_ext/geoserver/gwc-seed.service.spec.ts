@@ -23,7 +23,7 @@ describe('GwcSeedService', () => {
       miny: 7100000,
       maxx: 420000,
       maxy: 7140000,
-      crs: 'EPSG:31984',
+      crs: 'EPSG:31983',
     });
 
     expect(http.post).toHaveBeenCalledTimes(1);
@@ -39,7 +39,7 @@ describe('GwcSeedService', () => {
     expect(body.seedRequest.zoomStop).toBe(16);
     expect(body.seedRequest.threadCount).toBe(2);
     expect(body.seedRequest.srs.number).toBe(3857);
-    // bbox reprojected from EPSG:31984 to EPSG:3857 — non-zero, distinct from input
+    // bbox reprojected from EPSG:31983 to EPSG:3857 — non-zero, distinct from input
     const coords = body.seedRequest.bounds.coords.double as number[];
     expect(coords).toHaveLength(4);
     expect(coords[0]).not.toBe(380000);

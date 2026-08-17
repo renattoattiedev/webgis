@@ -632,7 +632,7 @@ export class CoordinateConverterComponent
     try {
       const url = 'https://nominatim.openstreetmap.org/search';
       const params = {
-        q: `${query}, Espírito Santo, Brasil`,
+        q: `${query}, Distrito Federal, Brasil`,
         format: 'json',
         addressdetails: '1',
         limit: '5',
@@ -653,7 +653,7 @@ export class CoordinateConverterComponent
         this.isAddressInEspiritoSanto(item?.address),
       );
       if (!filtered.length) {
-        this.inputError = 'Nenhum endereço encontrado no Espírito Santo.';
+        this.inputError = 'Nenhum endereço encontrado no Distrito Federal.';
         return;
       }
       this.inputError = '';

@@ -1,10 +1,13 @@
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["multiSchema", "postgresqlExtensions"]
 }
 
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+  schemas    = ["public", "camadas"]
+  extensions = [postgis(schema: "public")]
 }
 
 model Mapas {
@@ -31,6 +34,7 @@ model Mapas {
   grupos_adicionais            MapaGrupoAdicional[]
 
   @@map("TP_MAPAS")
+  @@schema("public")
 }
 
 model MapasCamadas {
@@ -43,6 +47,8 @@ model MapasCamadas {
   mapas                  Mapas                 @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID], onDelete: Cascade)
 
   @@map("TR_MAPAS_CAMADAS")
+    @@schema("public")
+
 }
 
 model MapasCamadasFiltros {
@@ -52,6 +58,8 @@ model MapasCamadasFiltros {
   mapas_camadas      MapasCamadas @relation(fields: [COD_MAPA_CAMADA_ID], references: [COD_MAPA_CAMADA_ID])
 
   @@map("TD_MAPAS_CAMADAS_FILTROS")
+    @@schema("public")
+
 }
 
 model MapasCamadasRaster {
@@ -63,6 +71,8 @@ model MapasCamadasRaster {
   mapas                     Mapas         @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID], onDelete: Cascade)
 
   @@map("TR_MAPAS_CAMADAS_RASTER")
+    @@schema("public")
+
 }
 
 model User {
@@ -90,6 +100,8 @@ model User {
   grupo_membros                  GrupoMembros[]
 
   @@map("TP_USER")
+    @@schema("public")
+
 }
 
 model PerfilUser {
@@ -98,6 +110,8 @@ model PerfilUser {
   user            User[]
 
   @@map("TA_PERFIL_USER")
+    @@schema("public")
+
 }
 
 model Temas {
@@ -112,6 +126,8 @@ model Temas {
   GruposCamadas                Grupo[]
 
   @@map("TA_TEMAS")
+    @@schema("public")
+
 }
 
 model Grupo {
@@ -139,6 +155,8 @@ model Grupo {
   mapas_grupos_adicionais          MapaGrupoAdicional[]
 
   @@map("TA_GRUPO")
+    @@schema("public")
+
 }
 
 model Folders {
@@ -150,6 +168,8 @@ model Folders {
   folders_mapas          FoldersMapas[]
 
   @@map("TA_FOLDERS")
+    @@schema("public")
+
 }
 
 model Camadas {
@@ -188,6 +208,8 @@ model Camadas {
   publicacoes                  PublicacaoCamada[]
 
   @@map("TP_CAMADAS")
+    @@schema("public")
+
 }
 
 model CamadasRaster {
@@ -226,6 +248,8 @@ model CamadasRaster {
   publicacoes                  PublicacaoCamadaRaster[]
 
   @@map("TP_CAMADAS_RASTER")
+    @@schema("public")
+
 }
 
 model FoldersCamadas {
@@ -236,6 +260,8 @@ model FoldersCamadas {
   folders                Folders @relation(fields: [COD_FOLDER_ID], references: [COD_FOLDER_ID], onDelete: Cascade)
 
   @@map("TR_FOLDERS_CAMADAS")
+    @@schema("public")
+
 }
 
 model FoldersCamadasRaster {
@@ -246,6 +272,8 @@ model FoldersCamadasRaster {
   folders                       Folders       @relation(fields: [COD_FOLDER_ID], references: [COD_FOLDER_ID], onDelete: Cascade)
 
   @@map("TR_FOLDERS_CAMADAS_RASTER")
+    @@schema("public")
+
 }
 
 model FoldersMapas {
@@ -256,6 +284,8 @@ model FoldersMapas {
   mapas              Mapas   @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID], onDelete: Cascade)
 
   @@map("TR_FOLDERS_MAPAS")
+    @@schema("public")
+
 }
 
 model PacotesConceituais {
@@ -277,6 +307,8 @@ model PacotesConceituais {
   camadas                      Camadas[]
 
   @@map("TA_PACOTES_CONCEITUAIS")
+    @@schema("public")
+
 }
 
 model NivelCompartilhamento {
@@ -292,6 +324,8 @@ model NivelCompartilhamento {
   camdas_raster                CamadasRaster[]
 
   @@map("TA_NIVEL_COMPARTILHAMENTO")
+    @@schema("public")
+
 }
 
 model Instituicoes {
@@ -306,6 +340,8 @@ model Instituicoes {
   creditos                     Creditos[]
 
   @@map("TA_INSTITUICOES")
+    @@schema("public")
+
 }
 
 model Atributos {
@@ -327,6 +363,8 @@ model Atributos {
   camadas                      Camadas   @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID])
 
   @@map("TP_ATRIBUTOS")
+    @@schema("public")
+
 }
 
 model Creditos {
@@ -337,6 +375,8 @@ model Creditos {
 
   @@unique([COD_INSTITUICAO_ID, COD_CAMADA_ID], name: "UNIQUE_CREDITOS")
   @@map("TR_CREDITOS")
+    @@schema("public")
+
 }
 
 model CamadasLog {
@@ -346,6 +386,8 @@ model CamadasLog {
   camadas       Camadas  @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID])
 
   @@map("TP_LOG_CAMADAS")
+    @@schema("public")
+
 }
 
 model CamadasRasterLog {
@@ -355,6 +397,8 @@ model CamadasRasterLog {
   camadas_raster       CamadasRaster @relation(fields: [COD_CAMADA_RASTER_ID], references: [COD_CAMADA_RASTER_ID])
 
   @@map("TP_LOG_CAMADAS_RASTER")
+    @@schema("public")
+
 }
 
 model MapasLog {
@@ -364,6 +408,8 @@ model MapasLog {
   mapas       Mapas    @relation(fields: [COD_MAPA_ID], references: [COD_MAPA_ID])
 
   @@map("TP_LOG_MAPAS")
+    @@schema("public")
+
 }
 
 model FavoritosCamadas {
@@ -375,6 +421,8 @@ model FavoritosCamadas {
 
   @@unique([COD_USER_ID, COD_CAMADA_ID], name: "UNIQUE_USER_CAMADA_FAVORITOS")
   @@map("TP_FAVORITOS_CAMADAS")
+    @@schema("public")
+
 }
 
 model FavoritosCamadasRaster {
@@ -386,6 +434,8 @@ model FavoritosCamadasRaster {
 
   @@unique([COD_USER_ID, COD_CAMADA_RASTER_ID], name: "UNIQUE_USER_CAMADA_RASTER_FAVORITOS")
   @@map("TP_FAVORITOS_CAMADAS_RASTER")
+    @@schema("public")
+
 }
 
 model FavoritosMapas {
@@ -397,6 +447,8 @@ model FavoritosMapas {
 
   @@unique([COD_USER_ID, COD_MAPA_ID], name: "UNIQUE_USER_MAPA_FAVORITOS")
   @@map("TP_FAVORITOS_MAPAS")
+    @@schema("public")
+
 }
 
 model Config {
@@ -415,6 +467,8 @@ model Config {
   DHS_ULTIMA_ALTERACAO         DateTime? @updatedAt
 
   @@map("TP_CONFIG")
+    @@schema("public")
+
 }
 
 model Basemap {
@@ -435,6 +489,8 @@ model Basemap {
 
   @@index([NOM_NOME_BASEMAP])
   @@map("TP_BASEMAPS")
+    @@schema("public")
+
 }
 
 model UserPreference {
@@ -448,6 +504,8 @@ model UserPreference {
   DHS_ULTIMA_ALTERACAO   DateTime? @updatedAt
 
   @@map("TP_USER_PREFERENCE")
+    @@schema("public")
+
 }
 
 /// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
@@ -457,6 +515,9 @@ model spatial_ref_sys {
   auth_srid Int?
   srtext    String? @db.VarChar(2048)
   proj4text String? @db.VarChar(2048)
+
+    @@schema("public")
+
 }
 
 model SicatCidade {
@@ -471,6 +532,8 @@ model SicatCidade {
 
   @@id([cd_cidade])
   @@map("webgis_sicat_cidade")
+    @@schema("public")
+
 }
 
 model SicatBairro {
@@ -485,6 +548,8 @@ model SicatBairro {
 
   @@id([cd_cidade, cd_bairro])
   @@map("webgis_sicat_bairro")
+    @@schema("public")
+
 }
 
 model SicatLogradouro {
@@ -499,6 +564,8 @@ model SicatLogradouro {
 
   @@id([cd_cidade, cd_logradouro])
   @@map("webgis_sicat_logradouro")
+    @@schema("public")
+
 }
 
 model SicatCliente {
@@ -511,6 +578,8 @@ model SicatCliente {
   imoveis SicatImovel[]
 
   @@map("webgis_sicat_cliente")
+    @@schema("public")
+
 }
 
 model SicatImovel {
@@ -545,6 +614,8 @@ model SicatImovel {
   logradouro SicatLogradouro? @relation(fields: [cd_cidade, cd_logradouro], references: [cd_cidade, cd_logradouro])
 
   @@map("webgis_sicat_imovel")
+    @@schema("public")
+
 }
 
 model Componente {
@@ -555,6 +626,8 @@ model Componente {
   FLG_HABILITADO      Boolean @default(true)
 
   @@map("TP_COMPONENTE")
+    @@schema("public")
+
 }
 
 model SicatHidrometroImovel {
@@ -563,6 +636,8 @@ model SicatHidrometroImovel {
 
   @@id([matricula_imovel, codigo_hidrometro])
   @@map("webgis_sicat_hidrometro_imovel")
+    @@schema("public")
+
 }
 
 model SolicitacaoServicos {
@@ -587,6 +662,8 @@ model SolicitacaoServicos {
 
   @@id([num_ss, seq_ss])
   @@map("webgis_integracao_solicitacao_servico")
+    @@schema("public")
+
 }
 
 model GrupoMembros {
@@ -606,6 +683,8 @@ model GrupoMembros {
   // Unique inclui soft-deletados de propósito: re-entrada reativa a linha existente (não insere nova)
   @@unique([COD_GRUPO_ID, COD_USER_ID])
   @@map("TR_GRUPO_MEMBROS")
+    @@schema("public")
+
 }
 
 model CamadaGrupoAdicional {
@@ -617,6 +696,8 @@ model CamadaGrupoAdicional {
 
   @@id([COD_CAMADA_ID, COD_GRUPO_ID])
   @@map("TR_CAMADAS_GRUPOS_ADICIONAIS")
+    @@schema("public")
+
 }
 
 model CamadaRasterGrupoAdicional {
@@ -628,6 +709,8 @@ model CamadaRasterGrupoAdicional {
 
   @@id([COD_CAMADA_RASTER_ID, COD_GRUPO_ID])
   @@map("TR_CAMADAS_RASTER_GRUPOS_ADICIONAIS")
+    @@schema("public")
+
 }
 
 model MapaGrupoAdicional {
@@ -639,6 +722,8 @@ model MapaGrupoAdicional {
 
   @@id([COD_MAPA_ID, COD_GRUPO_ID])
   @@map("TR_MAPAS_GRUPOS_ADICIONAIS")
+    @@schema("public")
+
 }
 
 model PublicacaoCamada {
@@ -653,6 +738,8 @@ model PublicacaoCamada {
   camadas           Camadas  @relation(fields: [COD_CAMADA_ID], references: [COD_CAMADA_ID])
 
   @@map("TP_PUBLICACOES_CAMADA")
+    @@schema("public")
+
 }
 
 model PublicacaoCamadaRaster {
@@ -667,4 +754,29 @@ model PublicacaoCamadaRaster {
   camadasRaster        CamadasRaster @relation(fields: [COD_CAMADA_RASTER_ID], references: [COD_CAMADA_RASTER_ID])
 
   @@map("TP_PUBLICACOES_CAMADA_RASTER")
+    @@schema("public")
+
+}
+
+enum TipoPitometria {
+  VAZAO
+  PRESSAO
+
+  @@schema("camadas")
+}
+
+model Pitometria {
+  COD_PITOMETRIA_ID       String         @id @default(uuid())
+  COD_SIMP                String
+  MATRICULA               String
+  TIPO                    TipoPitometria // Enum declarado no seu schema
+  GEOMETRY                Unsupported("public.geometry(Point, 31983)")?
+  COD_USUARIO_CRIACAO     String
+  DHS_CRIACAO             DateTime       @default(now())
+  COD_USUARIO_ATUALIZACAO String?
+  DHS_ATUALIZACAO         DateTime?      @updatedAt
+  DHS_EXCLUSAO            DateTime?
+
+  @@map("TP_PITOMETRIA")
+  @@schema("camadas")
 }

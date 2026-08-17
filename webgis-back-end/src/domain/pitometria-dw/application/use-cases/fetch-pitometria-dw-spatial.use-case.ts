@@ -49,7 +49,7 @@ export class FetchPitometriaDwSpatialUseCase {
         ST_X(ST_Transform(geometry, 4326)) AS longitude,
         ST_Y(ST_Transform(geometry, 4326)) AS latitude
       FROM "camadas"."pitometria"
-      WHERE ST_Intersects(geometry, ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON($1), 4326), 31984))
+      WHERE ST_Intersects(geometry, ST_Transform(ST_SetSRID(ST_GeomFromGeoJSON($1), 4326), 31983))
         AND dhs_exclusao IS NULL
     `,
       input.polygonGeoJSON,
