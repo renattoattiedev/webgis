@@ -10,6 +10,7 @@ $brand-tint-2: #e2eee0;
 $ink:          #1a2e1f;
 $ink-soft:     #4d6b52;
 $muted:        #6b8f74;
+$muted-2:      #a9bcab;
 $line:         #e7f0e7;
 $line-soft:    #edf4ea;
 $bg:           #f0f6ed;
@@ -426,6 +427,18 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
 }
 
+// Toggle de visibilidade — só existe na linha de camada mobile (v2); no
+// desktop o grid tem 4 colunas e este botão fica fora do fluxo.
+.mp-layer-visibility {
+  display: none;
+  width: 40px; height: 40px; border-radius: 9px;
+  background: transparent; border: none;
+  color: $brand; cursor: pointer;
+  align-items: center; justify-content: center;
+  svg { width: 16px; height: 16px; }
+  &.is-hidden { color: $muted-2; }
+}
+
 ::ng-deep .mp-menu-danger {
   color: $danger;
   mat-icon { color: $danger; }
@@ -459,6 +472,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .mp-empty-sub { font-size: 12px; color: $muted; margin-top: 6px; line-height: 1.5;
   strong { color: $brand; font-weight: 600; }
 }
+.mp-empty-sub-mobile { display: none; }
 
 // ── Legend ──────────────────────────────────────────────────────────────────
 .mp-legend {
@@ -490,16 +504,23 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 // ── Mobile-only elements (hidden by default; unhidden only ≤768px below) ────
 // Kept out of the flow on desktop via display:none so nothing above 768px moves.
-.mp-mobile-layers-pill,
-.mp-mobile-title,
-.mp-mobile-title-edit,
-.mp-mobile-save-btn,
-.mp-mobile-more-btn,
-.mp-sidebar-handle-row,
-.mp-sidebar-mobile-dados-btn,
-.mp-mobile-search-wrap,
-.mp-mobile-tool-pills {
+// (v2 — mapa primeiro: cromo flutuante mínimo, ver design_handoff_maps_mobile_v2)
+.mp-m2-topbar,
+.mp-m2-search-row,
+.mp-m2-nav-expand-btn,
+.mp-m2-layers-pill,
+.mp-m2-sheet-header,
+.mp-m2-actions-backdrop,
+.mp-m2-actions-sheet {
   display: none;
+}
+
+// Wrappers puramente estruturais (mantêm app-home/app-zoom-envolope/
+// app-current-location funcionando no desktop exatamente como hoje —
+// display:contents os remove da árvore de caixas sem remover os filhos).
+.mp-m2-navcluster,
+.mp-m2-nav-hosts {
+  display: contents;
 }
 
 // ── Responsive ──────────────────────────────────────────────────────────────
@@ -511,260 +532,101 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 }
 
 @media (max-width: 768px) {
-  // ── Barra: uma única linha de 52px ───────────────────────────────────────
-  .mp-bar {
-    flex-wrap: nowrap;
-    padding: 0 8px 0 10px;
-    gap: 6px;
-    min-height: 52px;
-    overflow: hidden;
-  }
+  // ── v2 — mapa primeiro: a barra branca de 52px some inteira; sobra o mapa. ──
+  .mp-bar { display: none; }
 
-  // Esconde tudo do desktop
-  .mp-bar > .mp-tool-group,
-  .mp-bar > .mp-bar-title,
-  .mp-bar > .mp-bar-divider,
-  .mp-search-wrap {
-    display: none;
-  }
-
-  .mp-mobile-layers-pill {
-    display: inline-flex;
-    align-items: center; gap: 6px;
-    height: 40px; padding: 0 12px; border-radius: 10px;
-    background: none; border: none;
-    color: $ink-soft; font-family: inherit; font-size: 12.5px; font-weight: 600;
-    cursor: pointer; flex-shrink: 0;
-    svg { width: 15px; height: 15px; }
-
-    &.active {
-      background: $brand-tint; border: 1px solid $brand-tint-2; color: $brand;
-    }
-  }
-
-  .mp-mobile-title,
-  .mp-mobile-title-edit {
-    flex: 1; min-width: 0;
-  }
-
-  .mp-mobile-title {
-    display: flex;
-    align-items: center; gap: 6px;
-    padding: 0 8px;
-    cursor: text;
-  }
-
-  .mp-mobile-title-icon {
-    width: 22px; height: 22px; border-radius: 6px;
-    background: $brand-tint; color: $brand;
-    display: inline-flex; align-items: center; justify-content: center;
-    flex-shrink: 0;
-    svg { width: 12px; height: 12px; }
-  }
-
-  .mp-mobile-title-text {
-    font-size: 13.5px; font-weight: 600; color: $ink;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
-
-  .mp-mobile-title-edit {
-    display: block;
-    border: 1px solid $brand;
-    background: #fff;
-    border-radius: 8px;
-    padding: 8px 10px;
-    font-family: inherit; font-size: 13px; font-weight: 600; color: $ink;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(1,73,155,0.1);
-  }
-
-  .mp-mobile-save-btn {
-    display: inline-flex;
-    align-items: center; gap: 6px;
-    height: 40px; padding: 0 14px; border-radius: 10px;
-    background: $brand; color: #fff;
-    border: none; cursor: pointer; flex-shrink: 0;
-    font-family: inherit; font-size: 12.5px; font-weight: 600;
-    svg { width: 14px; height: 14px; }
-    &:hover { background: $brand-mid; }
-  }
-
-  .mp-mobile-more-btn {
-    display: inline-flex;
-    align-items: center; justify-content: center;
-    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
-    background: none; border: none; color: $ink-soft; cursor: pointer;
-    svg { width: 18px; height: 18px; }
-    &:hover { background: $brand-tint; color: $brand; }
-  }
-
-  // ── Palco / folha de camadas (bottom sheet de 3 alturas) ─────────────────
+  // ── Palco: mapa de borda a borda, só o nav de 60px acima ─────────────────
   .mp-stage {
-    height: calc(100dvh - 60px - 52px - 52px);
+    height: calc(100dvh - 60px);
     min-height: 0;
   }
 
-  .mp-sidebar {
+  // ── Superfícies compartilhadas do cromo flutuante ─────────────────────────
+  $m2-chrome-surface: rgba(255, 255, 255, 0.94);
+  $m2-chrome-border: $line;
+  $m2-chrome-shadow: 0 2px 8px rgba(11, 37, 69, 0.14);
+  $m2-control-surface: rgba(255, 255, 255, 0.90);
+  $m2-control-border: rgba(11, 37, 69, 0.08);
+  $m2-control-shadow: 0 1px 4px rgba(11, 37, 69, 0.10);
+
+  // ── 1 · Cromo do topo: ‹ voltar · chip do título · busca · ⋯ ─────────────
+  .mp-m2-topbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     position: absolute;
-    inset: auto 0 0 0;
-    width: 100% !important;
-    height: 64px;
-    border-right: none;
-    border-top: 1px solid $line;
-    border-radius: 20px 20px 0 0;
-    box-shadow: 0 -10px 34px rgba(11,37,69,0.20);
-    z-index: 40;
-    overflow: hidden;
-    transition: height 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+    top: 12px; left: 12px; right: 12px;
+    z-index: 30;
+    transition: opacity 0.2s;
+    &.is-faded { opacity: 0.55; }
   }
 
-  .mp-stage[data-sheet-state="mid"]  .mp-sidebar { height: 55%; }
-  .mp-stage[data-sheet-state="full"] .mp-sidebar { height: 90%; }
+  .mp-m2-back,
+  .mp-m2-icon-btn {
+    width: 36px; height: 36px; border-radius: 50%; flex-shrink: 0;
+    background: $m2-chrome-surface;
+    border: 1px solid $m2-chrome-border;
+    box-shadow: $m2-chrome-shadow;
+    display: inline-flex; align-items: center; justify-content: center;
+    color: $ink; cursor: pointer;
+    svg { width: 17px; height: 17px; }
+  }
+  .mp-m2-icon-btn { color: $ink-soft; svg { width: 16px; height: 16px; } }
 
-  .mp-sidebar-handle-row {
+  .mp-m2-title-chip,
+  .mp-m2-title-input {
+    min-width: 0;
+  }
+
+  .mp-m2-title-chip {
+    display: flex; align-items: center; gap: 7px;
+    height: 36px; padding: 0 13px; border-radius: 100px;
+    background: $m2-chrome-surface;
+    border: 1px solid $m2-chrome-border;
+    box-shadow: $m2-chrome-shadow;
+    cursor: text;
+    svg { width: 13px; height: 13px; flex-shrink: 0; }
+  }
+
+  .mp-m2-title-text {
+    font-size: 13px; font-weight: 600; color: $ink;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .mp-m2-dirty-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #eab308; flex-shrink: 0;
+  }
+
+  .mp-m2-title-input {
+    flex: 1;
+    height: 36px; padding: 0 13px; border-radius: 100px;
+    background: #fff;
+    border: 1px solid $brand;
+    box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.10);
+    font-family: inherit; font-size: 14px; font-weight: 600; color: $ink;
+    outline: none;
+  }
+
+  .mp-m2-spacer { flex: 1; }
+
+  // ── 4 · Busca de endereço expandida ───────────────────────────────────────
+  .mp-m2-search-row {
     display: flex;
     flex-direction: column;
-    align-items: center;
-    flex-shrink: 0;
-    padding-top: 10px;
-    cursor: pointer;
+    position: absolute;
+    top: 12px; left: 12px; right: 12px;
+    z-index: 30;
   }
 
-  .mp-sidebar-handle {
-    width: 44px; height: 4px; border-radius: 2px;
-    background: $brand-tint-2;
-    margin-bottom: 8px;
-  }
-
-  .mp-sidebar-collapsed-label {
-    display: flex; align-items: center; gap: 8px;
-    font-size: 13.5px; font-weight: 600; color: $ink;
-    padding-bottom: 10px;
-    svg { width: 15px; height: 15px; color: $brand; }
-    .badge {
-      background: $brand-tint; color: $brand;
-      font-size: 11px; font-weight: 700;
-      padding: 2px 8px; border-radius: 100px;
-    }
-  }
-
-  .mp-sidebar-mobile-dados-btn {
-    display: block;
-    position: absolute; top: 8px; right: 14px; z-index: 5;
-
-    button {
-      height: 36px; padding: 0 12px; border-radius: 9px;
-      background: $brand; color: #fff;
-      border: none; cursor: pointer;
-      display: inline-flex; align-items: center; gap: 6px;
-      font-family: inherit; font-size: 12.5px; font-weight: 600;
-      svg { width: 13px; height: 13px; }
-    }
-  }
-
-  // Alvos de toque na lista de camadas
-  .mp-layer {
-    grid-template-columns: 28px 44px 1fr 44px;
-    padding: 8px 6px 8px 2px;
-  }
-  .mp-layer-grip { width: 28px; height: 44px; }
-  .mp-layer-thumb { width: 44px; height: 44px; }
-  .mp-layer-title { font-size: 13px; }
-  .mp-layer-more { width: 44px; height: 44px; }
-
-  // ── Controles do OpenLayers: cartão de zoom + trio de navegação compacto ──
-  // app-home/app-zoom-envolope/app-current-location são componentes
-  // compartilhados (também usados no mapa principal do webgis) cujo botão
-  // interno já é position:absolute contando com o host também absoluto — por
-  // isso cada um continua com posicionamento individual (não dá para
-  // agrupá-los num único flex sem alterar o componente compartilhado).
-  // O que dá para melhorar com segurança: aproximar os 3 de navegação entre
-  // si (viram um "trio" visualmente coeso) e destacar o par de zoom como
-  // outro grupinho, em vez de 5 pontos soltos espalhados por 200px de tela.
-  // Especificidade extra (.mp-stage como ancestral) para garantir que vença as
-  // regras desktop (que já usam !important) independentemente da ordem no arquivo.
-  .mp-stage .mp-map-view {
-    ::ng-deep .ol-zoom,
-    ::ng-deep .custom-ol-zoom {
-      top: 70px !important;
-      left: auto !important;
-      right: 12px !important;
-      width: 44px !important;
-      // Altura explícita: com overflow:hidden, esse controle (position:absolute
-      // vindo do próprio OpenLayers) não resolve a altura pelo conteúdo neste
-      // navegador/ambiente e desaparece (0px) — mesma causa do bug da folha de
-      // filtros, resolvida do mesmo jeito.
-      height: 88px !important;
-      background: transparent !important;
-      border: none !important;
-      border-radius: 0 !important;
-      box-shadow: none !important;
-
-      button {
-        width: 44px !important; height: 44px !important;
-        margin-bottom: 4px !important;
-      }
-    }
-
-    // app-home/app-zoom-envolope/app-current-location têm, cada um, um
-    // deslocamento vertical interno diferente e fixo no próprio componente
-    // (.btn { top: 130/180/230px }) — é isso que já separa os três entre si.
-    // Por isso os três hosts recebem a MESMA âncora aqui (senão os
-    // deslocamentos se somam e eles saem muito mais espaçados do que parece
-    // no CSS). Valor calibrado visualmente para ficar logo abaixo do card de
-    // zoom, sem herdar a posição da tela principal do webgis (bem mais alta).
-    ::ng-deep app-home,
-    ::ng-deep app-zoom-envolope,
-    ::ng-deep app-current-location {
-      top: 70px !important;
-      left: auto !important;
-      right: 12px !important;
-      width: 44px !important;
-    }
-
-    ::ng-deep app-home button,
-    ::ng-deep app-zoom-envolope button,
-    ::ng-deep app-current-location button {
-      width: 44px !important; height: 44px !important;
-    }
-
-    ::ng-deep .ol-overviewmap { display: none !important; }
-  }
-
-  .mp-stage .mp-map-view ::ng-deep .ol-zoom,
-  .mp-stage .mp-map-view ::ng-deep .custom-ol-zoom {
-    top: 70px !important;
-    left: auto !important;
-    right: 12px !important;
-    width: 44px !important;
-  }
-
-  // ── Basemap: canto inferior esquerdo, sempre acima da folha ──────────────
-  .mp-stage[data-sheet-state="collapsed"] .mp-map-view ::ng-deep app-basemap { bottom: calc(64px + 12px) !important; }
-  .mp-stage[data-sheet-state="mid"]       .mp-map-view ::ng-deep app-basemap { bottom: calc(55% + 12px) !important; }
-  .mp-stage[data-sheet-state="full"]      .mp-map-view ::ng-deep app-basemap { bottom: calc(90% + 12px) !important; }
-
-  .mp-map-view ::ng-deep app-basemap {
-    left: 12px !important;
-    width: 64px !important; height: 64px !important;
-    border-radius: 12px !important;
-    border: 2px solid #fff !important;
-  }
-
-  // ── Busca de endereço flutuante ───────────────────────────────────────────
-  .mp-mobile-search-wrap {
-    display: block;
-    position: absolute; top: 12px; left: 12px; right: 12px; z-index: 30;
-  }
-
-  .mp-mobile-search {
+  .mp-m2-search-field {
     display: flex; align-items: center; gap: 8px;
     height: 44px;
     background: #fff;
-    border: 1px solid $line;
+    border: 1px solid $brand;
     border-radius: 100px;
     padding: 0 6px 0 14px;
-    box-shadow: 0 4px 14px rgba(11,37,69,0.12);
+    box-shadow: 0 4px 16px rgba(11, 37, 69, 0.16), 0 0 0 3px rgba(27, 94, 32, 0.10);
 
     svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
 
@@ -776,40 +638,425 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     }
   }
 
-  .mp-mobile-search-btn {
+  .mp-m2-search-clear {
     width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-    background: $brand; color: #fff;
+    background: $line-soft; color: $ink-soft;
     border: none; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
-    svg { width: 13px; height: 13px; }
+    svg { width: 14px; height: 14px; }
   }
 
-  .mp-mobile-search-wrap .mp-suggestions {
-    left: 0; right: 0; top: calc(100% + 8px);
-  }
+  .mp-m2-suggestions {
+    list-style: none; margin: 8px 0 0; padding: 6px;
+    background: #fff;
+    border: 1px solid $line;
+    border-radius: 14px;
+    box-shadow: 0 8px 24px rgba(11, 37, 69, 0.16);
+    max-height: 320px; overflow-y: auto;
 
-  // ── Pílulas de ferramenta (canto inferior direito, folha recolhida) ──────
-  .mp-mobile-tool-pills {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 8px;
-    position: absolute;
-    right: 12px;
-    bottom: calc(64px + 24px);
-    z-index: 30;
-
-    button {
-      height: 40px; padding: 0 14px; border-radius: 100px;
-      background: #fff; border: 1px solid $line;
-      box-shadow: 0 4px 14px rgba(11,37,69,0.16);
-      display: inline-flex; align-items: center; gap: 8px;
-      font-family: inherit; font-size: 12.5px; font-weight: 600; color: $ink;
+    li {
+      display: flex; align-items: center; gap: 11px;
+      height: 52px; padding: 0 8px;
       cursor: pointer;
-      svg { width: 15px; height: 15px; color: $brand; }
-      &.active { background: $brand-tint; border-color: $brand-tint-2; color: $brand; }
+      border-bottom: 1px solid $line-soft;
+      &:last-child { border-bottom: none; }
+      svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
     }
   }
+
+  .mp-m2-suggestion-text {
+    display: flex; flex-direction: column; gap: 2px; min-width: 0;
+  }
+  .mp-m2-suggestion-title {
+    font-size: 13.5px; color: $ink;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mp-m2-suggestion-sub { font-size: 11px; color: $muted; }
+
+  // ── 3 · Cluster de navegação: zoom (OL real) + home/local/envelope ───────
+  .mp-stage .mp-map-view {
+    ::ng-deep .ol-zoom,
+    ::ng-deep .custom-ol-zoom {
+      top: 50% !important;
+      transform: translateY(-58px) !important;
+      left: auto !important;
+      right: 14px !important;
+      width: 32px !important;
+      // Altura explícita: com overflow:hidden, esse controle (position:absolute
+      // vindo do próprio OpenLayers) não resolve a altura pelo conteúdo neste
+      // navegador/ambiente e desaparece (0px) — mesma causa do bug da folha de
+      // filtros, resolvida do mesmo jeito.
+      height: 68px !important;
+      background: $m2-control-surface !important;
+      border: 1px solid $m2-control-border !important;
+      border-radius: 9px !important;
+      box-shadow: $m2-control-shadow !important;
+      overflow: hidden;
+
+      button {
+        // styles.scss tem uma regra GLOBAL e não escopada `.custom-ol-zoom-in`/
+        // `-out { position:absolute!important; top:30px/75px!important; left:8px!important }`
+        // (feita para o mapa principal do webgis, não para este). Sem este reset
+        // ela vaza pra cá: o botão de zoom out fica posicionado a 75px dentro de
+        // uma cápsula de 68px com overflow:hidden — ou seja, cortado/invisível.
+        position: static !important;
+        top: auto !important; left: auto !important;
+        width: 32px !important; height: 32px !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        border-radius: 0 !important;
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+        color: $ink-soft !important;
+        // OL's base ol.css sets `line-height:.4em` (relative to an inherited
+        // font-size), que descentraliza o glifo "+/−" para o topo do botão —
+        // display:flex ignora line-height e centraliza de verdade.
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 17px !important;
+        line-height: normal !important;
+        font-weight: 600 !important;
+        &:first-child { border-bottom: 1px solid $m2-control-border !important; }
+      }
+    }
+
+    ::ng-deep .ol-overviewmap { display: none !important; }
+  }
+
+  .mp-m2-navcluster {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    position: absolute;
+    right: 14px; top: 50%;
+    transform: translateY(20px);
+    z-index: 25;
+    transition: opacity 0.2s;
+    &.is-faded { opacity: 0.55; }
+  }
+
+  .mp-m2-nav-expand-btn {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 32px; height: 32px; border-radius: 9px;
+    background: $m2-control-surface;
+    border: 1px solid $m2-control-border;
+    box-shadow: $m2-control-shadow;
+    color: $muted;
+    cursor: pointer;
+    svg { width: 14px; height: 14px; transition: transform 0.15s; }
+
+    &.is-open {
+      background: $brand; border-color: $brand; color: #fff;
+      svg { transform: rotate(180deg); }
+    }
+  }
+
+  .mp-m2-nav-hosts {
+    display: none;
+
+    &.is-open {
+      display: flex;
+      flex-direction: column;
+      width: 32px;
+      border-radius: 9px;
+      overflow: hidden;
+      background: $m2-control-surface;
+      border: 1px solid $m2-control-border;
+      box-shadow: $m2-control-shadow;
+
+      > * { border-bottom: 1px solid $m2-control-border; }
+      > *:last-child { border-bottom: none; }
+    }
+
+    // app-home/app-zoom-envolope/app-current-location são compartilhados com
+    // o webgis principal e cada um tem `.btn { position:absolute; top:
+    // 130/180/230px }` fixo por dentro — neutraliza o offset interno para
+    // que rendam como itens de 32px empilhados nesta cápsula, em vez de
+    // espalhados por 200px de tela (defeito da v1).
+    ::ng-deep app-home,
+    ::ng-deep app-zoom-envolope,
+    ::ng-deep app-current-location {
+      position: static !important;
+      width: 32px !important; height: 32px !important;
+    }
+
+    ::ng-deep app-home .btn,
+    ::ng-deep app-zoom-envolope .btn,
+    ::ng-deep app-current-location .btn {
+      position: static !important;
+      top: auto !important; left: auto !important;
+      width: 32px !important; height: 32px !important;
+      border-radius: 0 !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      color: $brand !important;
+      display: inline-flex !important; align-items: center; justify-content: center;
+
+      &.active { background: $brand-tint !important; }
+    }
+
+    ::ng-deep .mat-icon {
+      font-size: 15px !important; width: 15px !important; height: 15px !important; line-height: 15px !important;
+    }
+  }
+
+  // ── 7 · Basemap: acompanha a folha de camadas ─────────────────────────────
+  .mp-stage[data-sheet-state="collapsed"] .mp-map-view ::ng-deep app-basemap { bottom: 14px !important; }
+  .mp-stage[data-sheet-state="mid"]       .mp-map-view ::ng-deep app-basemap { bottom: calc(52% + 12px) !important; }
+  .mp-stage[data-sheet-state="full"]      .mp-map-view ::ng-deep app-basemap { bottom: calc(88% + 12px) !important; }
+
+  .mp-map-view ::ng-deep app-basemap {
+    left: 12px !important;
+    width: 40px !important; height: 40px !important;
+    border-radius: 11px !important;
+    border: 2px solid rgba(255, 255, 255, 0.94) !important;
+    box-shadow: 0 2px 8px rgba(11, 37, 69, 0.16) !important;
+  }
+
+  // Nota: o mapa do Gestor não tem um controle ScaleLine (nenhum ol/control
+  // ScaleLine é instanciado em initializeMap()) — a escala do §7 do handoff
+  // não existe nesta tela; nada a estilizar.
+
+  // ── 6 · Pílula "Camadas · N" — único elemento no repouso ──────────────────
+  .mp-m2-layers-pill {
+    display: inline-flex;
+    align-items: center; gap: 8px;
+    position: absolute;
+    left: 50%; bottom: 14px;
+    transform: translateX(-50%);
+    height: 38px; padding: 0 15px; border-radius: 100px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid $line;
+    box-shadow: 0 4px 16px rgba(11, 37, 69, 0.18);
+    font-family: inherit; font-size: 12.5px; font-weight: 600; color: $ink;
+    cursor: pointer; z-index: 20;
+    svg:first-child { width: 14px; height: 14px; }
+    svg:last-child { width: 12px; height: 12px; }
+  }
+
+  .mp-m2-layers-pill-badge {
+    font-size: 11px; font-weight: 700; color: $brand;
+    background: $brand-tint; padding: 2px 8px; border-radius: 100px;
+  }
+
+  // ── Folha de camadas: 2 alturas (52% / 88%) + repouso sem barra fixa ─────
+  .mp-sidebar {
+    position: absolute;
+    inset: auto 0 0 0;
+    width: 100% !important;
+    height: 0;
+    border-right: none;
+    border-top: none;
+    border-radius: 20px 20px 0 0;
+    box-shadow: none;
+    z-index: 40;
+    overflow: hidden;
+    transition: height 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .mp-stage[data-sheet-state="mid"] .mp-sidebar,
+  .mp-stage[data-sheet-state="full"] .mp-sidebar {
+    border-top: 1px solid $line;
+    box-shadow: 0 -10px 34px rgba(11, 37, 69, 0.20);
+  }
+  .mp-stage[data-sheet-state="mid"]  .mp-sidebar { height: 52%; }
+  .mp-stage[data-sheet-state="full"] .mp-sidebar { height: 88%; }
+
+  .mp-m2-sheet-header {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+  }
+
+  .mp-m2-sheet-handle-row {
+    display: flex; justify-content: center;
+    padding: 10px 0 4px;
+    cursor: pointer;
+  }
+
+  .mp-m2-sheet-handle {
+    width: 44px; height: 4px; border-radius: 2px;
+    background: $brand-tint-2;
+  }
+
+  .mp-m2-sheet-tabs {
+    display: flex; align-items: center; gap: 4px;
+    padding: 2px 12px 0;
+    border-bottom: 1px solid $line;
+  }
+
+  .mp-m2-sheet-tab {
+    padding: 10px 12px;
+    background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 13px; font-weight: 600; color: $ink-soft;
+    position: relative;
+
+    .badge {
+      font-size: 11px; font-weight: 700; color: $brand;
+      background: $brand-tint; padding: 2px 7px; border-radius: 100px;
+      margin-left: 6px;
+    }
+
+    &.active {
+      color: $brand;
+      &::after {
+        content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px;
+        height: 2.5px; background: $brand; border-radius: 2px;
+      }
+    }
+  }
+
+  .mp-m2-sheet-spacer { flex: 1; }
+
+  .mp-m2-sheet-add-btn {
+    width: 36px; height: 36px; border-radius: 9px; margin-right: 2px;
+    background: $brand-tint; border: 1px solid $brand-tint-2; color: $brand;
+    cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    svg { width: 15px; height: 15px; }
+  }
+
+  // O cabeçalho nativo do MatTabGroup é substituído pelo header v2 acima.
+  .mp-tabs ::ng-deep .mat-mdc-tab-header { display: none; }
+
+  // Estado vazio: "Dados" agora mora no ⋯, não numa barra superior.
+  .mp-empty-sub-desktop { display: none; }
+  .mp-empty-sub-mobile { display: block; }
+
+  // Alvos de toque na lista de camadas (grid ganha a coluna do olho)
+  .mp-layer {
+    grid-template-columns: 26px 40px 1fr 40px 40px;
+    gap: 6px;
+    padding: 6px 4px 6px 0;
+  }
+  .mp-layer-grip { width: 26px; height: 40px; svg { width: 14px; height: 14px; } color: $muted-2; }
+  .mp-layer-thumb { width: 40px; height: 40px; }
+  .mp-layer-title { font-size: 13px; }
+  .mp-layer-visibility { display: inline-flex; }
+  .mp-layer-more { width: 40px; height: 40px; }
+
+  // ── 5 · Folha de ações (⋯) ─────────────────────────────────────────────────
+  .mp-m2-actions-backdrop {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(11, 37, 69, 0.26);
+    z-index: 250;
+  }
+
+  .mp-m2-actions-sheet {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    z-index: 251;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(11, 37, 69, 0.22);
+    padding-bottom: calc(20px + env(safe-area-inset-bottom));
+    max-height: 88%;
+    overflow-y: auto;
+  }
+
+  .mp-m2-actions-handle-row {
+    display: flex; justify-content: center;
+    padding: 10px 0 6px;
+    flex-shrink: 0;
+  }
+  .mp-m2-actions-handle {
+    width: 44px; height: 4px; border-radius: 2px;
+    background: $brand-tint-2;
+  }
+
+  .mp-m2-actions-header {
+    display: flex; align-items: center; gap: 10px;
+    padding: 4px 16px 12px;
+    border-bottom: 1px solid $line-soft;
+    flex-shrink: 0;
+  }
+
+  .mp-m2-actions-icon {
+    width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+    background: $brand-tint; color: $brand;
+    display: inline-flex; align-items: center; justify-content: center;
+    svg { width: 16px; height: 16px; }
+  }
+
+  .mp-m2-actions-title-block {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .mp-m2-actions-title {
+    font-size: 14.5px; font-weight: 600; color: $ink;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .mp-m2-actions-status {
+    font-size: 11.5px; color: $muted;
+    &.is-dirty { color: #b45309; }
+  }
+
+  .mp-m2-actions-save-btn {
+    display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
+    height: 40px; padding: 0 15px; border-radius: 11px;
+    background: $brand; color: #fff;
+    border: none; cursor: pointer;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    svg { width: 14px; height: 14px; }
+    &:disabled { background: $brand-tint-2; color: $muted; cursor: default; }
+  }
+
+  .mp-m2-actions-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px;
+    padding: 10px 12px 4px;
+    flex-shrink: 0;
+  }
+
+  .mp-m2-actions-tile {
+    height: 78px; border-radius: 12px;
+    background: $bg; border: 1px solid $line;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
+    cursor: pointer;
+    font-family: inherit; font-size: 11.5px; font-weight: 600; color: $ink;
+    svg { width: 19px; height: 19px; color: $brand; }
+
+    &.active {
+      background: $brand-tint; border-color: $brand-tint-2; color: $brand;
+    }
+  }
+
+  .mp-m2-actions-list {
+    display: flex; flex-direction: column;
+    padding: 6px 8px 0;
+  }
+
+  .mp-m2-actions-item {
+    display: flex; align-items: center; gap: 13px;
+    height: 54px; padding: 0 10px; border-radius: 11px;
+    background: none; border: none; cursor: pointer; text-align: left;
+    font-family: inherit; font-size: 14.5px; font-weight: 500; color: $ink;
+  }
+
+  .mp-m2-actions-item-icon {
+    width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
+    background: $brand-tint; color: $brand;
+    display: inline-flex; align-items: center; justify-content: center;
+    svg { width: 15px; height: 15px; }
+  }
+
+  .mp-m2-actions-item span:not([class]) { flex: 1; min-width: 0; }
+
+  .mp-m2-actions-item-chevron { width: 13px; height: 13px; color: $muted; flex-shrink: 0; }
+
+  .mp-m2-actions-item-value {
+    font-size: 12.5px; color: $muted; flex-shrink: 0;
+    max-width: 40%;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .mp-m2-actions-divider { height: 1px; background: $line-soft; margin: 4px 10px; }
 
   // ── Formulários flutuantes viram folha inferior ──────────────────────────
   .mp-floating-form {

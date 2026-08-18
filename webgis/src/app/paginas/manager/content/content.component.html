@@ -97,7 +97,8 @@
   <app-my-content           *ngIf="activeTabLabel === 'Meu Conteúdo'"></app-my-content>
   <app-organization-content *ngIf="activeTabLabel === 'Minha Organização'"></app-organization-content>
   <app-maps                 *ngIf="activeTabLabel === 'Mapas'"
-                            (mapaSalvo)="onMapaSalvo($event)"></app-maps>
+                            (mapaSalvo)="onMapaSalvo($event)"
+                            (exitMobileMap)="onExitMobileMap()"></app-maps>
   <app-relatorio-page       *ngIf="activeTabLabel === 'Relatórios'"></app-relatorio-page>
   <app-grupos-page          *ngIf="activeTabLabel === 'Grupos'"></app-grupos-page>
   <app-admin                *ngIf="activeTabLabel === 'Administração' && perfilUser === 'Admin'"></app-admin>

@@ -3,6 +3,7 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   Component,
   OnInit,
+  OnDestroy,
   ViewChild,
   AfterViewInit,
   ChangeDetectorRef,
@@ -110,7 +111,9 @@ export interface LayerEvent {
     FormsModule,
   ],
 })
-export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
+export class MapsComponent
+  implements OnInit, AfterViewInit, OnChanges, OnDestroy
+{
   @Output() layerAdded = new EventEmitter<{
     camadas: CamadaComOrdem[] | CamadaRasterComOrdem[];
     action: string;
@@ -127,9 +130,10 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   isSaveDialogVisible = false;
   isDataWindowVisible = false;
   isSidenavOpened = true;
-  // Espelha isSidenavOpened (que começa true, pensado para o desktop) para que
-  // o primeiro toque no pill "Camadas" no mobile não seja um no-op.
-  mobileLayersSheetState: 'collapsed' | 'mid' | 'full' = 'mid';
+  // Estado independente de isSidenavOpened (que começa true, pensado para o
+  // desktop): no mobile v2 o repouso é o mapa de borda a borda com só a
+  // pílula "Camadas" flutuando — a folha começa fechada.
+  mobileLayersSheetState: 'collapsed' | 'mid' | 'full' = 'collapsed';
   mapaAtual: Mapas | null = null;
   address: string = '';
   suggestions: any[] = [];
@@ -154,6 +158,21 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   @ViewChild(PrintingComponent) printingComponent!: PrintingComponent;
   isEditing = false;
   editedMapName = '';
+
+  // ── Mobile v2 (≤768px) — cromo flutuante ──────────────────────────────────
+  overviewMapEnabled = true;
+  mapDirty = false;
+  lastSavedAt: Date | null = null;
+  mobileSearchOpen = false;
+  mobileActionsOpen = false;
+  mobileNavExpanded = false;
+  mobileChromeFaded = false;
+  mobileActiveLayerTab = 0;
+  @ViewChild(BasemapComponent) basemapComponent!: BasemapComponent;
+  @Output() exitMobileMap = new EventEmitter<void>();
+  private mobileNavCollapseTimer: any;
+  private mobileChromeFadeTimer: any;
+  private savedLabelRefreshTimer: any;
 
   constructor(
     private http: HttpClient,
@@ -208,6 +227,19 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
           this.suggestions = [];
         },
       );
+
+    // Reavalia periodicamente o rótulo "Salvo há X min" da folha de ações (mobile).
+    this.savedLabelRefreshTimer = setInterval(() => {
+      if (this.lastSavedAt && !this.mapDirty) {
+        this.cdr.markForCheck();
+      }
+    }, 30000);
+  }
+
+  ngOnDestroy(): void {
+    clearInterval(this.savedLabelRefreshTimer);
+    clearTimeout(this.mobileNavCollapseTimer);
+    clearTimeout(this.mobileChromeFadeTimer);
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -254,6 +286,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
     }
 
     this.editedMapName = this.mapaAtual?.tituloMapa || '';
+    this.mapDirty = false;
     this.cdr.detectChanges();
   }
   initializeMap() {
@@ -277,6 +310,12 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
           },
         });
 
+        // OverviewMap \u00E9 caro (redesenha a cada moveend) e n\u00E3o aparece em
+        // \u2264768px \u2014 n\u00E3o instanciar em vez de s\u00F3 escond\u00EA-lo via CSS.
+        this.overviewMapEnabled = !window.matchMedia(
+          '(max-width: 768px)',
+        ).matches;
+
         this.map = new Map({
           target: 'map',
           layers: [basemapLayer],
@@ -286,13 +325,17 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
             projection: 'EPSG:3857',
           }),
           controls: [
-            new OverviewMap({
-              className: 'ol-overviewmap ol-custom-overviewmap',
-              layers: [new TileLayer({ source: new OSM() })],
-              collapseLabel: '\u00BB',
-              label: '\u00AB',
-              collapsed: false,
-            }),
+            ...(this.overviewMapEnabled
+              ? [
+                  new OverviewMap({
+                    className: 'ol-overviewmap ol-custom-overviewmap',
+                    layers: [new TileLayer({ source: new OSM() })],
+                    collapseLabel: '\u00BB',
+                    label: '\u00AB',
+                    collapsed: false,
+                  }),
+                ]
+              : []),
             new Zoom({
               zoomInTipLabel: 'Zoom In',
               zoomOutTipLabel: 'Zoom Out',
@@ -300,6 +343,8 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
             }),
           ],
         });
+
+        this.map.on('singleclick', () => this.onMapSingleClick());
 
         this.mapaService.setMapa(this.map);
 
@@ -476,6 +521,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
       this.updateRenderOrder();
       this.dataSourceContent.data = [...this.addedCamadas];
       this.updateLegendUrl();
+      this.mapDirty = true;
 
       this.cdr.detectChanges();
     }
@@ -517,6 +563,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
         this.associateCamadasMapaService.removeCamadaRaster(camada);
       }
 
+      this.mapDirty = true;
       this.cdr.detectChanges();
     }
   }
@@ -550,6 +597,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   newMap() {
+    this.closeMobileActions();
     this.clearLegend();
     this.clearMap();
   }
@@ -574,12 +622,15 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
       this.dataSourceContent.data = [];
       this.associateCamadasMapaService.clearCamadas();
       this.mapaAtual = null;
+      this.mapDirty = false;
+      this.lastSavedAt = null;
 
       this.cdr.detectChanges();
     }
   }
 
   showDataWindow() {
+    this.closeMobileActions();
     const dialogRef = this.dialog.open(AddDadosComponent, {
       width: '800px',
     });
@@ -672,6 +723,8 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
           this.mapaAtual = Object.assign({}, mapaConvertido);
           this.mapaSalvo.emit(this.mapaAtual);
           this.editedMapName = this.mapaAtual.tituloMapa;
+          this.mapDirty = false;
+          this.lastSavedAt = new Date();
           this.cdr.detectChanges();
           this.snackBar.open('Mapa Salvo com Sucesso!', '', {
             duration: 3000,
@@ -696,6 +749,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   saveMapData() {
+    this.closeMobileActions();
     if (!this.mapaAtual) {
       this.showSaveDialog();
     } else {
@@ -743,6 +797,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
     ) {
       if (this.mapaAtual) {
         this.mapaAtual.tituloMapa = this.editedMapName.trim();
+        this.mapDirty = true;
         this.cdr.markForCheck();
       }
     }
@@ -751,6 +806,8 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   toggleSidenav() {
     this.isSidenavOpened = !this.isSidenavOpened;
     this.mobileLayersSheetState = this.isSidenavOpened ? 'mid' : 'collapsed';
+    this.collapseMobileNavCluster();
+    this.closeMobileActions();
     setTimeout(() => {
       this.map?.updateSize();
     }, 300);
@@ -766,10 +823,122 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
       this.mobileLayersSheetState = 'collapsed';
       this.isSidenavOpened = false;
     }
+    this.collapseMobileNavCluster();
+    this.closeMobileActions();
     setTimeout(() => {
       this.map?.updateSize();
     }, 300);
   }
+
+  // ── Cromo flutuante mobile (v2) ────────────────────────────────────────────
+  toggleMobileSearch(): void {
+    this.mobileSearchOpen = !this.mobileSearchOpen;
+    if (this.mobileSearchOpen) {
+      this.closeMobileActions();
+      this.collapseMobileNavCluster();
+    } else {
+      this.suggestions = [];
+      this.address = '';
+    }
+  }
+
+  closeMobileSearch(): void {
+    this.mobileSearchOpen = false;
+    this.suggestions = [];
+  }
+
+  toggleMobileActions(): void {
+    this.mobileActionsOpen = !this.mobileActionsOpen;
+    if (this.mobileActionsOpen) {
+      this.mobileSearchOpen = false;
+      this.collapseMobileNavCluster();
+    }
+  }
+
+  closeMobileActions(): void {
+    this.mobileActionsOpen = false;
+  }
+
+  toggleMobileNavCluster(): void {
+    this.mobileNavExpanded = !this.mobileNavExpanded;
+    if (this.mobileNavExpanded) {
+      this.closeMobileActions();
+      this.resetMobileNavCollapseTimer();
+    } else {
+      clearTimeout(this.mobileNavCollapseTimer);
+    }
+  }
+
+  collapseMobileNavCluster(): void {
+    this.mobileNavExpanded = false;
+    clearTimeout(this.mobileNavCollapseTimer);
+  }
+
+  private resetMobileNavCollapseTimer(): void {
+    clearTimeout(this.mobileNavCollapseTimer);
+    this.mobileNavCollapseTimer = setTimeout(() => {
+      this.mobileNavExpanded = false;
+      this.cdr.markForCheck();
+    }, 6000);
+  }
+
+  /** Toque no mapa sem ferramenta ativa: reduz o cromo flutuante por 2s. */
+  onMapSingleClick(): void {
+    if (
+      !window.matchMedia('(max-width: 768px)').matches ||
+      this.isMeasureFormVisible ||
+      this.isDrawFormVisible ||
+      this.isPrintingVisible
+    ) {
+      return;
+    }
+    this.collapseMobileNavCluster();
+    this.mobileChromeFaded = true;
+    clearTimeout(this.mobileChromeFadeTimer);
+    this.mobileChromeFadeTimer = setTimeout(() => {
+      this.mobileChromeFaded = false;
+      this.cdr.markForCheck();
+    }, 2000);
+  }
+
+  exitMobileMapView(): void {
+    this.exitMobileMap.emit();
+  }
+
+  openMobileBasemapPanel(): void {
+    this.closeMobileActions();
+    if (this.basemapComponent) {
+      this.basemapComponent.expanded = true;
+    }
+  }
+
+  getCurrentBasemapName(): string {
+    return this.basemapComponent?.defaultBasemap?.name ?? '';
+  }
+
+  isCamadaVisible(camada: CamadaComOrdem | CamadaRasterComOrdem): boolean {
+    const layer = this.addedLayers[this.getLayerKey(camada)];
+    return layer ? layer.getVisible() : true;
+  }
+
+  toggleCamadaVisibility(camada: CamadaComOrdem | CamadaRasterComOrdem): void {
+    const layer = this.addedLayers[this.getLayerKey(camada)];
+    if (!layer) return;
+    layer.setVisible(!layer.getVisible());
+    this.mapDirty = true;
+    this.cdr.markForCheck();
+  }
+
+  getSavedLabel(): string {
+    if (this.mapDirty) return 'Alterações não salvas';
+    if (!this.lastSavedAt) return '';
+    const diffMin = Math.floor((Date.now() - this.lastSavedAt.getTime()) / 60000);
+    if (diffMin < 1) return 'Salvo agora';
+    if (diffMin < 60) return `Salvo há ${diffMin} min`;
+    const diffH = Math.floor(diffMin / 60);
+    return `Salvo há ${diffH}h`;
+  }
+
   updateRenderOrder() {
     const mapa = this.mapaService.getMapa();
     if (!mapa) return;
@@ -811,6 +980,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
 
       this.dataSourceContent.data = [...this.addedCamadas];
       this.mapaService.getMapa()?.render();
+      this.mapDirty = true;
       this.cdr.detectChanges();
     }
   }
@@ -841,6 +1011,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
 
       this.dataSourceContent.data = [...this.addedCamadas];
       this.mapaService.getMapa()?.render();
+      this.mapDirty = true;
       this.cdr.detectChanges();
     }
   }
@@ -865,6 +1036,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
 
     this.dataSourceContent.data = [...this.addedCamadas];
     this.mapaService.getMapa()?.render();
+    this.mapDirty = true;
     this.cdr.detectChanges();
   }
 
@@ -1094,6 +1266,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
     }
   }
   toggleMeasureForm() {
+    this.closeMobileActions();
     this.resetMeasureComponent();
 
     if (this.isDrawFormVisible) {
@@ -1138,6 +1311,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   toggleDrawForm(): void {
+    this.closeMobileActions();
     this.resetDrawingComponent();
 
     if (this.isMeasureFormVisible) {
@@ -1182,6 +1356,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   toggleFormPrinting() {
+    this.closeMobileActions();
     if (this.isMeasureFormVisible) {
       this.isMeasureFormVisible = false;
       this.resetMeasureComponent();
@@ -1343,6 +1518,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
     this.address = suggestion.display_name;
     this.suggestions = [];
     this.updateMap(lat, lon);
+    this.mobileSearchOpen = false;
   }
   onKeyup() {
     this.searchSubject.next(this.address);
@@ -1393,6 +1569,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   public shareConteudo() {
+    this.closeMobileActions();
     if (!this.mapaAtual) return;
     const baseURL = `${window.location.protocol}//${window.location.host}/webgis?`;
     const urlParams = new URLSearchParams();

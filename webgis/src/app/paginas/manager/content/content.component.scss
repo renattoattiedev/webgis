@@ -210,4 +210,9 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     min-height: 48px;
     scroll-snap-align: start;
   }
+
+  // Mapas v2 — "o mapa é a tela": a faixa de tabs some, o próprio mapa vira
+  // cromo flutuante (‹ voltar reexibe as tabs — ver ContentComponent.onExitMobileMap).
+  :host(.is-maps-mobile) .mgr-tabs { display: none; }
+  :host(.is-maps-mobile) .mgr-tab-body { min-height: 0; }
 }
