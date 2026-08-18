@@ -94,3 +94,61 @@ $font-serif:'Instrument Serif',Georgia,serif;
   &--sensitive { background:#fffbeb;      color:#b45309; border-color:#fde68a; }
   &--locked    { background:#fef2f2;      color:$danger; border-color:#fecaca; }
 }
+
+// Bloco somente-leitura do valor bloqueado — novo nó mobile-only, oculto por
+// padrão; abaixo de 768px ele substitui o <input readonly> (que é ocultado).
+.gr-locked-block { display:none; }
+
+.gr-group-count { display:none; }
+.gr-group-chevron { display:none; }
+
+@media (max-width:768px) {
+  .gr-page { gap:14px; }
+  .gr-head p { display:none; }
+
+  .gr-form { gap:12px; }
+
+  .gr-group {
+    padding:14px 14px 16px; border-radius:14px;
+  }
+  .gr-group-title {
+    padding-bottom:11px; margin-bottom:14px;
+    cursor:pointer;
+  }
+  .gr-group-count {
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; color:$muted;
+    background:$line-soft; padding:2px 8px; border-radius:100px;
+    margin-left:auto;
+  }
+  .gr-group-chevron {
+    display:block; width:13px; height:13px; color:$muted; flex-shrink:0;
+    transition:transform 0.15s;
+    &--open { transform:rotate(180deg); }
+  }
+  .gr-collapsed .gr-items { display:none; }
+
+  .gr-items { grid-template-columns:1fr; gap:16px; }
+
+  .gr-field label {
+    align-items:flex-start;
+    > span:first-child { word-break:break-all; }
+  }
+
+  .gr-input {
+    height:48px; border-radius:11px; padding:0 13px; font-size:14px;
+  }
+  .gr-input-row .gr-input { flex:1; min-width:0; }
+  .gr-edit-btn { width:48px; height:48px; border-radius:11px; flex-shrink:0; }
+
+  .gr-input--locked { display:none; }
+  .gr-locked-block {
+    display:flex; flex-direction:column; gap:3px; justify-content:center;
+    min-height:48px; background:$line-soft; border:1px solid $line; border-radius:11px;
+    padding:9px 13px;
+  }
+  .gr-locked-value {
+    font-family:ui-monospace, monospace; font-size:12.5px; color:$muted;
+  }
+  .gr-locked-reason { font-size:11px; color:$muted; }
+}

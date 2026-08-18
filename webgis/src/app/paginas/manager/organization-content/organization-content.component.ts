@@ -7,6 +7,7 @@ import {
   ViewChild,
   AfterViewInit,
   ElementRef,
+  HostListener,
 } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -84,6 +85,8 @@ export class OrganizationContentComponent
   selectedGrupoIds: Set<string> = new Set<string>();
   urlWms: string | undefined;
   selectedContentType: string | null = null;
+  temasExpanded = false;
+  gruposExpanded = false;
   thumbnailUrls: Map<string, string> = new Map();
   loading: Map<string, boolean> = new Map();
   thumbnailErrors: Map<string, boolean> = new Map();
@@ -361,6 +364,35 @@ export class OrganizationContentComponent
   toggleLeftSidenav() {
     this.isLeftSidenavOpened = !this.isLeftSidenavOpened;
     this.setupGrid();
+    if (typeof document !== 'undefined' && window.innerWidth <= 768) {
+      document.body.style.overflow = this.isLeftSidenavOpened ? 'hidden' : '';
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.isLeftSidenavOpened && window.innerWidth <= 768) {
+      this.toggleLeftSidenav();
+    }
+  }
+
+  get activeFilterCount(): number {
+    let count = 0;
+    if (this.selectedContentType) count++;
+    count += this.selectedTemaIds.size;
+    count += this.selectedGrupoIds.size;
+    if (this.isFavoriteFilterActive) count++;
+    if (this.minVisualizacoes || this.maxVisualizacoes) count++;
+    if (this.dataInicio || this.dataFim) count++;
+    return count;
+  }
+
+  get activeTemaChips(): Tema[] {
+    return this.dataSourceTema.filter((t) => this.selectedTemaIds.has(t.id));
+  }
+
+  get activeGrupoChips(): Grupos[] {
+    return this.dataSourceGrupos.filter((g) => this.selectedGrupoIds.has(g.id));
   }
 
   toggleRightSidenav(content: Camadas | CamadasRaster | Mapas) {

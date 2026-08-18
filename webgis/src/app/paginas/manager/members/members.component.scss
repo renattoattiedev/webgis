@@ -379,3 +379,124 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   .mb-search { width: 100%; order: 3; }
   .mb-table { min-width: 720px; }
 }
+
+// ─── Mobile (3D) — chips no header + lista de cards ─────────────────────────
+// Novos nós, ocultos por padrão; tabela/paginador/sidebar existentes só são
+// ocultados via CSS abaixo — nunca removidos do DOM.
+.mb-m-filterbar, .mb-m-list, .mb-m-sheet-backdrop { display:none; }
+.mb-m-period-sheet {
+  position:fixed; left:0; right:0; bottom:0; z-index:1000;
+  transform:translateY(100%); visibility:hidden; pointer-events:none;
+}
+
+@media (max-width:768px) {
+  .mb-page { display:block; padding:0; gap:0; }
+  .mb-filters { display:none !important; }
+  .mb-icon-btn { display:none; }
+  .mb-main { border:0; border-radius:0; box-shadow:none; }
+  .mb-main-top { display:none; }
+  .mb-table-wrap, .mb-paginator { display:none; }
+
+  .mb-m-filterbar {
+    display:flex; flex-direction:column; gap:10px;
+    position:sticky; top:113px; z-index:90;
+    background:#fff; border-bottom:1px solid $line;
+    padding:12px 0 12px;
+  }
+  .mb-m-chip-row {
+    display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
+    padding:0 14px;
+    &::-webkit-scrollbar { display:none; }
+  }
+  .mb-m-chip-label {
+    font-size:10.5px; font-weight:700; letter-spacing:1.2px; text-transform:uppercase;
+    color:$muted; padding:0 14px;
+  }
+  .mb-m-chip {
+    flex-shrink:0; white-space:nowrap;
+    background:#fff; border:1px solid $line; color:$ink-soft;
+    font-family:inherit; font-size:12.5px; font-weight:500;
+    padding:7px 12px; border-radius:100px; cursor:pointer;
+    &.active { background:$brand; color:#fff; border-color:$brand; font-weight:600; }
+  }
+  .mb-m-search {
+    display:flex; align-items:center; gap:8px; margin:0 14px;
+    background:$line-soft; border:1px solid $line; border-radius:12px;
+    height:44px; padding:0 12px;
+    svg { width:15px; height:15px; color:$muted; flex-shrink:0; }
+    input {
+      flex:1; min-width:0; border:none; outline:none; background:transparent;
+      font-family:inherit; font-size:14px; color:$ink;
+      &::placeholder { color:$muted; }
+    }
+  }
+
+  // Folha de período customizado
+  .mb-m-sheet-backdrop {
+    display:block; position:fixed; inset:0; z-index:999;
+    background:rgba(11,37,69,0.24);
+  }
+  .mb-m-period-sheet {
+    display:flex; flex-direction:column;
+    background:#fff; border-radius:20px 20px 0 0;
+    box-shadow:0 -10px 40px rgba(11,37,69,0.22);
+    padding-bottom:max(20px, env(safe-area-inset-bottom));
+    transition:transform 0.22s ease;
+    &--open { transform:translateY(0); visibility:visible; pointer-events:auto; }
+  }
+  .mb-m-sheet-handle {
+    padding:10px 0 6px; display:flex; justify-content:center;
+    span { width:44px; height:4px; border-radius:2px; background:$brand-tint-2; }
+  }
+  .mb-m-sheet-head {
+    padding:4px 18px 12px; border-bottom:1px solid $line-soft;
+    font-size:11px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase;
+    color:$muted;
+  }
+  .mb-m-sheet-body { padding:16px; display:flex; flex-direction:column; gap:10px; }
+  .mb-m-sheet-apply { height:50px; border-radius:12px; }
+
+  // Lista de cards
+  .mb-m-list { display:flex; flex-direction:column; gap:10px; padding:12px; }
+  .mb-m-item {
+    background:#fff; border:1px solid $line; border-radius:14px;
+    padding:12px 6px 12px 14px; flex-shrink:0;
+    box-shadow:0 1px 3px rgba(11,37,69,0.04);
+    &--deleted { opacity:0.62; }
+  }
+  .mb-m-item-row { display:flex; align-items:center; gap:12px; }
+  .mb-avatar {
+    width:40px; height:40px; font-size:14px;
+    &--self { background:$brand; }
+    &:not(.mb-avatar--self):not(.mb-avatar--deleted) { background:$ink-soft; }
+    &--deleted { background:$line-soft; color:$muted; }
+  }
+  .mb-user-text { flex:1; min-width:0; }
+  .mb-user-name--deleted { text-decoration:line-through; color:$muted; }
+  .mb-m-deleted-text { font-size:11.5px; color:$muted; }
+  .mb-row-icon, .mb-self-pill { width:44px; height:44px; flex-shrink:0; }
+  .mb-self-pill { width:auto; height:auto; }
+
+  .mb-m-item-row2 {
+    display:flex; align-items:center; gap:10px; margin-top:8px;
+  }
+  .mb-m-perfil-select {
+    flex:1; min-width:0;
+    ::ng-deep .mdc-text-field--outlined { --mdc-outlined-text-field-container-shape:10px; }
+    ::ng-deep .mat-mdc-text-field-wrapper { height:44px; }
+    ::ng-deep .mat-mdc-form-field-infix { padding:11px 0 !important; font-size:13.5px; }
+    ::ng-deep .mat-mdc-select-value { font-size:13.5px; }
+  }
+  .mb-m-item-date {
+    flex-shrink:0; text-align:right;
+    font-size:12px; color:$ink-soft;
+    span { font-size:11px; color:$muted; }
+  }
+
+  .mb-m-loadmore {
+    height:46px; flex-shrink:0; border-radius:12px; border:1px solid $line;
+    background:#fff; display:flex; align-items:center; justify-content:center; gap:8px;
+    font-family:inherit; font-size:13px; font-weight:600; color:$brand; cursor:pointer;
+    span { font-size:11.5px; font-weight:500; color:$muted; }
+  }
+}

@@ -1,3 +1,48 @@
+<!-- ═══ Filtros mobile (3D) — chips no header, substitui a sidebar ═══ -->
+<div class="mb-m-filterbar">
+  <div class="mb-m-chip-row">
+    <button class="mb-m-chip" [class.active]="!selectedProfileId" (click)="filtrarPorPerfil('')">
+      Todos · {{ contarUsuariosPorPerfil() }}
+    </button>
+    <button class="mb-m-chip" *ngFor="let perfil of dataSourcePerfis"
+            [class.active]="perfil.id === selectedProfileId" (click)="filtrarPorPerfil(perfil.id)">
+      {{ perfil.perfil }} · {{ contarUsuariosPorPerfil(perfil.id) }}
+    </button>
+  </div>
+  <div class="mb-m-chip-label">Último acesso</div>
+  <div class="mb-m-chip-row">
+    <button class="mb-m-chip" [class.active]="selectedPeriodo === ''" (click)="filtrarPorPeriodo('')">Todos</button>
+    <button class="mb-m-chip" [class.active]="selectedPeriodo === 'hoje'" (click)="filtrarPorPeriodo('hoje')">Hoje</button>
+    <button class="mb-m-chip" [class.active]="selectedPeriodo === 'ontem'" (click)="filtrarPorPeriodo('ontem')">Ontem</button>
+    <button class="mb-m-chip" [class.active]="selectedPeriodo === 'ultimos7dias'" (click)="filtrarPorPeriodo('ultimos7dias')">7 dias</button>
+    <button class="mb-m-chip" [class.active]="selectedPeriodo === 'ultimos30dias'" (click)="filtrarPorPeriodo('ultimos30dias')">30 dias</button>
+    <button class="mb-m-chip" [class.active]="selectedPeriodo === 'nunca'" (click)="filtrarPorPeriodo('nunca')">Nunca</button>
+    <button class="mb-m-chip" [class.active]="selectedPeriodo === 'custom'" (click)="openMobilePeriodSheet()">Período</button>
+  </div>
+  <div class="mb-m-search">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+    <input placeholder="Buscar por nome ou e-mail…" (keyup)="aplicarFiltroNome($event)"/>
+  </div>
+</div>
+
+<!-- ═══ Folha do período customizado (mobile, 3D) ═══ -->
+<div class="mb-m-sheet-backdrop" *ngIf="mobilePeriodSheetOpen" (click)="closeMobilePeriodSheet()"></div>
+<div class="mb-m-period-sheet" [class.mb-m-period-sheet--open]="mobilePeriodSheetOpen">
+  <div class="mb-m-sheet-handle"><span></span></div>
+  <div class="mb-m-sheet-head">Período personalizado</div>
+  <div class="mb-m-sheet-body">
+    <mat-form-field appearance="outline" class="mb-date-range">
+      <mat-date-range-input [rangePicker]="mPicker">
+        <input matStartDate placeholder="Início" [(ngModel)]="dataInicio">
+        <input matEndDate placeholder="Fim" [(ngModel)]="dataFim">
+      </mat-date-range-input>
+      <mat-datepicker-toggle matIconSuffix [for]="mPicker"></mat-datepicker-toggle>
+      <mat-date-range-picker #mPicker></mat-date-range-picker>
+    </mat-form-field>
+    <button class="mb-btn-primary mb-m-sheet-apply" (click)="aplicarFiltrosMobile()">Aplicar</button>
+  </div>
+</div>
+
 <div class="mb-page">
 
   <!-- ── Sidebar de filtros ───────────────────────────────────────────────── -->
@@ -177,5 +222,54 @@
     <mat-paginator class="mb-paginator"
                    [pageSizeOptions]="[10, 20, 30]"
                    showFirstLastButtons></mat-paginator>
+
+    <!-- ═══ Lista de cards (mobile, 3D) ═══ -->
+    <div class="mb-m-list">
+      <div class="mb-m-item" *ngFor="let element of mobileRows" [class.mb-m-item--deleted]="element.dataExclusao !== null">
+        <div class="mb-m-item-row">
+          <div class="mb-avatar" [class.mb-avatar--self]="element.id === userIdAutenticado" [class.mb-avatar--deleted]="element.dataExclusao !== null">
+            {{ (element.nome || '?').charAt(0).toUpperCase() }}
+          </div>
+          <div class="mb-user-text">
+            <span class="mb-user-name" [class.mb-user-name--deleted]="element.dataExclusao !== null">{{ element.nome }}</span>
+            <span class="mb-user-email" *ngIf="element.dataExclusao === null">{{ element.email }}</span>
+            <span class="mb-m-deleted-text" *ngIf="element.dataExclusao !== null">Excluído em {{ element.dataExclusao | date:'dd/MM/yyyy HH:mm' }}</span>
+          </div>
+          <button class="mb-row-icon danger" *ngIf="!element.dataExclusao && element.id !== userIdAutenticado"
+                  (click)="excluirUsuario(element.id)" aria-label="Excluir usuário">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6M9 6V4a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/>
+            </svg>
+          </button>
+          <button class="mb-row-icon success" *ngIf="element.dataExclusao" (click)="recuperarUsuario(element.id)" aria-label="Restaurar usuário">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/>
+            </svg>
+          </button>
+          <span *ngIf="element.id === userIdAutenticado" class="mb-self-pill">Você</span>
+        </div>
+        <div class="mb-m-item-row2">
+          <mat-form-field class="mb-perfil-select mb-m-perfil-select" appearance="outline" subscriptSizing="dynamic">
+            <mat-select [(value)]="element.perfilId"
+                        (selectionChange)="updatePerfil(element.id, $event.value)"
+                        [disabled]="element.id === userIdAutenticado || element.dataExclusao !== null">
+              <mat-option *ngFor="let perfil of dataSourcePerfis" [value]="perfil.id">{{ perfil.perfil }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          <div class="mb-date mb-m-item-date" *ngIf="element.ultimaAutenticacao; else nuncaEntrouMobile">
+            {{ element.ultimaAutenticacao | date: 'dd/MM/yyyy' }}
+            <span>{{ element.ultimaAutenticacao | date: 'HH:mm' }}</span>
+          </div>
+          <ng-template #nuncaEntrouMobile>
+            <span class="mb-pill-never">Nunca acessou</span>
+          </ng-template>
+        </div>
+      </div>
+
+      <button class="mb-m-loadmore" *ngIf="mobileVisibleCount < dataSourceUsuarios.filteredData.length" (click)="loadMoreMobile()">
+        Carregar mais {{ mobileLoadMoreStep }}
+        <span>{{ mobileRows.length }} de {{ dataSourceUsuarios.filteredData.length }}</span>
+      </button>
+    </div>
   </section>
 </div>

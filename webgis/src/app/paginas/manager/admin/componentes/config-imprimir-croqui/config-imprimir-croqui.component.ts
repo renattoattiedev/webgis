@@ -136,6 +136,9 @@ export class ConfigImprimirCroquiComponent
   // ✨ Propriedades para o modal de ajuda de variáveis
   showAjudaVariaveis: boolean = false;
 
+  // ─── Mobile (3D) — abas Camadas · Template · Preview ────────────────────
+  activeMobileTab: 'camadas' | 'template' = 'camadas';
+
   constructor(
     private fetchContentService: FetchContentOrganizationService,
     private updateComponenteService: UpdateComponenteService,
@@ -337,6 +340,18 @@ export class ConfigImprimirCroquiComponent
       grupoId: null,
       temaId: null,
     });
+  }
+
+  setMobileTab(tab: 'camadas' | 'template'): void {
+    this.activeMobileTab = tab;
+  }
+
+  // O estado vazio de "camadas auxiliares" vira alvo de toque só no mobile
+  // (≤768px); em telas maiores continua um bloco somente informativo.
+  onEmptyAuxClick(): void {
+    if (window.matchMedia('(max-width:768px)').matches) {
+      this.addCamadaConfig();
+    }
   }
 
   removeCamadaConfig(index: number): void {

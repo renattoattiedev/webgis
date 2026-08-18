@@ -8,6 +8,9 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
       <input placeholder="Buscar por nome…" (keyup)="aplicarFiltroNome($event)"/>
     </div>
+    <button class="al-sort-btn" (click)="toggleSortSheet()" aria-label="Ordenar">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M7 12h10M11 18h2"/></svg>
+    </button>
     <button class="al-add" (click)="openAddDialog()">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Novo pacote
@@ -86,8 +89,88 @@
         </td>
       </ng-container>
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.is-deleted]="row.deletedAt !== null"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.is-deleted]="!!row.deletedAt"></tr>
     </table>
   </div>
   <mat-paginator class="al-paginator" [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+
+  <!-- ═══ Lista de cards (mobile, 3C) ═══ -->
+  <div class="al-m-list">
+    <div class="al-m-item" *ngFor="let p of mobileRows" [class.al-m-item--deleted]="!!p.deletedAt">
+      <div class="al-m-item-row">
+        <div class="al-m-item-main">
+          <span class="al-m-item-title" [class.al-m-item-title--deleted]="!!p.deletedAt">{{ p.tituloPacoteConceitual }}</span>
+          <span class="al-m-item-sub" *ngIf="!p.deletedAt">{{ p.nomePacoteConceitual }}</span>
+          <div class="al-m-item-meta">
+            <span class="al-m-deleted-chip" *ngIf="!!p.deletedAt">Excluído</span>
+            <ng-container *ngIf="!p.deletedAt">
+              <span class="al-status ok" *ngIf="p.validadoGeoserver === true">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="20 6 9 17 4 12"/></svg>
+                Validado
+              </span>
+              <span class="al-status fail" *ngIf="p.validadoGeoserver === false">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg>
+                Não validado
+              </span>
+              <div class="al-user-pill">
+                <div class="av">{{ (p.nomeUsrCriacao || '?').charAt(0).toUpperCase() }}</div>
+                <span>{{ p.nomeUsrCriacao }}</span>
+              </div>
+            </ng-container>
+            <span class="al-m-item-created">{{ !!p.deletedAt ? (p.criadoEm | date:'dd/MM') : ('criou ' + (p.criadoEm | date:'dd/MM')) }}</span>
+          </div>
+        </div>
+        <button class="al-m-item-menu" [matMenuTriggerFor]="mMenu" aria-label="Ações">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/></svg>
+        </button>
+        <mat-menu #mMenu="matMenu">
+          <button mat-menu-item (click)="openEditDialog(p)"><mat-icon>edit</mat-icon><span>Editar</span></button>
+          <button mat-menu-item class="al-menu-danger" (click)="openDeleteDialog(p)"><mat-icon>delete</mat-icon><span>Excluir</span></button>
+        </mat-menu>
+      </div>
+      <div class="al-m-item-foot" *ngIf="!p.deletedAt">
+        <button class="al-m-details-toggle" [class.al-m-details-toggle--open]="isMobileDetailsOpen(p.id)" (click)="toggleMobileDetails(p.id)">
+          {{ isMobileDetailsOpen(p.id) ? 'Ocultar detalhes' : 'Detalhes' }}
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+        <span class="al-m-item-updated" *ngIf="!isMobileDetailsOpen(p.id)">alterado {{ p.updatedAt | date:'dd/MM HH:mm' }}</span>
+      </div>
+      <div class="al-m-details-panel" *ngIf="isMobileDetailsOpen(p.id)">
+        <div class="al-m-details-row"><span>Inclusão</span><span>{{ p.criadoEm | date:'dd/MM/yyyy HH:mm' }}</span></div>
+        <div class="al-m-details-row"><span>Alteração</span><span>{{ p.updatedAt | date:'dd/MM/yyyy HH:mm' }}</span></div>
+        <div class="al-m-details-row"><span>Alterado por</span><span>{{ p.nomeUsrAlteracao }}</span></div>
+      </div>
+    </div>
+
+    <button class="al-m-loadmore" *ngIf="mobileVisibleCount < dataSourcePacotesConceituais.filteredData.length" (click)="loadMoreMobile()">
+      Carregar mais {{ mobileLoadMoreStep }}
+      <span>{{ mobileRows.length }} de {{ dataSourcePacotesConceituais.filteredData.length }}</span>
+    </button>
+  </div>
+
+  <button class="al-m-fab" (click)="openAddDialog()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Novo pacote
+  </button>
+
+  <!-- ═══ Folha de ordenação (mobile, 3C) ═══ -->
+  <div class="al-m-sort-backdrop" *ngIf="mobileSortSheetOpen" (click)="closeSortSheet()"></div>
+  <div class="al-m-sort-sheet" [class.al-m-sort-sheet--open]="mobileSortSheetOpen">
+    <div class="al-m-sort-handle"><span></span></div>
+    <div class="al-m-sort-head">Ordenar por</div>
+    <div class="al-m-sort-list">
+      <button class="al-m-sort-item" [class.al-m-sort-item--active]="mobileSortKey === 'titulo'" (click)="applyMobileSort('titulo')">
+        Título
+        <svg *ngIf="mobileSortKey === 'titulo'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+      <button class="al-m-sort-item" [class.al-m-sort-item--active]="mobileSortKey === 'inclusao'" (click)="applyMobileSort('inclusao')">
+        Inclusão
+        <svg *ngIf="mobileSortKey === 'inclusao'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+      <button class="al-m-sort-item" [class.al-m-sort-item--active]="mobileSortKey === 'alteracao'" (click)="applyMobileSort('alteracao')">
+        Alteração
+        <svg *ngIf="mobileSortKey === 'alteracao'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+      </button>
+    </div>
+  </div>
 </div>

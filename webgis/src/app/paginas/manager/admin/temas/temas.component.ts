@@ -47,6 +47,12 @@ export class TemasComponent implements OnInit {
     'acao',
   ];
 
+  // ─── Mobile (3C) — lista de cards ───────────────────────────────────────
+  mobileVisibleCount = 10;
+  mobileExpandedDetails = new Set<string>();
+  mobileSortSheetOpen = false;
+  mobileSortKey: 'titulo' | 'inclusao' | 'alteracao' | null = null;
+
   constructor(
     public dialog: MatDialog,
     private fetchTemasService: FetchTemasService,
@@ -78,6 +84,52 @@ export class TemasComponent implements OnInit {
     const filtroValor = (event.target as HTMLInputElement).value;
     this.dataSourceTema.filter = filtroValor.trim().toLowerCase();
   }
+
+  get mobileRows(): Tema[] {
+    return this.dataSourceTema.filteredData.slice(0, this.mobileVisibleCount);
+  }
+
+  get mobileLoadMoreStep(): number {
+    return Math.min(10, this.dataSourceTema.filteredData.length - this.mobileVisibleCount);
+  }
+
+  loadMoreMobile(): void {
+    this.mobileVisibleCount += 10;
+  }
+
+  toggleMobileDetails(id: string): void {
+    if (this.mobileExpandedDetails.has(id)) {
+      this.mobileExpandedDetails.delete(id);
+    } else {
+      this.mobileExpandedDetails.add(id);
+    }
+  }
+
+  isMobileDetailsOpen(id: string): boolean {
+    return this.mobileExpandedDetails.has(id);
+  }
+
+  toggleSortSheet(): void {
+    this.mobileSortSheetOpen = !this.mobileSortSheetOpen;
+  }
+
+  closeSortSheet(): void {
+    this.mobileSortSheetOpen = false;
+  }
+
+  applyMobileSort(key: 'titulo' | 'inclusao' | 'alteracao'): void {
+    this.mobileSortKey = key;
+    const data = [...this.dataSourceTema.data];
+    data.sort((a, b) => {
+      if (key === 'titulo') return a.tituloTema.localeCompare(b.tituloTema);
+      if (key === 'inclusao')
+        return new Date(a.criadoEm).getTime() - new Date(b.criadoEm).getTime();
+      return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+    });
+    this.dataSourceTema.data = data;
+    this.mobileSortSheetOpen = false;
+  }
+
   openAddDialog() {
     const dialogRef = this.dialog.open(AddTemasDialogComponent, {});
 

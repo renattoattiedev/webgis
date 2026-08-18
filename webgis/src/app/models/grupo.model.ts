@@ -17,6 +17,7 @@ export interface Grupos {
   camadas: Camadas[];
   camadasRaster: CamadasRaster[];
   mapas: Mapas[];
+  deletedAt?: string | null;
 }
 
 export interface RespostaApi {

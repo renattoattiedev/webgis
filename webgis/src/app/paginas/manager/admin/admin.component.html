@@ -1,4 +1,96 @@
-<div class="ad-page">
+<!-- ═══ Ícones das seções, definidos uma vez e reutilizados pelo índice ═══
+     mobile e pela folha de troca de seção — SVG verbatim dos .ad-nav-item
+     abaixo (mesmos paths, sem redesenho). -->
+<ng-template #sectionIcon let-key="key">
+  <ng-container [ngSwitch]="key">
+    <svg *ngSwitchCase="'geral'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    <svg *ngSwitchCase="'pacotes'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg>
+    <svg *ngSwitchCase="'temas'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+    <svg *ngSwitchCase="'grupos'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>
+    <svg *ngSwitchCase="'componentes'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    <svg *ngSwitchCase="'basemaps'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+    <svg *ngSwitchCase="'membros'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+  </ng-container>
+</ng-template>
+
+<!-- ═══ Header mobile (56px) — índice ou seção com voltar + troca ═══ -->
+<div class="ad-m-header" *ngIf="isAdmin">
+  <ng-container *ngIf="mobileShowIndex; else adMSectionHeader">
+    <div class="ad-m-header-tile">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </div>
+    <span class="ad-m-header-title">Painel de Controle</span>
+  </ng-container>
+  <ng-template #adMSectionHeader>
+    <button type="button" class="ad-m-back" (click)="openIndex()" aria-label="Voltar ao índice">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button type="button" class="ad-m-section-trigger" (click)="toggleSectionSheet()">
+      <span class="ad-m-section-title">{{ currentSection()?.titleMain }} <em *ngIf="currentSection()?.titleEm">{{ currentSection()?.titleEm }}</em></span>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="ad-m-header-action">
+      <button
+        type="button"
+        class="ad-m-save-btn"
+        *ngIf="currentComponent === GeralComponent"
+        [disabled]="!(adminRoutesService.geralDirty$ | async)"
+        (click)="adminRoutesService.geralSaveRequested$.next()"
+      >Salvar</button>
+      <span class="ad-m-header-count" *ngIf="currentListNoun() as noun" [style.visibility]="sectionCounts[currentSection()!.key] === null ? 'hidden' : 'visible'">
+        {{ sectionCounts[currentSection()!.key] }} {{ noun }}
+      </span>
+    </div>
+  </ng-template>
+</div>
+
+<!-- ═══ Índice mobile — lista das 7 seções ═══ -->
+<div class="ad-m-index" *ngIf="mobileShowIndex">
+  <p class="ad-m-index-lead">Administração da plataforma. Escolha uma seção.</p>
+  <div class="ad-m-index-card">
+    <ng-container *ngFor="let section of sections; let last = last">
+      <button type="button" class="ad-m-index-item" (click)="openSection(section)">
+        <div class="ad-m-index-icon">
+          <ng-container *ngTemplateOutlet="sectionIcon; context:{key:section.key}"></ng-container>
+        </div>
+        <div class="ad-m-index-text">
+          <span class="ad-m-index-name">{{ section.navLabel }}</span>
+          <span class="ad-m-index-sub">{{ section.navSubtitle }}</span>
+        </div>
+        <span class="ad-m-index-count" *ngIf="sectionCounts[section.key] !== null">{{ sectionCounts[section.key] }}</span>
+        <svg class="ad-m-index-chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"/></svg>
+      </button>
+      <div class="ad-m-index-sep" *ngIf="!last"></div>
+    </ng-container>
+  </div>
+</div>
+
+<!-- ═══ Folha de troca de seção ═══ -->
+<div class="ad-m-sheet-backdrop" *ngIf="mobileSectionSheetOpen" (click)="closeSectionSheet()"></div>
+<div class="ad-m-sheet" [class.ad-m-sheet--open]="mobileSectionSheetOpen">
+  <div class="ad-m-sheet-handle"><span></span></div>
+  <div class="ad-m-sheet-head">
+    <span>Painel de Controle</span>
+    <button type="button" (click)="openIndex()">Ver índice</button>
+  </div>
+  <div class="ad-m-sheet-list">
+    <button
+      type="button"
+      class="ad-m-sheet-item"
+      *ngFor="let section of sections"
+      [class.ad-m-sheet-item--active]="currentComponent === section.component"
+      (click)="openSection(section)"
+    >
+      <div class="ad-m-sheet-icon">
+        <ng-container *ngTemplateOutlet="sectionIcon; context:{key:section.key}"></ng-container>
+      </div>
+      <span class="ad-m-sheet-label">{{ section.navLabel }}</span>
+      <svg class="ad-m-sheet-check" *ngIf="currentComponent === section.component" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><polyline points="20 6 9 17 4 12"/></svg>
+    </button>
+  </div>
+</div>
+
+<div class="ad-page" [class.ad-page--mobile-index]="mobileShowIndex">
   <aside class="ad-side" [class.opened]="isSidenavOpened">
     <div class="ad-side-head"><span class="ad-side-title">Painel de Controle</span></div>
     <nav class="ad-nav">

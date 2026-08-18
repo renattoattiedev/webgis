@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -8,11 +8,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-import { catchError, of } from 'rxjs';
+import { catchError, of, Subscription } from 'rxjs';
 import { Configs } from 'src/app/models/configs.model';
 import { FetchConfigsService } from 'src/app/services/api/fetch.configs.service';
 import { UpdateConfigService } from 'src/app/services/api/update.config.service';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { AdminRoutesService } from 'src/app/services/admin.routes.service';
 
 @Component({
   selector: 'app-geral',
@@ -33,23 +34,40 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   templateUrl: './geral.component.html',
   styleUrls: ['./geral.component.scss'],
 })
-export class GeralComponent implements OnInit {
+export class GeralComponent implements OnInit, OnDestroy {
   configForm: FormGroup;
   configData: Configs[] = [];
   groupedConfigData: any[] = [];
   isLoading = false;
+
+  private saveRequestSub?: Subscription;
+  private dirtySub?: Subscription;
+
+  expandedGroups = new Set<number>([0]);
 
   constructor(
     private fetchConfigService: FetchConfigsService,
     private fb: FormBuilder,
     private updateConfig: UpdateConfigService,
     private snackBar: MatSnackBar,
+    private adminRoutesService: AdminRoutesService,
   ) {
     this.configForm = this.fb.group({});
   }
 
   ngOnInit(): void {
     this.loadConfigs();
+
+    this.saveRequestSub = this.adminRoutesService.geralSaveRequested$.subscribe(() => {
+      this.configForm.markAsPristine();
+      this.adminRoutesService.geralDirty$.next(false);
+    });
+  }
+
+  ngOnDestroy(): void {
+    this.saveRequestSub?.unsubscribe();
+    this.dirtySub?.unsubscribe();
+    this.adminRoutesService.geralDirty$.next(false);
   }
 
   loadConfigs(): void {
@@ -72,6 +90,10 @@ export class GeralComponent implements OnInit {
             this.configData,
           );
           this.buildForm();
+          this.dirtySub?.unsubscribe();
+          this.dirtySub = this.configForm.valueChanges.subscribe(() => {
+            this.adminRoutesService.geralDirty$.next(this.configForm.dirty);
+          });
         }
         this.isLoading = false;
       });
@@ -207,5 +229,18 @@ export class GeralComponent implements OnInit {
   // 🆕 Verificar se item é sensível mas editável
   isSensitiveAndEditable(item: Configs): boolean {
     return item.isSensitive && item.canEdit;
+  }
+
+  // Grupos colapsáveis (mobile) — só o primeiro grupo abre por padrão.
+  isGroupExpanded(index: number): boolean {
+    return this.expandedGroups.has(index);
+  }
+
+  toggleGroup(index: number): void {
+    if (this.expandedGroups.has(index)) {
+      this.expandedGroups.delete(index);
+    } else {
+      this.expandedGroups.add(index);
+    }
   }
 }

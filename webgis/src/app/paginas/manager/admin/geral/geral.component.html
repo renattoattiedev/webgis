@@ -10,10 +10,12 @@
   </div>
 
   <form [formGroup]="configForm" *ngIf="!isLoading" class="gr-form">
-    <section class="gr-group" *ngFor="let group of groupedConfigData">
-      <h2 class="gr-group-title">
+    <section class="gr-group" *ngFor="let group of groupedConfigData; let i = index" [class.gr-collapsed]="!isGroupExpanded(i)">
+      <h2 class="gr-group-title" (click)="toggleGroup(i)">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/></svg>
         {{ group.grupoKey }}
+        <span class="gr-group-count" *ngIf="!isGroupExpanded(i)">{{ group.items.length }}</span>
+        <svg class="gr-group-chevron" [class.gr-group-chevron--open]="isGroupExpanded(i)" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
       </h2>
 
       <div class="gr-items">
@@ -28,6 +30,10 @@
               </span>
             </label>
             <input class="gr-input gr-input--locked" [value]="item.displayValue" readonly/>
+            <div class="gr-locked-block">
+              <span class="gr-locked-value">{{ item.displayValue }}</span>
+              <span class="gr-locked-reason">Configuração sensível — acesso restrito</span>
+            </div>
           </div>
 
           <div *ngIf="isSensitiveAndEditable(item)" class="gr-field">

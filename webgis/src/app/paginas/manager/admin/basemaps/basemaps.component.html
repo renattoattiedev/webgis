@@ -13,6 +13,51 @@
       Novo basemap
     </button>
   </div>
+
+  <!-- ═══ Lista de cards (mobile, 3D) ═══ -->
+  <div class="al-m-list">
+    <div class="al-m-basemap" *ngFor="let basemap of mobileRows">
+      <div class="al-m-basemap-thumb-wrap">
+        <img class="al-m-basemap-thumb" [src]="mobileThumbUrl(basemap)" [alt]="basemap.name"/>
+        <span class="al-m-basemap-default-chip" *ngIf="basemap.isDefault">
+          <svg viewBox="0 0 24 24" fill="currentColor" stroke="none"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Padrão
+        </span>
+      </div>
+      <div class="al-m-basemap-name-row">
+        <span class="al-m-basemap-name">{{ basemap.name }}</span>
+        <div class="al-m-basemap-stepper">
+          <button class="al-m-basemap-step-btn" [disabled]="basemap.order === 0" (click)="stepOrderMobile(basemap, -1)" aria-label="Diminuir ordem">−</button>
+          <span class="al-m-basemap-step-value">{{ basemap.order }}</span>
+          <button class="al-m-basemap-step-btn" (click)="stepOrderMobile(basemap, 1)" aria-label="Aumentar ordem">+</button>
+        </div>
+      </div>
+      <div class="al-m-basemap-toggle-row">
+        <span>Basemap padrão</span>
+        <mat-slide-toggle [checked]="basemap.isDefault" (change)="onToggleDefault(basemap, $event)"></mat-slide-toggle>
+      </div>
+      <div class="al-m-basemap-toggle-row">
+        <span>Ativo</span>
+        <mat-slide-toggle [checked]="basemap.isActive" (change)="onToggleActive(basemap, $event)"></mat-slide-toggle>
+      </div>
+      <div class="al-m-basemap-foot">
+        <span class="al-m-basemap-foot-dates">criado {{ basemap.createdAt | date:'dd/MM' }} · alterado {{ basemap.updatedAt | date:'dd/MM' }}</span>
+        <button class="al-m-basemap-delete" (click)="openDeleteDialog(basemap)" aria-label="Excluir">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+        </button>
+      </div>
+    </div>
+
+    <button class="al-m-loadmore" *ngIf="mobileVisibleCount < dataSourceBasemaps.filteredData.length" (click)="loadMoreMobile()">
+      Carregar mais {{ mobileLoadMoreStep }}
+      <span>{{ mobileRows.length }} de {{ dataSourceBasemaps.filteredData.length }}</span>
+    </button>
+  </div>
+
+  <button class="al-m-fab" (click)="openAddDialog()">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+    Novo basemap
+  </button>
   <div class="al-table-wrap">
     <table mat-table [dataSource]="dataSourceBasemaps" class="al-table">
       <ng-container matColumnDef="thumbnail">

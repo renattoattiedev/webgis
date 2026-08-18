@@ -533,6 +533,23 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   to { opacity: 1; }
 }
 
+// ── Mobile-only elements (hidden by default; unhidden only ≤768px below) ────
+// Kept out of the flow on desktop via display:none so nothing above 768px moves.
+.oc-filters-backdrop,
+.oc-filters-mobile-head,
+.oc-filters-mobile-foot,
+.oc-mobile-title-row,
+.oc-mobile-filter-btn,
+.oc-icon-btn-badge,
+.oc-active-chips,
+.oc-panel-summary,
+.oc-chip-more {
+  display: none;
+}
+
+.oc-filters-scroll { display: contents; }
+.oc-mobile-search-row { display: contents; }
+
 // ── Responsive ──────────────────────────────────────────────────────────────
 @media (max-width: 1280px) {
   .oc-page { padding: 16px 20px 32px; gap: 16px; }
@@ -557,9 +574,204 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 @media (max-width: 768px) {
   .oc-main-top { padding: 14px; gap: 10px; }
-  .oc-search   { width: 100%; order: 3; }
+  .oc-search   { flex: 1 1 auto; width: auto; }
   .oc-grid-wrap { padding: 14px; }
-  .oc-grid     { grid-template-columns: 1fr 1fr; gap: 12px; }
+  .oc-grid     { grid-template-columns: 1fr; gap: 12px; }
+
+  // Hide desktop-only groupings from the action bar
+  .oc-main-top-left, .oc-main-top-actions { display: none; }
+
+  // ── Mobile action bar: title row / search+filter row / active-chips row ──
+  .oc-mobile-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-basis: 100%;
+  }
+
+  .oc-mobile-search-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-basis: 100%;
+  }
+
+  .oc-mobile-filter-btn {
+    display: inline-flex;
+    position: relative;
+    width: 44px; height: 44px; border-radius: 12px;
+    flex-shrink: 0;
+
+    &.oc-icon-btn--active {
+      background: $brand; border-color: $brand; color: #fff;
+      &:hover { background: $brand-mid; color: #fff; }
+    }
+  }
+
+  .oc-icon-btn-badge {
+    display: flex;
+    align-items: center; justify-content: center;
+    position: absolute; top: -4px; right: -4px;
+    min-width: 19px; height: 19px; border-radius: 100px;
+    background: $gold; color: $ink;
+    font-size: 10.5px; font-weight: 800;
+    border: 2px solid #fff;
+    padding: 0 3px;
+  }
+
+  .oc-active-chips {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+  }
+
+  .oc-active-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: $brand; color: #fff;
+    font-size: 12px; font-weight: 600;
+    padding: 6px 8px 6px 11px; border-radius: 100px;
+    white-space: nowrap; flex-shrink: 0;
+
+    button {
+      display: inline-flex; align-items: center; justify-content: center;
+      background: none; border: none; padding: 0; color: inherit; cursor: pointer;
+      svg { width: 11px; height: 11px; }
+    }
+  }
+
+  .oc-active-chip-clear {
+    background: #fff; color: $ink-soft;
+    border: 1px solid $line; font-family: inherit;
+    font-size: 12px; font-weight: 600;
+    padding: 6px 10px; border-radius: 100px;
+    white-space: nowrap; flex-shrink: 0; cursor: pointer;
+  }
+
+  // ── Folha de filtros (substitui a coluna estática do bloco 1024px) ──────
+  .oc-filters-backdrop {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(11,37,69,0.18);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+    animation: oc-fade 0.18s;
+  }
+
+  .oc-filters {
+    &.opened {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      // Altura explícita: em alguns navegadores, position:fixed + display:flex
+      // com apenas top/bottom (sem height) não resolve a altura pelo viewport
+      // e a caixa cresce para caber o conteúdo — quebrando a rolagem interna.
+      top: 16px; left: 0; right: 0;
+      height: calc(100dvh - 16px);
+      background: $bg;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -10px 40px rgba(11,37,69,0.22);
+      z-index: 1000;
+      max-height: none;
+      overflow: visible;
+      padding-right: 0;
+      gap: 0;
+      animation: oc-sheet-in 280ms cubic-bezier(0.32,0.72,0,1);
+    }
+  }
+
+  .oc-filters-mobile-head {
+    display: flex;
+    align-items: center; justify-content: space-between;
+    height: 60px; flex-shrink: 0;
+    background: #fff;
+    border-bottom: 1px solid $line;
+    border-radius: 20px 20px 0 0;
+    padding: 0 8px 0 18px;
+  }
+
+  .oc-filters-mobile-head-title {
+    display: flex; align-items: center; gap: 10px;
+    span:first-child { font-size: 16px; font-weight: 600; color: $ink; }
+  }
+
+  .oc-filters-close-btn {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: $line-soft; border: 1px solid $line; color: $ink;
+    svg { width: 18px; height: 18px; }
+  }
+
+  .oc-filters-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-height: 0; // sem isso, o item flex cresce até o tamanho do conteúdo em vez de rolar
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px;
+  }
+
+  .oc-filters-mobile-foot {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    background: #fff;
+    border-top: 1px solid $line;
+    padding: 12px 14px calc(22px + env(safe-area-inset-bottom));
+
+    .oc-btn-ghost   { width: 120px; height: 50px; border-radius: 12px; flex-shrink: 0; }
+    .oc-btn-primary { height: 50px; border-radius: 12px; font-size: 14px; }
+  }
+
+  // Rodapé "Aplicar/Limpar" original (dentro de Refinamentos) some — usamos o rodapé fixo acima
+  .oc-panel .oc-foot { display: none; }
+
+  // ── Painéis longos colapsáveis (Temas/Grupos) ─────────────────────────────
+  .oc-panel-summary {
+    display: flex;
+    align-items: center; gap: 5px;
+    background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 12px; font-weight: 600; color: $brand;
+  }
+
+  .oc-panel-chevron {
+    width: 12px; height: 12px; transition: transform 0.15s;
+    &--open { transform: rotate(180deg); }
+  }
+
+  .oc-chips--collapsed .oc-chip:nth-child(n+5) { display: none; }
+
+  .oc-chip-more {
+    display: inline-flex; align-items: center;
+    background: none; border: none;
+    font-family: inherit; font-size: 12px; font-weight: 600; color: $muted;
+    padding: 9px 4px; cursor: pointer;
+  }
+
+  // ── Refinamentos: linhas de 56px em vez de bloco denso ───────────────────
+  .oc-fav-row { height: 56px; }
+  .oc-fav-toggle { width: 52px; height: 32px; border-radius: 100px; }
+
+  .oc-chips .oc-chip,
+  .oc-chips .oc-chip-more { font-size: 13px; padding: 9px 14px; }
+
+  // ── Cards: alvos de toque de 44px ────────────────────────────────────────
+  .oc-thumb-refresh { width: 32px; height: 32px; opacity: 1; }
+  .oc-details-btn { min-height: 44px; padding: 4px 10px; }
+  .oc-share, .oc-star {
+    width: 44px; height: 44px; border-radius: 11px;
+    svg { width: 15px; height: 15px; }
+  }
+  .oc-star svg { width: 18px; height: 18px; }
+}
+
+@keyframes oc-sheet-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }
 
 @media (max-width: 480px) {

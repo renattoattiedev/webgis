@@ -599,6 +599,28 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   ::ng-deep .mat-mdc-select { color: $ink; }
 }
 
+// ── Mobile-only elements (hidden by default; unhidden only ≤768px below) ────
+// Kept out of the flow on desktop via display:none so nothing above 768px moves.
+.mc-filters-backdrop,
+.mc-filters-mobile-head,
+.mc-filters-mobile-foot,
+.mc-filters-cache-btn,
+.mc-mobile-title-row,
+.mc-mobile-filter-btn,
+.mc-mobile-add-btn,
+.mc-icon-btn-badge,
+.mc-type-chips-row,
+.mc-panel-summary,
+.mc-chip-more,
+.mc-list,
+.mc-sheet-overlay,
+.mc-action-sheet {
+  display: none;
+}
+
+.mc-filters-scroll { display: contents; }
+.mc-mobile-search-row { display: contents; }
+
 // ── Responsive ──────────────────────────────────────────────────────────────
 @media (max-width: 1280px) {
   .mc-page { padding: 16px 20px 32px; gap: 16px; }
@@ -623,6 +645,360 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 @media (max-width: 768px) {
   .mc-main-top { padding: 14px 14px; gap: 10px; }
-  .mc-search   { width: 100%; order: 3; }
+  .mc-search   { flex: 1 1 auto; width: auto; }
   .mc-table    { min-width: 1100px; }
+
+  // Tabela vira lista de cards
+  .mc-table-wrap, .mc-paginator { display: none; }
+  .mc-main { overflow: hidden; }
+
+  // Hide desktop-only groupings from the action bar
+  .mc-main-top-left, .mc-main-top-actions { display: none; }
+
+  // ── Mobile action bar: título / busca+filtro+novo / atalhos de tipo ─────
+  .mc-mobile-title-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-basis: 100%;
+  }
+
+  .mc-mobile-search-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-basis: 100%;
+  }
+
+  .mc-mobile-filter-btn {
+    display: inline-flex;
+    position: relative;
+    width: 44px; height: 44px; border-radius: 12px;
+    flex-shrink: 0;
+
+    &.mc-icon-btn--active {
+      background: $brand; border-color: $brand; color: #fff;
+      &:hover { background: $brand-mid; color: #fff; }
+    }
+  }
+
+  .mc-mobile-add-btn {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 44px; height: 44px; border-radius: 12px;
+    background: $brand; border: 1px solid $brand; color: #fff;
+    cursor: pointer; flex-shrink: 0;
+    svg { width: 20px; height: 20px; }
+    &:hover { background: $brand-mid; }
+  }
+
+  .mc-icon-btn-badge {
+    display: flex;
+    align-items: center; justify-content: center;
+    position: absolute; top: -4px; right: -4px;
+    min-width: 19px; height: 19px; border-radius: 100px;
+    background: $gold; color: $ink;
+    font-size: 10.5px; font-weight: 800;
+    border: 2px solid #fff;
+    padding: 0 3px;
+  }
+
+  .mc-type-chips-row {
+    display: flex;
+    flex-basis: 100%;
+    align-items: center;
+    gap: 6px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    &::-webkit-scrollbar { display: none; }
+
+    .mc-chip { white-space: nowrap; flex-shrink: 0; }
+  }
+
+  // ── Folha de filtros (substitui a coluna estática do bloco 1024px) ──────
+  .mc-filters-backdrop {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(11,37,69,0.18);
+    backdrop-filter: blur(2px);
+    z-index: 999;
+    animation: mc-fade 0.18s;
+  }
+
+  .mc-filters {
+    &.opened {
+      display: flex;
+      flex-direction: column;
+      position: fixed;
+      // Altura explícita: em alguns navegadores, position:fixed + display:flex
+      // com apenas top/bottom (sem height) não resolve a altura pelo viewport
+      // e a caixa cresce para caber o conteúdo — quebrando a rolagem interna.
+      top: 16px; left: 0; right: 0;
+      height: calc(100dvh - 16px);
+      background: $bg;
+      border-radius: 20px 20px 0 0;
+      box-shadow: 0 -10px 40px rgba(11,37,69,0.22);
+      z-index: 1000;
+      max-height: none;
+      overflow: visible;
+      padding-right: 0;
+      gap: 0;
+      animation: mc-sheet-in 280ms cubic-bezier(0.32,0.72,0,1);
+    }
+  }
+
+  .mc-filters-mobile-head {
+    display: flex;
+    align-items: center; justify-content: space-between;
+    height: 60px; flex-shrink: 0;
+    background: #fff;
+    border-bottom: 1px solid $line;
+    border-radius: 20px 20px 0 0;
+    padding: 0 8px 0 18px;
+  }
+
+  .mc-filters-mobile-head-title {
+    display: flex; align-items: center; gap: 10px;
+    span:first-child { font-size: 16px; font-weight: 600; color: $ink; }
+  }
+
+  .mc-filters-close-btn {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: $line-soft; border: 1px solid $line; color: $ink;
+    svg { width: 18px; height: 18px; }
+  }
+
+  .mc-filters-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-height: 0; // sem isso, o item flex cresce até o tamanho do conteúdo em vez de rolar
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 14px;
+  }
+
+  .mc-filters-cache-btn {
+    display: flex;
+    align-items: center; gap: 8px;
+    height: 44px; padding: 0 14px;
+    background: #fff; border: 1px solid $line; border-radius: 12px;
+    color: $ink-soft; font-family: inherit; font-size: 13px; font-weight: 500;
+    cursor: pointer;
+    svg { width: 15px; height: 15px; }
+    &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  }
+
+  .mc-filters-mobile-foot {
+    display: flex;
+    gap: 10px;
+    flex-shrink: 0;
+    background: #fff;
+    border-top: 1px solid $line;
+    padding: 12px 14px calc(22px + env(safe-area-inset-bottom));
+
+    .mc-btn-ghost   { width: 120px; height: 50px; border-radius: 12px; flex-shrink: 0; }
+    .mc-btn-primary { height: 50px; border-radius: 12px; font-size: 14px; }
+  }
+
+  // Rodapé "Aplicar/Limpar" original (dentro de Refinamentos) some — usamos o rodapé fixo acima
+  .mc-panel .mc-foot { display: none; }
+
+  // ── Pastas: alvos de 48px ────────────────────────────────────────────────
+  .mc-folder-item { min-height: 48px; }
+  .mc-icon-btn { width: 44px; height: 44px; }
+
+  // ── Painéis longos colapsáveis (Temas/Grupos) ─────────────────────────────
+  .mc-panel-summary {
+    display: flex;
+    align-items: center; gap: 5px;
+    background: none; border: none; cursor: pointer;
+    font-family: inherit; font-size: 12px; font-weight: 600; color: $brand;
+  }
+
+  .mc-panel-chevron {
+    width: 12px; height: 12px; transition: transform 0.15s;
+    &--open { transform: rotate(180deg); }
+  }
+
+  .mc-chips--collapsed .mc-chip:nth-child(n+5) { display: none; }
+
+  .mc-chip-more {
+    display: inline-flex; align-items: center;
+    background: none; border: none;
+    font-family: inherit; font-size: 12px; font-weight: 600; color: $muted;
+    padding: 9px 4px; cursor: pointer;
+  }
+
+  .mc-chips .mc-chip,
+  .mc-chips .mc-chip-more { font-size: 13px; padding: 9px 14px; }
+
+  .mc-fav-row { height: 56px; }
+  .mc-fav-toggle { width: 52px; height: 32px; border-radius: 100px; }
+
+  // ── Lista de cards ───────────────────────────────────────────────────────
+  .mc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 12px 14px;
+  }
+
+  .mc-card {
+    background: #fff;
+    border: 1px solid $line;
+    border-radius: 14px;
+    padding: 14px 8px 10px 14px;
+    display: flex; flex-direction: column; gap: 10px;
+    box-shadow: 0 1px 3px rgba(11,37,69,0.04);
+  }
+
+  .mc-card-top {
+    display: flex; align-items: flex-start; gap: 8px;
+  }
+
+  .mc-card-title-wrap {
+    flex: 1; min-width: 0;
+    display: flex; flex-direction: column; gap: 3px;
+  }
+
+  .mc-card-title {
+    font-size: 14.5px; font-weight: 600; color: $ink; line-height: 1.3;
+  }
+
+  .mc-card-sub { font-size: 11.5px; color: $muted; }
+
+  .mc-card-more {
+    width: 44px; height: 44px; margin-top: -8px; flex-shrink: 0;
+    border-radius: 11px; background: none; border: none;
+    color: $ink-soft; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    svg { width: 18px; height: 18px; }
+    &:active { background: $brand-tint; }
+  }
+
+  .mc-card-chips {
+    display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  }
+
+  .mc-share-chip {
+    display: inline-flex; align-items: center; gap: 5px;
+    background: $line-soft; color: $ink-soft;
+    font-size: 11px; font-weight: 600;
+    padding: 4px 10px; border-radius: 100px;
+    svg { width: 12px; height: 12px; }
+
+    &.publico { background: #ecfdf5; color: #047857; }
+    &.privado { background: #fef2f2; color: $danger; }
+    &.inst    { background: $brand-tint; color: $brand; }
+  }
+
+  .mc-card-bottom {
+    display: flex; align-items: center; justify-content: space-between;
+    padding-right: 6px;
+  }
+
+  .mc-card-meta {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: $muted;
+    .sep { width: 1px; height: 11px; background: $line; }
+  }
+
+  .mc-card-default {
+    display: flex; align-items: center; gap: 8px;
+    span { font-size: 11.5px; font-weight: 600; color: $ink-soft; }
+  }
+
+  .mc-list-empty {
+    text-align: center;
+    padding: 48px 20px;
+    color: $muted; font-size: 13px;
+  }
+
+  // ── Action sheet de linha ─────────────────────────────────────────────────
+  .mc-sheet-overlay {
+    display: block;
+    position: fixed; inset: 0;
+    background: rgba(11,37,69,0.28);
+    z-index: 999;
+    animation: mc-fade 0.18s;
+  }
+
+  .mc-action-sheet {
+    display: flex;
+    flex-direction: column;
+    position: fixed; left: 0; right: 0; bottom: 0;
+    max-height: 80%;
+    background: #fff;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 40px rgba(11,37,69,0.22);
+    z-index: 1000;
+    padding: 10px 0 calc(12px + env(safe-area-inset-bottom));
+    animation: mc-sheet-in 280ms cubic-bezier(0.32,0.72,0,1);
+  }
+
+  .mc-action-sheet-handle {
+    width: 44px; height: 4px; border-radius: 2px;
+    background: $brand-tint-2;
+    align-self: center;
+    margin-bottom: 8px;
+  }
+
+  .mc-action-sheet-head {
+    padding: 6px 18px 12px;
+    border-bottom: 1px solid $line-soft;
+    display: flex; flex-direction: column; gap: 2px;
+    flex-shrink: 0;
+
+    .title { font-size: 15px; font-weight: 600; color: $ink; }
+    .sub   { font-size: 12px; color: $muted; }
+  }
+
+  .mc-action-sheet-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 6px 8px;
+  }
+
+  .mc-action-item {
+    width: 100%;
+    height: 56px;
+    display: flex; align-items: center; gap: 14px;
+    padding: 0 10px; border-radius: 12px;
+    background: none; border: none;
+    font-family: inherit; font-size: 14.5px; font-weight: 500; color: $ink;
+    cursor: pointer; text-align: left;
+
+    .tile {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: $brand-tint; color: $brand;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+      svg { width: 17px; height: 17px; }
+    }
+
+    &:active { background: $brand-tint; }
+
+    &--disabled { opacity: 0.42; pointer-events: none; }
+
+    &--danger {
+      color: $danger;
+      .tile { background: #fef2f2; color: $danger; }
+    }
+  }
+
+  .mc-action-divider { height: 1px; background: $line-soft; margin: 4px 10px; }
+}
+
+@keyframes mc-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes mc-sheet-in {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
 }

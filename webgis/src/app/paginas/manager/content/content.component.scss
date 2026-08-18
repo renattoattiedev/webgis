@@ -200,6 +200,14 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 // ── Responsive ──────────────────────────────────────────────────────────────
 @media (max-width: 768px) {
   .mgr-nav   { padding: 0 18px; }
-  .mgr-tabs  { padding: 0 12px; }
+  .mgr-tabs  {
+    padding: 0 12px;
+    scroll-snap-type: x proximity;
+  }
   .mgr-nav-title, .mgr-nav-tag { display: none; }
+
+  .mgr-tab {
+    min-height: 48px;
+    scroll-snap-align: start;
+  }
 }

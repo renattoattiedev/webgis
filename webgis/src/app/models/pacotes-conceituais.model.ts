@@ -19,6 +19,7 @@ export interface PacotesConceituais {
   hasSensitiveData: boolean;
   canAccessConnectionData?: boolean;
   accessDenied?: boolean;
+  deletedAt?: string | null;
 }
 
 export interface RespostaApi {

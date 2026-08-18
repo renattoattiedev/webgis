@@ -55,6 +55,9 @@ export class BasemapsComponent implements OnInit {
   thumbnailUrls: Map<string, string> = new Map();
   locallyDeletedBasemapIds = new Set<string>();
 
+  // ─── Mobile (3D) — lista de cards ───────────────────────────────────────
+  mobileVisibleCount = 10;
+
   displayedColumns: string[] = [
     'thumbnail',
     'name',
@@ -92,6 +95,22 @@ export class BasemapsComponent implements OnInit {
   aplicarFiltroNome(event: Event) {
     const filtroValor = (event.target as HTMLInputElement).value;
     this.dataSourceBasemaps.filter = filtroValor.trim().toLowerCase();
+  }
+
+  get mobileRows(): Basemap[] {
+    return this.dataSourceBasemaps.filteredData.slice(0, this.mobileVisibleCount);
+  }
+
+  get mobileLoadMoreStep(): number {
+    return Math.min(10, this.dataSourceBasemaps.filteredData.length - this.mobileVisibleCount);
+  }
+
+  loadMoreMobile(): void {
+    this.mobileVisibleCount += 10;
+  }
+
+  mobileThumbUrl(basemap: Basemap): string {
+    return this.thumbnailUrls.get(basemap.thumbnail) || 'assets/imagens/logo.png';
   }
 
   fetchBasemaps() {
@@ -259,13 +278,31 @@ export class BasemapsComponent implements OnInit {
       return;
     }
 
+    this.setOrder(basemap, nextOrder, () => {
+      input.value = String(previousOrder);
+    });
+  }
+
+  // Stepper mobile (3D) — mesmo caminho de persistência do input de ordem.
+  stepOrderMobile(basemap: Basemap, delta: number): void {
+    const nextOrder = Number(basemap.order ?? 0) + delta;
+    if (nextOrder < 0) return;
+    this.setOrder(basemap, nextOrder, () => {});
+  }
+
+  private setOrder(
+    basemap: Basemap,
+    nextOrder: number,
+    onErrorRollback: () => void,
+  ): void {
+    const previousOrder = Number(basemap.order ?? 0);
     basemap.order = nextOrder;
     this.persistBasemapUpdate(
       basemap,
       { order: nextOrder },
       () => {
         basemap.order = previousOrder;
-        input.value = String(previousOrder);
+        onErrorRollback();
       },
       '✅ Ordem do basemap atualizada com sucesso!',
     );

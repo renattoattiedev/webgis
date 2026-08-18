@@ -127,6 +127,9 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   isSaveDialogVisible = false;
   isDataWindowVisible = false;
   isSidenavOpened = true;
+  // Espelha isSidenavOpened (que começa true, pensado para o desktop) para que
+  // o primeiro toque no pill "Camadas" no mobile não seja um no-op.
+  mobileLayersSheetState: 'collapsed' | 'mid' | 'full' = 'mid';
   mapaAtual: Mapas | null = null;
   address: string = '';
   suggestions: any[] = [];
@@ -747,6 +750,22 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
 
   toggleSidenav() {
     this.isSidenavOpened = !this.isSidenavOpened;
+    this.mobileLayersSheetState = this.isSidenavOpened ? 'mid' : 'collapsed';
+    setTimeout(() => {
+      this.map?.updateSize();
+    }, 300);
+  }
+
+  onMobileLayersHandleTap(): void {
+    if (this.mobileLayersSheetState === 'collapsed') {
+      this.mobileLayersSheetState = 'mid';
+      this.isSidenavOpened = true;
+    } else if (this.mobileLayersSheetState === 'mid') {
+      this.mobileLayersSheetState = 'full';
+    } else {
+      this.mobileLayersSheetState = 'collapsed';
+      this.isSidenavOpened = false;
+    }
     setTimeout(() => {
       this.map?.updateSize();
     }, 300);
@@ -1227,7 +1246,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   setPositionOfMeasureForm() {
-    if (!this.measureForm) {
+    if (!this.measureForm || window.innerWidth <= 768) {
       return;
     }
 
@@ -1254,7 +1273,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
   }
 
   setPositionOfDrawForm() {
-    if (!this.drawForm) {
+    if (!this.drawForm || window.innerWidth <= 768) {
       return;
     }
 
@@ -1280,7 +1299,7 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
     );
   }
   setPositionOfPrintingForm() {
-    if (!this.printingForm) {
+    if (!this.printingForm || window.innerWidth <= 768) {
       return;
     }
 

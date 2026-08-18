@@ -50,6 +50,12 @@ export class PacotesConceituaisComponent implements OnInit {
     'acao',
   ];
 
+  // ─── Mobile (3C) — lista de cards ───────────────────────────────────────
+  mobileVisibleCount = 10;
+  mobileExpandedDetails = new Set<string>();
+  mobileSortSheetOpen = false;
+  mobileSortKey: 'titulo' | 'inclusao' | 'alteracao' | null = null;
+
   constructor(
     private fetchPacotesConceituaisService: FetchPacotesConceituaisService,
     public dialog: MatDialog,
@@ -68,6 +74,52 @@ export class PacotesConceituaisComponent implements OnInit {
   aplicarFiltroNome(event: Event) {
     const filtroValor = (event.target as HTMLInputElement).value;
     this.dataSourcePacotesConceituais.filter = filtroValor.trim().toLowerCase();
+  }
+
+  get mobileRows(): PacotesConceituais[] {
+    return this.dataSourcePacotesConceituais.filteredData.slice(0, this.mobileVisibleCount);
+  }
+
+  get mobileLoadMoreStep(): number {
+    return Math.min(10, this.dataSourcePacotesConceituais.filteredData.length - this.mobileVisibleCount);
+  }
+
+  loadMoreMobile(): void {
+    this.mobileVisibleCount += 10;
+  }
+
+  toggleMobileDetails(id: string): void {
+    if (this.mobileExpandedDetails.has(id)) {
+      this.mobileExpandedDetails.delete(id);
+    } else {
+      this.mobileExpandedDetails.add(id);
+    }
+  }
+
+  isMobileDetailsOpen(id: string): boolean {
+    return this.mobileExpandedDetails.has(id);
+  }
+
+  toggleSortSheet(): void {
+    this.mobileSortSheetOpen = !this.mobileSortSheetOpen;
+  }
+
+  closeSortSheet(): void {
+    this.mobileSortSheetOpen = false;
+  }
+
+  applyMobileSort(key: 'titulo' | 'inclusao' | 'alteracao'): void {
+    this.mobileSortKey = key;
+    const data = [...this.dataSourcePacotesConceituais.data];
+    data.sort((a, b) => {
+      if (key === 'titulo')
+        return a.tituloPacoteConceitual.localeCompare(b.tituloPacoteConceitual);
+      if (key === 'inclusao')
+        return new Date(a.criadoEm).getTime() - new Date(b.criadoEm).getTime();
+      return new Date(a.updatedAt).getTime() - new Date(b.updatedAt).getTime();
+    });
+    this.dataSourcePacotesConceituais.data = data;
+    this.mobileSortSheetOpen = false;
   }
 
   // Método fetchPacotesConceituais com atualização forçada

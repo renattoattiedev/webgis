@@ -1,7 +1,26 @@
 <div class="oc-page" [class.filters-collapsed]="!isLeftSidenavOpened">
 
+  <!-- ── Backdrop da folha de filtros (mobile) ─────────────────────────────── -->
+  <div class="oc-filters-backdrop" *ngIf="isLeftSidenavOpened" (click)="toggleLeftSidenav()"></div>
+
   <!-- ── Sidebar esquerda — filtros ──────────────────────────────────────── -->
-  <aside class="oc-filters" [class.opened]="isLeftSidenavOpened">
+  <aside class="oc-filters" [class.opened]="isLeftSidenavOpened" role="dialog" aria-modal="true" aria-label="Filtros">
+
+    <!-- Header da folha (mobile) -->
+    <div class="oc-filters-mobile-head">
+      <div class="oc-filters-mobile-head-title">
+        <span>Filtros</span>
+        <span class="oc-badge-count" *ngIf="activeFilterCount > 0">{{ activeFilterCount }} ativos</span>
+      </div>
+      <button type="button" class="oc-icon-btn oc-filters-close-btn" (click)="toggleLeftSidenav()" aria-label="Fechar filtros">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+
+    <div class="oc-filters-scroll">
 
     <!-- Tipo -->
     <section class="oc-panel">
@@ -24,8 +43,14 @@
 
     <!-- Temas -->
     <section class="oc-panel">
-      <div class="oc-panel-head"><span class="oc-panel-title">Temas</span></div>
-      <div class="oc-chips">
+      <div class="oc-panel-head">
+        <span class="oc-panel-title">Temas</span>
+        <button type="button" class="oc-panel-summary" *ngIf="dataSourceTema.length > 3" (click)="temasExpanded = !temasExpanded">
+          {{ selectedTemaIds.size > 0 ? selectedTemaIds.size : 'Todos' }} de {{ dataSourceTema.length }}
+          <svg class="oc-panel-chevron" [class.oc-panel-chevron--open]="temasExpanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="oc-chips" [class.oc-chips--collapsed]="dataSourceTema.length > 3 && !temasExpanded">
         <button class="oc-chip oc-chip--all"
                 [class.active]="selectedTemaIds.size === 0"
                 (click)="clearTemaFilters()">Todos</button>
@@ -33,13 +58,20 @@
                 *ngFor="let tema of dataSourceTema"
                 [class.active]="selectedTemaIds.has(tema.id)"
                 (click)="toggleTemaFilter(tema.id)">{{ tema.tituloTema }}</button>
+        <button type="button" class="oc-chip-more" *ngIf="dataSourceTema.length > 3 && !temasExpanded" (click)="temasExpanded = true">+{{ dataSourceTema.length - 3 }}</button>
       </div>
     </section>
 
     <!-- Grupos -->
     <section class="oc-panel">
-      <div class="oc-panel-head"><span class="oc-panel-title">Grupos</span></div>
-      <div class="oc-chips">
+      <div class="oc-panel-head">
+        <span class="oc-panel-title">Grupos</span>
+        <button type="button" class="oc-panel-summary" *ngIf="dataSourceGrupos.length > 3" (click)="gruposExpanded = !gruposExpanded">
+          {{ selectedGrupoIds.size > 0 ? selectedGrupoIds.size : 'Todos' }} de {{ dataSourceGrupos.length }}
+          <svg class="oc-panel-chevron" [class.oc-panel-chevron--open]="gruposExpanded" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="6 9 12 15 18 9"/></svg>
+        </button>
+      </div>
+      <div class="oc-chips" [class.oc-chips--collapsed]="dataSourceGrupos.length > 3 && !gruposExpanded">
         <button class="oc-chip oc-chip--all"
                 [class.active]="selectedGrupoIds.size === 0"
                 (click)="clearGrupoFilters()">Todos</button>
@@ -47,6 +79,7 @@
                 *ngFor="let grupo of dataSourceGrupos"
                 [class.active]="selectedGrupoIds.has(grupo.id)"
                 (click)="toggleGrupoFilter(grupo.id)">{{ grupo.grupoNome }}</button>
+        <button type="button" class="oc-chip-more" *ngIf="dataSourceGrupos.length > 3 && !gruposExpanded" (click)="gruposExpanded = true">+{{ dataSourceGrupos.length - 3 }}</button>
       </div>
     </section>
 
@@ -106,6 +139,14 @@
       </div>
     </section>
 
+    </div>
+
+    <!-- Rodapé fixo da folha (mobile) -->
+    <div class="oc-filters-mobile-foot">
+      <button type="button" class="oc-btn-ghost" (click)="clearFilter()">Limpar</button>
+      <button type="button" class="oc-btn-primary stretch" (click)="toggleLeftSidenav()">Aplicar filtros · {{ (filteredContent || []).length }}</button>
+    </div>
+
   </aside>
 
   <!-- ── Conteúdo principal ──────────────────────────────────────────────── -->
@@ -125,12 +166,32 @@
         <span class="oc-badge-count">{{ (filteredContent || []).length }} itens</span>
       </div>
 
-      <div class="oc-search">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <circle cx="11" cy="11" r="7"/>
-          <line x1="21" y1="21" x2="16.65" y2="16.65"/>
-        </svg>
-        <input placeholder="Buscar por nome…" (keyup)="aplicarFiltroNome($event)"/>
+      <!-- Título (mobile) -->
+      <div class="oc-mobile-title-row">
+        <div class="oc-main-title">Minha <em>organização</em></div>
+        <span class="oc-badge-count">{{ (filteredContent || []).length }} itens</span>
+      </div>
+
+      <div class="oc-mobile-search-row">
+        <div class="oc-search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="7"/>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input placeholder="Buscar por nome…" (keyup)="aplicarFiltroNome($event)"/>
+        </div>
+
+        <!-- Botão de filtro (mobile) -->
+        <button type="button" class="oc-icon-btn oc-mobile-filter-btn"
+                [class.oc-icon-btn--active]="activeFilterCount > 0"
+                (click)="toggleLeftSidenav()" aria-label="Filtros">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="4" y1="6" x2="20" y2="6"/>
+            <line x1="7" y1="12" x2="17" y2="12"/>
+            <line x1="10" y1="18" x2="14" y2="18"/>
+          </svg>
+          <span class="oc-icon-btn-badge" *ngIf="activeFilterCount > 0">{{ activeFilterCount }}</span>
+        </button>
       </div>
 
       <div class="oc-main-top-actions">
@@ -142,6 +203,47 @@
           </svg>
           Carregar miniaturas
         </button>
+      </div>
+
+      <!-- Chips de filtro ativo (mobile) -->
+      <div class="oc-active-chips" *ngIf="activeFilterCount > 0">
+        <span class="oc-active-chip" *ngIf="selectedContentType">
+          {{ selectedContentType === 'vetorial' ? 'Vetoriais' : (selectedContentType === 'raster' ? 'Raster' : 'Mapas') }}
+          <button type="button" (click)="clearContentTypeFilter()" aria-label="Remover filtro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </span>
+        <span class="oc-active-chip" *ngFor="let tema of activeTemaChips">
+          {{ tema.tituloTema }}
+          <button type="button" (click)="clearTemaFilters()" aria-label="Remover filtro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </span>
+        <span class="oc-active-chip" *ngFor="let grupo of activeGrupoChips">
+          {{ grupo.grupoNome }}
+          <button type="button" (click)="clearGrupoFilters()" aria-label="Remover filtro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </span>
+        <span class="oc-active-chip" *ngIf="isFavoriteFilterActive">
+          Favoritos
+          <button type="button" (click)="toggleFavoriteFilter()" aria-label="Remover filtro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </span>
+        <span class="oc-active-chip" *ngIf="minVisualizacoes || maxVisualizacoes">
+          Visualizações
+          <button type="button" (click)="minVisualizacoes = 0; maxVisualizacoes = null; applyFilter()" aria-label="Remover filtro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </span>
+        <span class="oc-active-chip" *ngIf="dataInicio || dataFim">
+          Data
+          <button type="button" (click)="dataInicio = null; dataFim = null; applyFilter()" aria-label="Remover filtro">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </span>
+        <button type="button" class="oc-active-chip-clear" (click)="clearFilter()">Limpar</button>
       </div>
     </div>
 

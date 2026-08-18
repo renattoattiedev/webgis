@@ -71,6 +71,10 @@ export class MembersComponent implements OnInit {
 
   isAdmin: boolean = false;
 
+  // ─── Mobile (3D) — chips no header + lista de cards ─────────────────────
+  mobileVisibleCount = 10;
+  mobilePeriodSheetOpen = false;
+
   constructor(
     private fetchUserService: FetchUsuariosService,
     private fetchPerfisService: FetchPerfisService,
@@ -182,6 +186,32 @@ export class MembersComponent implements OnInit {
   }
   mostrarCustomPeriodoPicker() {
     this.selectedPeriodo = 'custom';
+  }
+
+  get mobileRows(): User[] {
+    return this.dataSourceUsuarios.filteredData.slice(0, this.mobileVisibleCount);
+  }
+
+  get mobileLoadMoreStep(): number {
+    return Math.min(10, this.dataSourceUsuarios.filteredData.length - this.mobileVisibleCount);
+  }
+
+  loadMoreMobile(): void {
+    this.mobileVisibleCount += 10;
+  }
+
+  openMobilePeriodSheet(): void {
+    this.selectedPeriodo = 'custom';
+    this.mobilePeriodSheetOpen = true;
+  }
+
+  closeMobilePeriodSheet(): void {
+    this.mobilePeriodSheetOpen = false;
+  }
+
+  aplicarFiltrosMobile(): void {
+    this.aplicarFiltros();
+    this.mobilePeriodSheetOpen = false;
   }
 
   aplicarFiltros() {

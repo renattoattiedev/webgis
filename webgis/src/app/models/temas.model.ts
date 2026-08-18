@@ -7,6 +7,7 @@ export interface Tema {
   updatedAt: string;
   nomeUsrAlteracao: string;
   grupos: Grupos[];
+  deletedAt?: string | null;
 }
 
 export interface RespostaApi {

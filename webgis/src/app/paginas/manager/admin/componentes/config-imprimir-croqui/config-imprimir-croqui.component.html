@@ -26,11 +26,18 @@
     </div>
   </header>
 
+  <!-- Abas (mobile, 3D) -->
+  <nav class="cfg-tabs">
+    <button class="cfg-tab-pill" [class.active]="activeMobileTab === 'camadas'" (click)="setMobileTab('camadas')" type="button">Camadas</button>
+    <button class="cfg-tab-pill" [class.active]="activeMobileTab === 'template'" (click)="setMobileTab('template')" type="button">Template</button>
+    <button class="cfg-tab-pill" (click)="visualizarPreview(activeLayout)" type="button">Preview</button>
+  </nav>
+
   <!-- Body -->
   <div class="cfg-body">
 
     <!-- Camada alvo (Demais consultas) -->
-    <section class="cfg-section">
+    <section class="cfg-section" [class.cfg-tab-hidden]="activeMobileTab !== 'camadas'">
       <header class="cfg-section-head">
         <div>
           <h3 class="cfg-section-title">Camada alvo · Demais consultas</h3>
@@ -75,7 +82,7 @@
     </section>
 
     <!-- Camada alvo SS -->
-    <section class="cfg-section">
+    <section class="cfg-section" [class.cfg-tab-hidden]="activeMobileTab !== 'camadas'">
       <header class="cfg-section-head">
         <div>
           <h3 class="cfg-section-title">Camada alvo · Solicitação de Serviço</h3>
@@ -118,7 +125,7 @@
     </section>
 
     <!-- Camadas auxiliares -->
-    <section class="cfg-section">
+    <section class="cfg-section" [class.cfg-tab-hidden]="activeMobileTab !== 'camadas'">
       <header class="cfg-section-head">
         <div>
           <h3 class="cfg-section-title">Camadas auxiliares</h3>
@@ -153,7 +160,7 @@
         </div>
       </div>
 
-      <div class="cfg-empty" *ngIf="auxCamadasConfigs.length === 0">
+      <div class="cfg-empty" (click)="onEmptyAuxClick()" *ngIf="auxCamadasConfigs.length === 0">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6">
           <polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/>
         </svg>
@@ -162,7 +169,7 @@
     </section>
 
     <!-- Layouts -->
-    <section class="cfg-section">
+    <section class="cfg-section" [class.cfg-tab-hidden]="activeMobileTab !== 'template'">
       <header class="cfg-section-head">
         <div>
           <h3 class="cfg-section-title">Templates de <em>layout</em></h3>

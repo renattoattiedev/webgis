@@ -5,6 +5,7 @@ import {
   ChangeDetectorRef,
   Component,
   EventEmitter,
+  HostListener,
   OnInit,
   Output,
   ViewChild,
@@ -156,6 +157,9 @@ export class MyContentComponent implements OnInit, AfterViewInit {
   allContent: any[] = [];
   selectedFolderCamadas: Camadas[] = [];
   selectedContentType: string | null = null;
+  temasExpanded = false;
+  gruposExpanded = false;
+  mobileActionItem: any = null;
   @Output() mapaSalvo = new EventEmitter<Mapas>();
   thumbnailUrls: Map<string, string> = new Map();
   loading: Map<string, boolean> = new Map();
@@ -268,6 +272,51 @@ export class MyContentComponent implements OnInit, AfterViewInit {
 
   toggleSidenav() {
     this.isSidenavOpened = !this.isSidenavOpened;
+    if (typeof document !== 'undefined' && window.innerWidth <= 768) {
+      document.body.style.overflow = this.isSidenavOpened ? 'hidden' : '';
+    }
+  }
+
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.isSidenavOpened && window.innerWidth <= 768) {
+      this.toggleSidenav();
+    }
+  }
+
+  get activeFilterCount(): number {
+    let count = 0;
+    if (this.selectedContentType) count++;
+    if (this.selectedTema) count++;
+    if (this.selectedGrupo) count++;
+    if (this.isFavoriteFilterActive) count++;
+    if (this.minVisualizacoes || this.maxVisualizacoes) count++;
+    if (this.dataInicio || this.dataFim) count++;
+    return count;
+  }
+
+  get countTodos(): number {
+    return this.allContent.length;
+  }
+
+  get countVetoriais(): number {
+    return this.allContent.filter((i) => i.tipo === 'vetorial').length;
+  }
+
+  get countRaster(): number {
+    return this.allContent.filter((i) => i.tipo === 'raster').length;
+  }
+
+  get countMapas(): number {
+    return this.allContent.filter((i) => i.tituloMapa).length;
+  }
+
+  openMobileActions(item: any): void {
+    this.mobileActionItem = item;
+  }
+
+  closeMobileActions(): void {
+    this.mobileActionItem = null;
   }
 
   selectFolder(folder: any, index: number) {

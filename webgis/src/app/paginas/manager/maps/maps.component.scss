@@ -488,10 +488,339 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   padding: 16px;
 }
 
+// ── Mobile-only elements (hidden by default; unhidden only ≤768px below) ────
+// Kept out of the flow on desktop via display:none so nothing above 768px moves.
+.mp-mobile-layers-pill,
+.mp-mobile-title,
+.mp-mobile-title-edit,
+.mp-mobile-save-btn,
+.mp-mobile-more-btn,
+.mp-sidebar-handle-row,
+.mp-sidebar-mobile-dados-btn,
+.mp-mobile-search-wrap,
+.mp-mobile-tool-pills {
+  display: none;
+}
+
 // ── Responsive ──────────────────────────────────────────────────────────────
 @media (max-width: 1100px) {
   .mp-bar { padding: 8px 14px; gap: 6px; flex-wrap: wrap; }
   .mp-bar-title { max-width: 100%; }
   .mp-search-wrap { order: 99; flex-basis: 100%; max-width: none; margin-top: 6px; }
   .mp-sidebar.opened { width: 280px; }
+}
+
+@media (max-width: 768px) {
+  // ── Barra: uma única linha de 52px ───────────────────────────────────────
+  .mp-bar {
+    flex-wrap: nowrap;
+    padding: 0 8px 0 10px;
+    gap: 6px;
+    min-height: 52px;
+    overflow: hidden;
+  }
+
+  // Esconde tudo do desktop
+  .mp-bar > .mp-tool-group,
+  .mp-bar > .mp-bar-title,
+  .mp-bar > .mp-bar-divider,
+  .mp-search-wrap {
+    display: none;
+  }
+
+  .mp-mobile-layers-pill {
+    display: inline-flex;
+    align-items: center; gap: 6px;
+    height: 40px; padding: 0 12px; border-radius: 10px;
+    background: none; border: none;
+    color: $ink-soft; font-family: inherit; font-size: 12.5px; font-weight: 600;
+    cursor: pointer; flex-shrink: 0;
+    svg { width: 15px; height: 15px; }
+
+    &.active {
+      background: $brand-tint; border: 1px solid $brand-tint-2; color: $brand;
+    }
+  }
+
+  .mp-mobile-title,
+  .mp-mobile-title-edit {
+    flex: 1; min-width: 0;
+  }
+
+  .mp-mobile-title {
+    display: flex;
+    align-items: center; gap: 6px;
+    padding: 0 8px;
+    cursor: text;
+  }
+
+  .mp-mobile-title-icon {
+    width: 22px; height: 22px; border-radius: 6px;
+    background: $brand-tint; color: $brand;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    svg { width: 12px; height: 12px; }
+  }
+
+  .mp-mobile-title-text {
+    font-size: 13.5px; font-weight: 600; color: $ink;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .mp-mobile-title-edit {
+    display: block;
+    border: 1px solid $brand;
+    background: #fff;
+    border-radius: 8px;
+    padding: 8px 10px;
+    font-family: inherit; font-size: 13px; font-weight: 600; color: $ink;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(1,73,155,0.1);
+  }
+
+  .mp-mobile-save-btn {
+    display: inline-flex;
+    align-items: center; gap: 6px;
+    height: 40px; padding: 0 14px; border-radius: 10px;
+    background: $brand; color: #fff;
+    border: none; cursor: pointer; flex-shrink: 0;
+    font-family: inherit; font-size: 12.5px; font-weight: 600;
+    svg { width: 14px; height: 14px; }
+    &:hover { background: $brand-mid; }
+  }
+
+  .mp-mobile-more-btn {
+    display: inline-flex;
+    align-items: center; justify-content: center;
+    width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
+    background: none; border: none; color: $ink-soft; cursor: pointer;
+    svg { width: 18px; height: 18px; }
+    &:hover { background: $brand-tint; color: $brand; }
+  }
+
+  // ── Palco / folha de camadas (bottom sheet de 3 alturas) ─────────────────
+  .mp-stage {
+    height: calc(100dvh - 60px - 52px - 52px);
+    min-height: 0;
+  }
+
+  .mp-sidebar {
+    position: absolute;
+    inset: auto 0 0 0;
+    width: 100% !important;
+    height: 64px;
+    border-right: none;
+    border-top: 1px solid $line;
+    border-radius: 20px 20px 0 0;
+    box-shadow: 0 -10px 34px rgba(11,37,69,0.20);
+    z-index: 40;
+    overflow: hidden;
+    transition: height 0.24s cubic-bezier(0.32, 0.72, 0, 1);
+  }
+
+  .mp-stage[data-sheet-state="mid"]  .mp-sidebar { height: 55%; }
+  .mp-stage[data-sheet-state="full"] .mp-sidebar { height: 90%; }
+
+  .mp-sidebar-handle-row {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+    padding-top: 10px;
+    cursor: pointer;
+  }
+
+  .mp-sidebar-handle {
+    width: 44px; height: 4px; border-radius: 2px;
+    background: $brand-tint-2;
+    margin-bottom: 8px;
+  }
+
+  .mp-sidebar-collapsed-label {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 13.5px; font-weight: 600; color: $ink;
+    padding-bottom: 10px;
+    svg { width: 15px; height: 15px; color: $brand; }
+    .badge {
+      background: $brand-tint; color: $brand;
+      font-size: 11px; font-weight: 700;
+      padding: 2px 8px; border-radius: 100px;
+    }
+  }
+
+  .mp-sidebar-mobile-dados-btn {
+    display: block;
+    position: absolute; top: 8px; right: 14px; z-index: 5;
+
+    button {
+      height: 36px; padding: 0 12px; border-radius: 9px;
+      background: $brand; color: #fff;
+      border: none; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px;
+      font-family: inherit; font-size: 12.5px; font-weight: 600;
+      svg { width: 13px; height: 13px; }
+    }
+  }
+
+  // Alvos de toque na lista de camadas
+  .mp-layer {
+    grid-template-columns: 28px 44px 1fr 44px;
+    padding: 8px 6px 8px 2px;
+  }
+  .mp-layer-grip { width: 28px; height: 44px; }
+  .mp-layer-thumb { width: 44px; height: 44px; }
+  .mp-layer-title { font-size: 13px; }
+  .mp-layer-more { width: 44px; height: 44px; }
+
+  // ── Controles do OpenLayers: cartão de zoom + trio de navegação compacto ──
+  // app-home/app-zoom-envolope/app-current-location são componentes
+  // compartilhados (também usados no mapa principal do webgis) cujo botão
+  // interno já é position:absolute contando com o host também absoluto — por
+  // isso cada um continua com posicionamento individual (não dá para
+  // agrupá-los num único flex sem alterar o componente compartilhado).
+  // O que dá para melhorar com segurança: aproximar os 3 de navegação entre
+  // si (viram um "trio" visualmente coeso) e destacar o par de zoom como
+  // outro grupinho, em vez de 5 pontos soltos espalhados por 200px de tela.
+  // Especificidade extra (.mp-stage como ancestral) para garantir que vença as
+  // regras desktop (que já usam !important) independentemente da ordem no arquivo.
+  .mp-stage .mp-map-view {
+    ::ng-deep .ol-zoom,
+    ::ng-deep .custom-ol-zoom {
+      top: 70px !important;
+      left: auto !important;
+      right: 12px !important;
+      width: 44px !important;
+      // Altura explícita: com overflow:hidden, esse controle (position:absolute
+      // vindo do próprio OpenLayers) não resolve a altura pelo conteúdo neste
+      // navegador/ambiente e desaparece (0px) — mesma causa do bug da folha de
+      // filtros, resolvida do mesmo jeito.
+      height: 88px !important;
+      background: transparent !important;
+      border: none !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+
+      button {
+        width: 44px !important; height: 44px !important;
+        margin-bottom: 4px !important;
+      }
+    }
+
+    // app-home/app-zoom-envolope/app-current-location têm, cada um, um
+    // deslocamento vertical interno diferente e fixo no próprio componente
+    // (.btn { top: 130/180/230px }) — é isso que já separa os três entre si.
+    // Por isso os três hosts recebem a MESMA âncora aqui (senão os
+    // deslocamentos se somam e eles saem muito mais espaçados do que parece
+    // no CSS). Valor calibrado visualmente para ficar logo abaixo do card de
+    // zoom, sem herdar a posição da tela principal do webgis (bem mais alta).
+    ::ng-deep app-home,
+    ::ng-deep app-zoom-envolope,
+    ::ng-deep app-current-location {
+      top: 70px !important;
+      left: auto !important;
+      right: 12px !important;
+      width: 44px !important;
+    }
+
+    ::ng-deep app-home button,
+    ::ng-deep app-zoom-envolope button,
+    ::ng-deep app-current-location button {
+      width: 44px !important; height: 44px !important;
+    }
+
+    ::ng-deep .ol-overviewmap { display: none !important; }
+  }
+
+  .mp-stage .mp-map-view ::ng-deep .ol-zoom,
+  .mp-stage .mp-map-view ::ng-deep .custom-ol-zoom {
+    top: 70px !important;
+    left: auto !important;
+    right: 12px !important;
+    width: 44px !important;
+  }
+
+  // ── Basemap: canto inferior esquerdo, sempre acima da folha ──────────────
+  .mp-stage[data-sheet-state="collapsed"] .mp-map-view ::ng-deep app-basemap { bottom: calc(64px + 12px) !important; }
+  .mp-stage[data-sheet-state="mid"]       .mp-map-view ::ng-deep app-basemap { bottom: calc(55% + 12px) !important; }
+  .mp-stage[data-sheet-state="full"]      .mp-map-view ::ng-deep app-basemap { bottom: calc(90% + 12px) !important; }
+
+  .mp-map-view ::ng-deep app-basemap {
+    left: 12px !important;
+    width: 64px !important; height: 64px !important;
+    border-radius: 12px !important;
+    border: 2px solid #fff !important;
+  }
+
+  // ── Busca de endereço flutuante ───────────────────────────────────────────
+  .mp-mobile-search-wrap {
+    display: block;
+    position: absolute; top: 12px; left: 12px; right: 12px; z-index: 30;
+  }
+
+  .mp-mobile-search {
+    display: flex; align-items: center; gap: 8px;
+    height: 44px;
+    background: #fff;
+    border: 1px solid $line;
+    border-radius: 100px;
+    padding: 0 6px 0 14px;
+    box-shadow: 0 4px 14px rgba(11,37,69,0.12);
+
+    svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
+
+    input {
+      flex: 1; min-width: 0; border: none; outline: none;
+      background: transparent;
+      font-family: inherit; font-size: 13.5px; color: $ink;
+      &::placeholder { color: $muted; }
+    }
+  }
+
+  .mp-mobile-search-btn {
+    width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
+    background: $brand; color: #fff;
+    border: none; cursor: pointer;
+    display: inline-flex; align-items: center; justify-content: center;
+    svg { width: 13px; height: 13px; }
+  }
+
+  .mp-mobile-search-wrap .mp-suggestions {
+    left: 0; right: 0; top: calc(100% + 8px);
+  }
+
+  // ── Pílulas de ferramenta (canto inferior direito, folha recolhida) ──────
+  .mp-mobile-tool-pills {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+    position: absolute;
+    right: 12px;
+    bottom: calc(64px + 24px);
+    z-index: 30;
+
+    button {
+      height: 40px; padding: 0 14px; border-radius: 100px;
+      background: #fff; border: 1px solid $line;
+      box-shadow: 0 4px 14px rgba(11,37,69,0.16);
+      display: inline-flex; align-items: center; gap: 8px;
+      font-family: inherit; font-size: 12.5px; font-weight: 600; color: $ink;
+      cursor: pointer;
+      svg { width: 15px; height: 15px; color: $brand; }
+      &.active { background: $brand-tint; border-color: $brand-tint-2; color: $brand; }
+    }
+  }
+
+  // ── Formulários flutuantes viram folha inferior ──────────────────────────
+  .mp-floating-form {
+    position: fixed;
+    top: auto; left: 0; right: 0; bottom: 0;
+    width: auto;
+    max-height: 70%;
+    overflow-y: auto;
+    border-radius: 20px 20px 0 0;
+    z-index: 200;
+    box-shadow: 0 -10px 40px rgba(11,37,69,0.22);
+    padding: 18px 16px calc(16px + env(safe-area-inset-bottom));
+  }
 }
