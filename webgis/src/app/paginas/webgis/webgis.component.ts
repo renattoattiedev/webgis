@@ -67,6 +67,8 @@ export class WebgisComponent implements AfterViewInit, OnInit, OnDestroy {
   public nomeUsuario = '';
   public isUserLoggedIn = false;
   public menuAberto = false;
+  public mobileMenuOpen = false;
+  public mobileSearchOpen = false;
 
   private subscriptions: Subscription[] = [];
 
@@ -161,9 +163,32 @@ export class WebgisComponent implements AfterViewInit, OnInit, OnDestroy {
 
   @HostListener('document:click', ['$event.target'])
   fecharMenu(target: EventTarget | null): void {
-    if (!(target instanceof HTMLElement) || !target.closest('.wg-user-pill')) {
+    const el = target instanceof Element ? target : null;
+
+    if (!el || !el.closest('.wg-user-pill')) {
       this.menuAberto = false;
     }
+
+    if (!el || (!el.closest('.header-tools') && !el.closest('.mobile-menu-btn'))) {
+      this.mobileMenuOpen = false;
+    }
+  }
+
+  toggleMobileMenu(): void {
+    this.mobileMenuOpen = !this.mobileMenuOpen;
+  }
+
+  closeMobileMenu(): void {
+    this.mobileMenuOpen = false;
+  }
+
+  openMobileSearch(): void {
+    this.mobileMenuOpen = false;
+    this.mobileSearchOpen = true;
+  }
+
+  closeMobileSearch(): void {
+    this.mobileSearchOpen = false;
   }
 
   toggleOverlay(isOpened: boolean) {

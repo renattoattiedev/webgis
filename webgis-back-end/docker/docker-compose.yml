@@ -16,6 +16,7 @@ services:
     volumes:
       - data_geoserver:/opt/geoserver_data
       - upload_raster:/opt/geoserver_data/upload_raster
+      - ./config_overrides:/opt/config_overrides
     networks:
       - runforrest_network
     restart: always
