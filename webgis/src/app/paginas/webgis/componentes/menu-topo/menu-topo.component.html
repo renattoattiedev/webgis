@@ -1,4 +1,4 @@
-<div class="ribbon-container" role="toolbar" aria-label="Barra de ferramentas">
+<div class="ribbon-container" *ngIf="variant === 'ribbon'" role="toolbar" aria-label="Barra de ferramentas">
 
   <!-- ── Grupo: Pesquisar ─────────────────────────────────────── -->
   <div class="ribbon-group">
@@ -51,6 +51,31 @@
   </ng-container>
 
 </div>
+
+<!-- ── Lista rotulada (drawer mobile) ──────────────────────────── -->
+<ng-container *ngIf="variant === 'list'">
+  <ng-container *ngFor="let section of visibleSections; let last = last">
+    <div class="drawer-section-label">{{ section.titulo }}</div>
+    <div class="drawer-section-items">
+      <button
+        type="button"
+        class="drawer-item"
+        *ngFor="let item of section.items"
+        [class.drawer-item--disabled]="item.disabled"
+        [disabled]="item.disabled"
+        (click)="onListItemClick(item)">
+        <span class="drawer-item-icon" [class.drawer-item-icon--disabled]="item.disabled">
+          <mat-icon>{{ item.icon }}</mat-icon>
+        </span>
+        <span class="drawer-item-text">
+          <span class="drawer-item-title">{{ item.titulo }}</span>
+          <span class="drawer-item-desc">{{ item.descricao }}</span>
+        </span>
+      </button>
+    </div>
+    <div class="drawer-separator" *ngIf="!last"></div>
+  </ng-container>
+</ng-container>
 
 <!-- ── Componentes filhos ──────────────────────────────────────── -->
 <app-imprimir-croqui-vistoria *ngIf="vistoriaAtiva" (fechado)="onVistoriaFechada()">

@@ -117,3 +117,100 @@ $icon-size:         20px;
     padding: 5px 5px;
   }
 }
+
+// ── Lista rotulada (drawer mobile) ──────────────────────────────────────────────
+.drawer-section-label {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  color: #6b8f74;
+  padding: 10px 8px 6px;
+}
+
+.drawer-section-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.drawer-separator {
+  height: 1px;
+  background: #edf4ea;
+  margin: 12px 8px;
+}
+
+.drawer-item {
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 8px;
+  border-radius: 12px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  transition: background 0.12s ease;
+  outline: none;
+
+  &:active:not(.drawer-item--disabled) {
+    background: #f4f9f3;
+  }
+
+  &:focus-visible {
+    outline: 2px solid #1b5e20;
+    outline-offset: -2px;
+  }
+
+  &--disabled {
+    opacity: 0.42;
+    pointer-events: none;
+  }
+}
+
+.drawer-item-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  background: #e9f2e7;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  mat-icon {
+    font-size: 20px;
+    width: 20px;
+    height: 20px;
+    color: #1b5e20;
+  }
+
+  &--disabled {
+    background: #eef1ec;
+
+    mat-icon {
+      color: #63705f;
+    }
+  }
+}
+
+.drawer-item-text {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.drawer-item-title {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: #1a2e1f;
+}
+
+.drawer-item-desc {
+  font-size: 11.5px;
+  color: #7e8f80;
+}

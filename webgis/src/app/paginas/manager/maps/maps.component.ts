@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import {
   Component,
   OnInit,
@@ -1329,8 +1329,38 @@ export class MapsComponent implements OnInit, AfterViewInit, OnChanges {
     this.searchSubject.next(this.address);
   }
   searchAddress(address: string) {
-    const url = `https://nominatim.openstreetmap.org/search?q=${address}&format=json&addressdetails=1&limit=5&viewbox=-41.5078,-18.5156,-39.6976,-21.3542&bounded=1`;
-    return this.http.get(url);
+    let params = new HttpParams()
+      .set('q', address)
+      .set('format', 'json')
+      .set('addressdetails', '1')
+      .set('limit', '5')
+      .set('countrycodes', 'br');
+
+    // Usa a área visível do mapa como preferência de busca (sem excluir o resto do país,
+    // já que a região de atuação varia por implantação/tenant e não deve ficar fixa no código).
+    const viewbox = this.getMapViewbox();
+    if (viewbox) {
+      params = params.set('viewbox', viewbox).set('bounded', '0');
+    }
+
+    return this.http.get('https://nominatim.openstreetmap.org/search', {
+      params,
+    });
+  }
+
+  private getMapViewbox(): string | null {
+    const map = this.mapaService.getMapa();
+    const size = map?.getSize();
+    if (!map || !size) return null;
+
+    const extent = map.getView().calculateExtent(size);
+    const [minLon, minLat, maxLon, maxLat] = transformExtent(
+      extent,
+      'EPSG:3857',
+      'EPSG:4326',
+    );
+
+    return `${minLon},${maxLat},${maxLon},${minLat}`;
   }
 
   updateMap(lat: number, lon: number) {

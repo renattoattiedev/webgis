@@ -20,7 +20,8 @@
     </button>
 
     <!-- Hamburguer (apenas mobile) -->
-    <button class="mobile-menu-btn" (click)="toggleMobileMenu()" [class.active]="mobileMenuOpen" aria-label="Abrir menu">
+    <button #mobileMenuBtn class="mobile-menu-btn" (click)="toggleMobileMenu()" [class.active]="mobileMenuOpen"
+            [attr.aria-expanded]="mobileMenuOpen" aria-label="Abrir menu">
       <svg *ngIf="!mobileMenuOpen" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
         <line x1="3" y1="6" x2="21" y2="6"/>
         <line x1="3" y1="12" x2="21" y2="12"/>
@@ -32,8 +33,8 @@
       </svg>
     </button>
 
-    <!-- Demais botões + busca (agrupados no hamburguer em mobile) -->
-    <div class="header-tools" [class.mobile-open]="mobileMenuOpen">
+    <!-- Demais botões + busca (ocultos em mobile; ver drawer abaixo) -->
+    <div class="header-tools">
 
     <!-- Divisor vertical -->
     <div class="header-divider" *ngIf="shouldShowMenu"></div>
@@ -44,12 +45,8 @@
     <!-- Spacer -->
     <span class="header-spacer"></span>
 
-    <!-- Busca de endereço (desktop: inline / mobile: abre sidebar) -->
+    <!-- Busca de endereço (desktop) -->
     <app-search-address class="desktop-search"></app-search-address>
-    <button class="mobile-search-trigger" (click)="openMobileSearch()">
-      <mat-icon>search</mat-icon>
-      <span>Buscar endereço</span>
-    </button>
 
     <!-- Divisor -->
     <div class="header-divider"></div>
@@ -123,25 +120,100 @@
 
   </header>
 
-  <!-- Backdrop do menu mobile -->
-  <div class="mobile-menu-overlay" *ngIf="mobileMenuOpen" (click)="closeMobileMenu()"></div>
+  <!-- Drawer do menu mobile -->
+  <ng-container *ngIf="mobileMenuOpen">
+    <div class="mobile-drawer-overlay" (click)="closeMobileMenu()"></div>
 
-  <!-- Sidebar de busca de endereço (mobile) -->
-  <div class="mobile-search-overlay" *ngIf="mobileSearchOpen" (click)="closeMobileSearch()"></div>
-  <aside class="mobile-search-sidebar" *ngIf="mobileSearchOpen">
-    <div class="mobile-search-sidebar-header">
-      <span>Buscar endereço</span>
-      <button class="mobile-search-sidebar-close" (click)="closeMobileSearch()" aria-label="Fechar busca">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="18" y1="6" x2="6" y2="18"/>
-          <line x1="6" y1="6" x2="18" y2="18"/>
-        </svg>
-      </button>
-    </div>
-    <div class="mobile-search-sidebar-body">
-      <app-search-address></app-search-address>
-    </div>
-  </aside>
+    <aside
+      #mobileDrawer
+      class="mobile-drawer"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Menu"
+      tabindex="-1"
+      (keydown)="onMobileDrawerKeydown($event)">
+
+      <!-- 1. Conta -->
+      <div class="mobile-drawer-account" *ngIf="isLoggedIn(); else mobileDrawerLogin">
+        <button type="button" class="mobile-drawer-account-row"
+                (click)="toggleMobileAccount()" [attr.aria-expanded]="mobileAccountOpen">
+          <div class="mobile-drawer-avatar">{{ iniciais || 'U' }}</div>
+          <div class="mobile-drawer-user-info">
+            <span class="mobile-drawer-user-name">{{ nomeUsuario }}</span>
+            <span class="mobile-drawer-user-role">{{ perfilUser }}</span>
+          </div>
+          <span class="mobile-drawer-account-chevron" [class.mobile-drawer-account-chevron--open]="mobileAccountOpen">
+            <mat-icon>chevron_right</mat-icon>
+          </span>
+        </button>
+
+        <div class="mobile-drawer-account-menu" *ngIf="mobileAccountOpen">
+          <button type="button" class="mobile-drawer-account-item" (click)="mostrarPerfil(); closeMobileMenu()">
+            <mat-icon>person</mat-icon> Meu Perfil
+          </button>
+          <button type="button" class="mobile-drawer-account-item" *ngIf="shouldShowMenu"
+                  (click)="goToPage('manager'); closeMobileMenu()">
+            <mat-icon>dashboard</mat-icon> Painel Administrativo
+          </button>
+          <div class="mobile-drawer-account-divider"></div>
+          <button type="button" class="mobile-drawer-account-item mobile-drawer-account-item--danger"
+                  (click)="logout(); closeMobileMenu()">
+            <mat-icon>logout</mat-icon> Sair
+          </button>
+        </div>
+      </div>
+      <ng-template #mobileDrawerLogin>
+        <div class="mobile-drawer-login-wrap">
+          <button type="button" class="mobile-drawer-login-btn" (click)="goToPage('login'); closeMobileMenu()">
+            Entrar
+          </button>
+        </div>
+      </ng-template>
+
+      <!-- 2. Busca de endereço -->
+      <div class="mobile-drawer-search">
+        <app-search-address></app-search-address>
+      </div>
+
+      <!-- 3. Ferramentas -->
+      <div class="mobile-drawer-tools">
+        <app-menu-topo *ngIf="shouldShowMenu" variant="list" (toolSelected)="closeMobileMenu()"></app-menu-topo>
+      </div>
+
+      <!-- 4. Rodapé -->
+      <div class="mobile-drawer-footer">
+        <div class="mobile-drawer-footer-row">
+          <button type="button" class="mobile-drawer-footer-btn" (click)="goToPage(''); closeMobileMenu()">
+            <mat-icon>home</mat-icon> Início
+          </button>
+          <button type="button" class="mobile-drawer-footer-btn" *ngIf="isLoggedIn()"
+                  (click)="toggleMobilePrefs()" [attr.aria-expanded]="mobilePrefsOpen">
+            <mat-icon>bookmark</mat-icon> Preferências
+          </button>
+        </div>
+
+        <div class="mobile-drawer-prefs" *ngIf="mobilePrefsOpen && isLoggedIn()">
+          <div class="mobile-drawer-prefs-actions">
+            <button type="button" class="mobile-drawer-prefs-btn" [disabled]="prefsCarregando"
+                    (click)="salvarOuAtualizarPreferencias()">
+              <mat-icon>save</mat-icon> Salvar/Atualizar
+            </button>
+            <button type="button" class="mobile-drawer-prefs-btn mobile-drawer-prefs-btn--danger"
+                    [disabled]="prefsCarregando || !prefsTemPreferencia" (click)="removerPreferencias()">
+              <mat-icon>delete</mat-icon> Remover
+            </button>
+          </div>
+          <span class="mobile-drawer-prefs-status" *ngIf="prefsTemPreferencia && prefsUltimaAtualizacao">
+            Última atualização: {{ prefsUltimaAtualizacao | date:'short' }}
+          </span>
+        </div>
+
+        <button type="button" class="mobile-drawer-logout" *ngIf="isLoggedIn()" (click)="logout(); closeMobileMenu()">
+          <mat-icon>logout</mat-icon> Sair
+        </button>
+      </div>
+    </aside>
+  </ng-container>
 
   <!-- Resto do seu layout -->
   <mat-sidenav-container class="example-sidenav-container">

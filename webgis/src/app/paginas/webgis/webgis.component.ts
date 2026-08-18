@@ -3,6 +3,7 @@ import {
   AfterViewInit,
   ChangeDetectorRef,
   Component,
+  ElementRef,
   HostListener,
   OnInit,
   ViewChild,
@@ -31,6 +32,7 @@ import { SearchAddressComponent } from './componentes/search-address/search-addr
 import { PreferenciasComponent } from './componentes/preferencias/preferencias.component';
 import { PesquisarCamadasDialogComponent } from './componentes/pesquisar-camadas-dialog/pesquisar-camadas-dialog.component';
 import { PesquisarCamadasUiStore } from './componentes/pesquisar-camadas-dialog/pesquisar-camadas-ui.store';
+import { UserPreferencesService } from '../../services/api/user-preferences.service';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -60,6 +62,8 @@ import { Subscription } from 'rxjs';
 export class WebgisComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild('menu') menu!: MatMenu;
   @ViewChild('snav') sidenav!: MatSidenav;
+  @ViewChild('mobileMenuBtn') mobileMenuBtnRef?: ElementRef<HTMLButtonElement>;
+  @ViewChild('mobileDrawer') mobileDrawerRef?: ElementRef<HTMLElement>;
 
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
@@ -68,7 +72,12 @@ export class WebgisComponent implements AfterViewInit, OnInit, OnDestroy {
   public isUserLoggedIn = false;
   public menuAberto = false;
   public mobileMenuOpen = false;
-  public mobileSearchOpen = false;
+  public mobileAccountOpen = false;
+  public mobilePrefsOpen = false;
+
+  public prefsCarregando = false;
+  public prefsTemPreferencia = false;
+  public prefsUltimaAtualizacao: string | null = null;
 
   private subscriptions: Subscription[] = [];
 
@@ -80,6 +89,7 @@ export class WebgisComponent implements AfterViewInit, OnInit, OnDestroy {
     private conteudoService: ConteudoService,
     public dialog: MatDialog,
     public pesquisarCamadasUiStore: PesquisarCamadasUiStore,
+    private userPreferencesService: UserPreferencesService,
   ) {
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
     this._mobileQueryListener = () => changeDetectorRef.detectChanges();
@@ -96,6 +106,12 @@ export class WebgisComponent implements AfterViewInit, OnInit, OnDestroy {
     // Se o AuthService tiver um Observable para mudanças de autenticação, subscribe nele
     // Caso contrário, use setInterval para verificar periodicamente
     this.checkAuthStatus();
+
+    const prefsSub = this.userPreferencesService.preference$.subscribe((pref) => {
+      this.prefsTemPreferencia = !!pref;
+      this.prefsUltimaAtualizacao = pref?.updatedAt || pref?.createdAt || null;
+    });
+    this.subscriptions.push(prefsSub);
   }
 
   ngOnDestroy(): void {
@@ -168,27 +184,90 @@ export class WebgisComponent implements AfterViewInit, OnInit, OnDestroy {
     if (!el || !el.closest('.wg-user-pill')) {
       this.menuAberto = false;
     }
+  }
 
-    if (!el || (!el.closest('.header-tools') && !el.closest('.mobile-menu-btn'))) {
-      this.mobileMenuOpen = false;
+  @HostListener('document:keydown.escape')
+  onEscapeKey(): void {
+    if (this.mobileMenuOpen) {
+      this.closeMobileMenu();
     }
   }
 
   toggleMobileMenu(): void {
-    this.mobileMenuOpen = !this.mobileMenuOpen;
+    if (this.mobileMenuOpen) {
+      this.closeMobileMenu();
+    } else {
+      this.openMobileMenu();
+    }
+  }
+
+  openMobileMenu(): void {
+    this.mobileMenuOpen = true;
+    this.mobileAccountOpen = false;
+    this.mobilePrefsOpen = false;
+    document.body.style.overflow = 'hidden';
+    setTimeout(() => this.mobileDrawerRef?.nativeElement.focus());
   }
 
   closeMobileMenu(): void {
+    if (!this.mobileMenuOpen) return;
     this.mobileMenuOpen = false;
+    document.body.style.overflow = '';
+    this.mobileMenuBtnRef?.nativeElement.focus();
   }
 
-  openMobileSearch(): void {
-    this.mobileMenuOpen = false;
-    this.mobileSearchOpen = true;
+  toggleMobileAccount(): void {
+    this.mobileAccountOpen = !this.mobileAccountOpen;
   }
 
-  closeMobileSearch(): void {
-    this.mobileSearchOpen = false;
+  toggleMobilePrefs(): void {
+    this.mobilePrefsOpen = !this.mobilePrefsOpen;
+  }
+
+  onMobileDrawerKeydown(event: KeyboardEvent): void {
+    if (event.key !== 'Tab' || !this.mobileDrawerRef) return;
+
+    const focusable = this.mobileDrawerRef.nativeElement.querySelectorAll<HTMLElement>(
+      'button:not([disabled]), [href], input, [tabindex]:not([tabindex="-1"])',
+    );
+    if (!focusable.length) return;
+
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
+  salvarOuAtualizarPreferencias(): void {
+    const payload = this.userPreferencesService.captureCurrentState();
+    this.prefsCarregando = true;
+    const pref = this.userPreferencesService.getCurrentPreference();
+    const obs = pref
+      ? this.userPreferencesService.updatePreference(payload)
+      : this.userPreferencesService.createPreference(payload);
+    obs.subscribe({
+      next: () => {
+        this.prefsCarregando = false;
+      },
+      error: () => (this.prefsCarregando = false),
+    });
+  }
+
+  removerPreferencias(): void {
+    if (!confirm('Remover preferências salvas?')) return;
+    this.prefsCarregando = true;
+    this.userPreferencesService.deletePreference().subscribe({
+      next: () => {
+        this.prefsCarregando = false;
+      },
+      error: () => (this.prefsCarregando = false),
+    });
   }
 
   toggleOverlay(isOpened: boolean) {
