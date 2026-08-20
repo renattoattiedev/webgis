@@ -1,3 +1,4 @@
+@use './styles/tokens' as t;
 @use './styles/dialog-base';
 @use './styles/admin-list-base.scss';
 @import 'node_modules/ol/ol.css';
@@ -9,14 +10,14 @@ $font-family: Roboto, "Helvetica Neue", sans-serif;
 $background-color-tooltip: rgba(255, 255, 255, 0.8);
 $border-color-tooltip: #ccc;
 $shadow-color-tooltip: rgba(0, 0, 0, 0.3);
-$background-color-header-bar: #1b5e20;
+$background-color-header-bar: t.$brand-deep;
 $background-color-hover-remove-marker: #e0e0e0;
 $background-color-transparent: rgba(255, 255, 255, 0.0);
 $hover-color: rgba(173, 216, 230, 0.3);
 
 html, body {
   height: 100%;
-  background-color: #1b5e20!important;
+  background-color: t.$brand!important;
 
 }
 
@@ -345,7 +346,7 @@ body {
 }
 
 .mdc-switch:enabled .mdc-switch__track::after {
-  background-color: #1b5e20!important;
+  background-color: t.$brand!important;
 }
 
 .mat-mdc-form-field{
@@ -362,7 +363,7 @@ body {
 
 .mat-mdc-select-panel {
   border-radius: 8px !important;
-  border: 1px solid rgba(1, 73, 155, 0.18) !important;
+  border: 1px solid rgba(38, 138, 151, 0.18) !important;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
   padding: 4px 0 !important;
 }
@@ -377,12 +378,12 @@ body {
 }
 
 .mat-mdc-select-panel .mat-mdc-option.mdc-list-item--selected {
-  background: rgba(1, 73, 155, 0.06) !important;
-  color: #14532d !important;
+  background: rgba(38, 138, 151, 0.06) !important;
+  color: t.$brand-deep !important;
 }
 
 .mat-mdc-select-panel .mat-mdc-option:hover:not(.mdc-list-item--disabled) {
-  background: rgba(1, 73, 155, 0.04) !important;
+  background: rgba(38, 138, 151, 0.04) !important;
 }
 
 .mat-mdc-select-panel .mat-mdc-option .mdc-list-item__primary-text {
@@ -459,7 +460,7 @@ body {
 
 .wg-menu.mat-mdc-menu-panel {
   border-radius: 10px !important;
-  border: 1px solid rgba(1, 73, 155, 0.14) !important;
+  border: 1px solid rgba(38, 138, 151, 0.14) !important;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.10), 0 1px 6px rgba(0, 0, 0, 0.06) !important;
   padding: 4px !important;
   min-width: 190px !important;
@@ -500,16 +501,16 @@ body {
 }
 
 .wg-menu .mat-mdc-menu-item:not([disabled]):hover {
-  background: rgba(1, 73, 155, 0.06) !important;
+  background: rgba(38, 138, 151, 0.06) !important;
 }
 
 .wg-menu .mat-mdc-menu-item:not([disabled]):hover mat-icon,
 .wg-menu .mat-mdc-menu-item:not([disabled]):hover .mat-icon {
-  color: #1b5e20 !important;
+  color: t.$brand !important;
 }
 
 .wg-menu .mat-mdc-menu-item:not([disabled]):hover .mdc-list-item__primary-text {
-  color: #14532d !important;
+  color: t.$brand-deep !important;
 }
 
 .wg-menu .mat-mdc-menu-item[disabled] {
@@ -533,7 +534,7 @@ body {
   background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
-  border: 1px solid rgba(1, 73, 155, 0.18);
+  border: 1px solid rgba(38, 138, 151, 0.18);
   border-radius: 12px;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.14), 0 2px 8px rgba(0, 0, 0, 0.07);
   z-index: 999;
@@ -554,7 +555,7 @@ body {
   transform: translateX(-50%);
   border-left:  8px solid transparent;
   border-right: 8px solid transparent;
-  border-top:   9px solid rgba(1, 73, 155, 0.18);
+  border-top:   9px solid rgba(38, 138, 151, 0.18);
 
   &::after {
     content: '';
@@ -574,7 +575,7 @@ body {
   transform: translateX(-50%);
   border-left:   8px solid transparent;
   border-right:  8px solid transparent;
-  border-bottom: 9px solid rgba(1, 73, 155, 0.18);
+  border-bottom: 9px solid rgba(38, 138, 151, 0.18);
 
   &::after {
     content: '';
@@ -594,7 +595,7 @@ body {
   transform: translateY(-50%);
   border-top:    8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-right:  9px solid rgba(1, 73, 155, 0.18);
+  border-right:  9px solid rgba(38, 138, 151, 0.18);
 
   &::after {
     content: '';
@@ -614,7 +615,7 @@ body {
   transform: translateY(-50%);
   border-top:    8px solid transparent;
   border-bottom: 8px solid transparent;
-  border-left:   9px solid rgba(1, 73, 155, 0.18);
+  border-left:   9px solid rgba(38, 138, 151, 0.18);
 
   &::after {
     content: '';
@@ -632,8 +633,8 @@ body {
   align-items: center;
   justify-content: space-between;
   padding: 8px 10px;
-  background: rgba(1, 73, 155, 0.05);
-  border-bottom: 1px solid rgba(1, 73, 155, 0.18);
+  background: rgba(38, 138, 151, 0.05);
+  border-bottom: 1px solid rgba(38, 138, 151, 0.18);
   border-radius: 12px 12px 0 0;
 }
 
@@ -648,14 +649,14 @@ body {
 .mk-pin-icon {
   width: 14px;
   height: 14px;
-  color: #1b5e20;
+  color: t.$brand;
   flex-shrink: 0;
 }
 
 .mk-title {
   font-size: 12px;
   font-weight: 700;
-  color: #14532d;
+  color: t.$brand-deep;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -698,7 +699,7 @@ body {
   transition: background 0.13s, color 0.13s;
 
   svg { width: 13px; height: 13px; }
-  &:hover { background: rgba(1, 73, 155, 0.08); color: #1b5e20; }
+  &:hover { background: rgba(38, 138, 151, 0.08); color: t.$brand; }
   &--done { color: #16a34a; }
 }
 
@@ -711,8 +712,8 @@ body {
   padding: 5px 12px;
   transition: background 0.1s;
 
-  &--alt { background: rgba(1, 73, 155, 0.025); }
-  &:hover { background: rgba(1, 73, 155, 0.07); }
+  &--alt { background: rgba(38, 138, 151, 0.025); }
+  &:hover { background: rgba(38, 138, 151, 0.07); }
 }
 
 .mk-label {
@@ -729,7 +730,7 @@ body {
 .mk-value {
   font-size: 12px;
   font-weight: 500;
-  color: #14532d;
+  color: t.$brand-deep;
   word-break: break-word;
   flex: 1;
   font-family: system-ui, sans-serif;

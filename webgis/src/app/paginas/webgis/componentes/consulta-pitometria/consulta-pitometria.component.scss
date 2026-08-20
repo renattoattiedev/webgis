@@ -1,9 +1,7 @@
 // ─── Variables ─────────────────────────────────────────────────────────────
 
-$blue:        #1b5e20;
-$blue-light:  rgba(1, 73, 155, 0.08);
-$blue-border: rgba(1, 73, 155, 0.22);
-$text:        #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted:       #6b7280;
 
 // ─── Container ─────────────────────────────────────────────────────────────
@@ -60,8 +58,8 @@ $muted:       #6b7280;
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: rgba(1, 73, 155, 0.06);
-  border-bottom: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.06);
+  border-bottom: 1px solid rgba(t.$brand, 0.22);
   cursor: grab;
   user-select: none;
   min-height: 42px;
@@ -78,7 +76,7 @@ $muted:       #6b7280;
   display: flex;
   align-items: center;
   gap: 7px;
-  color: $text;
+  color: t.$brand-deep;
   font-size: 12px;
   font-weight: 700;
 
@@ -86,7 +84,7 @@ $muted:       #6b7280;
     font-size: 16px;
     width: 16px;
     height: 16px;
-    color: $blue;
+    color: t.$brand;
   }
 }
 
@@ -109,7 +107,7 @@ $muted:       #6b7280;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $text;
+  color: t.$brand-deep;
   transition: background 0.15s;
   pointer-events: auto;
 
@@ -157,7 +155,7 @@ $muted:       #6b7280;
 .campo-label {
   font-size: 10px;
   font-weight: 700;
-  color: $blue;
+  color: t.$brand-deep;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   display: flex;
@@ -173,13 +171,13 @@ $muted:       #6b7280;
   border-radius: 7px;
   padding: 0 9px;
   font-size: 12px;
-  color: $text;
+  color: t.$ink;
   background: #fff;
   outline: none;
   transition: border-color 0.15s;
 
   &:focus {
-    border-color: $blue;
+    border-color: t.$brand;
   }
 
   &::placeholder {
@@ -198,9 +196,9 @@ $muted:       #6b7280;
 
 .auto-badge {
   font-size: 9px;
-  background: $blue-light;
-  color: $blue;
-  border: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.08);
+  color: t.$brand;
+  border: 1px solid rgba(t.$brand, 0.22);
   border-radius: 4px;
   padding: 1px 5px;
   font-weight: 700;
@@ -225,7 +223,7 @@ $muted:       #6b7280;
   align-items: center;
   justify-content: center;
   gap: 5px;
-  background: $blue;
+  background: t.$brand-deep;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -243,7 +241,7 @@ $muted:       #6b7280;
   }
 
   &:hover:not(:disabled) {
-    background: #14532d;
+    background: t.$brand-mid;
   }
 
   &:disabled {
@@ -255,8 +253,8 @@ $muted:       #6b7280;
 
 .btn-limpar {
   background: #fff;
-  color: $blue;
-  border: 1px solid $blue-border;
+  color: t.$brand-deep;
+  border: 1px solid rgba(t.$brand, 0.22);
   border-radius: 7px;
   height: 32px;
   padding: 0 12px;
@@ -267,7 +265,7 @@ $muted:       #6b7280;
   transition: background 0.15s;
 
   &:hover {
-    background: $blue-light;
+    background: rgba(t.$brand, 0.08);
   }
 }
 
@@ -288,7 +286,7 @@ $muted:       #6b7280;
     font-size: 13px;
     width: 13px;
     height: 13px;
-    color: rgba(1, 73, 155, 0.45);
+    color: rgba(t.$brand, 0.45);
   }
 }
 
@@ -315,14 +313,14 @@ $muted:       #6b7280;
     font-size: 16px;
     width: 16px;
     height: 16px;
-    color: $blue;
+    color: t.$brand;
   }
 }
 
 .beacon-label {
   font-size: 11px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   white-space: nowrap;
   opacity: 0;
   padding-right: 12px;

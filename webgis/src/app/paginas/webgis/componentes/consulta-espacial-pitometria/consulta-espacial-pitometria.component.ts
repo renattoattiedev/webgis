@@ -65,7 +65,7 @@ const CORES_LEGENDA: { value: string; label: string; hex: string }[] = [
   { value: 'preto', label: 'Preto', hex: '#111111' },
   { value: 'branco', label: 'Branco', hex: '#FFFFFF' },
   { value: 'amarelo', label: 'Amarelo', hex: '#FFD600' },
-  { value: 'azul', label: 'Azul', hex: '#1b5e20' },
+  { value: 'azul', label: 'Teal', hex: '#268A97' },
   { value: 'verde', label: 'Verde', hex: '#2E7D32' },
   { value: 'vermelho', label: 'Vermelho', hex: '#D32F2F' },
 ];
@@ -354,8 +354,8 @@ export class ConsultaEspacialPitometriaComponent
       source: this.drawSource,
       zIndex: 900,
       style: new Style({
-        stroke: new Stroke({ color: '#1b5e20', width: 2, lineDash: [8, 6] }),
-        fill: new Fill({ color: 'rgba(1,73,155,0.1)' }),
+        stroke: new Stroke({ color: '#268A97', width: 2, lineDash: [8, 6] }),
+        fill: new Fill({ color: 'rgba(38,138,151,0.1)' }),
       }),
     } as any);
 
@@ -418,8 +418,8 @@ export class ConsultaEspacialPitometriaComponent
       type: 'Polygon',
       freehand: tipo === 'livre',
       style: new Style({
-        stroke: new Stroke({ color: '#1b5e20', width: 2 }),
-        fill: new Fill({ color: 'rgba(1,73,155,0.15)' }),
+        stroke: new Stroke({ color: '#268A97', width: 2 }),
+        fill: new Fill({ color: 'rgba(38,138,151,0.15)' }),
       }),
     } as any);
 
@@ -699,7 +699,7 @@ export class ConsultaEspacialPitometriaComponent
       null;
     for (const feature of this.pinsSource.getFeatures()) {
       const cod = feature.get('codPontoMedicao') as string;
-      const corPin = this.pinColorMap.get(cod) ?? '#1b5e20';
+      const corPin = this.pinColorMap.get(cod) ?? '#268A97';
       const valor = (feature.get('valorEstatistica') as number | null) ?? null;
       feature.setStyle(
         criarEstiloPin(corPin, valor, corBadge, cod === codPonto) as any,
@@ -782,7 +782,7 @@ export class ConsultaEspacialPitometriaComponent
       return 'linear-gradient(to right, #0000ff, #00c8ff, #00c800, #ffdc00, #ff1e00)';
     return (
       CORES_LEGENDA.find((c) => c.value === this.corLegendaSelecionada)?.hex ??
-      '#1b5e20'
+      '#268A97'
     );
   }
 }

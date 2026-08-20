@@ -1,5 +1,6 @@
 // Estilos compartilhados em src/styles/_dialog-base.scss
 @use 'sass:color';
+@use '../../../../../styles/tokens' as t;
 
 :host {
   display: block;
@@ -11,15 +12,6 @@
 }
 
 // ── Tokens locais (espelham _dialog-base.scss) ──────────────────────────────
-$brand:        #1b5e20;
-$brand-mid:    #14532d;
-$brand-tint:   #eef5ec;
-$brand-tint-2: #e2eee0;
-$ink:          #1a2e1f;
-$ink-soft:     #4d6b52;
-$muted:        #6b8f74;
-$line:         #e7f0e7;
-$line-soft:    #f3f6fb;
 $success:      #047857;
 $success-bg:   #ecfdf5;
 $success-line: #a7f3d0;
@@ -43,7 +35,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   flex-direction: column;
   min-height: 380px;
   background: linear-gradient(180deg, #fff 0%, #fafbfd 100%);
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 12px;
   overflow: hidden;
 }
@@ -52,7 +44,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   display: flex; align-items: center; justify-content: space-between;
   gap: 10px;
   padding: 12px 14px 10px;
-  border-bottom: 1px solid $line-soft;
+  border-bottom: 1px solid t.$line-soft;
   background: #fff;
 }
 
@@ -64,22 +56,22 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 .raster-pane-eyebrow {
   font-size: 9.5px; font-weight: 700; letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: $muted;
+  color: t.$muted;
 }
 
 .raster-pane-title h3 {
   margin: 0;
   font-size: 13.5px; font-weight: 600; letter-spacing: -0.15px;
-  color: $ink;
+  color: t.$ink;
 }
 
 .raster-pane-meta {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 11px; color: $ink-soft;
+  font-size: 11px; color: t.$ink-soft;
   padding: 3px 9px;
   border-radius: 100px;
-  background: $line-soft;
-  border: 1px solid $line;
+  background: t.$line-soft;
+  border: 1px solid t.$line;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 
@@ -97,18 +89,18 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
     padding: 0 32px 0 32px;
     font-family: inherit;
     font-size: 12.5px;
-    color: $ink;
+    color: t.$ink;
     background: #fff;
-    border: 1px solid $line;
+    border: 1px solid t.$line;
     border-radius: 9px;
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s, background 0.15s;
 
-    &::placeholder { color: $muted; }
-    &:hover { border-color: $brand-tint-2; }
+    &::placeholder { color: t.$muted; }
+    &:hover { border-color: t.$brand-tint-2; }
     &:focus {
-      border-color: $brand;
-      box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.12);
+      border-color: t.$brand;
+      box-shadow: 0 0 0 3px rgba(38, 138, 151, 0.12);
     }
   }
 }
@@ -118,7 +110,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   left: 11px; top: 50%;
   width: 13px; height: 13px;
   transform: translateY(-50%);
-  color: $muted;
+  color: t.$muted;
   pointer-events: none;
 }
 
@@ -131,12 +123,12 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   border: none;
   border-radius: 6px;
   display: inline-flex; align-items: center; justify-content: center;
-  color: $muted;
+  color: t.$muted;
   cursor: pointer;
   transition: background 0.15s, color 0.15s;
 
   svg { width: 11px; height: 11px; }
-  &:hover { background: $line-soft; color: $ink; }
+  &:hover { background: t.$line-soft; color: t.$ink; }
 }
 
 // ── Tree body ───────────────────────────────────────────────────────────────
@@ -157,13 +149,13 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   &::-webkit-scrollbar { width: 8px; }
   &::-webkit-scrollbar-track { background: transparent; }
   &::-webkit-scrollbar-thumb {
-    background: $line;
+    background: t.$line;
     border-radius: 100px;
     border: 2px solid transparent;
     background-clip: padding-box;
   }
   &::-webkit-scrollbar-thumb:hover {
-    background: $brand-tint-2;
+    background: t.$brand-tint-2;
     background-clip: padding-box;
   }
 }
@@ -188,8 +180,8 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
       width: 1px;
       background: linear-gradient(180deg,
         transparent 0,
-        $line 4px,
-        $line calc(100% - 4px),
+        t.$line 4px,
+        t.$line calc(100% - 4px),
         transparent 100%);
     }
   }
@@ -207,21 +199,21 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   cursor: pointer;
   font-family: inherit;
   font-size: 12.5px;
-  color: $ink;
+  color: t.$ink;
   text-align: left;
   border-radius: 7px;
   transition: background 0.12s, color 0.12s;
 
-  &:hover { background: $brand-tint; }
+  &:hover { background: t.$brand-tint; }
   &:focus-visible {
-    outline: 2px solid $brand;
+    outline: 2px solid t.$brand;
     outline-offset: -2px;
   }
 
   .raster-node--selected > & {
-    background: $brand;
+    background: t.$brand-deep;
     color: #fff;
-    box-shadow: 0 4px 12px -4px rgba(1, 73, 155, 0.4);
+    box-shadow: 0 4px 12px -4px rgba(38, 138, 151, 0.4);
 
     .raster-node-icon--file,
     .raster-node-icon--dir { color: #fff; background: rgba(255,255,255,0.18); }
@@ -241,7 +233,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 .raster-node-caret {
   display: inline-flex; align-items: center; justify-content: center;
   width: 14px; height: 14px;
-  color: $muted;
+  color: t.$muted;
 
   svg {
     width: 10px; height: 10px;
@@ -261,12 +253,12 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   transition: background 0.12s, color 0.12s;
 
   &--dir {
-    color: $brand;
-    background: $brand-tint;
+    color: t.$brand;
+    background: t.$brand-tint;
   }
   &--file {
-    color: $brand-mid;
-    background: rgba(1, 73, 155, 0.07);
+    color: t.$brand-mid;
+    background: rgba(38, 138, 151, 0.07);
   }
 
   svg { width: 12px; height: 12px; }
@@ -291,10 +283,10 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 .raster-node-size {
   font-family: $mono;
   font-size: 10.5px;
-  color: $muted;
+  color: t.$muted;
   font-variant-numeric: tabular-nums;
   padding: 1px 7px;
-  background: $line-soft;
+  background: t.$line-soft;
   border-radius: 100px;
   white-space: nowrap;
   transition: background 0.12s, color 0.12s;
@@ -319,7 +311,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   display: inline-flex;
   align-items: center;
 
-  ::ng-deep .mat-mdc-progress-spinner circle { stroke: $brand !important; }
+  ::ng-deep .mat-mdc-progress-spinner circle { stroke: t.$brand !important; }
   .raster-node--selected ::ng-deep .mat-mdc-progress-spinner circle { stroke: #fff !important; }
 }
 
@@ -327,7 +319,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 .raster-tree-state {
   display: flex; align-items: flex-start; gap: 12px;
   padding: 24px 20px;
-  color: $ink-soft;
+  color: t.$ink-soft;
   font-size: 12.5px;
   max-width: 320px;
 }
@@ -335,14 +327,14 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 .raster-tree-state-icon {
   width: 36px; height: 36px; flex-shrink: 0;
   border-radius: 10px;
-  background: $brand-tint;
-  color: $brand;
+  background: t.$brand-tint;
+  color: t.$brand;
   display: inline-flex; align-items: center; justify-content: center;
   margin-top: 1px;
 
   svg { width: 18px; height: 18px; }
 
-  &--soft  { background: $line-soft; color: $muted; }
+  &--soft  { background: t.$line-soft; color: t.$muted; }
   &--danger { background: $danger-bg; color: $danger; }
 }
 
@@ -353,13 +345,13 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   strong {
     display: block;
     font-size: 12.5px; font-weight: 600;
-    color: $ink;
+    color: t.$ink;
     margin-bottom: 2px;
   }
   p {
     margin: 0 0 10px;
     font-size: 12px; line-height: 1.5;
-    color: $ink-soft;
+    color: t.$ink-soft;
 
     &:last-child { margin-bottom: 0; }
   }
@@ -367,9 +359,9 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
     font-family: $mono;
     font-size: 11px;
     padding: 1px 5px;
-    background: $line-soft;
+    background: t.$line-soft;
     border-radius: 4px;
-    color: $ink;
+    color: t.$ink;
   }
 }
 
@@ -379,9 +371,9 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   font-family: inherit;
   font-size: 11.5px; font-weight: 600;
   padding: 5px 11px;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   background: #fff;
-  color: $ink-soft;
+  color: t.$ink-soft;
   border-radius: 7px;
   cursor: pointer;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
@@ -389,9 +381,9 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
   svg { width: 11px; height: 11px; }
 
   &:hover {
-    background: $brand-tint;
-    color: $brand;
-    border-color: $brand-tint-2;
+    background: t.$brand-tint;
+    color: t.$brand;
+    border-color: t.$brand-tint-2;
   }
 }
 
@@ -399,7 +391,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 .raster-selected {
   display: flex; align-items: center; gap: 12px;
   padding: 11px 14px;
-  border-top: 1px solid $line;
+  border-top: 1px solid t.$line;
   background: #fff;
   position: relative;
 
@@ -408,7 +400,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
     content: "";
     position: absolute;
     left: 0; right: 0; top: -1px; height: 1px;
-    background: linear-gradient(90deg, transparent, $brand-tint-2 35%, $brand-tint-2 65%, transparent);
+    background: linear-gradient(90deg, transparent, t.$brand-tint-2 35%, t.$brand-tint-2 65%, transparent);
     opacity: 0.85;
     pointer-events: none;
   }
@@ -423,11 +415,11 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 .raster-selected-mark {
   width: 26px; height: 26px;
   border-radius: 8px;
-  background: $brand;
+  background: t.$brand;
   color: #fff;
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 4px 10px -3px rgba(1, 73, 155, 0.45);
+  box-shadow: 0 4px 10px -3px rgba(38, 138, 151, 0.45);
 
   svg { width: 13px; height: 13px; }
 }
@@ -440,17 +432,17 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 .raster-selected-label {
   font-size: 9.5px; font-weight: 700; letter-spacing: 1.4px;
   text-transform: uppercase;
-  color: $muted;
+  color: t.$muted;
 }
 
 .raster-selected-path {
   font-family: $mono;
   font-size: 11.5px;
-  color: $ink;
-  background: $line-soft;
+  color: t.$ink;
+  background: t.$line-soft;
   padding: 2px 8px;
   border-radius: 5px;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -460,7 +452,7 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
 .raster-selected-meta {
   font-size: 11px;
-  color: $ink-soft;
+  color: t.$ink-soft;
   font-variant-numeric: tabular-nums;
 
   .raster-selected-meta-pub {
@@ -471,16 +463,16 @@ $mono: ui-monospace, 'JetBrains Mono', 'SF Mono', Menlo, Consolas, monospace;
 
 .raster-selected-hint {
   font-size: 12px;
-  color: $muted;
+  color: t.$muted;
   line-height: 1.4;
 
   code {
     font-family: $mono;
     font-size: 10.5px;
     padding: 1px 5px;
-    background: $line-soft;
+    background: t.$line-soft;
     border-radius: 4px;
-    color: $ink-soft;
+    color: t.$ink-soft;
   }
 }
 

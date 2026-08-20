@@ -1,6 +1,5 @@
-$brand:   #1b5e20;
+@use '../../../../styles/tokens' as t;
 $success: #16a34a;
-$text:    #14532d;
 $muted:   #64748b;
 
 ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
@@ -22,7 +21,7 @@ $muted:   #64748b;
   background: #fff;
   border-radius: 20px;
   padding: 44px 36px 36px;
-  box-shadow: 0 8px 40px rgba(1,73,155,0.12), 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: 0 8px 40px rgba(38, 138, 151,0.12), 0 1px 4px rgba(0,0,0,0.04);
   text-align: center;
 }
 
@@ -45,7 +44,7 @@ $muted:   #64748b;
 .ev-title {
   font-size: 22px;
   font-weight: 700;
-  color: $text;
+  color: t.$ink;
   margin: 0 0 12px !important;
   padding: 0 !important;
   letter-spacing: -0.3px;
@@ -79,7 +78,7 @@ mat-dialog-actions {
   gap: 8px;
   height: 46px;
   padding: 0 28px;
-  background: $brand;
+  background: t.$brand;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -94,6 +93,6 @@ mat-dialog-actions {
 
   &:hover {
     background: #012d6b;
-    box-shadow: 0 4px 14px rgba(1,73,155,0.28);
+    box-shadow: 0 4px 14px rgba(38, 138, 151,0.28);
   }
 }

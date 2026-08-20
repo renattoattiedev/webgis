@@ -1,3 +1,5 @@
+@use '../../../../../styles/tokens' as t;
+
 // ── Container inline na pill bar ─────────────────────────────────────────────
 .scale-bar-container {
   padding: 0 6px;
@@ -52,7 +54,7 @@
 
   .scale-input {
     width: 90px;
-    border: 1px solid rgba(1, 73, 155, 0.35);
+    border: 1px solid rgba(38, 138, 151, 0.35);
     border-radius: 6px;
     padding: 4px 8px;
     font-size: 12px;
@@ -63,8 +65,8 @@
     transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
     &:focus {
-      border-color: #1b5e20;
-      box-shadow: 0 0 0 2px rgba(1, 73, 155, 0.12);
+      border-color: t.$brand;
+      box-shadow: 0 0 0 2px rgba(38, 138, 151, 0.12);
     }
 
     &::placeholder {

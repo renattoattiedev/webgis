@@ -3,20 +3,11 @@
 // Mesma identidade do index: Geist + Instrument Serif + paleta azul institucional.
 // As fontes devem ser importadas globalmente (ver README do index).
 // ─────────────────────────────────────────────────────────────────────────────
+@use '../../../styles/tokens' as t;
 
-$brand:        #1b5e20;
-$brand-mid:    #14532d;
 $brand-dark:   #011d4d;
 $brand-deep:   #012656;
-$brand-tint:   #eef5ec;
-$brand-tint-2: #e2eee0;
-$ink:          #1a2e1f;
-$ink-soft:     #4d6b52;
-$muted:        #6b8f74;
-$line:         #e7f0e7;
-$line-soft:    #edf4ea;
 $surface:      #ffffff;
-$bg:           #f0f6ed;
 $accent:       #5fe3a1;
 
 $font-ui:    'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
@@ -24,9 +15,9 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 :host {
   display: block;
-  background: $bg;
+  background: t.$bg;
   font-family: $font-ui;
-  color: $ink;
+  color: t.$ink;
 }
 
 button { font-family: inherit; }
@@ -35,7 +26,7 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 // ── Hero ──────────────────────────────────────────────────────────────────────
 .page-hero {
   position: relative;
-  background: linear-gradient(135deg, $brand 0%, $brand-mid 60%, $brand-dark 100%);
+  background: linear-gradient(135deg, t.$brand 0%, t.$brand-mid 60%, $brand-dark 100%);
   color: #fff;
   padding: 56px 80px 96px;
   overflow: hidden;
@@ -114,22 +105,22 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
   box-shadow: 0 24px 60px -20px rgba(0,0,0,0.4), 0 6px 16px rgba(0,0,0,0.18);
   max-width: 920px;
 
-  .icon { width: 18px; height: 18px; color: $muted; flex-shrink: 0; }
+  .icon { width: 18px; height: 18px; color: t.$muted; flex-shrink: 0; }
 
   input {
     flex: 1; border: none; outline: none;
-    font-family: inherit; font-size: 15.5px; color: $ink;
+    font-family: inherit; font-size: 15.5px; color: t.$ink;
     padding: 14px;
     background: transparent;
     min-width: 0;
 
-    &::placeholder { color: $muted; }
+    &::placeholder { color: t.$muted; }
   }
 }
 
 .search-btn {
   display: inline-flex; align-items: center; gap: 8px;
-  background: $brand; color: #fff;
+  background: t.$brand-deep; color: #fff;
   border: none; cursor: pointer;
   padding: 12px 20px; border-radius: 100px;
   font-size: 13.5px; font-weight: 600;
@@ -137,16 +128,16 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 
   svg { width: 14px; height: 14px; }
 
-  &:hover { background: $brand-mid; }
+  &:hover { background: t.$brand-mid; }
   &:active { transform: scale(0.98); }
 }
 
 .kbd {
   display: inline-flex; align-items: center; gap: 4px;
   margin-right: 10px;
-  font-size: 11px; color: $muted;
+  font-size: 11px; color: t.$muted;
   padding: 3px 8px; border-radius: 6px;
-  background: $line-soft; border: 1px solid $line;
+  background: t.$line-soft; border: 1px solid t.$line;
 }
 
 .quick {
@@ -174,7 +165,7 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 .state-msg {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 14px; padding: 80px 20px;
-  color: $ink-soft; font-size: 14px;
+  color: t.$ink-soft; font-size: 14px;
 
   &--erro { color: #b91c1c; svg { color: #b91c1c; width: 28px; height: 28px; } }
 }
@@ -183,8 +174,8 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 
 .spinner {
   width: 36px; height: 36px;
-  border: 3px solid $line;
-  border-top-color: $brand;
+  border: 3px solid t.$line;
+  border-top-color: t.$brand;
   border-radius: 50%;
   animation: spin 0.75s linear infinite;
   flex-shrink: 0;
@@ -193,27 +184,27 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 // ── Empty states ──────────────────────────────────────────────────────────────
 .empty-results {
   display: flex; flex-direction: column; align-items: center;
-  gap: 14px; padding: 56px 0; color: $muted; text-align: center;
+  gap: 14px; padding: 56px 0; color: t.$muted; text-align: center;
 
-  svg { width: 40px; height: 40px; color: $line; }
+  svg { width: 40px; height: 40px; color: t.$line; }
   p   { font-size: 14px; margin: 0; }
   button {
     margin-top: 4px;
     padding: 9px 22px; border-radius: 9px;
-    background: $brand; color: #fff; border: none;
+    background: t.$brand-deep; color: #fff; border: none;
     font-size: 13px; font-weight: 600; cursor: pointer;
-    &:hover { background: $brand-mid; }
+    &:hover { background: t.$brand-mid; }
   }
 }
 
 .empty-side {
-  font-size: 12.5px; color: $muted; padding: 4px 0;
+  font-size: 12.5px; color: t.$muted; padding: 4px 0;
 }
 
 .active-badge {
   margin-left: auto;
   font-size: 10px; font-weight: 700;
-  background: $brand; color: #fff;
+  background: t.$brand-deep; color: #fff;
   border-radius: 100px; padding: 2px 7px;
 }
 
@@ -232,7 +223,7 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
   position: sticky; top: 76px;
   align-self: flex-start;
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 18px;
   padding: 20px;
   box-shadow: 0 12px 36px -16px rgba(11,37,69,0.18);
@@ -241,20 +232,20 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 }
 
 .side-section + .side-section {
-  margin-top: 22px; padding-top: 22px; border-top: 1px solid $line;
+  margin-top: 22px; padding-top: 22px; border-top: 1px solid t.$line;
 }
 
 .side-h {
   font-size: 11px; font-weight: 700; letter-spacing: 2px;
-  text-transform: uppercase; color: $muted;
+  text-transform: uppercase; color: t.$muted;
   margin: 0 0 12px;
 }
 
 .side-link {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: 600; color: $brand;
+  font-size: 13px; font-weight: 600; color: t.$brand-deep;
   svg { width: 13px; height: 13px; }
-  &:hover { color: $brand-mid; }
+  &:hover { color: t.$brand-mid; }
 }
 
 .accordion { display: flex; flex-direction: column; gap: 4px; }
@@ -268,15 +259,15 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   padding: 10px 12px;
   cursor: pointer;
-  font-size: 13.5px; font-weight: 600; color: $ink;
+  font-size: 13.5px; font-weight: 600; color: t.$ink;
   border-radius: 10px;
   transition: background 0.15s;
 
-  &:hover { background: $brand-tint; }
+  &:hover { background: t.$brand-tint; }
 
   .count {
-    font-size: 11px; color: $muted;
-    background: $line-soft;
+    font-size: 11px; color: t.$muted;
+    background: t.$line-soft;
     padding: 1px 8px; border-radius: 100px;
     font-weight: 600;
   }
@@ -285,7 +276,7 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 .acc-head-right { display: flex; align-items: center; gap: 8px; }
 
 .chev {
-  width: 13px; height: 13px; color: $muted;
+  width: 13px; height: 13px; color: t.$muted;
   transition: transform 0.15s;
 }
 
@@ -300,15 +291,15 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 
 .check {
   display: flex; align-items: center; gap: 8px;
-  font-size: 13px; color: $ink-soft;
+  font-size: 13px; color: t.$ink-soft;
   cursor: pointer; padding: 5px 6px; border-radius: 6px;
 
-  &:hover { background: $brand-tint; color: $ink; }
+  &:hover { background: t.$brand-tint; color: t.$ink; }
 
-  input { accent-color: $brand; width: 14px; height: 14px; cursor: pointer; }
+  input { accent-color: t.$brand; width: 14px; height: 14px; cursor: pointer; }
 
   .num {
-    color: $muted; margin-left: auto;
+    color: t.$muted; margin-left: auto;
     font-size: 11.5px;
   }
 }
@@ -323,18 +314,18 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
     cursor: pointer;
     transition: background 0.15s, border-color 0.15s;
   }
-  .apply { background: $brand; color: #fff; border: none;
-    &:hover { background: $brand-mid; }
+  .apply { background: t.$brand-deep; color: #fff; border: none;
+    &:hover { background: t.$brand-mid; }
   }
-  .clear { background: #fff; color: $ink-soft; border: 1px solid $line;
-    &:hover { background: $brand-tint; color: $ink; }
+  .clear { background: #fff; color: t.$ink-soft; border: 1px solid t.$line;
+    &:hover { background: t.$brand-tint; color: t.$ink; }
   }
 }
 
 // ── Resultados ────────────────────────────────────────────────────────────────
 .results {
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 18px;
   padding: 28px 32px 32px;
   box-shadow: 0 12px 36px -16px rgba(11,37,69,0.18);
@@ -342,12 +333,12 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 
 .results-top {
   display: flex; align-items: center; justify-content: space-between;
-  padding-bottom: 20px; border-bottom: 1px solid $line; margin-bottom: 12px;
+  padding-bottom: 20px; border-bottom: 1px solid t.$line; margin-bottom: 12px;
 }
 
 .listing-label {
-  font-size: 13.5px; color: $ink-soft;
-  b { color: $ink; font-weight: 600; }
+  font-size: 13.5px; color: t.$ink-soft;
+  b { color: t.$ink; font-weight: 600; }
 }
 
 .count-pill {
@@ -355,32 +346,32 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
   min-width: 30px; height: 22px; padding: 0 9px;
   border-radius: 100px;
   font-size: 11.5px; font-weight: 700;
-  background: $brand; color: #fff;
+  background: t.$brand-deep; color: #fff;
   margin: 0 2px;
 
-  &.gray { background: $ink-soft; }
+  &.gray { background: t.$ink-soft; }
 }
 
 .sort-wrap { position: relative; }
 
 .sort {
   display: inline-flex; align-items: center; gap: 6px;
-  font-size: 13px; font-weight: 500; color: $ink-soft;
-  background: $line-soft; border: 1px solid $line;
+  font-size: 13px; font-weight: 500; color: t.$ink-soft;
+  background: t.$line-soft; border: 1px solid t.$line;
   padding: 7px 12px; border-radius: 10px; cursor: pointer;
 
-  b { color: $ink; font-weight: 600; }
+  b { color: t.$ink; font-weight: 600; }
   svg { width: 12px; height: 12px; transition: transform 0.15s;
     &.open { transform: rotate(180deg); }
   }
-  &:hover { background: $brand-tint; border-color: $brand-tint-2; }
+  &:hover { background: t.$brand-tint; border-color: t.$brand-tint-2; }
 }
 
 .sort-menu {
   position: absolute; right: 0; top: calc(100% + 6px);
   min-width: 180px;
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 10px;
   box-shadow: 0 12px 32px rgba(11,37,69,0.12);
   z-index: 50;
@@ -391,10 +382,10 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
     text-align: left;
     background: none; border: none;
     padding: 8px 12px; border-radius: 7px;
-    font-size: 13px; color: $ink; cursor: pointer;
+    font-size: 13px; color: t.$ink; cursor: pointer;
 
-    &:hover { background: $brand-tint; }
-    &.active { color: $brand; font-weight: 600; background: $brand-tint; }
+    &:hover { background: t.$brand-tint; }
+    &.active { color: t.$brand; font-weight: 600; background: t.$brand-tint; }
   }
 }
 
@@ -402,7 +393,7 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 .card {
   display: grid; grid-template-columns: 220px 1fr;
   gap: 24px; padding: 24px 4px;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid t.$line;
 
   &:last-of-type { border-bottom: none; }
 }
@@ -412,7 +403,7 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
   aspect-ratio: 4 / 3;
   border-radius: 12px;
   overflow: hidden;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   background: linear-gradient(135deg, #c8d8ed 0%, #e6eef8 100%);
 
   img, .thumb-svg {
@@ -425,7 +416,7 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 .thumb-type {
   position: absolute; top: 8px; left: 8px; z-index: 1;
   font-size: 10px; font-weight: 700; letter-spacing: 0.6px; text-transform: uppercase;
-  background: rgba(255,255,255,0.95); color: $brand;
+  background: rgba(255,255,255,0.95); color: t.$brand-deep;
   padding: 3px 8px; border-radius: 100px;
   backdrop-filter: blur(4px);
 
@@ -451,7 +442,7 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 .acessos-badge {
   display: inline-flex; align-items: center; gap: 5px;
   flex-shrink: 0;
-  background: $brand-tint; color: $brand;
+  background: t.$brand-tint; color: t.$brand;
   padding: 4px 11px 4px 9px; border-radius: 100px;
   font-size: 11.5px; font-weight: 700;
   white-space: nowrap;
@@ -461,20 +452,20 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 
 .meta-tag {
   display: inline-flex; align-items: center; gap: 5px;
-  font-size: 11.5px; font-weight: 500; color: $ink-soft;
-  background: $line-soft; border: 1px solid $line;
+  font-size: 11.5px; font-weight: 500; color: t.$ink-soft;
+  background: t.$line-soft; border: 1px solid t.$line;
   padding: 3px 9px; border-radius: 100px;
 
-  svg { width: 11px; height: 11px; color: $muted; flex-shrink: 0; }
+  svg { width: 11px; height: 11px; color: t.$muted; flex-shrink: 0; }
 }
 
 .meta-date {
-  font-size: 11.5px; color: $muted;
+  font-size: 11.5px; color: t.$muted;
 }
 
 .card-title {
   font-size: 17px; font-weight: 600; letter-spacing: -0.3px;
-  color: $brand;
+  color: t.$brand;
   line-height: 1.3;
   cursor: pointer;
 
@@ -483,27 +474,27 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 
 .card-meta {
   display: flex; align-items: center; flex-wrap: wrap; gap: 14px;
-  font-size: 11.5px; color: $muted;
+  font-size: 11.5px; color: t.$muted;
 
-  .dot { width: 3px; height: 3px; border-radius: 50%; background: $muted; }
-  b { color: $ink-soft; font-weight: 600; }
+  .dot { width: 3px; height: 3px; border-radius: 50%; background: t.$muted; }
+  b { color: t.$ink-soft; font-weight: 600; }
 
   .access {
     display: inline-flex; align-items: center; gap: 6px;
-    color: $brand;
-    background: $brand-tint;
+    color: t.$brand;
+    background: t.$brand-tint;
     padding: 3px 10px 3px 8px;
     border-radius: 100px;
     font-weight: 600;
     font-size: 11.5px;
 
     svg { width: 12px; height: 12px; }
-    b { color: $brand; font-weight: 700; }
+    b { color: t.$brand; font-weight: 700; }
   }
 }
 
 .card-desc {
-  font-size: 13.5px; color: $ink-soft; line-height: 1.55;
+  font-size: 13.5px; color: t.$ink-soft; line-height: 1.55;
   margin: 0; max-width: 820px;
 }
 
@@ -527,36 +518,36 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 
 // downloads — azul claro
 .chip-dl {
-  background: $brand-tint; color: $brand;
-  border: 1px solid $brand-tint-2;
+  background: t.$brand-tint; color: t.$brand;
+  border: 1px solid t.$brand-tint-2;
 
   &:hover {
-    background: $brand-tint-2;
-    box-shadow: 0 4px 12px rgba(1,73,155,0.12);
+    background: t.$brand-tint-2;
+    box-shadow: 0 4px 12px rgba(38, 138, 151,0.12);
   }
 }
 
 // metadados — azul cheio
 .chip-meta {
-  background: $brand; color: #fff;
-  &:hover { background: $brand-mid; }
+  background: t.$brand-deep; color: #fff;
+  &:hover { background: t.$brand-mid; }
 }
 
 // serviços — contorno
 .chip-svc {
-  background: #fff; color: $brand;
-  border: 1px solid $brand;
-  &:hover { background: $brand-tint; }
+  background: #fff; color: t.$brand-deep;
+  border: 1px solid t.$brand;
+  &:hover { background: t.$brand-tint; }
 }
 
 // ── Pager ─────────────────────────────────────────────────────────────────────
 .pager {
   display: flex; align-items: center; justify-content: space-between;
-  padding-top: 24px; margin-top: 8px; border-top: 1px solid $line;
+  padding-top: 24px; margin-top: 8px; border-top: 1px solid t.$line;
 }
 
 .pager-info {
-  font-size: 12.5px; color: $muted;
+  font-size: 12.5px; color: t.$muted;
 }
 
 .pager-controls {
@@ -565,24 +556,24 @@ a { color: inherit; text-decoration: none; cursor: pointer; }
 
 .pg {
   min-width: 34px; height: 34px; padding: 0 10px;
-  border-radius: 9px; border: 1px solid $line; background: #fff;
-  color: $ink-soft; font-size: 13px; font-weight: 500;
+  border-radius: 9px; border: 1px solid t.$line; background: #fff;
+  color: t.$ink-soft; font-size: 13px; font-weight: 500;
   cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   transition: background 0.15s, border-color 0.15s;
 
-  &:hover:not(:disabled) { background: $brand-tint; border-color: $brand-tint-2; }
+  &:hover:not(:disabled) { background: t.$brand-tint; border-color: t.$brand-tint-2; }
   &:disabled { opacity: 0.45; cursor: not-allowed; }
 
   &.active {
-    background: $brand; color: #fff; border-color: $brand;
-    &:hover { background: $brand-mid; }
+    background: t.$brand-deep; color: #fff; border-color: t.$brand-deep;
+    &:hover { background: t.$brand-mid; }
   }
   &.icon svg { width: 13px; height: 13px; }
 }
 
 .pg-ellipsis {
-  color: $muted; padding: 0 6px; font-size: 13px;
+  color: t.$muted; padding: 0 6px; font-size: 13px;
 }
 
 // ── Responsivo ────────────────────────────────────────────────────────────────

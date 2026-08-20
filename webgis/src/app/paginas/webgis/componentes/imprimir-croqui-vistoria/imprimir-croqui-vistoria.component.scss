@@ -1,8 +1,6 @@
 // ── Design tokens ────────────────────────────────────────────────────────────
-$blue:        #1b5e20;
-$blue-light:  rgba(1, 73, 155, 0.08);
-$blue-border: rgba(1, 73, 155, 0.22);
-$text:        #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted:       #6b7280;
 $divider:     rgba(0, 0, 0, 0.07);
 
@@ -84,8 +82,8 @@ body.dragging * {
 // ── Header ────────────────────────────────────────────────────────────────────
 .vistoria-header {
   padding: 10px 12px;
-  background: rgba(1, 73, 155, 0.06);
-  border-bottom: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.06);
+  border-bottom: 1px solid rgba(t.$brand, 0.22);
   cursor: grab;
   user-select: none;
   min-height: 42px;
@@ -99,7 +97,7 @@ body.dragging * {
   display: inline-flex;
   align-items: center;
   gap: 7px;
-  color: $text;
+  color: t.$brand-deep;
   font-size: 12px;
   font-weight: 700;
 
@@ -107,7 +105,7 @@ body.dragging * {
     font-size: 16px;
     width: 16px;
     height: 16px;
-    color: $blue;
+    color: t.$brand;
   }
 }
 
@@ -129,7 +127,7 @@ body.dragging * {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $text;
+  color: t.$brand-deep;
   transition: background 0.15s;
   padding: 0;
   pointer-events: auto;
@@ -188,18 +186,18 @@ body.dragging * {
 
 ::ng-deep .mat-tab-header {
   flex-shrink: 0;
-  border-bottom: 1px solid $blue-border;
+  border-bottom: 1px solid rgba(t.$brand, 0.22);
   min-height: 32px;
 }
 
 ::ng-deep .mat-ink-bar {
-  background-color: $blue !important;
+  background-color: t.$brand !important;
   height: 2px !important;
 }
 
 ::ng-deep .mat-tab-label.mat-tab-label-active .mat-tab-label-content,
 ::ng-deep .mat-tab-label.mat-tab-label-active {
-  color: $blue !important;
+  color: t.$brand-deep !important;
 }
 
 ::ng-deep .mat-tab-label {
@@ -335,8 +333,8 @@ body.dragging * {
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:focus-within {
-    border-color: rgba(1, 73, 155, 0.35);
-    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.07);
+    border-color: rgba(t.$brand, 0.35);
+    box-shadow: 0 0 0 3px rgba(t.$brand, 0.07);
   }
 }
 
@@ -414,7 +412,7 @@ body.dragging * {
 
   ::ng-deep .mat-form-field-label {
     font-size: 13px !important;
-    color: $blue !important;
+    color: t.$brand-deep !important;
     font-weight: 600 !important;
   }
 
@@ -478,8 +476,8 @@ body.dragging * {
 
 // ── Registros box ─────────────────────────────────────────────────────────────
 .registros-selecionados {
-  background: rgba(1, 73, 155, 0.03);
-  border: 1px solid rgba(1, 73, 155, 0.12);
+  background: rgba(t.$brand, 0.03);
+  border: 1px solid rgba(t.$brand, 0.12);
   border-radius: 10px;
   padding: 8px;
   height: 160px;
@@ -501,7 +499,7 @@ body.dragging * {
 
 .registros-header h4 {
   margin: 0;
-  color: $text;
+  color: t.$brand-deep;
   font-size: 11px;
   font-weight: 700;
   text-transform: uppercase;
@@ -511,8 +509,8 @@ body.dragging * {
 .header-actions { display: flex; align-items: center; gap: 6px; }
 
 .contador {
-  background: $blue-light;
-  color: $blue;
+  background: rgba(t.$brand, 0.08);
+  color: t.$brand;
   border-radius: 10px;
   padding: 2px 8px;
   font-size: 11px;
@@ -551,11 +549,11 @@ body.dragging * {
 
   &:last-child { border-bottom: none; }
 
-  &:hover { background: rgba(1, 73, 155, 0.04); }
+  &:hover { background: rgba(t.$brand, 0.04); }
 
   &.selected {
-    background: rgba(1, 73, 155, 0.06);
-    border-left: 3px solid $blue;
+    background: rgba(t.$brand, 0.06);
+    border-left: 3px solid t.$brand;
   }
 }
 
@@ -570,7 +568,7 @@ body.dragging * {
 
 .registro-tipo {
   font-weight: 600;
-  color: $blue;
+  color: t.$brand-deep;
   font-size: 11px;
   text-transform: uppercase;
   min-width: 60px;
@@ -579,7 +577,7 @@ body.dragging * {
 
 .registro-codigo {
   font-weight: 500;
-  color: $text;
+  color: t.$brand-deep;
   font-size: 13px;
   flex-shrink: 0;
 }
@@ -667,15 +665,15 @@ body.dragging * {
   font-size: 11px;
   font-weight: 600;
   border-radius: 7px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.22);
   background: white;
-  color: $blue;
+  color: t.$brand-deep;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 
   mat-icon { font-size: 14px; width: 14px; height: 14px; }
 
-  &:hover:not(:disabled) { background: $blue-light; }
+  &:hover:not(:disabled) { background: rgba(t.$brand, 0.08); }
 
   &:disabled {
     background: #f3f4f6;
@@ -693,12 +691,12 @@ body.dragging * {
   }
 
   &.primary {
-    background: $blue;
+    background: t.$brand-deep;
     color: white;
-    border-color: $blue;
+    border-color: t.$brand-deep;
     font-weight: 700;
 
-    &:hover:not(:disabled) { background: #14532d; border-color: #14532d; }
+    &:hover:not(:disabled) { background: t.$brand-mid; border-color: t.$brand-mid; }
 
     &:disabled { background: #bdbdbd; border-color: #bdbdbd; color: white; }
   }
@@ -798,14 +796,14 @@ body.dragging * {
   background-color: white !important;
 
   &:hover { background-color: #f5f5f5 !important; }
-  &.mat-selected { background-color: $blue !important; color: white !important; }
+  &.mat-selected { background-color: t.$brand !important; color: white !important; }
 }
 
 // ── Autocomplete overlay ──────────────────────────────────────────────────────
 ::ng-deep .mat-autocomplete-panel {
   min-width: 320px !important;
   max-width: 440px !important;
-  box-shadow: 0 6px 24px rgba(1, 73, 155, 0.12) !important;
+  box-shadow: 0 6px 24px rgba(t.$brand, 0.12) !important;
   border-radius: 8px !important;
   border: 1px solid #d1d5db !important;
   background: #fff !important;
@@ -835,7 +833,7 @@ body.dragging * {
   position: absolute;
   background-color: white;
   border-radius: 8px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.22);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   z-index: 9999;
   min-width: 280px;
@@ -852,12 +850,12 @@ body.dragging * {
   justify-content: space-between;
   align-items: center;
   padding: 10px 14px;
-  background: rgba(1, 73, 155, 0.06);
-  border-bottom: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.06);
+  border-bottom: 1px solid rgba(t.$brand, 0.22);
   border-radius: 8px 8px 0 0;
 
   strong {
-    color: $text;
+    color: t.$brand-deep;
     font-size: 13px;
     font-weight: 700;
   }
@@ -891,7 +889,7 @@ body.dragging * {
   &:last-child { margin-bottom: 0; }
 }
 
-.label  { font-weight: 600; color: $text; min-width: 80px; flex-shrink: 0; }
+.label  { font-weight: 600; color: t.$brand-deep; min-width: 80px; flex-shrink: 0; }
 .value  { color: #333; word-break: break-word; }
 
 .popup-footer {
@@ -902,7 +900,7 @@ body.dragging * {
 }
 
 .popup-print-button {
-  background-color: $blue;
+  background-color: t.$brand-deep;
   color: white;
   border: none;
   border-radius: 7px;
@@ -920,7 +918,7 @@ body.dragging * {
 
   mat-icon { font-size: 15px; width: 15px; height: 15px; }
 
-  &:hover:not(:disabled) { background: #14532d; }
+  &:hover:not(:disabled) { background: t.$brand-mid; }
   &:disabled { background: #bdbdbd; cursor: not-allowed; }
 }
 
@@ -999,7 +997,7 @@ body.dragging * {
       border-bottom-color: #444 !important;
 
       &:hover    { background-color: #3d3d3d !important; }
-      &.mat-selected { background-color: $blue !important; color: white !important; }
+      &.mat-selected { background-color: t.$brand-deep !important; color: white !important; }
     }
   }
 }
@@ -1027,14 +1025,14 @@ body.dragging * {
     font-size: 16px;
     width: 16px;
     height: 16px;
-    color: $blue;
+    color: t.$brand;
   }
 }
 
 .beacon-label {
   font-size: 11px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   white-space: nowrap;
   opacity: 0;
   padding-right: 12px;

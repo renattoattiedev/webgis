@@ -1,14 +1,6 @@
 // Estilos compartilhados em src/styles/_dialog-base.scss
+@use '../../../../../styles/tokens' as t;
 
-$brand:        #1b5e20;
-$brand-mid:    #14532d;
-$brand-tint:   #eef5ec;
-$brand-tint-2: #e2eee0;
-$ink:          #1a2e1f;
-$ink-soft:     #4d6b52;
-$muted:        #6b8f74;
-$line:         #e7f0e7;
-$line-soft:    #edf4ea;
 $success:      #047857;
 $success-bg:   #ecfdf5;
 
@@ -25,15 +17,15 @@ $success-bg:   #ecfdf5;
   font-family: 'Geist', system-ui, sans-serif;
 
   ::ng-deep .mat-mdc-tab-header {
-    border-bottom: 1px solid $line;
+    border-bottom: 1px solid t.$line;
     --mdc-secondary-navigation-tab-container-height: 40px;
   }
   ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
-    font-size: 13px; font-weight: 600; color: $ink-soft;
+    font-size: 13px; font-weight: 600; color: t.$ink-soft;
   }
-  ::ng-deep .mat-mdc-tab--active .mdc-tab__text-label { color: $brand !important; }
+  ::ng-deep .mat-mdc-tab--active .mdc-tab__text-label { color: t.$brand-deep !important; }
   ::ng-deep .mdc-tab-indicator__content--underline {
-    border-color: $brand !important;
+    border-color: t.$brand !important;
     border-top-width: 2.5px !important;
   }
   ::ng-deep .mat-mdc-tab-body-content { overflow-y: auto; }
@@ -53,11 +45,11 @@ $success-bg:   #ecfdf5;
   align-items: center;
   padding: 8px 10px;
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 10px;
   transition: background 0.12s, border-color 0.12s;
 
-  &:hover { background: $line-soft; border-color: $brand-tint-2; }
+  &:hover { background: t.$line-soft; border-color: t.$brand-tint-2; }
 
   &.added {
     background: $success-bg;
@@ -68,7 +60,7 @@ $success-bg:   #ecfdf5;
 .ad-thumb {
   width: 44px; height: 44px; border-radius: 9px;
   overflow: hidden;
-  background: $line-soft; border: 1px solid $line;
+  background: t.$line-soft; border: 1px solid t.$line;
   flex-shrink: 0;
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
@@ -79,7 +71,7 @@ $success-bg:   #ecfdf5;
 }
 
 .ad-row-title {
-  font-size: 13.5px; font-weight: 600; color: $ink;
+  font-size: 13.5px; font-weight: 600; color: t.$ink;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
@@ -91,17 +83,17 @@ $success-bg:   #ecfdf5;
   font-size: 9.5px; font-weight: 700; letter-spacing: 0.5px;
   text-transform: uppercase;
   padding: 2px 7px; border-radius: 100px;
-  background: $line-soft; color: $ink-soft;
-  border: 1px solid $line;
+  background: t.$line-soft; color: t.$ink-soft;
+  border: 1px solid t.$line;
 
-  &.type-vec { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &.type-vec { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; }
   &.type-ras { background: #fff7e6; color: #b35a00; border-color: #ffe0b3; }
 }
 
 .ad-toggle {
   display: inline-flex; align-items: center; gap: 6px;
-  background: $brand; color: #fff;
-  border: 1px solid $brand;
+  background: t.$brand-deep; color: #fff;
+  border: 1px solid t.$brand-deep;
   border-radius: 8px;
   padding: 6px 12px;
   font-family: inherit; font-size: 12px; font-weight: 600;
@@ -109,7 +101,7 @@ $success-bg:   #ecfdf5;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
   svg { width: 12px; height: 12px; }
 
-  &:hover { background: $brand-mid; border-color: $brand-mid; }
+  &:hover { background: t.$brand-mid; border-color: t.$brand-mid; }
 
   &.is-added {
     background: $success; border-color: $success;
@@ -121,12 +113,12 @@ $success-bg:   #ecfdf5;
   display: flex; flex-direction: column; align-items: center;
   padding: 36px 16px;
   text-align: center;
-  color: $muted;
+  color: t.$muted;
   font-size: 13px;
 
   .ad-empty-icon {
     width: 44px; height: 44px; border-radius: 13px;
-    background: $brand-tint; color: $brand;
+    background: t.$brand-tint; color: t.$brand;
     display: inline-flex; align-items: center; justify-content: center;
     margin-bottom: 10px;
     svg { width: 22px; height: 22px; }

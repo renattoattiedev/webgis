@@ -1,3 +1,5 @@
+@use '../../../../styles/tokens' as t;
+
 $nav-h: 60px;
 $tabs-h: 53px;
 
@@ -119,10 +121,10 @@ $tabs-h: 53px;
   }
 
   &.active {
-    background: #eef5ec;
-    color: #1b5e20;
+    background: t.$brand-tint;
+    color: t.$brand;
     font-weight: 600;
-    svg { color: #1b5e20; }
+    svg { color: t.$brand; }
   }
 
   .collapsed & {

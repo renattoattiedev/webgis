@@ -60,92 +60,59 @@
 
 <!-- ── Hero ──────────────────────────────────────────────────────────────── -->
 <section class="idx-hero">
-  <!-- Fundo decorativo: retículo topográfico + halo + constelação -->
-  <svg class="idx-hero-bg" viewBox="0 0 1440 680"
-       preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-    <defs>
-      <radialGradient id="idxHalo" cx="80%" cy="20%" r="55%">
-        <stop offset="0%"   stop-color="rgba(120,170,255,0.25)"/>
-        <stop offset="100%" stop-color="rgba(120,170,255,0)"/>
-      </radialGradient>
-    </defs>
-    <rect width="1440" height="680" fill="url(#idxHalo)"/>
+  <div class="idx-hero-inner">
+    <div class="idx-hero-content">
+      <div class="idx-hero-copy">
+        <div class="idx-hero-eyebrow">
+          <span class="idx-hero-pulse"></span>
+          Infraestrutura de dados espaciais
+        </div>
+        <h1 class="idx-hero-title">
+          O território em<br>
+          <em class="idx-hero-title-em">uma só camada.</em>
+        </h1>
+        <p class="idx-hero-sub">
+          Consulte, cruze e publique dados geoespaciais de saneamento, urbanismo e infraestrutura — transforme dados complexos em inteligência espacial.
+        </p>
+      </div>
+      <div class="idx-hero-actions">
+        <button class="idx-hero-cta" (click)="acessarModulo(modules[0])">
+          Acessar o WebGIS
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+            <line x1="5" y1="12" x2="19" y2="12"/>
+            <polyline points="12 5 19 12 12 19"/>
+          </svg>
+        </button>
+        <button class="idx-hero-cta-ghost">Ver documentação</button>
+      </div>
 
-    <!-- topográfico -->
-    <g fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1">
-      <ellipse cx="1160" cy="140" rx="60"  ry="50"/>
-      <ellipse cx="1162" cy="142" rx="92"  ry="76"/>
-      <ellipse cx="1164" cy="144" rx="124" ry="102"/>
-      <ellipse cx="1166" cy="146" rx="156" ry="128"/>
-      <ellipse cx="1168" cy="148" rx="188" ry="154"/>
-      <ellipse cx="1170" cy="150" rx="220" ry="180"/>
-      <ellipse cx="1172" cy="152" rx="252" ry="206"/>
-      <ellipse cx="1174" cy="154" rx="284" ry="232"/>
-      <ellipse cx="1176" cy="156" rx="316" ry="258"/>
-      <ellipse cx="1178" cy="158" rx="348" ry="284"/>
-    </g>
-
-    <!-- grade horizontal sutil -->
-    <g stroke="rgba(255,255,255,0.03)" stroke-width="1">
-      <line x1="0" y1="75"  x2="1440" y2="75"/>
-      <line x1="0" y1="150" x2="1440" y2="150"/>
-      <line x1="0" y1="225" x2="1440" y2="225"/>
-      <line x1="0" y1="300" x2="1440" y2="300"/>
-      <line x1="0" y1="375" x2="1440" y2="375"/>
-      <line x1="0" y1="450" x2="1440" y2="450"/>
-      <line x1="0" y1="525" x2="1440" y2="525"/>
-    </g>
-
-    <!-- constelação de pontos -->
-    <g>
-      <circle cx="220" cy="440" r="3"  fill="rgba(180,210,255,0.85)"/>
-      <circle cx="220" cy="440" r="14" fill="none" stroke="rgba(180,210,255,0.2)"/>
-      <circle cx="340" cy="400" r="2.5" fill="rgba(180,210,255,0.7)"/>
-      <circle cx="510" cy="460" r="3"   fill="rgba(180,210,255,0.85)"/>
-      <circle cx="510" cy="460" r="14"  fill="none" stroke="rgba(180,210,255,0.2)"/>
-      <circle cx="680" cy="420" r="2.5" fill="rgba(180,210,255,0.7)"/>
-      <circle cx="180" cy="540" r="2.5" fill="rgba(180,210,255,0.7)"/>
-      <circle cx="420" cy="540" r="2.5" fill="rgba(180,210,255,0.7)"/>
-    </g>
-  </svg>
-
-  <div class="idx-hero-content">
-    <div class="idx-hero-eyebrow">
-      <span class="idx-hero-pulse"></span>
-      Plataforma operacional · v1.0
+      <!-- Faixa de indicadores -->
+      <div class="idx-hero-stats">
+        <ng-container *ngFor="let i of indicadores; let first = first">
+          <div class="idx-hero-stat-divider" *ngIf="!first"></div>
+          <div class="idx-hero-stat">
+            <span class="idx-hero-stat-num">{{ i.valor }}</span>
+            <span class="idx-hero-stat-label">{{ i.label }}</span>
+          </div>
+        </ng-container>
+      </div>
     </div>
-    <h1 class="idx-hero-title">
-      A base geoespacial<br>
-      <span class="idx-hero-title-em">do saneamento</span> Candango.
-    </h1>
-    <p class="idx-hero-sub">
-      Visualize, analise e gerencie os dados geoespaciais da RunForrestGIS em uma plataforma
-      unificada — temas, camadas e indicadores de todo o Distrito Federal.
-    </p>
-    <div class="idx-hero-actions">
-      <button class="idx-hero-cta" (click)="acessarModulo(modules[0])">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-          <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"/>
-          <line x1="8" y1="2" x2="8" y2="18"/>
-          <line x1="16" y1="6" x2="16" y2="22"/>
-        </svg>
-        Acessar o WebGIS
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-          <line x1="5" y1="12" x2="19" y2="12"/>
-          <polyline points="12 5 19 12 12 19"/>
-        </svg>
-      </button>
-      <button class="idx-hero-cta-ghost">Ver documentação</button>
-    </div>
-  </div>
 
-  <!-- Faixa de indicadores -->
-  <div class="idx-hero-stats">
-    <div class="idx-hero-stat" *ngFor="let i of indicadores; let last = last"
-         [class.is-last]="last">
-      <div class="idx-hero-stat-num">{{ i.valor }}</div>
-      <div class="idx-hero-stat-label">{{ i.label }}</div>
-    </div>
+    <picture class="idx-hero-art">
+      <source type="image/webp"
+              srcset="assets/imagens/hero-gis-668.webp 668w,
+                      assets/imagens/hero-gis-1024.webp 1024w,
+                      assets/imagens/hero-gis.webp 1536w"
+              sizes="(max-width: 768px) 334px, clamp(360px, 34vw, 560px)">
+      <img src="assets/imagens/hero-gis.png"
+           srcset="assets/imagens/hero-gis-668.png 668w,
+                   assets/imagens/hero-gis-1024.png 1024w,
+                   assets/imagens/hero-gis.png 1536w"
+           sizes="(max-width: 768px) 334px, clamp(360px, 34vw, 560px)"
+           width="1536" height="1536"
+           alt="" role="presentation"
+           fetchpriority="high" decoding="async">
+    </picture>
   </div>
 </section>
 

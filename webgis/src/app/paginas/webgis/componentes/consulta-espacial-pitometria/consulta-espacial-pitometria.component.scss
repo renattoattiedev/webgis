@@ -1,7 +1,5 @@
-$blue: #1b5e20;
-$blue-light: rgba(1, 73, 155, 0.08);
-$blue-border: rgba(1, 73, 155, 0.22);
-$text: #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted: #6b7280;
 $divider: rgba(0, 0, 0, 0.07);
 
@@ -47,8 +45,8 @@ $divider: rgba(0, 0, 0, 0.07);
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: rgba(1, 73, 155, 0.06);
-  border-bottom: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.06);
+  border-bottom: 1px solid rgba(t.$brand, 0.22);
   cursor: grab;
   user-select: none;
   &:active { cursor: grabbing; }
@@ -58,10 +56,10 @@ $divider: rgba(0, 0, 0, 0.07);
   display: flex;
   align-items: center;
   gap: 7px;
-  color: $text;
+  color: t.$brand-deep;
   font-size: 12px;
   font-weight: 700;
-  svg { color: $blue; flex-shrink: 0; }
+  svg { color: t.$brand; flex-shrink: 0; }
 }
 
 .cep-header-actions {
@@ -83,7 +81,7 @@ $divider: rgba(0, 0, 0, 0.07);
   color: $muted;
   transition: background 0.12s, color 0.12s;
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
-  &:hover { background: rgba(0,0,0,0.07); color: $text; }
+  &:hover { background: rgba(0,0,0,0.07); color: t.$brand-deep; }
   &--close:hover { background: rgba(239,68,68,0.1); color: #ef4444; }
 }
 
@@ -109,7 +107,7 @@ $divider: rgba(0, 0, 0, 0.07);
 .cep-section-label {
   font-size: 10px;
   font-weight: 700;
-  color: $blue;
+  color: t.$brand-deep;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   margin-bottom: 2px;
@@ -144,8 +142,8 @@ $divider: rgba(0, 0, 0, 0.07);
   cursor: pointer;
   transition: all 0.13s;
   mat-icon { font-size: 15px; width: 15px; height: 15px; }
-  &:hover { border-color: $blue-border; color: $blue; }
-  &--active { background: $blue-light; border-color: $blue; color: $blue; font-weight: 700; }
+  &:hover { border-color: rgba(t.$brand, 0.22); color: t.$brand-deep; }
+  &--active { background: rgba(t.$brand, 0.08); border-color: t.$brand; color: t.$brand; font-weight: 700; }
 }
 
 // ── Draw buttons ──────────────────────────────────────────────────────────────
@@ -162,16 +160,16 @@ $divider: rgba(0, 0, 0, 0.07);
   align-items: center;
   gap: 4px;
   padding: 10px 8px;
-  border: 1px dashed $blue-border;
+  border: 1px dashed rgba(t.$brand, 0.22);
   border-radius: 8px;
-  background: $blue-light;
-  color: $blue;
+  background: rgba(t.$brand, 0.08);
+  color: t.$brand;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.13s;
   mat-icon { font-size: 20px; width: 20px; height: 20px; }
-  &:hover:not(:disabled) { background: rgba(1,73,155,0.14); border-style: solid; }
+  &:hover:not(:disabled) { background: rgba(t.$brand, 0.14); border-style: solid; }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
@@ -206,8 +204,8 @@ $divider: rgba(0, 0, 0, 0.07);
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:focus-within {
-    border-color: $blue-border;
-    box-shadow: 0 0 0 3px $blue-light;
+    border-color: rgba(t.$brand, 0.22);
+    box-shadow: 0 0 0 3px rgba(t.$brand, 0.08);
   }
 }
 
@@ -232,14 +230,14 @@ $divider: rgba(0, 0, 0, 0.07);
   padding: 8px 14px;
   border: none;
   border-radius: 8px;
-  background: $blue;
+  background: t.$brand-deep;
   color: white;
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.13s;
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
-  &:hover:not(:disabled) { background: #14532d; }
+  &:hover:not(:disabled) { background: t.$brand-mid; }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
@@ -254,9 +252,9 @@ $divider: rgba(0, 0, 0, 0.07);
   border: 1px solid rgba(0,0,0,0.07);
 
   &--active {
-    color: $blue;
-    background: $blue-light;
-    border-color: $blue-border;
+    color: t.$brand;
+    background: rgba(t.$brand, 0.08);
+    border-color: rgba(t.$brand, 0.22);
     display: flex;
     align-items: center;
     gap: 5px;
@@ -308,13 +306,13 @@ $divider: rgba(0, 0, 0, 0.07);
 .cep-check {
   font-size: 11px;
   --mdc-checkbox-selected-checkmark-color: #ffffff;
-  --mdc-checkbox-selected-focus-icon-color: #1b5e20;
-  --mdc-checkbox-selected-hover-icon-color: #1b5e20;
-  --mdc-checkbox-selected-icon-color: #1b5e20;
-  --mdc-checkbox-selected-pressed-icon-color: #1b5e20;
-  --mdc-checkbox-unselected-hover-icon-color: #1b5e20;
-  --mdc-checkbox-unselected-focus-icon-color: #1b5e20;
-  --mdc-checkbox-unselected-pressed-icon-color: #1b5e20;
+  --mdc-checkbox-selected-focus-icon-color: #{t.$brand};
+  --mdc-checkbox-selected-hover-icon-color: #{t.$brand};
+  --mdc-checkbox-selected-icon-color: #{t.$brand};
+  --mdc-checkbox-selected-pressed-icon-color: #{t.$brand};
+  --mdc-checkbox-unselected-hover-icon-color: #{t.$brand};
+  --mdc-checkbox-unselected-focus-icon-color: #{t.$brand};
+  --mdc-checkbox-unselected-pressed-icon-color: #{t.$brand};
   ::ng-deep .mdc-label { font-size: 12px; color: #374151; }
   ::ng-deep .mdc-checkbox { transform: scale(0.85); }
 }
@@ -342,7 +340,7 @@ $divider: rgba(0, 0, 0, 0.07);
     width: 14px;
     height: 14px;
     border-radius: 3px;
-    accent-color: $blue;
+    accent-color: t.$brand;
     cursor: pointer;
     flex-shrink: 0;
   }
@@ -350,8 +348,8 @@ $divider: rgba(0, 0, 0, 0.07);
   &:hover { background: rgba(0,0,0,0.04); }
 
   &--active {
-    background: $blue-light;
-    color: $text;
+    background: rgba(t.$brand, 0.08);
+    color: t.$brand-deep;
     font-weight: 600;
   }
 }
@@ -413,7 +411,7 @@ $divider: rgba(0, 0, 0, 0.07);
 
 .cep-legenda-label {
   font-size: 10px;
-  color: $text;
+  color: t.$brand-deep;
 }
 
 // ── Loading ───────────────────────────────────────────────────────────────────
@@ -423,7 +421,7 @@ $divider: rgba(0, 0, 0, 0.07);
   align-items: center;
   gap: 10px;
   font-size: 11px;
-  color: $blue;
+  color: t.$brand-deep;
   padding: 2px 0;
 
   &--inline {
@@ -462,16 +460,16 @@ $divider: rgba(0, 0, 0, 0.07);
   align-items: center;
   gap: 4px;
   padding: 7px 10px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.22);
   border-radius: 7px;
   background: white;
   font-size: 11px;
   font-weight: 600;
-  color: $blue;
+  color: t.$brand-deep;
   cursor: pointer;
   transition: all 0.12s;
   mat-icon { font-size: 14px; width: 14px; height: 14px; }
-  &:hover:not(:disabled) { background: $blue-light; }
+  &:hover:not(:disabled) { background: rgba(t.$brand, 0.08); }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
@@ -484,14 +482,14 @@ $divider: rgba(0, 0, 0, 0.07);
   padding: 8px 12px;
   border: none;
   border-radius: 8px;
-  background: $blue;
+  background: t.$brand-deep;
   color: white;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   transition: background 0.13s;
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
-  &:hover:not(:disabled) { background: #14532d; }
+  &:hover:not(:disabled) { background: t.$brand-mid; }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
 
@@ -514,13 +512,13 @@ $divider: rgba(0, 0, 0, 0.07);
   justify-content: center;
   flex-shrink: 0;
 
-  svg { color: $blue; }
+  svg { color: t.$brand; }
 }
 
 .beacon-label {
   font-size: 11px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   white-space: nowrap;
   opacity: 0;
   padding-right: 12px;

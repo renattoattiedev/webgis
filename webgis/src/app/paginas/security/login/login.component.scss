@@ -1,7 +1,6 @@
 // ── Tokens ────────────────────────────────────────────────────────────────────
-$brand:      #1b5e20;
+@use '../../../../styles/tokens' as t;
 $brand-dark: #012d6b;
-$text:       #14532d;
 $muted:      #64748b;
 $border:     #d1dced;
 $bg:         #f0f5fb;
@@ -16,7 +15,7 @@ $error:      #dc2626;
 // ── Brand panel ───────────────────────────────────────────────────────────────
 .auth-visual {
   flex: 0 0 400px;
-  background: linear-gradient(158deg, $brand 0%, $brand-dark 100%);
+  background: linear-gradient(158deg, t.$brand 0%, $brand-dark 100%);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -103,7 +102,7 @@ $error:      #dc2626;
   background: #fff;
   border-radius: 16px;
   padding: 40px 36px;
-  box-shadow: 0 4px 28px rgba(1, 73, 155, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 28px rgba(38, 138, 151, 0.08), 0 1px 4px rgba(0, 0, 0, 0.04);
 }
 
 .af-head { margin-bottom: 30px; }
@@ -111,7 +110,7 @@ $error:      #dc2626;
 .af-title {
   font-size: 22px;
   font-weight: 700;
-  color: $text;
+  color: t.$ink;
   margin: 0 0 6px;
   letter-spacing: -0.3px;
 }
@@ -148,7 +147,7 @@ $error:      #dc2626;
   display: block;
   font-size: 12.5px;
   font-weight: 600;
-  color: $text;
+  color: t.$ink;
   margin-bottom: 6px;
   letter-spacing: 0.1px;
 }
@@ -164,7 +163,7 @@ $error:      #dc2626;
 
 .field-aux-link {
   font-size: 12px;
-  color: $brand;
+  color: t.$brand-deep;
   text-decoration: none;
   font-weight: 500;
   &:hover { text-decoration: underline; }
@@ -192,7 +191,7 @@ $error:      #dc2626;
   border: 1.5px solid $border;
   border-radius: 10px;
   font-size: 14px;
-  color: $text;
+  color: t.$ink;
   background: #fff;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -202,8 +201,8 @@ $error:      #dc2626;
   &::placeholder { color: #b0bbc9; }
 
   &:focus {
-    border-color: $brand;
-    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.08);
+    border-color: t.$brand;
+    box-shadow: 0 0 0 3px rgba(38, 138, 151, 0.08);
   }
 
   &--padded-r { padding-right: 44px; }
@@ -226,14 +225,14 @@ $error:      #dc2626;
   transition: color 0.13s;
 
   svg { width: 16px; height: 16px; }
-  &:hover { color: $brand; }
+  &:hover { color: t.$brand; }
 }
 
 // ── Primary button ────────────────────────────────────────────────────────────
 .btn-primary {
   width: 100%;
   height: 46px;
-  background: $brand;
+  background: t.$brand;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -253,7 +252,7 @@ $error:      #dc2626;
 
   &:hover:not(:disabled) {
     background: $brand-dark;
-    box-shadow: 0 4px 14px rgba(1, 73, 155, 0.30);
+    box-shadow: 0 4px 14px rgba(38, 138, 151, 0.30);
   }
 
   &:active:not(:disabled) { transform: scale(0.99); }
@@ -268,7 +267,7 @@ $error:      #dc2626;
   color: $muted;
 
   a {
-    color: $brand;
+    color: t.$brand-deep;
     font-weight: 600;
     text-decoration: none;
     &:hover { text-decoration: underline; }

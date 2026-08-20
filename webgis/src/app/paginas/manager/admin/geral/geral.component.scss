@@ -1,31 +1,30 @@
 // ─── Geral ───────────────────────────────────────────────────────────
-$brand:#1b5e20; $brand-mid:#14532d; $brand-tint:#eef5ec; $brand-tint-2:#e2eee0;
-$ink:#1a2e1f; $ink-soft:#4d6b52; $muted:#6b8f74; $line:#e7f0e7; $line-soft:#edf4ea;
+@use '../../../../../styles/tokens' as t;
 $gold:#eab308; $danger:#dc2626;
 $font-ui:'Geist',system-ui,sans-serif;
 $font-serif:'Instrument Serif',Georgia,serif;
 
-:host { display:block; font-family:$font-ui; color:$ink; }
+:host { display:block; font-family:$font-ui; color:t.$ink; }
 
 .gr-page { display:flex; flex-direction:column; gap:24px; }
 
 .gr-head {
-  h1 { margin:0 0 6px; font-size:22px; font-weight:600; color:$ink; letter-spacing:-0.4px;
-    em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+  h1 { margin:0 0 6px; font-size:22px; font-weight:600; color:t.$ink; letter-spacing:-0.4px;
+    em { font-family:$font-serif; font-style:italic; font-weight:400; color:t.$ink-soft; }
   }
-  p { margin:0; font-size:13.5px; color:$ink-soft; line-height:1.55; max-width:680px; }
+  p { margin:0; font-size:13.5px; color:t.$ink-soft; line-height:1.55; max-width:680px; }
 }
 
 .gr-loading {
   display:flex; align-items:center; gap:12px; padding:48px;
-  color:$ink-soft; font-size:13.5px;
+  color:t.$ink-soft; font-size:13.5px;
   justify-content:center;
 }
 
 .gr-form { display:flex; flex-direction:column; gap:20px; }
 
 .gr-group {
-  background:#fff; border:1px solid $line; border-radius:14px;
+  background:#fff; border:1px solid t.$line; border-radius:14px;
   padding:18px 20px;
   box-shadow:0 1px 3px rgba(11,37,69,0.03);
 }
@@ -34,9 +33,9 @@ $font-serif:'Instrument Serif',Georgia,serif;
   display:flex; align-items:center; gap:8px;
   margin:0 0 16px;
   font-size:13px; font-weight:700; letter-spacing:1.4px;
-  text-transform:uppercase; color:$brand;
+  text-transform:uppercase; color:t.$brand-deep;
   svg { width:14px; height:14px; }
-  border-bottom:1px solid $line; padding-bottom:12px;
+  border-bottom:1px solid t.$line; padding-bottom:12px;
 }
 
 .gr-items {
@@ -48,10 +47,10 @@ $font-serif:'Instrument Serif',Georgia,serif;
   display:flex; flex-direction:column; gap:6px;
   label {
     display:flex; align-items:center; justify-content:space-between;
-    font-size:12px; font-weight:600; color:$ink-soft;
+    font-size:12px; font-weight:600; color:t.$ink-soft;
     > span:first-child {
       font-family: ui-monospace, monospace;
-      color:$ink;
+      color:t.$ink;
     }
   }
 }
@@ -59,14 +58,14 @@ $font-serif:'Instrument Serif',Georgia,serif;
 .gr-input {
   width:100%; height:38px;
   background:#fff;
-  border:1px solid $line; border-radius:9px;
+  border:1px solid t.$line; border-radius:9px;
   padding:0 12px;
-  font-family:inherit; font-size:13px; color:$ink;
+  font-family:inherit; font-size:13px; color:t.$ink;
   outline:none;
   transition:border-color 0.15s, box-shadow 0.15s, background 0.15s;
-  &:focus { border-color:$brand; box-shadow:0 0 0 3px rgba(1,73,155,0.1); }
+  &:focus { border-color:t.$brand; box-shadow:0 0 0 3px rgba(38, 138, 151,0.1); }
   &--locked {
-    background:$line-soft; color:$muted; cursor:not-allowed;
+    background:t.$line-soft; color:t.$muted; cursor:not-allowed;
     font-family: ui-monospace, monospace; font-size:12px;
   }
 }
@@ -75,12 +74,12 @@ $font-serif:'Instrument Serif',Georgia,serif;
 
 .gr-edit-btn {
   width:38px; height:38px; border-radius:9px;
-  background:$brand-tint; color:$brand;
-  border:1px solid $brand-tint-2; cursor:pointer;
+  background:t.$brand-tint; color:t.$brand;
+  border:1px solid t.$brand-tint-2; cursor:pointer;
   display:inline-flex; align-items:center; justify-content:center;
   flex-shrink:0;
   svg { width:14px; height:14px; }
-  &:hover { background:$brand-tint-2; }
+  &:hover { background:t.$brand-tint-2; }
 }
 
 .gr-badge {
@@ -90,7 +89,7 @@ $font-serif:'Instrument Serif',Georgia,serif;
   padding:2px 7px; border-radius:100px;
   border:1px solid;
   svg { width:10px; height:10px; }
-  &--public    { background:$brand-tint;  color:$brand;  border-color:$brand-tint-2; }
+  &--public    { background:t.$brand-tint;  color:t.$brand;  border-color:t.$brand-tint-2; }
   &--sensitive { background:#fffbeb;      color:#b45309; border-color:#fde68a; }
   &--locked    { background:#fef2f2;      color:$danger; border-color:#fecaca; }
 }
@@ -117,12 +116,12 @@ $font-serif:'Instrument Serif',Georgia,serif;
   }
   .gr-group-count {
     display:inline-flex; align-items:center; justify-content:center;
-    font-size:11px; font-weight:700; color:$muted;
-    background:$line-soft; padding:2px 8px; border-radius:100px;
+    font-size:11px; font-weight:700; color:t.$muted;
+    background:t.$line-soft; padding:2px 8px; border-radius:100px;
     margin-left:auto;
   }
   .gr-group-chevron {
-    display:block; width:13px; height:13px; color:$muted; flex-shrink:0;
+    display:block; width:13px; height:13px; color:t.$muted; flex-shrink:0;
     transition:transform 0.15s;
     &--open { transform:rotate(180deg); }
   }
@@ -144,11 +143,11 @@ $font-serif:'Instrument Serif',Georgia,serif;
   .gr-input--locked { display:none; }
   .gr-locked-block {
     display:flex; flex-direction:column; gap:3px; justify-content:center;
-    min-height:48px; background:$line-soft; border:1px solid $line; border-radius:11px;
+    min-height:48px; background:t.$line-soft; border:1px solid t.$line; border-radius:11px;
     padding:9px 13px;
   }
   .gr-locked-value {
-    font-family:ui-monospace, monospace; font-size:12.5px; color:$muted;
+    font-family:ui-monospace, monospace; font-size:12.5px; color:t.$muted;
   }
-  .gr-locked-reason { font-size:11px; color:$muted; }
+  .gr-locked-reason { font-size:11px; color:t.$muted; }
 }

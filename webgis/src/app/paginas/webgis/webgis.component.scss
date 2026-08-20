@@ -1,6 +1,6 @@
+@use '../../../styles/tokens' as t;
 @import 'node_modules/ol/ol.css';
 
-$RunForrestGIS-blue: #1b5e20;
 $glass-btn-bg: rgba(255, 255, 255, 0.08);
 $glass-btn-border: rgba(255, 255, 255, 0.15);
 $header-icon-color: #c5cae9;
@@ -23,7 +23,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 
 // ── Header unificado ──────────────────────────────────────────────────────────
 .app-header {
-  background: $RunForrestGIS-blue;
+  background: t.$brand-deep;
   display: flex;
   align-items: center;
   padding: 0 14px;
@@ -67,17 +67,17 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   width: 30px;
   height: 30px;
   border-radius: 7px;
-  background: $RunForrestGIS-blue;
+  background: t.$brand;
   border: none;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  box-shadow: 0 1px 4px rgba(1, 73, 155, 0.35);
+  box-shadow: 0 1px 4px rgba(38, 138, 151, 0.35);
 }
 
 .launcher-pill-text {
-  color: $RunForrestGIS-blue;
+  color: t.$brand-deep;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 2px;
@@ -163,7 +163,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   height: 28px;
   border-radius: 50%;
   background: #fff;
-  color: $RunForrestGIS-blue;
+  color: t.$brand-deep;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -199,8 +199,8 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   min-width: 210px;
   background: #fff;
   border-radius: 12px;
-  box-shadow: 0 10px 32px rgba(1,73,155,0.18), 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid #e7f0e7;
+  box-shadow: 0 10px 32px rgba(38,138,151,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid t.$line;
   overflow: hidden;
   z-index: 500;
 }
@@ -209,15 +209,15 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   padding: 11px 16px 8px;
   font-size: 11px;
   font-weight: 700;
-  color: #6b8f74;
+  color: t.$muted;
   letter-spacing: 0.3px;
   text-transform: uppercase;
-  border-bottom: 1px solid #edf4ea;
+  border-bottom: 1px solid t.$line-soft;
 }
 
 .wg-dropdown-divider {
   height: 1px;
-  background: #edf4ea;
+  background: t.$line-soft;
   margin: 4px 0;
 }
 
@@ -231,15 +231,15 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   border: none;
   text-align: left;
   font-size: 13px;
-  color: #1a2e1f;
+  color: t.$ink;
   cursor: pointer;
   font-family: inherit;
   font-weight: 500;
   transition: background 0.12s;
 
-  svg { width: 14px; height: 14px; color: #6b8f74; flex-shrink: 0; }
+  svg { width: 14px; height: 14px; color: t.$muted; flex-shrink: 0; }
 
-  &:hover { background: #eef5ec; }
+  &:hover { background: t.$brand-tint; }
 
   &--danger {
     color: #dc2626;
@@ -358,7 +358,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   align-items: center;
   gap: 11px;
   padding: 16px 18px;
-  border-bottom: 1px solid #e9f0e8;
+  border-bottom: 1px solid t.$line;
   background: none;
   border-left: none;
   border-right: none;
@@ -373,7 +373,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   width: 42px;
   height: 42px;
   border-radius: 50%;
-  background: $RunForrestGIS-blue;
+  background: t.$brand;
   color: #fff;
   display: flex;
   align-items: center;
@@ -394,7 +394,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 .mobile-drawer-user-name {
   font-size: 14.5px;
   font-weight: 700;
-  color: #1a2e1f;
+  color: t.$ink;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -403,7 +403,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 .mobile-drawer-user-role {
   font-size: 11.5px;
   font-weight: 600;
-  color: #6b8f74;
+  color: t.$muted;
   letter-spacing: 0.3px;
   text-transform: uppercase;
 }
@@ -412,11 +412,11 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   width: 36px;
   height: 36px;
   border-radius: 9px;
-  background: #f2f7f1;
+  background: t.$bg;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #6b8f74;
+  color: t.$muted;
   flex-shrink: 0;
   transition: transform 0.15s ease;
 
@@ -429,8 +429,8 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   display: flex;
   flex-direction: column;
   padding: 4px 10px 10px;
-  border-bottom: 1px solid #e9f0e8;
-  background: #fbfdfa;
+  border-bottom: 1px solid t.$line;
+  background: t.$line-soft;
 }
 
 .mobile-drawer-account-item {
@@ -445,14 +445,14 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   text-align: left;
   font-size: 13.5px;
   font-weight: 600;
-  color: #1a2e1f;
+  color: t.$ink;
   cursor: pointer;
   font-family: inherit;
   outline: none;
 
-  mat-icon { font-size: 19px; width: 19px; height: 19px; color: #6b8f74; }
+  mat-icon { font-size: 19px; width: 19px; height: 19px; color: t.$muted; }
 
-  &:active { background: #f4f9f3; }
+  &:active { background: t.$line-soft; }
 
   &--danger {
     color: #dc2626;
@@ -462,20 +462,20 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 
 .mobile-drawer-account-divider {
   height: 1px;
-  background: #edf4ea;
+  background: t.$line-soft;
   margin: 4px 8px;
 }
 
 .mobile-drawer-login-wrap {
   padding: 16px 18px;
-  border-bottom: 1px solid #e9f0e8;
+  border-bottom: 1px solid t.$line;
 }
 
 .mobile-drawer-login-btn {
   width: 100%;
   height: 48px;
   border-radius: 12px;
-  background: $RunForrestGIS-blue;
+  background: t.$brand;
   color: #fff;
   font-size: 14px;
   font-weight: 700;
@@ -492,8 +492,8 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
     width: 100%;
     height: 48px;
     padding: 0 12px;
-    background: #f2f7f1;
-    border: 1px solid #e0ebdf;
+    background: t.$bg;
+    border: 1px solid t.$line;
     border-radius: 12px;
     gap: 9px;
     box-sizing: border-box;
@@ -506,21 +506,21 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 
   ::ng-deep app-search-address .custom-input {
     font-size: 14px;
-    color: #1a2e1f;
+    color: t.$ink;
 
     &::placeholder {
-      color: #8fa393;
+      color: t.$muted-2;
     }
   }
 
   ::ng-deep app-search-address .search-btn {
     order: 1;
     background: transparent;
-    color: #6b8f74;
+    color: t.$muted;
 
-    mat-icon { color: #6b8f74; }
+    mat-icon { color: t.$muted; }
 
-    &:hover { background: transparent; color: #6b8f74; }
+    &:hover { background: transparent; color: t.$muted; }
   }
 
   ::ng-deep app-search-address .suggestions {
@@ -528,7 +528,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
     width: 100%;
     margin-top: 6px;
     box-shadow: none;
-    border: 1px solid #e0ebdf;
+    border: 1px solid t.$line;
   }
 }
 
@@ -541,8 +541,8 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 
 // 4. Rodapé fixo
 .mobile-drawer-footer {
-  border-top: 1px solid #e9f0e8;
-  background: #fbfdfa;
+  border-top: 1px solid t.$line;
+  background: t.$line-soft;
   padding: 10px 14px calc(16px + env(safe-area-inset-bottom));
   display: flex;
   flex-direction: column;
@@ -559,13 +559,13 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   flex: 1;
   height: 46px;
   border-radius: 11px;
-  background: #f2f7f1;
-  border: 1px solid #e0ebdf;
+  background: t.$bg;
+  border: 1px solid t.$line;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  color: $RunForrestGIS-blue;
+  color: t.$brand-deep;
   font-size: 13.5px;
   font-weight: 600;
   cursor: pointer;
@@ -591,13 +591,13 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
   flex: 1;
   height: 40px;
   border-radius: 10px;
-  background: #f2f7f1;
-  border: 1px solid #e0ebdf;
+  background: t.$bg;
+  border: 1px solid t.$line;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
-  color: $RunForrestGIS-blue;
+  color: t.$brand-deep;
   font-size: 12.5px;
   font-weight: 600;
   cursor: pointer;
@@ -619,7 +619,7 @@ $bg-transparent-white: rgba(255, 255, 255, 0.8);
 
 .mobile-drawer-prefs-status {
   font-size: 11px;
-  color: #7e8f80;
+  color: t.$muted;
   text-align: center;
 }
 

@@ -1,7 +1,5 @@
-$blue:        #1b5e20;
-$blue-light:  rgba(1, 73, 155, 0.07);
-$blue-border: rgba(1, 73, 155, 0.18);
-$text:        #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted:       #6b7280;
 $divider:     rgba(0, 0, 0, 0.06);
 
@@ -12,15 +10,26 @@ $divider:     rgba(0, 0, 0, 0.06);
   top: 48px;
   right: -420px;
   width: 380px;
-  height: calc(100% - 48px);
+  // calc(100% - 48px) resolve contra o layout viewport, que no mobile não
+  // acompanha a barra de endereço/teclado — usa 100dvh para a altura real
+  // visível, senão o painel cresce além da tela e o rolamento interno quebra.
+  height: calc(100dvh - 48px);
   background: #fff;
-  border-left: 1px solid $blue-border;
+  border-left: 1px solid rgba(t.$brand, 0.18);
   box-shadow: -4px 0 24px rgba(0, 0, 0, 0.08);
   transition: right 0.28s cubic-bezier(0.4, 0, 0.2, 1);
-  z-index: 900;
+  z-index: 1200;
   font-family: system-ui, sans-serif;
 
   &.expanded { right: 0; }
+}
+
+@media (max-width: 768px) {
+  .side-panel {
+    width: 100%;
+    right: -100%;
+    height: calc(100dvh - 48px);
+  }
 }
 
 .drawer-panel {
@@ -54,17 +63,17 @@ $divider:     rgba(0, 0, 0, 0.06);
   flex-shrink: 0;
   width: 28px; height: 28px;
   border-radius: 7px;
-  background: $blue-light;
-  border: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.07);
+  border: 1px solid rgba(t.$brand, 0.18);
   display: flex; align-items: center; justify-content: center;
 
-  mat-icon { font-size: 15px; width: 15px; height: 15px; color: $blue; }
+  mat-icon { font-size: 15px; width: 15px; height: 15px; color: t.$brand; }
 }
 
 .title-text {
   font-size: 13px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -73,7 +82,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 .close-btn {
   flex-shrink: 0;
   width: 28px; height: 28px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.18);
   border-radius: 7px;
   background: transparent;
   cursor: pointer;
@@ -82,7 +91,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   transition: background 0.13s, color 0.13s;
 
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
-  &:hover { background: $blue-light; color: $blue; }
+  &:hover { background: rgba(t.$brand, 0.07); color: t.$brand; }
 }
 
 // ── Body / Tabs ───────────────────────────────────────────────────────────────
@@ -107,10 +116,10 @@ $divider:     rgba(0, 0, 0, 0.06);
 
   .mat-mdc-tab { min-width: 80px; font-size: 12px; }
 
-  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label { color: $blue; font-weight: 600; }
+  .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label { color: t.$brand-deep; font-weight: 600; }
   .mat-mdc-tab .mdc-tab__text-label { color: $muted; }
 
-  .mdc-tab-indicator__content--underline { border-color: $blue !important; }
+  .mdc-tab-indicator__content--underline { border-color: t.$brand !important; }
   .mat-mdc-tab-ripple, .mat-ripple { display: none; }
 
   .mat-mdc-tab-body-wrapper {
@@ -118,9 +127,14 @@ $divider:     rgba(0, 0, 0, 0.06);
     overflow: hidden;
   }
 
+  // O Material aplica overflow-y:hidden !important por padrão no MDC tab body;
+  // sem !important aqui essa regra perde a cascata mesmo sendo mais específica,
+  // e o conteúdo fica visível mas não rola por toque/mouse (só via scrollTop JS).
   .mat-mdc-tab-body-content {
-    overflow-y: auto;
+    overflow-y: auto !important;
     height: 100%;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior: contain;
   }
 }
 
@@ -168,7 +182,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 
 .info-value {
   flex: 1;
-  color: $text;
+  color: t.$brand-deep;
   font-size: 12px;
   word-break: break-word;
 }
@@ -189,7 +203,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 
   &--public       { background: rgba(5,150,105,.07); color: #065f46; border-color: rgba(5,150,105,.2); }
   &--private      { background: rgba(239,68,68,.06); color: #b91c1c; border-color: rgba(239,68,68,.2); }
-  &--institutional{ background: $blue-light; color: $blue; border-color: $blue-border; }
+  &--institutional{ background: rgba(t.$brand, 0.07); color: t.$brand; border-color: rgba(t.$brand, 0.18); }
 }
 
 // ── Tag chips ─────────────────────────────────────────────────────────────────
@@ -203,9 +217,9 @@ $divider:     rgba(0, 0, 0, 0.06);
 .tag-chip {
   font-size: 10.5px;
   font-weight: 500;
-  background: $blue-light;
-  color: $blue;
-  border: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.07);
+  color: t.$brand;
+  border: 1px solid rgba(t.$brand, 0.18);
   border-radius: 4px;
   padding: 1px 7px;
   white-space: nowrap;
@@ -222,10 +236,10 @@ $divider:     rgba(0, 0, 0, 0.06);
 .attr-group-title {
   font-size: 11.5px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   margin: 0 0 8px;
   padding-bottom: 6px;
-  border-bottom: 1px solid $blue-border;
+  border-bottom: 1px solid rgba(t.$brand, 0.18);
 }
 
 .attr-table {
@@ -258,7 +272,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 
 .attr-name {
   flex: 1;
-  color: $text;
+  color: t.$brand-deep;
 }
 
 .attr-type {
@@ -275,6 +289,8 @@ $divider:     rgba(0, 0, 0, 0.06);
   border-top: 1px solid $divider;
   max-height: 260px;
   overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   padding: 10px 14px 14px;
 }
 
@@ -284,10 +300,10 @@ $divider:     rgba(0, 0, 0, 0.06);
   gap: 6px;
   font-size: 11.5px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   margin-bottom: 10px;
 
-  mat-icon { font-size: 15px; width: 15px; height: 15px; color: $blue; }
+  mat-icon { font-size: 15px; width: 15px; height: 15px; color: t.$brand; }
 }
 
 .legend-list {
@@ -314,7 +330,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   max-width: 100%;
   height: auto;
   border-radius: 6px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.18);
 }
 
 .legend-unavailable {

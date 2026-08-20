@@ -1,35 +1,26 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Gestor de Conteúdo — casca (navbar + tabs)
-// Mesma identidade do componente Index/Dados (Geist + Instrument Serif + #1b5e20).
+// Mesma identidade do componente Index/Dados (Geist + Instrument Serif + #268A97).
 // As fontes devem ser carregadas globalmente no index.html.
 // ─────────────────────────────────────────────────────────────────────────────
+@use '../../../../styles/tokens' as t;
 
-$brand:        #1b5e20;
-$brand-mid:    #14532d;
 $brand-deep:   #012656;
-$brand-tint:   #eef5ec;
-$brand-tint-2: #e2eee0;
-$ink:          #1a2e1f;
-$ink-soft:     #4d6b52;
-$muted:        #6b8f74;
-$line:         #e7f0e7;
-$line-soft:    #edf4ea;
-$bg:           #f0f6ed;
 
 $font-ui:    'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
 $font-serif: 'Instrument Serif', Georgia, serif;
 
 :host {
   display: block;
-  background: $bg;
+  background: t.$bg;
   min-height: 100vh;
   font-family: $font-ui;
-  color: $ink;
+  color: t.$ink;
 }
 
 // ── Navbar ──────────────────────────────────────────────────────────────────
 .mgr-nav {
-  background: $brand;
+  background: t.$brand-deep;
   height: 60px;
   display: flex; align-items: center; justify-content: space-between;
   padding: 0 32px;
@@ -42,7 +33,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mgr-nav-logo {
   font-size: 13px; font-weight: 800; letter-spacing: 2px;
-  color: $brand; background: rgba(255,255,255,0.95);
+  color: t.$brand-deep; background: rgba(255,255,255,0.95);
   padding: 5px 11px; border-radius: 6px;
 }
 
@@ -75,7 +66,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mgr-nav-avatar {
   width: 30px; height: 30px; border-radius: 50%;
-  background: #fff; color: $brand;
+  background: #fff; color: t.$brand-deep;
   display: flex; align-items: center; justify-content: center;
   font-size: 12px; font-weight: 700;
 }
@@ -95,31 +86,31 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   min-width: 220px; z-index: 300;
   background: #fff;
   border-radius: 14px;
-  border: 1px solid $line;
-  box-shadow: 0 12px 36px rgba(1,73,155,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid t.$line;
+  box-shadow: 0 12px 36px rgba(38, 138, 151,0.18), 0 2px 8px rgba(0,0,0,0.08);
   overflow: hidden;
 }
 
 .mgr-nav-menu-header {
   padding: 12px 16px 8px;
   font-size: 11px; font-weight: 700; letter-spacing: 0.3px;
-  color: $muted; text-transform: uppercase;
-  border-bottom: 1px solid $line-soft;
+  color: t.$muted; text-transform: uppercase;
+  border-bottom: 1px solid t.$line-soft;
 }
 
-.mgr-nav-menu-div { height: 1px; background: $line-soft; margin: 4px 0; }
+.mgr-nav-menu-div { height: 1px; background: t.$line-soft; margin: 4px 0; }
 
 .mgr-nav-menu-item {
   width: 100%;
   display: flex; align-items: center; gap: 10px;
   padding: 10px 16px;
   background: none; border: none; text-align: left;
-  font-family: inherit; font-size: 13.5px; font-weight: 500; color: $ink;
+  font-family: inherit; font-size: 13.5px; font-weight: 500; color: t.$ink;
   cursor: pointer; transition: background 0.12s;
 
-  svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
+  svg { width: 15px; height: 15px; color: t.$muted; flex-shrink: 0; }
 
-  &:hover { background: $brand-tint; }
+  &:hover { background: t.$brand-tint; }
 
   &--danger {
     color: #dc2626;
@@ -131,7 +122,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 // ── Tabs ────────────────────────────────────────────────────────────────────
 .mgr-tabs {
   background: #fff;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid t.$line;
   padding: 0 32px;
   display: flex; align-items: center; gap: 4px;
   overflow-x: auto;
@@ -148,20 +139,20 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .mgr-tab {
   background: none; border: none;
   font-family: inherit; font-size: 13.5px; font-weight: 600;
-  color: $ink-soft;
+  color: t.$ink-soft;
   padding: 16px 18px;
   position: relative; cursor: pointer;
   white-space: nowrap;
   display: inline-flex; align-items: center; gap: 8px;
   transition: color 0.15s;
 
-  &:hover { color: $ink; }
+  &:hover { color: t.$ink; }
 
   &.active {
-    color: $brand;
+    color: t.$brand-deep;
     &::after {
       content: ""; position: absolute; left: 14px; right: 14px; bottom: -1px;
-      height: 2.5px; background: $brand; border-radius: 2px;
+      height: 2.5px; background: t.$brand; border-radius: 2px;
     }
   }
 }
@@ -183,18 +174,18 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mgr-empty-icon {
   width: 60px; height: 60px; border-radius: 18px;
-  background: $brand-tint; color: $brand;
+  background: t.$brand-tint; color: t.$brand;
   display: inline-flex; align-items: center; justify-content: center;
   margin-bottom: 18px;
   svg { width: 28px; height: 28px; }
 }
 
 .mgr-empty-title {
-  font-size: 20px; font-weight: 600; color: $ink; letter-spacing: -0.3px;
+  font-size: 20px; font-weight: 600; color: t.$ink; letter-spacing: -0.3px;
 }
 
 .mgr-empty-sub {
-  font-size: 14px; color: $muted; margin-top: 6px;
+  font-size: 14px; color: t.$muted; margin-top: 6px;
 }
 
 // ── Responsive ──────────────────────────────────────────────────────────────

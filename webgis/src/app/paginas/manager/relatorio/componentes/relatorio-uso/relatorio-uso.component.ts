@@ -62,7 +62,7 @@ export class RelatorioUsoComponent implements OnInit, OnDestroy {
         toolbar: { show: false },
         fontFamily: 'inherit',
       },
-      colors: ['#1b5e20'],
+      colors: ['#268A97'],
       plotOptions: { bar: { borderRadius: 3 } },
       dataLabels: { enabled: false },
       xaxis: {

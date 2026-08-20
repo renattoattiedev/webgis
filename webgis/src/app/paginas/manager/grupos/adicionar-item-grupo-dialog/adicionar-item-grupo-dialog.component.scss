@@ -1,32 +1,28 @@
 // Estilos compartilhados em src/styles/_dialog-base.scss
+@use '../../../../../styles/tokens' as t;
 
 // ── Tokens locais (espelham _dialog-base.scss) ──────────────────────────────
-$brand:      #1b5e20;
-$brand-tint2: #e2eee0;
-$ink:        #1a2e1f;
-$muted:      #6b8f74;
-$line:       #e7f0e7;
 $line-soft:  #f3f6fb;
 $danger:     #dc2626;
 
 .idedlg-busca {
   width: 100%;
   padding: 8px 12px;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 8px;
   margin-bottom: 12px;
   box-sizing: border-box;
   font-family: inherit;
   font-size: 13px;
-  color: $ink;
+  color: t.$ink;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
 
-  &::placeholder { color: $muted; }
-  &:hover { border-color: $brand-tint2; }
+  &::placeholder { color: t.$muted; }
+  &:hover { border-color: t.$brand-tint-2; }
   &:focus {
-    border-color: $brand;
-    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.12);
+    border-color: t.$brand;
+    box-shadow: 0 0 0 3px rgba(38, 138, 151, 0.12);
   }
 }
 
@@ -49,7 +45,7 @@ $danger:     #dc2626;
   }
 
   &:focus-visible {
-    outline: 2px solid $brand;
+    outline: 2px solid t.$brand;
     outline-offset: -2px;
   }
 }
@@ -57,14 +53,14 @@ $danger:     #dc2626;
 .idedlg-item-tipo {
   font-size: 11px;
   text-transform: uppercase;
-  color: $muted;
+  color: t.$muted;
 }
 
 .idedlg-item-loading,
 .idedlg-erro {
   padding: 20px 0;
   text-align: center;
-  color: $muted;
+  color: t.$muted;
 }
 
 .idedlg-erro {

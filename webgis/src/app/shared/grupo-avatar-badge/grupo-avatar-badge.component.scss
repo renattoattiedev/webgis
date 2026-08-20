@@ -1,3 +1,5 @@
+@use '../../../styles/tokens' as t;
+
 .gab-stack {
   display: inline-flex;
   align-items: center;
@@ -14,12 +16,12 @@
   align-items: center;
   justify-content: center;
   border: 2px solid #fff;
-  box-shadow: 0 0 0 1px #e7f0e7;
+  box-shadow: 0 0 0 1px t.$line;
   cursor: pointer;
   user-select: none;
 }
 
 .gab-overflow {
   background: #e0e2e6;
-  color: #4d6b52;
+  color: t.$ink-soft;
 }

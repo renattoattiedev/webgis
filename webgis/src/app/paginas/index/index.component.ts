@@ -77,11 +77,8 @@ export class IndexComponent implements OnInit {
   private carregarIndicadores(): void {
     this.fetchIndicadoresService.getIndicadores().subscribe((data) => {
       this.indicadores = [
+        { valor: String(data.camadasVetoriais + data.camadasRaster), label: 'camadas' },
         { valor: String(data.temas), label: 'temas ativos' },
-        { valor: String(data.grupos), label: 'grupos de camadas' },
-        { valor: String(data.camadasVetoriais), label: 'camadas vetoriais' },
-        { valor: String(data.camadasRaster), label: 'camadas raster' },
-        { valor: String(data.mapas), label: 'mapas publicados' },
         { valor: String(data.usuarios), label: 'usuários cadastrados' },
       ];
     });

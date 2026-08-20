@@ -1,8 +1,6 @@
 // ── Design tokens ─────────────────────────────────────────────────────────────
-$blue:        #1b5e20;
-$blue-light:  rgba(1, 73, 155, 0.07);
-$blue-border: rgba(1, 73, 155, 0.18);
-$text:        #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted:       #6b7280;
 
 // ── Dialog wrapper ────────────────────────────────────────────────────────────
@@ -22,8 +20,8 @@ $muted:       #6b7280;
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: rgba(1, 73, 155, 0.05);
-  border-bottom: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.05);
+  border-bottom: 1px solid rgba(t.$brand, 0.18);
   flex-shrink: 0;
 }
 
@@ -36,7 +34,7 @@ $muted:       #6b7280;
 .dialog-icon-wrap {
   width: 28px;
   height: 28px;
-  background: $blue;
+  background: t.$brand;
   border-radius: 7px;
   display: flex;
   align-items: center;
@@ -53,7 +51,7 @@ $muted:       #6b7280;
 .dialog-title {
   font-size: 13px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
 }
 
 .dialog-close-btn {
@@ -93,7 +91,7 @@ $muted:       #6b7280;
   padding: 0 10px;
   border: none;
   border-radius: 7px;
-  background: $blue;
+  background: t.$brand-deep;
   color: #fff;
   font-size: 11px;
   font-weight: 600;
@@ -102,14 +100,14 @@ $muted:       #6b7280;
 
   mat-icon { font-size: 14px; width: 14px; height: 14px; }
 
-  &:hover { background: #14532d; }
+  &:hover { background: t.$brand-mid; }
 
   &--outline {
     background: transparent;
     color: $muted;
     border: 1px solid rgba(0, 0, 0, 0.12);
 
-    &:hover { background: rgba(0, 0, 0, 0.05); color: $text; }
+    &:hover { background: rgba(0, 0, 0, 0.05); color: t.$brand-deep; }
   }
 }
 
@@ -133,17 +131,17 @@ $muted:       #6b7280;
   border-radius: 6px;
   margin: 1px 6px;
 
-  &:hover { background: $blue-light !important; }
+  &:hover { background: rgba(t.$brand, 0.07) !important; }
 
   &.mdc-list-item--selected {
-    color: $text !important;
-    background: $blue-light !important;
+    color: t.$brand-deep !important;
+    background: rgba(t.$brand, 0.07) !important;
   }
 }
 
 ::ng-deep .mat-mdc-list-option.mat-accent {
-  --mdc-checkbox-selected-icon-color: #1b5e20;
-  --mdc-checkbox-selected-focus-icon-color: #1b5e20;
-  --mdc-checkbox-selected-hover-icon-color: #1b5e20;
-  --mdc-checkbox-selected-pressed-icon-color: #1b5e20;
+  --mdc-checkbox-selected-icon-color: #{t.$brand};
+  --mdc-checkbox-selected-focus-icon-color: #{t.$brand};
+  --mdc-checkbox-selected-hover-icon-color: #{t.$brand};
+  --mdc-checkbox-selected-pressed-icon-color: #{t.$brand};
 }

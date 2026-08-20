@@ -1,3 +1,5 @@
+@use '../../../../../styles/tokens' as t;
+
 $modal-background-color: rgba(255, 255, 255, 0.92);
 $modal-shadow-color: rgba(0, 0, 0, 0.18);
 
@@ -70,17 +72,17 @@ $modal-shadow-color: rgba(0, 0, 0, 0.18);
   }
 
   &--active {
-    background: rgba(1, 73, 155, 0.1);
-    border-color: rgba(1, 73, 155, 0.28);
-    color: #1b5e20;
+    background: rgba(38, 138, 151, 0.1);
+    border-color: rgba(38, 138, 151, 0.28);
+    color: t.$brand;
 
     &:hover {
-      background: rgba(1, 73, 155, 0.16);
+      background: rgba(38, 138, 151, 0.16);
     }
   }
 
   &:focus-visible {
-    outline: 2px solid rgba(1, 73, 155, 0.5);
+    outline: 2px solid rgba(38, 138, 151, 0.5);
     outline-offset: 2px;
   }
 }
@@ -120,9 +122,9 @@ $modal-shadow-color: rgba(0, 0, 0, 0.18);
   top: 0;
   bottom: 0;
   width: 2px;
-  background: #1b5e20;
+  background: t.$brand;
   transform: translateX(-50%);
-  box-shadow: 0 0 10px rgba(1, 73, 155, 0.50);
+  box-shadow: 0 0 10px rgba(38, 138, 151, 0.50);
   cursor: ew-resize;
   z-index: 500;
   user-select: none;
@@ -134,21 +136,21 @@ $modal-shadow-color: rgba(0, 0, 0, 0.18);
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background: #1b5e20;
+  background: t.$brand;
   border-radius: 22px;
   padding: 10px 7px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 5px;
-  box-shadow: 0 4px 18px rgba(1, 73, 155, 0.45), 0 1px 4px rgba(0, 0, 0, 0.22);
+  box-shadow: 0 4px 18px rgba(38, 138, 151, 0.45), 0 1px 4px rgba(0, 0, 0, 0.22);
   cursor: ew-resize;
   transition: transform 0.1s ease, box-shadow 0.1s ease;
 
   &--dragging,
   &:hover {
     transform: translate(-50%, -50%) scale(1.08);
-    box-shadow: 0 6px 24px rgba(1, 73, 155, 0.55), 0 2px 6px rgba(0, 0, 0, 0.28);
+    box-shadow: 0 6px 24px rgba(38, 138, 151, 0.55), 0 2px 6px rgba(0, 0, 0, 0.28);
   }
 }
 
@@ -178,7 +180,7 @@ $modal-shadow-color: rgba(0, 0, 0, 0.18);
   padding: 4px 9px;
   font-size: 10px;
   font-weight: 700;
-  color: #14532d;
+  color: t.$brand-deep;
   white-space: nowrap;
   max-width: 140px;
   overflow: hidden;

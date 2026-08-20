@@ -1,0 +1,25 @@
+// ─────────────────────────────────────────────────────────────────────────────
+// Tokens — fonte única de verdade da paleta (RunForrestGIS / teal)
+// Ver design_handoff_tema_teal/README.md para as regras de contraste que
+// definem quando usar $brand (área de cor) vs $brand-deep (texto pequeno /
+// barra de navegação).
+// ─────────────────────────────────────────────────────────────────────────────
+
+$brand:        #268A97; // área de cor: FAB, chips ativos, tiles, indicador de aba, toggles, foco de campo
+$brand-deep:   #1D707C; // nav, botões cheios com rótulo <14px, texto/ícone de marca <14px sobre branco (5,74:1)
+$brand-mid:    #1A626D; // hover / pressed
+$brand-tint:   #E8F4F6;
+$brand-tint-2: #CDE6EA;
+$ink:          #102C31;
+$ink-soft:     #3C5F65;
+$muted:        #6A8A90;
+$muted-2:      #A3BEC3;
+$line:         #DDEBED;
+$line-soft:    #E9F3F4;
+$bg:           #EFF6F7;
+
+// Estados — inalterados pela troca de tema
+$danger:       #dc2626;
+$warn:         #b45309;
+$success:      #047857;
+$gold:         #eab308;

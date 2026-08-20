@@ -1,19 +1,9 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Maps — IDE RunForrestGIS
 // ─────────────────────────────────────────────────────────────────────────────
+@use '../../../../styles/tokens' as t;
 
-$brand:        #1b5e20;
-$brand-mid:    #14532d;
 $brand-deep:   #012656;
-$brand-tint:   #eef5ec;
-$brand-tint-2: #e2eee0;
-$ink:          #1a2e1f;
-$ink-soft:     #4d6b52;
-$muted:        #6b8f74;
-$muted-2:      #a9bcab;
-$line:         #e7f0e7;
-$line-soft:    #edf4ea;
-$bg:           #f0f6ed;
 $danger:       #dc2626;
 $success:      #047857;
 
@@ -22,9 +12,9 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 :host {
   display: block;
-  background: $bg;
+  background: t.$bg;
   font-family: $font-ui;
-  color: $ink;
+  color: t.$ink;
 }
 
 * { box-sizing: border-box; }
@@ -34,7 +24,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display: flex; align-items: center; gap: 10px;
   padding: 10px 20px;
   background: #fff;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid t.$line;
   position: relative; z-index: 10;
   min-height: 56px;
 }
@@ -44,21 +34,21 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   min-width: 0;
   flex-shrink: 0;
   padding: 4px 10px 4px 8px;
-  background: $line-soft;
-  border: 1px solid $line;
+  background: t.$line-soft;
+  border: 1px solid t.$line;
   border-radius: 10px;
 }
 
 .mp-bar-icon {
   width: 24px; height: 24px; border-radius: 6px;
-  background: $brand-tint; color: $brand;
+  background: t.$brand-tint; color: t.$brand;
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   svg { width: 13px; height: 13px; }
 }
 
 .mp-title {
-  margin: 0; font-size: 13.5px; font-weight: 600; color: $ink;
+  margin: 0; font-size: 13.5px; font-weight: 600; color: t.$ink;
   letter-spacing: -0.1px; line-height: 1.2;
   cursor: text;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -66,31 +56,31 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 }
 
 .mp-title-edit {
-  border: 1px solid $brand;
+  border: 1px solid t.$brand;
   background: #fff;
   border-radius: 6px;
   padding: 4px 8px;
-  font-family: inherit; font-size: 13px; font-weight: 600; color: $ink;
+  font-family: inherit; font-size: 13px; font-weight: 600; color: t.$ink;
   outline: none;
-  box-shadow: 0 0 0 3px rgba(1,73,155,0.1);
+  box-shadow: 0 0 0 3px rgba(38, 138, 151,0.1);
   min-width: 180px;
 }
 
 .mp-title-new {
   width: 22px; height: 22px; border-radius: 6px;
-  background: $brand; color: #fff;
+  background: t.$brand; color: #fff;
   border: none; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   flex-shrink: 0;
   transition: background 0.15s, transform 0.12s;
   svg { width: 12px; height: 12px; }
-  &:hover { background: $brand-mid; }
+  &:hover { background: t.$brand-mid; }
   &:active { transform: scale(0.94); }
 }
 
 .mp-bar-divider {
   width: 1px; height: 22px;
-  background: $line;
+  background: t.$line;
   flex-shrink: 0;
 }
 
@@ -100,7 +90,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mp-tool {
   display: inline-flex; align-items: center; gap: 6px;
-  background: transparent; color: $ink-soft;
+  background: transparent; color: t.$ink-soft;
   border: 1px solid transparent;
   border-radius: 8px;
   padding: 7px 11px;
@@ -109,25 +99,25 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
   svg { width: 14px; height: 14px; }
 
-  &:hover { background: $brand-tint; color: $brand; }
-  &.active { background: $brand-tint; color: $brand; border-color: $brand-tint-2; font-weight: 600; }
+  &:hover { background: t.$brand-tint; color: t.$brand; }
+  &.active { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; font-weight: 600; }
 
   &--primary {
-    background: $brand; color: #fff; font-weight: 600;
-    &:hover { background: $brand-mid; color: #fff; }
+    background: t.$brand; color: #fff; font-weight: 600;
+    &:hover { background: t.$brand-mid; color: #fff; }
   }
 }
 
 .mp-tool-icon {
   width: 32px; height: 32px; border-radius: 8px;
-  background: transparent; color: $ink-soft;
+  background: transparent; color: t.$ink-soft;
   border: 1px solid transparent;
   display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer; flex-shrink: 0;
   transition: background 0.15s, color 0.15s, border-color 0.15s;
   svg { width: 14px; height: 14px; }
-  &:hover { background: $brand-tint; color: $brand; }
-  &.active { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &:hover { background: t.$brand-tint; color: t.$brand; }
+  &.active { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; }
 }
 
 // ── Busca ───────────────────────────────────────────────────────────────────
@@ -139,42 +129,42 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mp-search {
   display: flex; align-items: center; gap: 8px;
-  background: $line-soft;
-  border: 1px solid $line;
+  background: t.$line-soft;
+  border: 1px solid t.$line;
   border-radius: 100px;
   padding: 4px 4px 4px 14px;
   transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
 
   &:focus-within {
-    background: #fff; border-color: $brand;
-    box-shadow: 0 0 0 3px rgba(1,73,155,0.1);
+    background: #fff; border-color: t.$brand;
+    box-shadow: 0 0 0 3px rgba(38, 138, 151,0.1);
   }
 
-  > svg { width: 14px; height: 14px; color: $muted; flex-shrink: 0; }
+  > svg { width: 14px; height: 14px; color: t.$muted; flex-shrink: 0; }
 
   input {
     flex: 1; border: none; outline: none;
     background: transparent;
-    font-family: inherit; font-size: 13px; color: $ink;
+    font-family: inherit; font-size: 13px; color: t.$ink;
     min-width: 0;
-    &::placeholder { color: $muted; }
+    &::placeholder { color: t.$muted; }
   }
 }
 
 .mp-search-btn {
   width: 30px; height: 30px; border-radius: 50%;
-  background: $brand; color: #fff;
+  background: t.$brand; color: #fff;
   border: none; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   transition: background 0.15s;
   svg { width: 12px; height: 12px; }
-  &:hover { background: $brand-mid; }
+  &:hover { background: t.$brand-mid; }
 }
 
 .mp-suggestions {
   position: absolute; top: calc(100% + 6px); left: 0; right: 0;
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 12px;
   box-shadow: 0 12px 30px rgba(11,37,69,0.15);
   list-style: none; margin: 0; padding: 6px;
@@ -184,13 +174,13 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   li {
     display: flex; align-items: center; gap: 9px;
     padding: 9px 10px; border-radius: 8px;
-    font-size: 13px; color: $ink;
+    font-size: 13px; color: t.$ink;
     cursor: pointer;
     transition: background 0.12s;
-    svg { width: 13px; height: 13px; color: $muted; flex-shrink: 0; }
+    svg { width: 13px; height: 13px; color: t.$muted; flex-shrink: 0; }
     span { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    &:hover { background: $brand-tint; color: $brand;
-      svg { color: $brand; }
+    &:hover { background: t.$brand-tint; color: t.$brand;
+      svg { color: t.$brand; }
     }
   }
 }
@@ -206,7 +196,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .mp-sidebar {
   width: 0;
   background: #fff;
-  border-right: 1px solid $line;
+  border-right: 1px solid t.$line;
   overflow: hidden;
   transition: width 0.24s cubic-bezier(0.32, 0.72, 0, 1);
   flex-shrink: 0;
@@ -222,7 +212,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mp-map-view {
   width: 100%; height: 100%;
-  background: $line-soft;
+  background: t.$line-soft;
   position: relative;
 }
 
@@ -241,13 +231,13 @@ $font-serif: 'Instrument Serif', Georgia, serif;
       width: 40px !important; height: 40px !important;
       border-radius: 50% !important;
       background: #fff !important;
-      color: $ink !important;
+      color: t.$ink !important;
       box-shadow: 0 2px 8px rgba(11,37,69,0.18) !important;
       margin-bottom: 4px !important;
       font-size: 16px !important;
       font-weight: 600 !important;
-      border: 1px solid $line !important;
-      &:hover { background: $brand-tint !important; color: $brand !important; }
+      border: 1px solid t.$line !important;
+      &:hover { background: t.$brand-tint !important; color: t.$brand !important; }
     }
   }
 
@@ -276,12 +266,12 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     width: 40px !important; height: 40px !important;
     border-radius: 50% !important;
     background: #fff !important;
-    color: $ink !important;
+    color: t.$ink !important;
     box-shadow: 0 2px 8px rgba(11,37,69,0.18) !important;
-    border: 1px solid $line !important;
+    border: 1px solid t.$line !important;
     display: inline-flex !important; align-items: center; justify-content: center;
     transition: background 0.15s, color 0.15s;
-    &:hover { background: $brand-tint !important; color: $brand !important; }
+    &:hover { background: t.$brand-tint !important; color: t.$brand !important; }
   }
 }
 
@@ -302,17 +292,17 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   top: auto !important;
   border-radius: 10px;
   overflow: hidden;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   box-shadow: 0 6px 18px rgba(11,37,69,0.18);
 
   button {
     background: #fff !important;
-    color: $brand !important;
+    color: t.$brand !important;
     border-radius: 6px !important;
   }
   .ol-overviewmap-map {
     border: none !important;
-    background: $line-soft;
+    background: t.$line-soft;
   }
 }
 
@@ -329,18 +319,18 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   font-family: $font-ui;
 
   ::ng-deep .mat-mdc-tab-header {
-    border-bottom: 1px solid $line;
+    border-bottom: 1px solid t.$line;
     padding: 0 12px;
     --mdc-secondary-navigation-tab-container-height: 42px;
   }
   ::ng-deep .mat-mdc-tab .mdc-tab__text-label {
     font-family: $font-ui;
     font-size: 13px; font-weight: 600;
-    color: $ink-soft;
+    color: t.$ink-soft;
   }
-  ::ng-deep .mat-mdc-tab--active .mdc-tab__text-label { color: $brand !important; }
+  ::ng-deep .mat-mdc-tab--active .mdc-tab__text-label { color: t.$brand-deep !important; }
   ::ng-deep .mdc-tab-indicator__content--underline {
-    border-color: $brand !important;
+    border-color: t.$brand !important;
     border-top-width: 2.5px !important;
   }
   ::ng-deep .mat-mdc-tab-body-wrapper { flex: 1; min-height: 0; }
@@ -350,10 +340,10 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .mp-tab-body { padding: 12px 14px 18px; }
 
 .mp-tab-hint {
-  font-size: 11.5px; color: $muted;
+  font-size: 11.5px; color: t.$muted;
   padding: 8px 10px; margin-bottom: 10px;
-  background: $line-soft; border-radius: 8px;
-  border: 1px dashed $line;
+  background: t.$line-soft; border-radius: 8px;
+  border: 1px dashed t.$line;
 }
 
 // ── Layers list ─────────────────────────────────────────────────────────────
@@ -369,30 +359,30 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   align-items: center;
   padding: 8px 8px 8px 4px;
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 10px;
   transition: background 0.12s, border-color 0.12s, box-shadow 0.15s;
 
   &:hover {
-    background: $line-soft;
-    border-color: $brand-tint-2;
+    background: t.$line-soft;
+    border-color: t.$brand-tint-2;
   }
 }
 
 .mp-layer-grip {
   width: 22px; height: 26px; border-radius: 6px;
-  color: $muted; cursor: grab;
+  color: t.$muted; cursor: grab;
   display: inline-flex; align-items: center; justify-content: center;
   svg { width: 13px; height: 13px; }
-  &:hover { color: $brand; background: $brand-tint; }
+  &:hover { color: t.$brand; background: t.$brand-tint; }
   &:active { cursor: grabbing; }
 }
 
 .mp-layer-thumb {
   width: 42px; height: 42px; border-radius: 8px;
   overflow: hidden;
-  background: $line-soft;
-  border: 1px solid $line;
+  background: t.$line-soft;
+  border: 1px solid t.$line;
   img { width: 100%; height: 100%; object-fit: cover; display: block; }
 }
 
@@ -402,7 +392,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 }
 
 .mp-layer-title {
-  font-size: 13px; font-weight: 600; color: $ink;
+  font-size: 13px; font-weight: 600; color: t.$ink;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
 }
 
@@ -414,17 +404,17 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   padding: 2px 7px; border-radius: 100px;
   border: 1px solid;
 
-  &.type-vec { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &.type-vec { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; }
   &.type-ras { background: #fff7e6; color: #b35a00; border-color: #ffe0b3; }
 }
 
 .mp-layer-more {
   width: 28px; height: 28px; border-radius: 7px;
   background: transparent; border: 1px solid transparent;
-  color: $muted; cursor: pointer;
+  color: t.$muted; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   svg { width: 14px; height: 14px; }
-  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &:hover { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; }
 }
 
 // Toggle de visibilidade — só existe na linha de camada mobile (v2); no
@@ -433,10 +423,10 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display: none;
   width: 40px; height: 40px; border-radius: 9px;
   background: transparent; border: none;
-  color: $brand; cursor: pointer;
+  color: t.$brand; cursor: pointer;
   align-items: center; justify-content: center;
   svg { width: 16px; height: 16px; }
-  &.is-hidden { color: $muted-2; }
+  &.is-hidden { color: t.$muted-2; }
 }
 
 ::ng-deep .mp-menu-danger {
@@ -447,11 +437,11 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 // CDK drag preview
 ::ng-deep .cdk-drag-preview {
   background: #fff !important;
-  border: 1px solid $brand !important;
+  border: 1px solid t.$brand !important;
   border-radius: 10px;
-  box-shadow: 0 12px 32px rgba(1,73,155,0.18) !important;
+  box-shadow: 0 12px 32px rgba(38, 138, 151,0.18) !important;
 }
-::ng-deep .cdk-drag-placeholder { opacity: 0.3; background: $brand-tint; }
+::ng-deep .cdk-drag-placeholder { opacity: 0.3; background: t.$brand-tint; }
 
 // ── Empty state ─────────────────────────────────────────────────────────────
 .mp-layers-empty {
@@ -462,15 +452,15 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mp-empty-icon {
   width: 52px; height: 52px; border-radius: 14px;
-  background: $brand-tint; color: $brand;
+  background: t.$brand-tint; color: t.$brand;
   display: inline-flex; align-items: center; justify-content: center;
   margin-bottom: 12px;
   svg { width: 24px; height: 24px; }
 }
 
-.mp-empty-title { font-size: 14px; font-weight: 600; color: $ink; }
-.mp-empty-sub { font-size: 12px; color: $muted; margin-top: 6px; line-height: 1.5;
-  strong { color: $brand; font-weight: 600; }
+.mp-empty-title { font-size: 14px; font-weight: 600; color: t.$ink; }
+.mp-empty-sub { font-size: 12px; color: t.$muted; margin-top: 6px; line-height: 1.5;
+  strong { color: t.$brand-deep; font-weight: 600; }
 }
 .mp-empty-sub-mobile { display: none; }
 
@@ -479,13 +469,13 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display: flex; flex-direction: column; gap: 12px;
 }
 .mp-legend-item {
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 10px;
   padding: 12px;
-  background: $line-soft;
+  background: t.$line-soft;
   h3 {
     margin: 0 0 8px;
-    font-size: 12px; font-weight: 600; color: $ink;
+    font-size: 12px; font-weight: 600; color: t.$ink;
   }
   img { display: block; max-width: 100%; height: auto; border-radius: 6px; }
 }
@@ -496,7 +486,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   width: 280px;
   z-index: 100;
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 14px;
   box-shadow: 0 16px 40px -10px rgba(11,37,69,0.22), 0 4px 12px rgba(11,37,69,0.08);
   padding: 16px;
@@ -543,7 +533,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   // ── Superfícies compartilhadas do cromo flutuante ─────────────────────────
   $m2-chrome-surface: rgba(255, 255, 255, 0.94);
-  $m2-chrome-border: $line;
+  $m2-chrome-border: t.$line;
   $m2-chrome-shadow: 0 2px 8px rgba(11, 37, 69, 0.14);
   $m2-control-surface: rgba(255, 255, 255, 0.90);
   $m2-control-border: rgba(11, 37, 69, 0.08);
@@ -568,10 +558,10 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     border: 1px solid $m2-chrome-border;
     box-shadow: $m2-chrome-shadow;
     display: inline-flex; align-items: center; justify-content: center;
-    color: $ink; cursor: pointer;
+    color: t.$ink; cursor: pointer;
     svg { width: 17px; height: 17px; }
   }
-  .mp-m2-icon-btn { color: $ink-soft; svg { width: 16px; height: 16px; } }
+  .mp-m2-icon-btn { color: t.$ink-soft; svg { width: 16px; height: 16px; } }
 
   .mp-m2-title-chip,
   .mp-m2-title-input {
@@ -589,7 +579,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   }
 
   .mp-m2-title-text {
-    font-size: 13px; font-weight: 600; color: $ink;
+    font-size: 13px; font-weight: 600; color: t.$ink;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
@@ -602,9 +592,9 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     flex: 1;
     height: 36px; padding: 0 13px; border-radius: 100px;
     background: #fff;
-    border: 1px solid $brand;
+    border: 1px solid t.$brand;
     box-shadow: 0 0 0 3px rgba(27, 94, 32, 0.10);
-    font-family: inherit; font-size: 14px; font-weight: 600; color: $ink;
+    font-family: inherit; font-size: 14px; font-weight: 600; color: t.$ink;
     outline: none;
   }
 
@@ -623,24 +613,24 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     display: flex; align-items: center; gap: 8px;
     height: 44px;
     background: #fff;
-    border: 1px solid $brand;
+    border: 1px solid t.$brand;
     border-radius: 100px;
     padding: 0 6px 0 14px;
     box-shadow: 0 4px 16px rgba(11, 37, 69, 0.16), 0 0 0 3px rgba(27, 94, 32, 0.10);
 
-    svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
+    svg { width: 15px; height: 15px; color: t.$muted; flex-shrink: 0; }
 
     input {
       flex: 1; min-width: 0; border: none; outline: none;
       background: transparent;
-      font-family: inherit; font-size: 13.5px; color: $ink;
-      &::placeholder { color: $muted; }
+      font-family: inherit; font-size: 13.5px; color: t.$ink;
+      &::placeholder { color: t.$muted; }
     }
   }
 
   .mp-m2-search-clear {
     width: 34px; height: 34px; border-radius: 50%; flex-shrink: 0;
-    background: $line-soft; color: $ink-soft;
+    background: t.$line-soft; color: t.$ink-soft;
     border: none; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
     svg { width: 14px; height: 14px; }
@@ -649,7 +639,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   .mp-m2-suggestions {
     list-style: none; margin: 8px 0 0; padding: 6px;
     background: #fff;
-    border: 1px solid $line;
+    border: 1px solid t.$line;
     border-radius: 14px;
     box-shadow: 0 8px 24px rgba(11, 37, 69, 0.16);
     max-height: 320px; overflow-y: auto;
@@ -658,9 +648,9 @@ $font-serif: 'Instrument Serif', Georgia, serif;
       display: flex; align-items: center; gap: 11px;
       height: 52px; padding: 0 8px;
       cursor: pointer;
-      border-bottom: 1px solid $line-soft;
+      border-bottom: 1px solid t.$line-soft;
       &:last-child { border-bottom: none; }
-      svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
+      svg { width: 15px; height: 15px; color: t.$muted; flex-shrink: 0; }
     }
   }
 
@@ -668,10 +658,10 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     display: flex; flex-direction: column; gap: 2px; min-width: 0;
   }
   .mp-m2-suggestion-title {
-    font-size: 13.5px; color: $ink;
+    font-size: 13.5px; color: t.$ink;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .mp-m2-suggestion-sub { font-size: 11px; color: $muted; }
+  .mp-m2-suggestion-sub { font-size: 11px; color: t.$muted; }
 
   // ── 3 · Cluster de navegação: zoom (OL real) + home/local/envelope ───────
   .mp-stage .mp-map-view {
@@ -708,7 +698,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
         background: transparent !important;
         border: none !important;
         box-shadow: none !important;
-        color: $ink-soft !important;
+        color: t.$ink-soft !important;
         // OL's base ol.css sets `line-height:.4em` (relative to an inherited
         // font-size), que descentraliza o glifo "+/−" para o topo do botão —
         // display:flex ignora line-height e centraliza de verdade.
@@ -745,12 +735,12 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     background: $m2-control-surface;
     border: 1px solid $m2-control-border;
     box-shadow: $m2-control-shadow;
-    color: $muted;
+    color: t.$muted;
     cursor: pointer;
     svg { width: 14px; height: 14px; transition: transform 0.15s; }
 
     &.is-open {
-      background: $brand; border-color: $brand; color: #fff;
+      background: t.$brand; border-color: t.$brand; color: #fff;
       svg { transform: rotate(180deg); }
     }
   }
@@ -793,10 +783,10 @@ $font-serif: 'Instrument Serif', Georgia, serif;
       border-radius: 0 !important;
       background: transparent !important;
       box-shadow: none !important;
-      color: $brand !important;
+      color: t.$brand !important;
       display: inline-flex !important; align-items: center; justify-content: center;
 
-      &.active { background: $brand-tint !important; }
+      &.active { background: t.$brand-tint !important; }
     }
 
     ::ng-deep .mat-icon {
@@ -830,17 +820,17 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     transform: translateX(-50%);
     height: 38px; padding: 0 15px; border-radius: 100px;
     background: rgba(255, 255, 255, 0.96);
-    border: 1px solid $line;
+    border: 1px solid t.$line;
     box-shadow: 0 4px 16px rgba(11, 37, 69, 0.18);
-    font-family: inherit; font-size: 12.5px; font-weight: 600; color: $ink;
+    font-family: inherit; font-size: 12.5px; font-weight: 600; color: t.$ink;
     cursor: pointer; z-index: 20;
     svg:first-child { width: 14px; height: 14px; }
     svg:last-child { width: 12px; height: 12px; }
   }
 
   .mp-m2-layers-pill-badge {
-    font-size: 11px; font-weight: 700; color: $brand;
-    background: $brand-tint; padding: 2px 8px; border-radius: 100px;
+    font-size: 11px; font-weight: 700; color: t.$brand;
+    background: t.$brand-tint; padding: 2px 8px; border-radius: 100px;
   }
 
   // ── Folha de camadas: 2 alturas (52% / 88%) + repouso sem barra fixa ─────
@@ -860,7 +850,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .mp-stage[data-sheet-state="mid"] .mp-sidebar,
   .mp-stage[data-sheet-state="full"] .mp-sidebar {
-    border-top: 1px solid $line;
+    border-top: 1px solid t.$line;
     box-shadow: 0 -10px 34px rgba(11, 37, 69, 0.20);
   }
   .mp-stage[data-sheet-state="mid"]  .mp-sidebar { height: 52%; }
@@ -880,32 +870,32 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .mp-m2-sheet-handle {
     width: 44px; height: 4px; border-radius: 2px;
-    background: $brand-tint-2;
+    background: t.$brand-tint-2;
   }
 
   .mp-m2-sheet-tabs {
     display: flex; align-items: center; gap: 4px;
     padding: 2px 12px 0;
-    border-bottom: 1px solid $line;
+    border-bottom: 1px solid t.$line;
   }
 
   .mp-m2-sheet-tab {
     padding: 10px 12px;
     background: none; border: none; cursor: pointer;
-    font-family: inherit; font-size: 13px; font-weight: 600; color: $ink-soft;
+    font-family: inherit; font-size: 13px; font-weight: 600; color: t.$ink-soft;
     position: relative;
 
     .badge {
-      font-size: 11px; font-weight: 700; color: $brand;
-      background: $brand-tint; padding: 2px 7px; border-radius: 100px;
+      font-size: 11px; font-weight: 700; color: t.$brand;
+      background: t.$brand-tint; padding: 2px 7px; border-radius: 100px;
       margin-left: 6px;
     }
 
     &.active {
-      color: $brand;
+      color: t.$brand-deep;
       &::after {
         content: ""; position: absolute; left: 8px; right: 8px; bottom: -1px;
-        height: 2.5px; background: $brand; border-radius: 2px;
+        height: 2.5px; background: t.$brand; border-radius: 2px;
       }
     }
   }
@@ -914,7 +904,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .mp-m2-sheet-add-btn {
     width: 36px; height: 36px; border-radius: 9px; margin-right: 2px;
-    background: $brand-tint; border: 1px solid $brand-tint-2; color: $brand;
+    background: t.$brand-tint; border: 1px solid t.$brand-tint-2; color: t.$brand;
     cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
     svg { width: 15px; height: 15px; }
@@ -933,7 +923,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     gap: 6px;
     padding: 6px 4px 6px 0;
   }
-  .mp-layer-grip { width: 26px; height: 40px; svg { width: 14px; height: 14px; } color: $muted-2; }
+  .mp-layer-grip { width: 26px; height: 40px; svg { width: 14px; height: 14px; } color: t.$muted-2; }
   .mp-layer-thumb { width: 40px; height: 40px; }
   .mp-layer-title { font-size: 13px; }
   .mp-layer-visibility { display: inline-flex; }
@@ -968,19 +958,19 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   }
   .mp-m2-actions-handle {
     width: 44px; height: 4px; border-radius: 2px;
-    background: $brand-tint-2;
+    background: t.$brand-tint-2;
   }
 
   .mp-m2-actions-header {
     display: flex; align-items: center; gap: 10px;
     padding: 4px 16px 12px;
-    border-bottom: 1px solid $line-soft;
+    border-bottom: 1px solid t.$line-soft;
     flex-shrink: 0;
   }
 
   .mp-m2-actions-icon {
     width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
-    background: $brand-tint; color: $brand;
+    background: t.$brand-tint; color: t.$brand;
     display: inline-flex; align-items: center; justify-content: center;
     svg { width: 16px; height: 16px; }
   }
@@ -990,22 +980,22 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     display: flex; flex-direction: column; gap: 1px;
   }
   .mp-m2-actions-title {
-    font-size: 14.5px; font-weight: 600; color: $ink;
+    font-size: 14.5px; font-weight: 600; color: t.$ink;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
   .mp-m2-actions-status {
-    font-size: 11.5px; color: $muted;
+    font-size: 11.5px; color: t.$muted;
     &.is-dirty { color: #b45309; }
   }
 
   .mp-m2-actions-save-btn {
     display: inline-flex; align-items: center; gap: 7px; flex-shrink: 0;
     height: 40px; padding: 0 15px; border-radius: 11px;
-    background: $brand; color: #fff;
+    background: t.$brand-deep; color: #fff;
     border: none; cursor: pointer;
     font-family: inherit; font-size: 13px; font-weight: 600;
     svg { width: 14px; height: 14px; }
-    &:disabled { background: $brand-tint-2; color: $muted; cursor: default; }
+    &:disabled { background: t.$brand-tint-2; color: t.$muted; cursor: default; }
   }
 
   .mp-m2-actions-grid {
@@ -1016,14 +1006,14 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .mp-m2-actions-tile {
     height: 78px; border-radius: 12px;
-    background: $bg; border: 1px solid $line;
+    background: t.$bg; border: 1px solid t.$line;
     display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 7px;
     cursor: pointer;
-    font-family: inherit; font-size: 11.5px; font-weight: 600; color: $ink;
-    svg { width: 19px; height: 19px; color: $brand; }
+    font-family: inherit; font-size: 11.5px; font-weight: 600; color: t.$ink;
+    svg { width: 19px; height: 19px; color: t.$brand; }
 
     &.active {
-      background: $brand-tint; border-color: $brand-tint-2; color: $brand;
+      background: t.$brand-tint; border-color: t.$brand-tint-2; color: t.$brand;
     }
   }
 
@@ -1036,27 +1026,27 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     display: flex; align-items: center; gap: 13px;
     height: 54px; padding: 0 10px; border-radius: 11px;
     background: none; border: none; cursor: pointer; text-align: left;
-    font-family: inherit; font-size: 14.5px; font-weight: 500; color: $ink;
+    font-family: inherit; font-size: 14.5px; font-weight: 500; color: t.$ink;
   }
 
   .mp-m2-actions-item-icon {
     width: 32px; height: 32px; border-radius: 9px; flex-shrink: 0;
-    background: $brand-tint; color: $brand;
+    background: t.$brand-tint; color: t.$brand;
     display: inline-flex; align-items: center; justify-content: center;
     svg { width: 15px; height: 15px; }
   }
 
   .mp-m2-actions-item span:not([class]) { flex: 1; min-width: 0; }
 
-  .mp-m2-actions-item-chevron { width: 13px; height: 13px; color: $muted; flex-shrink: 0; }
+  .mp-m2-actions-item-chevron { width: 13px; height: 13px; color: t.$muted; flex-shrink: 0; }
 
   .mp-m2-actions-item-value {
-    font-size: 12.5px; color: $muted; flex-shrink: 0;
+    font-size: 12.5px; color: t.$muted; flex-shrink: 0;
     max-width: 40%;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
 
-  .mp-m2-actions-divider { height: 1px; background: $line-soft; margin: 4px 10px; }
+  .mp-m2-actions-divider { height: 1px; background: t.$line-soft; margin: 4px 10px; }
 
   // ── Formulários flutuantes viram folha inferior ──────────────────────────
   .mp-floating-form {

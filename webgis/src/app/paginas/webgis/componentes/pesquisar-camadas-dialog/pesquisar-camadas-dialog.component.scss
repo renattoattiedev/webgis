@@ -1,9 +1,7 @@
 // ─── Variables ─────────────────────────────────────────────────────────────
 
-$blue:        #1b5e20;
-$blue-light:  rgba(1, 73, 155, 0.08);
-$blue-border: rgba(1, 73, 155, 0.22);
-$text:        #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted:       #6b7280;
 
 // ─── Container ─────────────────────────────────────────────────────────────
@@ -60,8 +58,8 @@ $muted:       #6b7280;
   align-items: center;
   justify-content: space-between;
   padding: 10px 12px;
-  background: rgba(1, 73, 155, 0.06);
-  border-bottom: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.06);
+  border-bottom: 1px solid rgba(t.$brand, 0.22);
   cursor: grab;
   user-select: none;
   min-height: 42px;
@@ -73,7 +71,7 @@ $muted:       #6b7280;
   display: flex;
   align-items: center;
   gap: 7px;
-  color: $text;
+  color: t.$brand-deep;
   font-size: 12px;
   font-weight: 700;
 
@@ -81,7 +79,7 @@ $muted:       #6b7280;
     font-size: 16px;
     width: 16px;
     height: 16px;
-    color: $blue;
+    color: t.$brand;
   }
 }
 
@@ -104,7 +102,7 @@ $muted:       #6b7280;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $text;
+  color: t.$brand-deep;
   transition: background 0.15s;
   pointer-events: auto;
 
@@ -143,7 +141,7 @@ $muted:       #6b7280;
 .section-label {
   font-size: 10px;
   font-weight: 700;
-  color: $blue;
+  color: t.$brand-deep;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -167,13 +165,13 @@ $muted:       #6b7280;
   gap: 8px;
   width: 100%;
   padding: 8px 10px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.22);
   border-radius: 8px;
   background: transparent;
   cursor: pointer;
   font-size: 12px;
   font-weight: 600;
-  color: $text;
+  color: t.$brand-deep;
   text-align: left;
   transition: background 0.15s, border-color 0.15s;
 
@@ -181,13 +179,13 @@ $muted:       #6b7280;
     font-size: 16px;
     width: 16px;
     height: 16px;
-    color: $blue;
+    color: t.$brand;
     flex-shrink: 0;
   }
 
   &:hover {
-    background: $blue-light;
-    border-color: rgba(1, 73, 155, 0.35);
+    background: rgba(t.$brand, 0.08);
+    border-color: rgba(t.$brand, 0.35);
   }
 }
 
@@ -202,7 +200,7 @@ $muted:       #6b7280;
 .form-title {
   font-size: 12px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
 }
 
 .field-block {
@@ -214,7 +212,7 @@ $muted:       #6b7280;
 .field-label {
   font-size: 10px;
   font-weight: 700;
-  color: $blue;
+  color: t.$brand-deep;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -224,18 +222,18 @@ $muted:       #6b7280;
   box-sizing: border-box;
   height: 34px;
   padding: 0 10px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.22);
   border-radius: 8px;
   background: #fff;
-  color: $text;
+  color: t.$ink;
   font-size: 12px;
   font-weight: 500;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:focus {
-    border-color: $blue;
-    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.12);
+    border-color: t.$brand;
+    box-shadow: 0 0 0 3px rgba(t.$brand, 0.12);
   }
 
   &::placeholder {
@@ -254,7 +252,7 @@ $muted:       #6b7280;
   align-items: center;
   justify-content: center;
   gap: 5px;
-  background: $blue;
+  background: t.$brand-deep;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -273,7 +271,7 @@ $muted:       #6b7280;
   }
 
   &:hover:not(:disabled) {
-    background: #14532d;
+    background: t.$brand-mid;
   }
 
   &:disabled {
@@ -316,7 +314,7 @@ $muted:       #6b7280;
     font-size: 15px;
     width: 15px;
     height: 15px;
-    color: rgba(1, 73, 155, 0.4);
+    color: rgba(t.$brand, 0.4);
     flex-shrink: 0;
   }
 }
@@ -332,9 +330,9 @@ $muted:       #6b7280;
 .total-badge {
   font-size: 11px;
   font-weight: 700;
-  color: $blue;
-  background: $blue-light;
-  border: 1px solid $blue-border;
+  color: t.$brand;
+  background: rgba(t.$brand, 0.08);
+  border: 1px solid rgba(t.$brand, 0.22);
   border-radius: 999px;
   padding: 1px 8px;
 }
@@ -342,7 +340,7 @@ $muted:       #6b7280;
 .table-wrapper {
   overflow: auto;
   max-height: 260px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.22);
   border-radius: 8px;
   background: #fff;
 }
@@ -354,13 +352,13 @@ $muted:       #6b7280;
   td {
     padding: 6px 10px;
     font-size: 11px;
-    color: $text;
+    color: t.$brand-deep;
   }
 
   th {
-    background: $blue-light;
+    background: rgba(t.$brand, 0.08);
     font-weight: 700;
-    color: $blue;
+    color: t.$brand;
     position: sticky;
     top: 0;
     z-index: 1;
@@ -375,7 +373,7 @@ $muted:       #6b7280;
   }
 
   tr:hover td {
-    background: rgba(1, 73, 155, 0.04);
+    background: rgba(t.$brand, 0.04);
   }
 }
 
@@ -402,14 +400,14 @@ $muted:       #6b7280;
     font-size: 16px;
     width: 16px;
     height: 16px;
-    color: $blue;
+    color: t.$brand;
   }
 }
 
 .beacon-label {
   font-size: 11px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   white-space: nowrap;
   opacity: 0;
   padding-right: 12px;

@@ -1,8 +1,6 @@
 // ── Design tokens ─────────────────────────────────────────────────────────────
-$blue:        #1b5e20;
-$blue-light:  rgba(1, 73, 155, 0.07);
-$blue-border: rgba(1, 73, 155, 0.18);
-$text:        #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted:       #6b7280;
 $divider:     rgba(0, 0, 0, 0.06);
 
@@ -16,7 +14,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   background: rgba(255, 255, 255, 0.97);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
-  border-top: 1px solid $blue-border;
+  border-top: 1px solid rgba(t.$brand, 0.18);
   border-radius: 14px 14px 0 0;
   box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.12);
   z-index: 1000;
@@ -38,22 +36,22 @@ $divider:     rgba(0, 0, 0, 0.06);
   gap: 10px;
   padding: 0 12px;
   height: 36px;
-  background: rgba(1, 73, 155, 0.05);
-  border-bottom: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.05);
+  border-bottom: 1px solid rgba(t.$brand, 0.18);
   border-radius: 14px 14px 0 0;
   cursor: pointer;
   user-select: none;
   flex-shrink: 0;
 
   &:hover {
-    background: rgba(1, 73, 155, 0.08);
+    background: rgba(t.$brand, 0.08);
   }
 }
 
 .handle-pill {
   width: 36px;
   height: 4px;
-  background: rgba(1, 73, 155, 0.22);
+  background: rgba(t.$brand, 0.22);
   border-radius: 2px;
   flex-shrink: 0;
 }
@@ -62,7 +60,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   flex: 1;
   font-size: 11px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -83,7 +81,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 
   mat-icon { font-size: 18px; width: 18px; height: 18px; }
 
-  &:hover { background: rgba(0, 0, 0, 0.07); color: $text; }
+  &:hover { background: rgba(0, 0, 0, 0.07); color: t.$brand-deep; }
 }
 
 // ── Tab group ─────────────────────────────────────────────────────────────────
@@ -108,7 +106,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 }
 
 ::ng-deep .mat-mdc-tab-header {
-  border-bottom: 1px solid $blue-border;
+  border-bottom: 1px solid rgba(t.$brand, 0.18);
   flex-shrink: 0;
 }
 
@@ -186,13 +184,13 @@ $divider:     rgba(0, 0, 0, 0.06);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: $text;
+  color: t.$brand-deep;
   transition: background 0.15s, color 0.15s;
   padding: 0;
 
   mat-icon { font-size: 17px; width: 17px; height: 17px; }
 
-  &:hover { background: $blue-light; color: $blue; }
+  &:hover { background: rgba(t.$brand, 0.07); color: t.$brand; }
 
   &--danger {
     color: #9ca3af;
@@ -226,10 +224,10 @@ $divider:     rgba(0, 0, 0, 0.06);
     background: #f0f4f8;
     font-size: 10px;
     font-weight: 700;
-    color: $text;
+    color: t.$brand-deep;
     text-transform: uppercase;
     letter-spacing: 0.5px;
-    border-bottom: 2px solid $blue-border;
+    border-bottom: 2px solid rgba(t.$brand, 0.18);
     white-space: nowrap;
     padding: 0 10px;
     height: 28px;
@@ -242,7 +240,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   height: 36px;
 
   &:hover:not(.tab-header) .tab-cell {
-    background: rgba(1, 73, 155, 0.04);
+    background: rgba(t.$brand, 0.04);
   }
 
   &.selected .tab-cell {
@@ -269,5 +267,5 @@ $divider:     rgba(0, 0, 0, 0.06);
   height: 16px;
   transition: color 0.15s;
 
-  &:hover { color: $blue; }
+  &:hover { color: t.$brand; }
 }

@@ -72,7 +72,7 @@ export class RelatorioUsuariosComponent implements OnInit, OnDestroy {
       series: d.porPerfil.map((p) => p.total),
       chart: { type: 'donut', height: 240 },
       labels: d.porPerfil.map((p) => p.perfil),
-      colors: ['#1b5e20', '#2e7d32', '#b45309', '#7c3aed'],
+      colors: ['#268A97', '#1D707C', '#b45309', '#7c3aed'],
       legend: { position: 'bottom', fontSize: '11px' },
       dataLabels: { style: { fontSize: '10px' } },
     });

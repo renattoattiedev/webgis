@@ -1,3 +1,5 @@
+@use '../../../../../../styles/tokens' as t;
+
 .thematic-legend {
   display: flex;
   flex-direction: column;
@@ -7,13 +9,13 @@
 .thematic-legend-title {
   font-size: 12px;
   font-weight: 700;
-  color: #14532d;
+  color: t.$brand-deep;
 }
 
 .thematic-legend-label {
   font-size: 10px;
   font-weight: 700;
-  color: #01499b;
+  color: t.$brand-deep;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }

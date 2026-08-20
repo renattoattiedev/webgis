@@ -1,7 +1,5 @@
-$blue:        #1b5e20;
-$blue-light:  rgba(1, 73, 155, 0.07);
-$blue-border: rgba(1, 73, 155, 0.18);
-$text:        #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted:       #6b7280;
 $divider:     rgba(0, 0, 0, 0.06);
 
@@ -30,20 +28,20 @@ $divider:     rgba(0, 0, 0, 0.06);
   gap: 8px;
   font-size: 13px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
 
   mat-icon {
     font-size: 18px;
     width: 18px;
     height: 18px;
-    color: $blue;
+    color: t.$brand;
   }
 }
 
 .icon-btn {
   width: 30px;
   height: 30px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.18);
   border-radius: 7px;
   background: transparent;
   cursor: pointer;
@@ -55,7 +53,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
 
-  &:hover { background: $blue-light; color: $blue; border-color: $blue-border; }
+  &:hover { background: rgba(t.$brand, 0.07); color: t.$brand; border-color: rgba(t.$brand, 0.18); }
 }
 
 // ── Filtros ───────────────────────────────────────────────────────────────────
@@ -77,8 +75,8 @@ $divider:     rgba(0, 0, 0, 0.06);
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:focus-within {
-    border-color: $blue-border;
-    box-shadow: 0 0 0 3px $blue-light;
+    border-color: rgba(t.$brand, 0.18);
+    box-shadow: 0 0 0 3px rgba(t.$brand, 0.07);
   }
 }
 
@@ -105,8 +103,8 @@ $divider:     rgba(0, 0, 0, 0.06);
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:focus-within {
-    border-color: $blue-border;
-    box-shadow: 0 0 0 3px $blue-light;
+    border-color: rgba(t.$brand, 0.18);
+    box-shadow: 0 0 0 3px rgba(t.$brand, 0.07);
   }
 }
 
@@ -123,7 +121,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   border: none;
   outline: none;
   font-size: 12px;
-  color: $text;
+  color: t.$ink;
   background: transparent;
   font-family: system-ui, sans-serif;
 
@@ -147,7 +145,7 @@ $divider:     rgba(0, 0, 0, 0.06);
     border: 1px solid $divider !important;
     box-shadow: none !important;
 
-    &.mat-expanded { border-color: $blue-border !important; }
+    &.mat-expanded { border-color: rgba(t.$brand, 0.18) !important; }
 
     .mat-expansion-panel-body { padding: 0 !important; }
 
@@ -163,7 +161,7 @@ $divider:     rgba(0, 0, 0, 0.06);
     min-height: 42px !important;
     padding: 0 12px !important;
     border-radius: 8px !important;
-    background: rgba(1, 73, 155, 0.03) !important;
+    background: rgba(t.$brand, 0.03) !important;
 
     .mat-expansion-panel-header-title { margin: 0; }
   }
@@ -172,17 +170,17 @@ $divider:     rgba(0, 0, 0, 0.06);
     .mdc-label, .mat-slide-toggle-content {
       font-size: 12px !important;
       font-weight: 600 !important;
-      color: $text !important;
+      color: t.$brand-deep !important;
     }
   }
 
   // Toggle color
   .mat-mdc-slide-toggle.mat-accent {
-    --mdc-switch-selected-track-color: #{$blue};
+    --mdc-switch-selected-track-color: #{t.$brand};
     --mdc-switch-selected-handle-color: #fff;
-    --mdc-switch-selected-hover-track-color: #{$blue};
-    --mdc-switch-selected-focus-track-color: #{$blue};
-    --mdc-switch-selected-pressed-track-color: #{$blue};
+    --mdc-switch-selected-hover-track-color: #{t.$brand};
+    --mdc-switch-selected-focus-track-color: #{t.$brand};
+    --mdc-switch-selected-pressed-track-color: #{t.$brand};
   }
 }
 
@@ -209,22 +207,22 @@ $divider:     rgba(0, 0, 0, 0.06);
   height: 36px;
   border-radius: 7px;
   object-fit: cover;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.18);
 }
 
 .thumb-placeholder {
   width: 36px;
   height: 36px;
   border-radius: 7px;
-  border: 1px solid $blue-border;
-  background: $blue-light;
+  border: 1px solid rgba(t.$brand, 0.18);
+  background: rgba(t.$brand, 0.07);
   display: flex;
   align-items: center;
   justify-content: center;
 
-  mat-icon { font-size: 18px; width: 18px; height: 18px; color: $blue; }
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: t.$brand; }
 
-  &.loading { background: rgba(1, 73, 155, 0.05); }
+  &.loading { background: rgba(t.$brand, 0.05); }
   &.error { background: rgba(239, 68, 68, 0.06); border-color: rgba(239, 68, 68, 0.25);
     mat-icon { color: #ef4444; } }
 }
@@ -254,14 +252,14 @@ $divider:     rgba(0, 0, 0, 0.06);
   width: 22px;
   height: 22px;
   border-radius: 5px;
-  background: $blue-light;
-  border: 1px solid $blue-border;
+  background: rgba(t.$brand, 0.07);
+  border: 1px solid rgba(t.$brand, 0.18);
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
 
-  mat-icon { font-size: 13px; width: 13px; height: 13px; color: $blue; }
+  mat-icon { font-size: 13px; width: 13px; height: 13px; color: t.$brand; }
 
   &--raster {
     background: rgba(120, 80, 200, 0.07);

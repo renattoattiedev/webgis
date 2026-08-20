@@ -6,34 +6,24 @@
 //   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 //   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
 // ─────────────────────────────────────────────────────────────────────────────
+@use '../../../styles/tokens' as t;
 
-$brand:        #1b5e20;
-$brand-mid:    #14532d;
-$brand-dark:   #011d4d;
 $brand-deep:   #012656;
-$brand-tint:   #eef5ec;
-$ink:          #1a2e1f;
-$ink-soft:     #4d6b52;
-$muted:        #6b8f74;
-$line:         #e7f0e7;
-$line-soft:    #edf4ea;
 $surface:      #ffffff;
-$bg:           #f0f6ed;
-$accent:       #5fe3a1;
 
 $font-ui:      'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif;
 $font-serif:   'Instrument Serif', Georgia, serif;
 
 :host {
   display: block;
-  background: $bg;
+  background: t.$bg;
   font-family: $font-ui;
-  color: $ink;
+  color: t.$ink;
 }
 
 // ── Navbar ──────────────────────────────────────────────────────────────────
 .idx-nav {
-  background: $brand;
+  background: t.$brand-deep;
   height: 60px;
   display: flex;
   align-items: center;
@@ -55,7 +45,7 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   font-size: 13px;
   font-weight: 800;
   letter-spacing: 2px;
-  color: $brand;
+  color: t.$brand-deep;
   background: rgba(255,255,255,0.95);
   padding: 5px 11px;
   border-radius: 6px;
@@ -131,7 +121,7 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   height: 30px;
   border-radius: 50%;
   background: #fff;
-  color: $brand;
+  color: t.$brand-deep;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -162,8 +152,8 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   min-width: 220px;
   background: #fff;
   border-radius: 14px;
-  box-shadow: 0 12px 36px rgba(1,73,155,0.18), 0 2px 8px rgba(0,0,0,0.08);
-  border: 1px solid $line;
+  box-shadow: 0 12px 36px rgba(38, 138, 151,0.18), 0 2px 8px rgba(0,0,0,0.08);
+  border: 1px solid t.$line;
   overflow: hidden;
   z-index: 300;
 }
@@ -172,15 +162,15 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   padding: 12px 16px 8px;
   font-size: 11px;
   font-weight: 700;
-  color: $muted;
+  color: t.$muted;
   letter-spacing: 0.3px;
   text-transform: uppercase;
-  border-bottom: 1px solid $line-soft;
+  border-bottom: 1px solid t.$line-soft;
 }
 
 .nav-dropdown-divider {
   height: 1px;
-  background: $line-soft;
+  background: t.$line-soft;
   margin: 4px 0;
 }
 
@@ -194,15 +184,15 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   border: none;
   text-align: left;
   font-size: 13.5px;
-  color: $ink;
+  color: t.$ink;
   cursor: pointer;
   font-family: inherit;
   font-weight: 500;
   transition: background 0.12s;
 
-  svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
+  svg { width: 15px; height: 15px; color: t.$muted; flex-shrink: 0; }
 
-  &:hover { background: $brand-tint; }
+  &:hover { background: t.$brand-tint; }
 
   &--danger {
     color: #dc2626;
@@ -214,77 +204,86 @@ $font-serif:   'Instrument Serif', Georgia, serif;
 // ── Hero ────────────────────────────────────────────────────────────────────
 .idx-hero {
   position: relative;
-  background: linear-gradient(135deg, $brand 0%, $brand-mid 60%, $brand-dark 100%);
-  padding: 96px 80px 64px;
-  overflow: hidden;
-  color: #fff;
+  background: #fff;
+  padding: 88px 80px 64px;
 }
 
-.idx-hero-bg {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
+.idx-hero-inner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 40px;
 }
 
 .idx-hero-content {
-  position: relative;
-  max-width: 720px;
-  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  width: 400px;
+  flex-shrink: 0;
+}
+
+.idx-hero-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
 }
 
 .idx-hero-eyebrow {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 5px 14px 5px 10px;
-  background: rgba(255,255,255,0.1);
-  border: 1px solid rgba(255,255,255,0.18);
+  width: fit-content;
+  height: 30px;
+  padding: 0 13px;
+  background: t.$brand-tint;
+  border: 1px solid t.$brand-tint-2;
   border-radius: 100px;
   font-size: 11.5px;
-  font-weight: 600;
-  letter-spacing: 0.3px;
-  color: rgba(255,255,255,0.88);
-  margin-bottom: 28px;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+  color: t.$brand-deep;
 }
 
 .idx-hero-pulse {
   width: 6px;
   height: 6px;
   border-radius: 50%;
-  background: $accent;
-  box-shadow: 0 0 0 4px rgba(95,227,161,0.2);
+  background: t.$brand;
+  flex-shrink: 0;
 }
 
 .idx-hero-title {
-  font-size: 60px;
-  line-height: 1.04;
+  font-size: 46px;
+  line-height: 1.1;
   font-weight: 600;
-  letter-spacing: -1.6px;
-  margin: 0 0 22px;
-  color: #fff;
+  letter-spacing: -1.4px;
+  text-wrap: balance;
+  margin: 0;
+  color: t.$ink;
 }
 
 .idx-hero-title-em {
   font-family: $font-serif;
   font-weight: 400;
   font-style: italic;
-  color: #9bc1ff;
+  font-size: 50px;
+  color: t.$brand;
 }
 
 .idx-hero-sub {
-  font-size: 17px;
-  line-height: 1.6;
-  color: rgba(255,255,255,0.72);
-  max-width: 520px;
-  margin: 0 0 38px;
+  font-size: 15.5px;
+  line-height: 1.62;
+  text-wrap: pretty;
+  color: t.$ink-soft;
+  margin: 0;
 }
 
 .idx-hero-actions {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 12px;
   flex-wrap: wrap;
 }
 
@@ -292,86 +291,103 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   display: inline-flex;
   align-items: center;
   gap: 10px;
-  background: #fff;
-  color: $brand;
-  padding: 15px 26px;
-  border-radius: 100px;
-  font-size: 14.5px;
+  height: 52px;
+  background: t.$brand-deep;
+  color: #fff;
+  padding: 0 26px;
+  border-radius: 12px;
+  font-size: 15px;
   font-weight: 600;
   font-family: inherit;
   border: none;
   cursor: pointer;
-  letter-spacing: 0.1px;
-  box-shadow: 0 6px 24px rgba(0,0,0,0.18);
-  transition: transform 0.15s, box-shadow 0.15s;
+  transition: background 0.15s, transform 0.15s;
 
   svg { width: 16px; height: 16px; }
-  svg:last-child { width: 14px; height: 14px; }
 
   &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 32px rgba(0,0,0,0.24);
+    background: t.$brand-mid;
+    transform: translateY(-1px);
   }
 }
 
 .idx-hero-cta-ghost {
   display: inline-flex;
   align-items: center;
-  background: transparent;
-  color: #fff;
-  padding: 15px 22px;
-  border-radius: 100px;
-  font-size: 14.5px;
+  height: 52px;
+  background: #fff;
+  color: t.$ink-soft;
+  padding: 0 24px;
+  border-radius: 12px;
+  font-size: 15px;
   font-weight: 500;
   font-family: inherit;
-  border: 1px solid rgba(255,255,255,0.28);
+  border: 1px solid t.$line;
   cursor: pointer;
   transition: background 0.15s, border-color 0.15s;
 
   &:hover {
-    background: rgba(255,255,255,0.08);
-    border-color: rgba(255,255,255,0.4);
+    background: t.$brand-tint;
+    border-color: t.$brand-tint-2;
   }
 }
 
 // ── Faixa de indicadores ────────────────────────────────────────────────────
 .idx-hero-stats {
-  position: relative;
-  margin-top: 80px;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  border-top: 1px solid rgba(255,255,255,0.1);
-  padding-top: 28px;
-  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 26px;
+  padding-top: 16px;
+  margin-top: 6px;
+  border-top: 1px solid t.$line-soft;
 }
 
 .idx-hero-stat {
-  padding: 0 20px;
-  border-right: 1px solid rgba(255,255,255,0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
 
-  &:first-child { padding-left: 0; }
-  &.is-last     { border-right: none; padding-right: 0; }
+.idx-hero-stat-divider {
+  width: 1px;
+  height: 30px;
+  background: t.$line-soft;
+  flex-shrink: 0;
 }
 
 .idx-hero-stat-num {
-  font-size: 30px;
+  font-size: 21px;
   font-weight: 600;
-  letter-spacing: -1px;
-  color: #fff;
-  margin-bottom: 4px;
+  letter-spacing: -0.5px;
+  color: t.$ink;
 }
 
 .idx-hero-stat-label {
   font-size: 11.5px;
-  color: rgba(255,255,255,0.55);
+  color: t.$muted;
   letter-spacing: 0.2px;
   line-height: 1.35;
+}
+
+// ── Arte do hero ────────────────────────────────────────────────────────────
+.idx-hero-art {
+  display: block;
+  width: clamp(360px, 34vw, 560px);
+  aspect-ratio: 1;
+  flex-shrink: 0;
+  margin-top: -24px;
+
+  img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
 }
 
 // ── Módulos ─────────────────────────────────────────────────────────────────
 .idx-modules {
   padding: 0 80px;
-  margin-top: -44px;
   margin-bottom: 96px;
   position: relative;
   z-index: 10;
@@ -387,36 +403,36 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   background: #fff;
   border-radius: 18px;
   padding: 28px 22px 24px;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   box-shadow: 0 4px 14px rgba(11,37,69,0.05);
   position: relative;
   transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
 
   &--active {
-    border: 1.5px solid $brand;
-    box-shadow: 0 14px 40px rgba(1,73,155,0.18);
+    border: 1.5px solid t.$brand;
+    box-shadow: 0 14px 40px rgba(38, 138, 151,0.18);
     cursor: pointer;
 
     &:hover {
       transform: translateY(-3px);
-      box-shadow: 0 18px 48px rgba(1,73,155,0.24);
+      box-shadow: 0 18px 48px rgba(38, 138, 151,0.24);
     }
 
     .idx-module-icon {
-      background: $brand;
+      background: t.$brand;
       color: #fff;
     }
 
-    .idx-module-name { color: $ink; }
-    .idx-module-desc { color: $ink-soft; }
+    .idx-module-name { color: t.$ink; }
+    .idx-module-desc { color: t.$ink-soft; }
   }
 
   &--soon {
     .idx-module-icon {
-      background: $line-soft;
+      background: t.$line-soft;
       color: #9ca8bd;
     }
-    .idx-module-name { color: $muted; }
+    .idx-module-name { color: t.$muted; }
     .idx-module-desc { color: #9ca8bd; }
   }
 }
@@ -428,8 +444,8 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   font-size: 9.5px;
   font-weight: 700;
   letter-spacing: 0.7px;
-  color: $muted;
-  background: $line-soft;
+  color: t.$muted;
+  background: t.$line-soft;
   padding: 3px 8px;
   border-radius: 100px;
   text-transform: uppercase;
@@ -466,7 +482,7 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   gap: 6px;
   font-size: 12px;
   font-weight: 600;
-  color: $brand;
+  color: t.$brand-deep;
 
   svg { width: 13px; height: 13px; }
 }
@@ -490,7 +506,7 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 2.5px;
-  color: $brand;
+  color: t.$brand-deep;
   text-transform: uppercase;
   margin-bottom: 10px;
 }
@@ -499,7 +515,7 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   font-size: 36px;
   font-weight: 600;
   letter-spacing: -0.8px;
-  color: $ink;
+  color: t.$ink;
   margin: 0 0 8px;
   line-height: 1.1;
 }
@@ -508,12 +524,12 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   font-family: $font-serif;
   font-style: italic;
   font-weight: 400;
-  color: $ink-soft;
+  color: t.$ink-soft;
 }
 
 .idx-section-sub {
   font-size: 14.5px;
-  color: $ink-soft;
+  color: t.$ink-soft;
   max-width: 460px;
   line-height: 1.55;
   margin: 0;
@@ -524,7 +540,7 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   align-items: center;
   gap: 8px;
   background: #fff;
-  color: $brand;
+  color: t.$brand-deep;
   padding: 12px 20px;
   border-radius: 100px;
   font-size: 13px;
@@ -539,7 +555,7 @@ $font-serif:   'Instrument Serif', Georgia, serif;
   svg { width: 14px; height: 14px; }
 
   &:hover {
-    background: $brand-tint;
+    background: t.$brand-tint;
     border-color: #b8c8e1;
     transform: translateY(-1px);
   }
@@ -613,36 +629,90 @@ $font-serif:   'Instrument Serif', Georgia, serif;
 
 // ── Responsive ──────────────────────────────────────────────────────────────
 @media (max-width: 1280px) {
-  .idx-hero       { padding: 72px 56px 56px; }
-  .idx-hero-title { font-size: 48px; }
-  .idx-modules    { padding: 0 56px; margin-bottom: 80px; }
-  .idx-temas      { padding: 0 56px 80px; }
-  .idx-hero-stats { grid-template-columns: repeat(4, 1fr); row-gap: 24px;
-    .idx-hero-stat { border-right: 1px solid rgba(255,255,255,0.08); }
-    .idx-hero-stat:nth-child(4n) { border-right: none; }
-    .idx-hero-stat.is-last { border-right: none; }
-  }
+  .idx-hero    { padding: 72px 56px 56px; }
+  .idx-modules { padding: 0 56px; margin-bottom: 80px; }
+  .idx-temas   { padding: 0 56px 80px; }
 }
 
+// Tablet: hero vira uma coluna, arte em cima, mesmas medidas do desktop.
 @media (max-width: 1024px) {
   .idx-modules-grid { grid-template-columns: repeat(3, 1fr); }
+
+  .idx-hero-inner {
+    flex-direction: column;
+    align-items: center;
+  }
+  .idx-hero-content {
+    width: 100%;
+    max-width: 480px;
+    align-items: center;
+    text-align: center;
+  }
+  .idx-hero-actions { justify-content: center; }
+  .idx-hero-stats   { justify-content: center; }
+  .idx-hero-art {
+    order: -1;
+    width: clamp(300px, 46vw, 420px);
+    margin-top: 0;
+  }
 }
 
 @media (max-width: 768px) {
   .idx-nav        { padding: 0 20px; }
   .idx-nav-title, .idx-nav-tag { display: none; }
-  .idx-hero       { padding: 56px 24px 48px; }
-  .idx-hero-title { font-size: 36px; letter-spacing: -1px; }
-  .idx-hero-sub   { font-size: 15px; }
-  .idx-modules    { padding: 0 24px; margin-bottom: 56px; }
-  .idx-modules-grid { grid-template-columns: repeat(2, 1fr); }
-  .idx-temas      { padding: 0 24px 64px; }
+
+  .idx-modules       { padding: 0 24px; margin-bottom: 56px; }
+  .idx-modules-grid  { grid-template-columns: repeat(2, 1fr); }
+  .idx-temas         { padding: 0 24px 64px; }
   .idx-section-header { flex-direction: column; align-items: flex-start; }
   .idx-section-title  { font-size: 28px; }
-  .idx-hero-stats {
-    grid-template-columns: repeat(2, 1fr);
-    .idx-hero-stat:nth-child(2n) { border-right: none; }
-  }
   .idx-footer-inner   { flex-direction: column; align-items: flex-start; gap: 14px; }
   .idx-footer-spacer  { display: none; }
+
+  // Hero mobile
+  .idx-hero        { padding: 0 22px 40px; }
+  .idx-hero-inner   { gap: 12px; }
+  .idx-hero-content { gap: 22px; }
+  .idx-hero-copy    { gap: 14px; }
+  .idx-hero-art     { width: 268px; margin-top: 6px; }
+  .idx-hero-title   { font-size: 31px; line-height: 1.14; letter-spacing: -0.9px; }
+  .idx-hero-title-em { font-size: 34px; }
+  .idx-hero-sub {
+    font-size: 14.5px;
+    line-height: 1.5;
+    max-width: 330px;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+  }
+  .idx-hero-eyebrow { height: 28px; padding: 0 12px; font-size: 10.5px; }
+  .idx-hero-actions {
+    width: 100%;
+    gap: 11px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .idx-hero-cta, .idx-hero-cta-ghost {
+    height: 54px;
+    width: 100%;
+    justify-content: center;
+    border-radius: 13px;
+    font-size: 15.5px;
+  }
+  .idx-hero-stats {
+    width: 100%;
+    padding-top: 18px;
+  }
+  .idx-hero-stat {
+    flex: 1;
+    align-items: center;
+  }
+  .idx-hero-stat-num  { font-size: 19px; letter-spacing: -0.4px; }
+  .idx-hero-stat-label { font-size: 11px; }
+}
+
+// Telas muito baixas: encolhe a arte para caber título + ações acima da dobra.
+@media (max-width: 768px) and (max-height: 640px) {
+  .idx-hero-art { width: 220px; }
 }

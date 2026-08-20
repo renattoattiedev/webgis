@@ -12,26 +12,28 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 // ── Tokens ──────────────────────────────────────────────────────────────────
-$idedlg-brand:        #1b5e20 !default;
-$idedlg-brand-mid:    #14532d !default;
-$idedlg-brand-deep:   #012656 !default;
-$idedlg-brand-tint:   #eef5ec !default;
-$idedlg-brand-tint-2: #e2eee0 !default;
-$idedlg-ink:          #1a2e1f !default;
-$idedlg-ink-soft:     #4d6b52 !default;
-$idedlg-muted:        #6b8f74 !default;
-$idedlg-line:         #e7f0e7 !default;
-$idedlg-line-soft:    #f3f6fb !default;
-$idedlg-accent:       #5fe3a1 !default;
-$idedlg-success:      #047857 !default;
+@use 'tokens' as t;
+
+$idedlg-brand:        t.$brand !default;
+$idedlg-brand-mid:    t.$brand-mid !default;
+$idedlg-brand-deep:   #012656 !default; // não faz parte da paleta verde/teal; não usado neste arquivo
+$idedlg-brand-tint:   t.$brand-tint !default;
+$idedlg-brand-tint-2: t.$brand-tint-2 !default;
+$idedlg-ink:          t.$ink !default;
+$idedlg-ink-soft:     t.$ink-soft !default;
+$idedlg-muted:        t.$muted !default;
+$idedlg-line:         t.$line !default;
+$idedlg-line-soft:    t.$line-soft !default;
+$idedlg-accent:       #5fe3a1 !default; // não usado neste arquivo
+$idedlg-success:      t.$success !default;
 $idedlg-success-bg:   #ecfdf5 !default;
-$idedlg-warn:         #b45309 !default;
+$idedlg-warn:         t.$warn !default;
 $idedlg-warn-bg:      #fffbeb !default;
 $idedlg-warn-border:  #fde68a !default;
-$idedlg-danger:       #dc2626 !default;
+$idedlg-danger:       t.$danger !default;
 $idedlg-danger-bg:    #fef2f2 !default;
 $idedlg-danger-border:#fecaca !default;
-$idedlg-gold:         #eab308 !default;
+$idedlg-gold:         t.$gold !default;
 
 $idedlg-font-ui:    'Geist', system-ui, -apple-system, 'Segoe UI', sans-serif !default;
 $idedlg-font-serif: 'Instrument Serif', Georgia, serif !default;

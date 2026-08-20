@@ -1,21 +1,12 @@
 // ─────────────────────────────────────────────────────────────────────────────
 // Meu Conteúdo — identidade IDE RunForrestGIS
-// Geist + Instrument Serif + paleta azul (#1b5e20). Overrides de Material
+// Geist + Instrument Serif + paleta teal (#268A97). Overrides de Material
 // onde necessário para mat-table, mat-paginator, mat-slide-toggle, mat-menu
 // e mat-form-field (date range).
 // ─────────────────────────────────────────────────────────────────────────────
+@use '../../../../styles/tokens' as t;
 
-$brand:        #1b5e20;
-$brand-mid:    #14532d;
 $brand-deep:   #012656;
-$brand-tint:   #eef5ec;
-$brand-tint-2: #e2eee0;
-$ink:          #1a2e1f;
-$ink-soft:     #4d6b52;
-$muted:        #6b8f74;
-$line:         #e7f0e7;
-$line-soft:    #edf4ea;
-$bg:           #f0f6ed;
 $accent:       #5fe3a1;
 $warn:         #f59e0b;
 $danger:       #dc2626;
@@ -26,9 +17,9 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 :host {
   display: block;
-  background: $bg;
+  background: t.$bg;
   font-family: $font-ui;
-  color: $ink;
+  color: t.$ink;
 }
 
 * { box-sizing: border-box; }
@@ -58,7 +49,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   transition: opacity 0.18s ease, transform 0.18s ease;
 
   &::-webkit-scrollbar { width: 6px; }
-  &::-webkit-scrollbar-thumb { background: $line; border-radius: 100px; }
+  &::-webkit-scrollbar-thumb { background: t.$line; border-radius: 100px; }
 }
 
 .mc-page.filters-collapsed .mc-filters {
@@ -71,7 +62,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mc-panel {
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 14px;
   padding: 16px 16px 14px;
   box-shadow: 0 2px 8px rgba(11,37,69,0.04);
@@ -84,7 +75,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mc-panel-title {
   font-size: 11px; font-weight: 700; letter-spacing: 1.8px;
-  text-transform: uppercase; color: $muted;
+  text-transform: uppercase; color: t.$muted;
 }
 
 .mc-panel-actions { display: flex; gap: 6px; }
@@ -99,27 +90,27 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .mc-folder-item {
   display: flex; align-items: center; gap: 9px;
   padding: 8px 10px; border-radius: 8px;
-  font-size: 13px; color: $ink-soft;
+  font-size: 13px; color: t.$ink-soft;
   cursor: pointer; user-select: none;
   border: 1px solid transparent;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
 
-  svg { width: 14px; height: 14px; color: $muted; flex-shrink: 0; }
+  svg { width: 14px; height: 14px; color: t.$muted; flex-shrink: 0; }
 
-  &:hover { background: $brand-tint; color: $ink; }
+  &:hover { background: t.$brand-tint; color: t.$ink; }
 
   &.active {
-    background: $brand-tint; color: $brand; font-weight: 600;
-    border-color: $brand-tint-2;
-    svg { color: $brand; }
+    background: t.$brand-tint; color: t.$brand; font-weight: 600;
+    border-color: t.$brand-tint-2;
+    svg { color: t.$brand; }
   }
 }
 
 .mc-folder-edit {
   flex: 1; min-width: 0;
-  border: 1px solid $brand;
+  border: 1px solid t.$brand;
   border-radius: 6px; padding: 4px 8px;
-  font-family: inherit; font-size: 13px; color: $ink;
+  font-family: inherit; font-size: 13px; color: t.$ink;
   outline: none;
 }
 
@@ -128,36 +119,36 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mc-chip {
   background: #fff;
-  border: 1px solid $line;
-  color: $ink-soft;
+  border: 1px solid t.$line;
+  color: t.$ink-soft;
   font-family: inherit; font-size: 12px; font-weight: 500;
   padding: 6px 11px; border-radius: 100px;
   cursor: pointer;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
 
-  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &:hover { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; }
 
   &.active {
-    background: $brand; color: #fff; border-color: $brand; font-weight: 600;
+    background: t.$brand-deep; color: #fff; border-color: t.$brand-deep; font-weight: 600;
   }
 
   &--all {
-    color: $brand; border-color: $brand-tint-2;
-    &.active { background: $brand; color: #fff; }
+    color: t.$brand; border-color: t.$brand-tint-2;
+    &.active { background: t.$brand-deep; color: #fff; }
   }
 }
 
 // Icon buttons
 .mc-icon-btn {
   width: 28px; height: 28px; border-radius: 8px;
-  background: $line-soft; border: 1px solid $line;
-  color: $ink-soft;
+  background: t.$line-soft; border: 1px solid t.$line;
+  color: t.$ink-soft;
   display: inline-flex; align-items: center; justify-content: center;
   cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s;
 
   svg { width: 14px; height: 14px; }
 
-  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &:hover { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; }
 
   &.danger:hover { background: #fef2f2; color: $danger; border-color: #fecaca; }
 }
@@ -167,12 +158,12 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display: flex; align-items: center; justify-content: space-between;
   padding: 4px 2px;
 }
-.mc-fav-label { font-size: 13px; color: $ink; font-weight: 500; }
+.mc-fav-label { font-size: 13px; color: t.$ink; font-weight: 500; }
 .mc-fav-toggle {
   width: 36px; height: 36px; border-radius: 50%;
-  background: $line-soft; border: 1px solid $line;
+  background: t.$line-soft; border: 1px solid t.$line;
   display: inline-flex; align-items: center; justify-content: center;
-  cursor: pointer; color: $muted;
+  cursor: pointer; color: t.$muted;
   transition: background 0.15s, color 0.15s, transform 0.15s;
 
   svg { width: 16px; height: 16px; }
@@ -185,11 +176,11 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 }
 
 // Divider dentro do panel
-.mc-divider { height: 1px; background: $line; margin: 14px -4px; }
+.mc-divider { height: 1px; background: t.$line; margin: 14px -4px; }
 
 .mc-sub-title {
   font-size: 11px; font-weight: 700; letter-spacing: 1.5px;
-  text-transform: uppercase; color: $muted;
+  text-transform: uppercase; color: t.$muted;
   margin-bottom: 8px;
 }
 
@@ -210,27 +201,27 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   label {
     font-size: 10.5px; font-weight: 700; letter-spacing: 1.5px;
-    text-transform: uppercase; color: $muted;
+    text-transform: uppercase; color: t.$muted;
   }
 
   input {
     width: 100%;
     min-width: 0;
     background: #fff;
-    border: 1px solid $line;
+    border: 1px solid t.$line;
     border-radius: 9px;
     padding: 9px 11px;
-    font-family: inherit; font-size: 13px; color: $ink;
+    font-family: inherit; font-size: 13px; color: t.$ink;
     outline: none;
     transition: border-color 0.15s, box-shadow 0.15s;
 
-    &:focus { border-color: $brand; box-shadow: 0 0 0 3px rgba(1,73,155,0.1); }
+    &:focus { border-color: t.$brand; box-shadow: 0 0 0 3px rgba(38, 138, 151,0.1); }
   }
 }
 
 // Buttons
 .mc-btn-primary {
-  background: $brand; color: #fff;
+  background: t.$brand-deep; color: #fff;
   border: none; border-radius: 9px;
   padding: 9px 14px;
   font-family: inherit; font-size: 13px; font-weight: 600;
@@ -238,18 +229,18 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display: inline-flex; align-items: center; justify-content: center; gap: 6px;
 
   svg { width: 13px; height: 13px; }
-  &:hover { background: $brand-mid; }
+  &:hover { background: t.$brand-mid; }
   &.stretch { flex: 1; }
 }
 
 .mc-btn-ghost {
-  background: #fff; color: $ink-soft;
-  border: 1px solid $line; border-radius: 9px;
+  background: #fff; color: t.$ink-soft;
+  border: 1px solid t.$line; border-radius: 9px;
   padding: 9px 14px;
   font-family: inherit; font-size: 13px; font-weight: 500;
   cursor: pointer; transition: background 0.15s, color 0.15s, border-color 0.15s;
 
-  &:hover { background: $brand-tint; color: $ink; border-color: $brand-tint-2; }
+  &:hover { background: t.$brand-tint; color: t.$ink; border-color: t.$brand-tint-2; }
 }
 
 .mc-foot { display: flex; gap: 6px; margin-top: 4px; }
@@ -262,9 +253,9 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   ::ng-deep .mat-mdc-form-field-subscript-wrapper { display: none; }
   ::ng-deep .mdc-text-field--outlined {
     background: #fff; border-radius: 9px;
-    --mdc-outlined-text-field-outline-color: #{$line};
-    --mdc-outlined-text-field-focus-outline-color: #{$brand};
-    --mdc-outlined-text-field-hover-outline-color: #{$brand-tint-2};
+    --mdc-outlined-text-field-outline-color: #{t.$line};
+    --mdc-outlined-text-field-focus-outline-color: #{t.$brand};
+    --mdc-outlined-text-field-hover-outline-color: #{t.$brand-tint-2};
   }
   ::ng-deep .mat-mdc-text-field-wrapper { padding: 0 12px; }
   ::ng-deep .mat-mdc-form-field-infix {
@@ -275,7 +266,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 // ── Main ────────────────────────────────────────────────────────────────────
 .mc-main {
   background: #fff;
-  border: 1px solid $line;
+  border: 1px solid t.$line;
   border-radius: 16px;
   box-shadow: 0 4px 18px rgba(11,37,69,0.04);
   display: flex; flex-direction: column;
@@ -285,7 +276,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mc-main-top {
   padding: 18px 22px;
-  border-bottom: 1px solid $line;
+  border-bottom: 1px solid t.$line;
   display: flex; align-items: center; justify-content: space-between; gap: 16px;
   flex-wrap: wrap;
 }
@@ -296,25 +287,25 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 }
 
 .mc-main-title {
-  font-size: 18px; font-weight: 600; color: $ink; letter-spacing: -0.3px;
+  font-size: 18px; font-weight: 600; color: t.$ink; letter-spacing: -0.3px;
 
   em {
     font-family: $font-serif;
-    font-style: italic; font-weight: 400; color: $ink-soft;
+    font-style: italic; font-weight: 400; color: t.$ink-soft;
   }
 }
 
 .mc-badge-count {
   display: inline-flex; align-items: center; justify-content: center;
-  background: $brand-tint; color: $brand;
+  background: t.$brand-tint; color: t.$brand;
   font-size: 11.5px; font-weight: 700;
   padding: 3px 9px; border-radius: 100px;
 }
 
 .mc-search {
   display: flex; align-items: center; gap: 8px;
-  background: $line-soft;
-  border: 1px solid $line;
+  background: t.$line-soft;
+  border: 1px solid t.$line;
   border-radius: 10px;
   padding: 8px 12px;
   width: 320px; min-width: 200px;
@@ -322,26 +313,26 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   &:focus-within {
     background: #fff;
-    border-color: $brand;
-    box-shadow: 0 0 0 3px rgba(1,73,155,0.08);
+    border-color: t.$brand;
+    box-shadow: 0 0 0 3px rgba(38, 138, 151,0.08);
   }
 
-  svg { width: 15px; height: 15px; color: $muted; flex-shrink: 0; }
+  svg { width: 15px; height: 15px; color: t.$muted; flex-shrink: 0; }
 
   input {
     flex: 1; border: none; outline: none;
     background: transparent;
-    font-family: inherit; font-size: 13.5px; color: $ink;
+    font-family: inherit; font-size: 13.5px; color: t.$ink;
     min-width: 0;
-    &::placeholder { color: $muted; }
+    &::placeholder { color: t.$muted; }
   }
 }
 
 .mc-main-top-actions { display: flex; gap: 8px; align-items: center; }
 
 .mc-action-btn {
-  background: #fff; color: $ink-soft;
-  border: 1px solid $line;
+  background: #fff; color: t.$ink-soft;
+  border: 1px solid t.$line;
   border-radius: 10px;
   padding: 8px 12px;
   font-family: inherit; font-size: 13px; font-weight: 500;
@@ -351,11 +342,11 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   svg { width: 14px; height: 14px; }
 
-  &:hover { background: $brand-tint; border-color: $brand-tint-2; color: $brand; }
+  &:hover { background: t.$brand-tint; border-color: t.$brand-tint-2; color: t.$brand; }
 
   &.primary {
-    background: $brand; color: #fff; border-color: $brand;
-    &:hover { background: $brand-mid; border-color: $brand-mid; color: #fff; }
+    background: t.$brand-deep; color: #fff; border-color: t.$brand-deep;
+    &:hover { background: t.$brand-mid; border-color: t.$brand-mid; color: #fff; }
   }
 }
 
@@ -366,14 +357,14 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   width: 100%; background: #fff; font-family: $font-ui;
 
   ::ng-deep .mat-mdc-header-row {
-    background: $line-soft;
+    background: t.$line-soft;
     min-height: 44px;
   }
   ::ng-deep .mat-mdc-header-cell {
-    color: $muted;
+    color: t.$muted;
     font-size: 11px; font-weight: 700; letter-spacing: 1.2px;
     text-transform: uppercase;
-    border-bottom: 1px solid $line;
+    border-bottom: 1px solid t.$line;
     padding: 0 14px;
   }
   ::ng-deep .mat-mdc-header-cell:first-child { padding-left: 22px; }
@@ -382,12 +373,12 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   ::ng-deep .mat-mdc-row {
     transition: background 0.1s;
     min-height: 60px;
-    &:hover { background: $brand-tint; }
+    &:hover { background: t.$brand-tint; }
   }
 
   ::ng-deep .mat-mdc-cell {
-    color: $ink;
-    border-bottom: 1px solid $line-soft;
+    color: t.$ink;
+    border-bottom: 1px solid t.$line-soft;
     padding: 12px 14px;
     font-size: 13px;
     vertical-align: middle;
@@ -398,19 +389,19 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 // Row cells
 .mc-row-title {
-  font-weight: 600; color: $ink; line-height: 1.3;
+  font-weight: 600; color: t.$ink; line-height: 1.3;
 
   .sub {
-    display: block; font-size: 11.5px; font-weight: 400; color: $muted; margin-top: 2px;
+    display: block; font-size: 11.5px; font-weight: 400; color: t.$muted; margin-top: 2px;
   }
 }
 
-.mc-row-tema { font-weight: 500; color: $ink; font-size: 13px; }
+.mc-row-tema { font-weight: 500; color: t.$ink; font-size: 13px; }
 .mc-row-grupo-badges { display: block; margin-top: 4px; }
 
 .mc-date {
-  font-size: 12px; color: $ink-soft; line-height: 1.35;
-  span { display: block; color: $muted; font-size: 11px; }
+  font-size: 12px; color: t.$ink-soft; line-height: 1.35;
+  span { display: block; color: t.$muted; font-size: 11px; }
 }
 
 // Type chip
@@ -423,7 +414,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   svg { width: 12px; height: 12px; }
 
-  &.type-vec  { background: $brand-tint; color: $brand;   border-color: $brand-tint-2; }
+  &.type-vec  { background: t.$brand-tint; color: t.$brand;   border-color: t.$brand-tint-2; }
   &.type-ras  { background: #fff7e6;     color: #b35a00;  border-color: #ffe0b3; }
   &.type-mapa { background: #ecfdf5;     color: #047857;  border-color: #a7f3d0; }
 }
@@ -431,31 +422,31 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 // Share icon
 .mc-share {
   width: 26px; height: 26px; border-radius: 8px;
-  background: $line-soft;
+  background: t.$line-soft;
   display: inline-flex; align-items: center; justify-content: center;
-  color: $ink-soft;
+  color: t.$ink-soft;
   svg { width: 14px; height: 14px; }
 
   &.publico  { background: #ecfdf5; color: #047857; }
   &.privado  { background: #fef2f2; color: $danger; }
-  &.inst     { background: $brand-tint; color: $brand; }
+  &.inst     { background: t.$brand-tint; color: t.$brand; }
 }
 
 // User pill
 .mc-user-pill {
   display: inline-flex; align-items: center; gap: 6px;
-  background: $line-soft;
+  background: t.$line-soft;
   padding: 3px 10px 3px 3px; border-radius: 100px;
   max-width: 200px;
 
   .av {
     width: 22px; height: 22px; border-radius: 50%;
-    background: $brand; color: #fff;
+    background: t.$brand-deep; color: #fff;
     font-size: 10px; font-weight: 700; flex-shrink: 0;
     display: inline-flex; align-items: center; justify-content: center;
   }
   span {
-    font-size: 11.5px; color: $ink-soft; font-weight: 500;
+    font-size: 11.5px; color: t.$ink-soft; font-weight: 500;
     overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
   }
 }
@@ -463,17 +454,17 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 // Access chip
 .mc-access-chip {
   display: inline-flex; align-items: center; gap: 5px;
-  color: $ink; font-weight: 600;
-  background: #fff; border: 1px solid $line;
+  color: t.$ink; font-weight: 600;
+  background: #fff; border: 1px solid t.$line;
   padding: 3px 9px; border-radius: 100px; font-size: 11.5px;
 
-  svg { width: 12px; height: 12px; color: $muted; }
+  svg { width: 12px; height: 12px; color: t.$muted; }
 }
 
 // Star
 .mc-star {
   background: none; border: none; padding: 4px;
-  color: $muted; cursor: pointer;
+  color: t.$muted; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   transition: color 0.15s, transform 0.12s;
 
@@ -491,13 +482,13 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .mc-row-icon {
   width: 30px; height: 30px; border-radius: 8px;
   background: transparent; border: 1px solid transparent;
-  color: $ink-soft; cursor: pointer;
+  color: t.$ink-soft; cursor: pointer;
   display: inline-flex; align-items: center; justify-content: center;
   transition: background 0.12s, color 0.12s, border-color 0.12s;
 
   svg { width: 15px; height: 15px; }
 
-  &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+  &:hover { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; }
 
   &.activate { color: #047857;
     &:hover { background: #ecfdf5; border-color: #a7f3d0; color: #047857; }
@@ -509,11 +500,11 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 // Slide toggle override
 ::ng-deep .mc-table .mat-mdc-slide-toggle {
-  --mdc-switch-selected-track-color: #{$brand};
+  --mdc-switch-selected-track-color: #{t.$brand};
   --mdc-switch-selected-handle-color: #fff;
-  --mdc-switch-selected-hover-track-color: #{$brand};
-  --mdc-switch-selected-focus-track-color: #{$brand};
-  --mdc-switch-selected-pressed-track-color: #{$brand};
+  --mdc-switch-selected-hover-track-color: #{t.$brand};
+  --mdc-switch-selected-focus-track-color: #{t.$brand};
+  --mdc-switch-selected-pressed-track-color: #{t.$brand};
 }
 
 // Status pills
@@ -551,16 +542,16 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .mc-status-prog {
   display: inline-flex; align-items: center; gap: 8px;
-  font-size: 11.5px; color: $ink-soft;
+  font-size: 11.5px; color: t.$ink-soft;
 }
 
 .mc-progress {
   width: 70px; height: 6px; border-radius: 100px;
-  background: $brand-tint-2; overflow: hidden;
+  background: t.$brand-tint-2; overflow: hidden;
 
   > i {
     display: block; height: 100%;
-    background: $brand; border-radius: 100px;
+    background: t.$brand; border-radius: 100px;
     transition: width 0.3s;
   }
 
@@ -583,20 +574,20 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 // Paginator override
 .mc-paginator {
-  border-top: 1px solid $line;
+  border-top: 1px solid t.$line;
   background: #fff;
   border-radius: 0 0 16px 16px;
 
   ::ng-deep .mat-mdc-paginator-container {
     padding: 8px 22px;
-    color: $muted;
+    color: t.$muted;
     font-size: 12.5px;
   }
   ::ng-deep .mat-mdc-icon-button {
-    color: $ink-soft;
-    &:hover:not(:disabled) { background: $brand-tint; color: $brand; }
+    color: t.$ink-soft;
+    &:hover:not(:disabled) { background: t.$brand-tint; color: t.$brand; }
   }
-  ::ng-deep .mat-mdc-select { color: $ink; }
+  ::ng-deep .mat-mdc-select { color: t.$ink; }
 }
 
 // ── Mobile-only elements (hidden by default; unhidden only ≤768px below) ────
@@ -677,8 +668,8 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     flex-shrink: 0;
 
     &.mc-icon-btn--active {
-      background: $brand; border-color: $brand; color: #fff;
-      &:hover { background: $brand-mid; color: #fff; }
+      background: t.$brand; border-color: t.$brand; color: #fff;
+      &:hover { background: t.$brand-mid; color: #fff; }
     }
   }
 
@@ -686,10 +677,10 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     display: inline-flex;
     align-items: center; justify-content: center;
     width: 44px; height: 44px; border-radius: 12px;
-    background: $brand; border: 1px solid $brand; color: #fff;
+    background: t.$brand; border: 1px solid t.$brand; color: #fff;
     cursor: pointer; flex-shrink: 0;
     svg { width: 20px; height: 20px; }
-    &:hover { background: $brand-mid; }
+    &:hover { background: t.$brand-mid; }
   }
 
   .mc-icon-btn-badge {
@@ -697,7 +688,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     align-items: center; justify-content: center;
     position: absolute; top: -4px; right: -4px;
     min-width: 19px; height: 19px; border-radius: 100px;
-    background: $gold; color: $ink;
+    background: $gold; color: t.$ink;
     font-size: 10.5px; font-weight: 800;
     border: 2px solid #fff;
     padding: 0 3px;
@@ -735,7 +726,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
       // e a caixa cresce para caber o conteúdo — quebrando a rolagem interna.
       top: 16px; left: 0; right: 0;
       height: calc(100dvh - 16px);
-      background: $bg;
+      background: t.$bg;
       border-radius: 20px 20px 0 0;
       box-shadow: 0 -10px 40px rgba(11,37,69,0.22);
       z-index: 1000;
@@ -752,19 +743,19 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     align-items: center; justify-content: space-between;
     height: 60px; flex-shrink: 0;
     background: #fff;
-    border-bottom: 1px solid $line;
+    border-bottom: 1px solid t.$line;
     border-radius: 20px 20px 0 0;
     padding: 0 8px 0 18px;
   }
 
   .mc-filters-mobile-head-title {
     display: flex; align-items: center; gap: 10px;
-    span:first-child { font-size: 16px; font-weight: 600; color: $ink; }
+    span:first-child { font-size: 16px; font-weight: 600; color: t.$ink; }
   }
 
   .mc-filters-close-btn {
     width: 44px; height: 44px; border-radius: 12px;
-    background: $line-soft; border: 1px solid $line; color: $ink;
+    background: t.$line-soft; border: 1px solid t.$line; color: t.$ink;
     svg { width: 18px; height: 18px; }
   }
 
@@ -783,11 +774,11 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     display: flex;
     align-items: center; gap: 8px;
     height: 44px; padding: 0 14px;
-    background: #fff; border: 1px solid $line; border-radius: 12px;
-    color: $ink-soft; font-family: inherit; font-size: 13px; font-weight: 500;
+    background: #fff; border: 1px solid t.$line; border-radius: 12px;
+    color: t.$ink-soft; font-family: inherit; font-size: 13px; font-weight: 500;
     cursor: pointer;
     svg { width: 15px; height: 15px; }
-    &:hover { background: $brand-tint; color: $brand; border-color: $brand-tint-2; }
+    &:hover { background: t.$brand-tint; color: t.$brand; border-color: t.$brand-tint-2; }
   }
 
   .mc-filters-mobile-foot {
@@ -795,7 +786,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     gap: 10px;
     flex-shrink: 0;
     background: #fff;
-    border-top: 1px solid $line;
+    border-top: 1px solid t.$line;
     padding: 12px 14px calc(22px + env(safe-area-inset-bottom));
 
     .mc-btn-ghost   { width: 120px; height: 50px; border-radius: 12px; flex-shrink: 0; }
@@ -814,7 +805,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     display: flex;
     align-items: center; gap: 5px;
     background: none; border: none; cursor: pointer;
-    font-family: inherit; font-size: 12px; font-weight: 600; color: $brand;
+    font-family: inherit; font-size: 12px; font-weight: 600; color: t.$brand-deep;
   }
 
   .mc-panel-chevron {
@@ -827,7 +818,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   .mc-chip-more {
     display: inline-flex; align-items: center;
     background: none; border: none;
-    font-family: inherit; font-size: 12px; font-weight: 600; color: $muted;
+    font-family: inherit; font-size: 12px; font-weight: 600; color: t.$muted;
     padding: 9px 4px; cursor: pointer;
   }
 
@@ -847,7 +838,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .mc-card {
     background: #fff;
-    border: 1px solid $line;
+    border: 1px solid t.$line;
     border-radius: 14px;
     padding: 14px 8px 10px 14px;
     display: flex; flex-direction: column; gap: 10px;
@@ -864,18 +855,18 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   }
 
   .mc-card-title {
-    font-size: 14.5px; font-weight: 600; color: $ink; line-height: 1.3;
+    font-size: 14.5px; font-weight: 600; color: t.$ink; line-height: 1.3;
   }
 
-  .mc-card-sub { font-size: 11.5px; color: $muted; }
+  .mc-card-sub { font-size: 11.5px; color: t.$muted; }
 
   .mc-card-more {
     width: 44px; height: 44px; margin-top: -8px; flex-shrink: 0;
     border-radius: 11px; background: none; border: none;
-    color: $ink-soft; cursor: pointer;
+    color: t.$ink-soft; cursor: pointer;
     display: inline-flex; align-items: center; justify-content: center;
     svg { width: 18px; height: 18px; }
-    &:active { background: $brand-tint; }
+    &:active { background: t.$brand-tint; }
   }
 
   .mc-card-chips {
@@ -884,14 +875,14 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .mc-share-chip {
     display: inline-flex; align-items: center; gap: 5px;
-    background: $line-soft; color: $ink-soft;
+    background: t.$line-soft; color: t.$ink-soft;
     font-size: 11px; font-weight: 600;
     padding: 4px 10px; border-radius: 100px;
     svg { width: 12px; height: 12px; }
 
     &.publico { background: #ecfdf5; color: #047857; }
     &.privado { background: #fef2f2; color: $danger; }
-    &.inst    { background: $brand-tint; color: $brand; }
+    &.inst    { background: t.$brand-tint; color: t.$brand; }
   }
 
   .mc-card-bottom {
@@ -901,19 +892,19 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .mc-card-meta {
     display: flex; align-items: center; gap: 8px;
-    font-size: 12px; color: $muted;
-    .sep { width: 1px; height: 11px; background: $line; }
+    font-size: 12px; color: t.$muted;
+    .sep { width: 1px; height: 11px; background: t.$line; }
   }
 
   .mc-card-default {
     display: flex; align-items: center; gap: 8px;
-    span { font-size: 11.5px; font-weight: 600; color: $ink-soft; }
+    span { font-size: 11.5px; font-weight: 600; color: t.$ink-soft; }
   }
 
   .mc-list-empty {
     text-align: center;
     padding: 48px 20px;
-    color: $muted; font-size: 13px;
+    color: t.$muted; font-size: 13px;
   }
 
   // ── Action sheet de linha ─────────────────────────────────────────────────
@@ -940,19 +931,19 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .mc-action-sheet-handle {
     width: 44px; height: 4px; border-radius: 2px;
-    background: $brand-tint-2;
+    background: t.$brand-tint-2;
     align-self: center;
     margin-bottom: 8px;
   }
 
   .mc-action-sheet-head {
     padding: 6px 18px 12px;
-    border-bottom: 1px solid $line-soft;
+    border-bottom: 1px solid t.$line-soft;
     display: flex; flex-direction: column; gap: 2px;
     flex-shrink: 0;
 
-    .title { font-size: 15px; font-weight: 600; color: $ink; }
-    .sub   { font-size: 12px; color: $muted; }
+    .title { font-size: 15px; font-weight: 600; color: t.$ink; }
+    .sub   { font-size: 12px; color: t.$muted; }
   }
 
   .mc-action-sheet-body {
@@ -969,18 +960,18 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     display: flex; align-items: center; gap: 14px;
     padding: 0 10px; border-radius: 12px;
     background: none; border: none;
-    font-family: inherit; font-size: 14.5px; font-weight: 500; color: $ink;
+    font-family: inherit; font-size: 14.5px; font-weight: 500; color: t.$ink;
     cursor: pointer; text-align: left;
 
     .tile {
       width: 36px; height: 36px; border-radius: 10px;
-      background: $brand-tint; color: $brand;
+      background: t.$brand-tint; color: t.$brand;
       display: inline-flex; align-items: center; justify-content: center;
       flex-shrink: 0;
       svg { width: 17px; height: 17px; }
     }
 
-    &:active { background: $brand-tint; }
+    &:active { background: t.$brand-tint; }
 
     &--disabled { opacity: 0.42; pointer-events: none; }
 
@@ -990,7 +981,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     }
   }
 
-  .mc-action-divider { height: 1px; background: $line-soft; margin: 4px 10px; }
+  .mc-action-divider { height: 1px; background: t.$line-soft; margin: 4px 10px; }
 }
 
 @keyframes mc-fade {

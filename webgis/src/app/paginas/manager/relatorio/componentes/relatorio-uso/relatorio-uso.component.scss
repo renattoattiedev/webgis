@@ -1,3 +1,5 @@
+@use '../../../../../../styles/tokens' as t;
+
 .ru-wrapper { display: flex; flex-direction: column; gap: 0; }
 
 .ru-header {
@@ -12,10 +14,10 @@
   gap: 12px;
   flex-wrap: wrap;
 
-  @media print { position: static; padding: 8px 0; border-bottom: 2px solid #1b5e20; }
+  @media print { position: static; padding: 8px 0; border-bottom: 2px solid t.$brand; }
 }
 
-.ru-title { font-weight: 700; color: #14532d; font-size: 15px; }
+.ru-title { font-weight: 700; color: t.$brand-deep; font-size: 15px; }
 
 .ru-filters {
   display: flex;
@@ -37,7 +39,7 @@
   color: #374151;
   transition: all 0.15s;
 
-  &.active, &:hover { background: #1b5e20; color: white; border-color: #1b5e20; }
+  &.active, &:hover { background: t.$brand-deep; color: white; border-color: t.$brand-deep; }
 }
 
 .ru-date {
@@ -64,17 +66,17 @@
   background: white;
   border-radius: 8px;
   padding: 14px 16px;
-  border-left: 4px solid #1b5e20;
+  border-left: 4px solid t.$brand;
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
 
-  &--blue  { border-color: #1b5e20; }
+  &--blue  { border-color: t.$brand; }
   &--green { border-color: #2e7d32; .ru-kpi-value { color: #2e7d32; } }
   &--amber { border-color: #b45309; .ru-kpi-value { color: #b45309; } }
   &--purple { border-color: #7c3aed; .ru-kpi-value { color: #7c3aed; } }
 }
 
 .ru-kpi-label { font-size: 10px; color: #6b7280; text-transform: uppercase; letter-spacing: 0.5px; }
-.ru-kpi-value { font-size: 26px; font-weight: 700; color: #1b5e20; margin: 4px 0; }
+.ru-kpi-value { font-size: 26px; font-weight: 700; color: t.$brand; margin: 4px 0; }
 .ru-kpi-sub { font-size: 10px; color: #6b7280; &.up { color: #2e7d32; } &.down { color: #dc2626; } }
 
 .ru-charts {
@@ -94,13 +96,13 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
 }
 
-.ru-chart-title { font-size: 11px; font-weight: 700; color: #14532d; margin-bottom: 10px; }
+.ru-chart-title { font-size: 11px; font-weight: 700; color: t.$brand-deep; margin-bottom: 10px; }
 
 .ru-ranking { display: flex; flex-direction: column; gap: 6px; }
 .ru-ranking-item { display: flex; align-items: center; gap: 8px; }
 .ru-rank-num { font-size: 10px; color: #9ca3af; width: 14px; flex-shrink: 0; }
 .ru-rank-nome { flex: 1; font-size: 11px; color: #374151; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.ru-rank-val { font-size: 11px; font-weight: 700; color: #1b5e20; }
+.ru-rank-val { font-size: 11px; font-weight: 700; color: t.$brand-deep; }
 
 .ru-table-card {
   margin: 0 20px 20px;
@@ -112,7 +114,7 @@
   @media print { margin: 0; box-shadow: none; border: 1px solid #e5e7eb; }
 }
 
-.ru-table-title { padding: 10px 14px; border-bottom: 1px solid #f3f4f6; font-size: 11px; font-weight: 700; color: #14532d; }
+.ru-table-title { padding: 10px 14px; border-bottom: 1px solid #f3f4f6; font-size: 11px; font-weight: 700; color: t.$brand-deep; }
 
 .ru-table {
   width: 100%;
@@ -124,7 +126,7 @@
   td { padding: 7px 14px; color: #374151; border-top: 1px solid #f3f4f6; }
   tbody tr:nth-child(even) { background: #fafafa; }
   .num { text-align: right; }
-  .blue { color: #1b5e20; font-weight: 600; }
+  .blue { color: t.$brand-deep; font-weight: 600; }
   .purple { color: #7c3aed; }
   .muted { color: #6b7280; }
   .empty { text-align: center; color: #9ca3af; padding: 20px; }

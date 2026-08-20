@@ -3,17 +3,9 @@
 // Padrão visual IDE RunForrestGIS — barra lateral azul, headers limpos, cards.
 // Importe no styles.scss ou deixe encapsulado por componente — funciona dos dois jeitos.
 // ─────────────────────────────────────────────────────────────────────────────
+@use '../../../../../styles/tokens' as t;
 
-$brand:        #1b5e20;
-$brand-mid:    #14532d;
-$brand-tint:   #eef5ec;
-$brand-tint-2: #e2eee0;
-$ink:          #1a2e1f;
-$ink-soft:     #4d6b52;
-$muted:        #6b8f74;
-$line:         #e7f0e7;
 $line-soft:    #f3f6fb;
-$bg:           #f0f6ed;
 $success:      #047857;
 $success-bg:   #ecfdf5;
 $warn:         #b45309;
@@ -27,7 +19,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 :host {
   display:block;
   font-family:$font-ui;
-  color:$ink;
+  color:t.$ink;
 }
 
 * { box-sizing:border-box; }
@@ -35,7 +27,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 // ── Wrapper inline (com barra lateral azul) ────────────────────────────
 .cfg {
   background:#fff;
-  border:1px solid $line;
+  border:1px solid t.$line;
   border-radius:14px;
   overflow:hidden;
   display:flex; flex-direction:column;
@@ -45,7 +37,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   &::before {
     content:""; position:absolute; left:0; top:14px; bottom:14px; width:3px;
-    background:$brand; border-radius:100px;
+    background:t.$brand; border-radius:100px;
   }
 }
 
@@ -54,14 +46,14 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display:flex; align-items:center; justify-content:space-between;
   gap:12px;
   padding:14px 18px 14px;
-  border-bottom:1px solid $line;
+  border-bottom:1px solid t.$line;
 }
 
 .cfg-head-left { display:flex; align-items:center; gap:12px; min-width:0; flex:1; }
 
 .cfg-head-icon {
   width:32px; height:32px; border-radius:9px;
-  background:$brand-tint; color:$brand;
+  background:t.$brand-tint; color:t.$brand;
   display:inline-flex; align-items:center; justify-content:center;
   flex-shrink:0;
   svg { width:16px; height:16px; }
@@ -71,13 +63,13 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .cfg-title {
   margin:0;
-  font-size:16px; font-weight:600; color:$ink;
+  font-size:16px; font-weight:600; color:t.$ink;
   letter-spacing:-0.2px; line-height:1.25;
-  em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+  em { font-family:$font-serif; font-style:italic; font-weight:400; color:t.$ink-soft; }
 }
 
 .cfg-sub {
-  margin:0; font-size:12px; color:$muted; line-height:1.4;
+  margin:0; font-size:12px; color:t.$muted; line-height:1.4;
 }
 
 .cfg-head-right {
@@ -87,12 +79,12 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .cfg-close {
   width:28px; height:28px; border-radius:7px;
-  background:transparent; color:$muted;
+  background:transparent; color:t.$muted;
   border:1px solid transparent; cursor:pointer;
   display:inline-flex; align-items:center; justify-content:center;
   transition:background 0.15s, color 0.15s, border-color 0.15s;
   svg { width:14px; height:14px; }
-  &:hover { background:$line-soft; color:$ink; border-color:$line; }
+  &:hover { background:$line-soft; color:t.$ink; border-color:t.$line; }
 }
 
 // ── Body ────────────────────────────────────────────────────────────────
@@ -111,20 +103,20 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .cfg-section-title {
   margin:0;
-  font-size:13px; font-weight:600; color:$ink;
+  font-size:13px; font-weight:600; color:t.$ink;
   letter-spacing:-0.1px;
-  em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+  em { font-family:$font-serif; font-style:italic; font-weight:400; color:t.$ink-soft; }
 }
 
 .cfg-section-sub {
   margin:2px 0 0;
-  font-size:12px; color:$muted; line-height:1.4;
+  font-size:12px; color:t.$muted; line-height:1.4;
 }
 
 // ── Card de camada ──────────────────────────────────────────────────────
 .cfg-card {
   background:#fff;
-  border:1px solid $line;
+  border:1px solid t.$line;
   border-radius:10px;
   padding:12px 14px;
   margin-bottom:8px;
@@ -135,7 +127,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display:flex; align-items:center; gap:8px;
   margin-bottom:10px;
   font-size:12px; font-weight:600;
-  color:$brand;
+  color:t.$brand-deep;
   svg { width:14px; height:14px; }
   span { letter-spacing:0.2px; }
 }
@@ -144,7 +136,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   margin-left:auto;
   width:26px; height:26px; border-radius:7px;
   background:transparent; border:1px solid transparent;
-  color:$muted; cursor:pointer;
+  color:t.$muted; cursor:pointer;
   display:inline-flex; align-items:center; justify-content:center;
   transition:background 0.15s, color 0.15s, border-color 0.15s;
   svg { width:13px; height:13px; }
@@ -165,17 +157,17 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   .mat-mdc-form-field-subscript-wrapper { padding:0 12px; min-height:0; }
 }
 .cfg ::ng-deep .mdc-text-field--outlined {
-  --mdc-outlined-text-field-outline-color:#{$line};
-  --mdc-outlined-text-field-hover-outline-color:#{$brand-tint-2};
-  --mdc-outlined-text-field-focus-outline-color:#{$brand};
-  --mdc-outlined-text-field-label-text-color:#{$muted};
-  --mdc-outlined-text-field-focus-label-text-color:#{$brand};
-  --mdc-outlined-text-field-input-text-color:#{$ink};
+  --mdc-outlined-text-field-outline-color:#{t.$line};
+  --mdc-outlined-text-field-hover-outline-color:#{t.$brand-tint-2};
+  --mdc-outlined-text-field-focus-outline-color:#{t.$brand};
+  --mdc-outlined-text-field-label-text-color:#{t.$muted};
+  --mdc-outlined-text-field-focus-label-text-color:#{t.$brand};
+  --mdc-outlined-text-field-input-text-color:#{t.$ink};
   --mdc-outlined-text-field-container-shape:9px;
   --mdc-outlined-text-field-label-text-size:13px;
 }
-.cfg ::ng-deep .mat-mdc-select-arrow { color:$muted; }
-.cfg ::ng-deep .mat-mdc-select-value { color:$ink; font-size:13px; }
+.cfg ::ng-deep .mat-mdc-select-arrow { color:t.$muted; }
+.cfg ::ng-deep .mat-mdc-select-value { color:t.$ink; font-size:13px; }
 
 .cfg-opt-invalid { color:rgba(0,0,0,0.42); }
 
@@ -186,56 +178,56 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display:inline-flex; align-items:center; gap:5px;
   font-size:11.5px; font-weight:500;
   padding:3px 9px; border-radius:100px;
-  background:$line-soft; color:$ink-soft;
-  border:1px solid $line;
-  svg { width:11px; height:11px; color:$muted; }
+  background:$line-soft; color:t.$ink-soft;
+  border:1px solid t.$line;
+  svg { width:11px; height:11px; color:t.$muted; }
 
   &--mono {
     font-family: ui-monospace, 'JetBrains Mono', monospace;
     font-size:11px;
-    color:$brand;
-    background:$brand-tint;
-    border-color:$brand-tint-2;
-    svg { color:$brand; }
+    color:t.$brand;
+    background:t.$brand-tint;
+    border-color:t.$brand-tint-2;
+    svg { color:t.$brand; }
   }
 }
 
 // ── Botões ─────────────────────────────────────────────────────────────
 .cfg-btn-primary {
   display:inline-flex; align-items:center; gap:7px;
-  background:$brand; color:#fff;
-  border:1px solid $brand; border-radius:9px;
+  background:t.$brand-deep; color:#fff;
+  border:1px solid t.$brand-deep; border-radius:9px;
   padding:8px 14px;
   font-family:inherit; font-size:13px; font-weight:600;
   cursor:pointer;
   transition:background 0.15s, border-color 0.15s, transform 0.12s;
   svg { width:13px; height:13px; }
-  &:hover:not(:disabled) { background:$brand-mid; border-color:$brand-mid; }
+  &:hover:not(:disabled) { background:t.$brand-mid; border-color:t.$brand-mid; }
   &:active:not(:disabled) { transform:scale(0.98); }
   &:disabled { opacity:0.45; cursor:not-allowed; }
 }
 
 .cfg-btn-ghost {
   display:inline-flex; align-items:center; gap:7px;
-  background:transparent; color:$ink-soft;
-  border:1px solid $line; border-radius:9px;
+  background:transparent; color:t.$ink-soft;
+  border:1px solid t.$line; border-radius:9px;
   padding:8px 14px;
   font-family:inherit; font-size:13px; font-weight:500;
   cursor:pointer;
   transition:background 0.15s, color 0.15s, border-color 0.15s;
   svg { width:13px; height:13px; }
-  &:hover { background:$brand-tint; color:$ink; border-color:$brand-tint-2; }
+  &:hover { background:t.$brand-tint; color:t.$ink; border-color:t.$brand-tint-2; }
 }
 
 .cfg-icon-btn {
   width:30px; height:30px; border-radius:8px;
-  background:transparent; color:$muted;
+  background:transparent; color:t.$muted;
   border:1px solid transparent; cursor:pointer;
   display:inline-flex; align-items:center; justify-content:center;
   transition:background 0.12s, color 0.12s, border-color 0.12s;
   svg { width:14px; height:14px; }
-  &:hover { background:$brand-tint; color:$brand; border-color:$brand-tint-2; }
-  &.active { background:$brand; color:#fff; border-color:$brand; }
+  &:hover { background:t.$brand-tint; color:t.$brand; border-color:t.$brand-tint-2; }
+  &.active { background:t.$brand; color:#fff; border-color:t.$brand; }
 
   &--danger:hover { background:$danger-bg; color:$danger; border-color:#fecaca; }
 }
@@ -244,28 +236,28 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .cfg-segment {
   display:inline-flex; gap:2px;
   background:$line-soft;
-  border:1px solid $line;
+  border:1px solid t.$line;
   border-radius:9px;
   padding:3px;
 }
 
 .cfg-segment-btn {
   display:inline-flex; align-items:center; gap:6px;
-  background:transparent; color:$ink-soft;
+  background:transparent; color:t.$ink-soft;
   border:none; border-radius:7px;
   padding:6px 12px;
   font-family:inherit; font-size:12.5px; font-weight:600;
   cursor:pointer;
   transition:background 0.15s, color 0.15s;
   svg { width:13px; height:13px; }
-  &:hover { color:$brand; }
-  &.active { background:#fff; color:$brand; box-shadow:0 1px 2px rgba(11,37,69,0.08); }
+  &:hover { color:t.$brand-deep; }
+  &.active { background:#fff; color:t.$brand-deep; box-shadow:0 1px 2px rgba(11,37,69,0.08); }
 }
 
 // ── Editor de template ──────────────────────────────────────────────────
 .cfg-editor {
   background:#fff;
-  border:1px solid $line;
+  border:1px solid t.$line;
   border-radius:10px;
   overflow:hidden;
 }
@@ -275,8 +267,8 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   gap:10px;
   padding:10px 12px;
   background:$line-soft;
-  border-bottom:1px solid $line;
-  font-size:12px; font-weight:600; color:$ink-soft;
+  border-bottom:1px solid t.$line;
+  font-size:12px; font-weight:600; color:t.$ink-soft;
   letter-spacing:0.1px;
 }
 
@@ -284,7 +276,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   width:100%;
   border:none; outline:none;
   padding:14px;
-  background:#fff; color:$ink;
+  background:#fff; color:t.$ink;
   font-family: ui-monospace, 'JetBrains Mono', 'Consolas', monospace;
   font-size:12px; line-height:1.55;
   resize:vertical;
@@ -318,16 +310,16 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .cfg-empty {
   display:flex; align-items:center; gap:8px;
   padding:14px 16px;
-  border:1.5px dashed $line;
+  border:1.5px dashed t.$line;
   border-radius:10px;
-  color:$muted; font-size:12.5px;
+  color:t.$muted; font-size:12.5px;
   background:$line-soft;
-  svg { width:18px; height:18px; color:$muted; flex-shrink:0; }
+  svg { width:18px; height:18px; color:t.$muted; flex-shrink:0; }
 }
 
 .cfg-loading {
   display:inline-flex; align-items:center; gap:8px;
-  font-size:12.5px; color:$ink-soft;
+  font-size:12.5px; color:t.$ink-soft;
 }
 
 // ── Linha de adicionar camada (pitometria) ─────────────────────────────
@@ -341,7 +333,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 .cfg-spatial-list { display:flex; flex-direction:column; gap:8px; margin-top:10px; }
 
 .cfg-spatial-item {
-  border:1px solid $line;
+  border:1px solid t.$line;
   border-radius:10px;
   overflow:hidden;
   background:#fff;
@@ -354,33 +346,33 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 }
 
 .cfg-spatial-icon {
-  width:18px; height:18px; color:$brand; flex-shrink:0;
+  width:18px; height:18px; color:t.$brand; flex-shrink:0;
 }
 
 .cfg-spatial-text { flex:1; display:flex; flex-direction:column; min-width:0; gap:2px; }
 
 .cfg-spatial-label {
-  font-size:13px; font-weight:600; color:$ink;
+  font-size:13px; font-weight:600; color:t.$ink;
   white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
 }
 
 .cfg-spatial-sub {
-  font-size:11.5px; color:$muted;
+  font-size:11.5px; color:t.$muted;
   strong { color:$success; font-weight:700; }
 }
 
 .cfg-spatial-warn { color:$warn; }
 
 .cfg-spatial-edit {
-  background:$brand-tint;
-  border-top:1px solid $brand-tint-2;
+  background:t.$brand-tint;
+  border-top:1px solid t.$brand-tint-2;
   padding:12px 14px;
   display:flex; flex-direction:column; gap:10px;
 }
 
 .cfg-spatial-edit-title {
   font-size:10.5px; font-weight:700; letter-spacing:1.3px;
-  text-transform:uppercase; color:$brand;
+  text-transform:uppercase; color:t.$brand-deep;
 }
 
 .cfg-spatial-edit-row {
@@ -394,7 +386,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   display:flex; align-items:center; justify-content:flex-end;
   gap:8px;
   padding:12px 18px;
-  border-top:1px solid $line;
+  border-top:1px solid t.$line;
   background:$line-soft;
 }
 
@@ -411,7 +403,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .cfg-overlay-card {
   background:#fff;
-  border:1px solid $line;
+  border:1px solid t.$line;
   border-radius:14px;
   box-shadow:0 24px 80px -20px rgba(11,37,69,0.4);
   width:95vw; max-width:1200px;
@@ -423,7 +415,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   &::before {
     content:""; position:absolute; left:0; top:14px; bottom:14px; width:3px;
-    background:$brand; border-radius:100px;
+    background:t.$brand; border-radius:100px;
   }
 
   &--narrow { max-width:640px; }
@@ -431,14 +423,14 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 .cfg-preview-body {
   flex:1; min-height:0;
-  background:$bg;
+  background:t.$bg;
   padding:18px;
   display:flex; align-items:stretch; justify-content:center;
 
   iframe {
     flex:1; min-width:0;
     background:#fff;
-    border:1px solid $line;
+    border:1px solid t.$line;
     border-radius:10px;
     box-shadow:0 6px 18px rgba(11,37,69,0.06);
   }
@@ -452,9 +444,9 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 }
 .cfg-var-label {
   font-size:10.5px; font-weight:700; letter-spacing:1.3px;
-  text-transform:uppercase; color:$brand;
+  text-transform:uppercase; color:t.$brand-deep;
   padding-bottom:5px;
-  border-bottom:1px solid $brand-tint-2;
+  border-bottom:1px solid t.$brand-tint-2;
   margin-bottom:2px;
 }
 
@@ -465,13 +457,13 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   font-size:12.5px;
   code {
     font-family: ui-monospace, monospace;
-    background:$brand-tint; color:$brand;
+    background:t.$brand-tint; color:t.$brand;
     padding:3px 8px; border-radius:6px;
     font-size:11.5px;
-    border:1px solid $brand-tint-2;
+    border:1px solid t.$brand-tint-2;
     width:fit-content;
   }
-  span { color:$ink-soft; line-height:1.45; }
+  span { color:t.$ink-soft; line-height:1.45; }
   @media (max-width:640px) {
     grid-template-columns:1fr;
     gap:4px;
@@ -480,12 +472,12 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
 // ── Slide toggle override ──────────────────────────────────────────────
 .cfg ::ng-deep .mat-mdc-slide-toggle {
-  --mdc-switch-selected-track-color:#{$brand};
+  --mdc-switch-selected-track-color:#{t.$brand};
   --mdc-switch-selected-handle-color:#fff;
-  --mdc-switch-selected-hover-track-color:#{$brand};
-  --mdc-switch-selected-focus-track-color:#{$brand};
-  --mdc-switch-selected-pressed-track-color:#{$brand};
-  .mdc-form-field { font-family:$font-ui; font-size:13px; color:$ink; }
+  --mdc-switch-selected-hover-track-color:#{t.$brand};
+  --mdc-switch-selected-focus-track-color:#{t.$brand};
+  --mdc-switch-selected-pressed-track-color:#{t.$brand};
+  .mdc-form-field { font-family:$font-ui; font-size:13px; color:t.$ink; }
 }
 
 // ── Abas (mobile, 3D — Camadas · Template · Preview) ───────────────────
@@ -505,7 +497,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
 
   .cfg-head {
     height:60px; padding:0 16px; flex-shrink:0;
-    border-left:3px solid $brand;
+    border-left:3px solid t.$brand;
   }
   .cfg-head-icon { width:32px; height:32px; }
   .cfg-head-text { min-width:0; }
@@ -517,26 +509,26 @@ $font-serif: 'Instrument Serif', Georgia, serif;
   .cfg-head-right { gap:8px; }
   .cfg-close {
     width:44px; height:44px; border-radius:11px;
-    background:$line-soft; border-color:$line;
+    background:$line-soft; border-color:t.$line;
   }
 
   .cfg-tabs {
     display:flex; gap:6px; overflow-x:auto; scrollbar-width:none;
-    padding:10px 16px; background:$bg; border-bottom:1px solid $line-soft;
+    padding:10px 16px; background:t.$bg; border-bottom:1px solid $line-soft;
     flex-shrink:0;
     &::-webkit-scrollbar { display:none; }
   }
   .cfg-tab-pill {
     flex-shrink:0; white-space:nowrap;
     height:38px; padding:0 14px; border-radius:100px;
-    background:$line-soft; border:1px solid $line; color:$ink-soft;
+    background:$line-soft; border:1px solid t.$line; color:t.$ink-soft;
     font-family:inherit; font-size:12.5px; font-weight:600; cursor:pointer;
-    &.active { background:$brand; color:#fff; border-color:$brand; }
+    &.active { background:t.$brand-deep; color:#fff; border-color:t.$brand-deep; }
   }
 
   .cfg-body {
     flex:1; min-height:0; overflow-y:auto;
-    background:$bg; padding:14px; gap:12px;
+    background:t.$bg; padding:14px; gap:12px;
   }
   .cfg-tab-hidden { display:none; }
 
@@ -576,7 +568,7 @@ $font-serif: 'Instrument Serif', Georgia, serif;
     width:100vw; max-width:100vw; height:100dvh; max-height:100dvh;
     border-radius:0; padding-left:0;
     &::before { display:none; }
-    .cfg-head { border-left:3px solid $brand; }
+    .cfg-head { border-left:3px solid t.$brand; }
   }
   .cfg-preview-body {
     padding:0;

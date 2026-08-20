@@ -1,6 +1,5 @@
-$brand:      #1b5e20;
+@use '../../../../styles/tokens' as t;
 $brand-dark: #012d6b;
-$text:       #14532d;
 $muted:      #64748b;
 $border:     #d1dced;
 $success:    #16a34a;
@@ -38,7 +37,7 @@ $error:      #dc2626;
   align-items: center;
   gap: 10px;
   padding: 16px 20px;
-  background: linear-gradient(135deg, $brand 0%, $brand-dark 100%);
+  background: linear-gradient(135deg, t.$brand 0%, $brand-dark 100%);
   color: #fff;
   flex-shrink: 0;
 }
@@ -114,11 +113,11 @@ $error:      #dc2626;
   }
 
   .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
-    color: $brand;
+    color: t.$brand-deep;
   }
 
   .mdc-tab-indicator__content--underline {
-    border-color: $brand;
+    border-color: t.$brand;
   }
 
   .mat-mdc-tab-body-content {
@@ -138,7 +137,7 @@ $error:      #dc2626;
   display: block;
   font-size: 12px;
   font-weight: 600;
-  color: $text;
+  color: t.$ink;
   margin-bottom: 5px;
   letter-spacing: 0.1px;
 }
@@ -164,7 +163,7 @@ $error:      #dc2626;
   border: 1.5px solid $border;
   border-radius: 10px;
   font-size: 13.5px;
-  color: $text;
+  color: t.$ink;
   background: #fff;
   outline: none;
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -174,8 +173,8 @@ $error:      #dc2626;
   &::placeholder { color: #b0bbc9; }
 
   &:focus {
-    border-color: $brand;
-    box-shadow: 0 0 0 3px rgba(1,73,155,0.08);
+    border-color: t.$brand;
+    box-shadow: 0 0 0 3px rgba(38, 138, 151,0.08);
   }
 
   &--readonly {
@@ -203,7 +202,7 @@ $error:      #dc2626;
   transition: color 0.13s;
 
   svg { width: 15px; height: 15px; }
-  &:hover { color: $brand; }
+  &:hover { color: t.$brand; }
 }
 
 .pu-error {
@@ -259,7 +258,7 @@ $error:      #dc2626;
   gap: 7px;
   height: 42px;
   padding: 0 20px;
-  background: $brand;
+  background: t.$brand-deep;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -274,7 +273,7 @@ $error:      #dc2626;
 
   &:hover:not(:disabled) {
     background: $brand-dark;
-    box-shadow: 0 4px 12px rgba(1,73,155,0.28);
+    box-shadow: 0 4px 12px rgba(38, 138, 151,0.28);
   }
 
   &:active:not(:disabled) { transform: scale(0.99); }

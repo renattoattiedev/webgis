@@ -1,3 +1,5 @@
+@use '../../../../../styles/tokens' as t;
+
 :host {
   display: block;
   font-family: system-ui, sans-serif;
@@ -21,7 +23,7 @@
 .panel-label {
   font-size: 11.5px;
   font-weight: 700;
-  color: #14532d;
+  color: t.$brand-deep;
   letter-spacing: 0.3px;
 }
 
@@ -51,7 +53,7 @@
   transition: background 0.22s ease;
 
   .toggle-on & {
-    background: #1b5e20;
+    background: t.$brand;
   }
 }
 
@@ -79,7 +81,7 @@
   min-width: 18px;
 
   .toggle-on & {
-    color: #1b5e20;
+    color: t.$brand-deep;
   }
 }
 
@@ -110,9 +112,9 @@
   letter-spacing: -0.3px;
 
   &-e {
-    background: rgba(1, 73, 155, 0.10);
-    border: 1.5px solid rgba(1, 73, 155, 0.30);
-    color: #1b5e20;
+    background: rgba(38, 138, 151, 0.10);
+    border: 1.5px solid rgba(38, 138, 151, 0.30);
+    color: t.$brand;
   }
 
   &-d {
@@ -133,8 +135,8 @@
   transition: border-color 0.15s ease, box-shadow 0.15s ease;
 
   &:focus-within {
-    border-color: rgba(1, 73, 155, 0.35);
-    box-shadow: 0 0 0 3px rgba(1, 73, 155, 0.08);
+    border-color: rgba(38, 138, 151, 0.35);
+    box-shadow: 0 0 0 3px rgba(38, 138, 151, 0.08);
   }
 }
 

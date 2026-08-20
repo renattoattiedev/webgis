@@ -1,7 +1,5 @@
-$blue:        #1b5e20;
-$blue-light:  rgba(1, 73, 155, 0.07);
-$blue-border: rgba(1, 73, 155, 0.18);
-$text:        #14532d;
+@use '../../../../../styles/tokens' as t;
+
 $muted:       #6b7280;
 $divider:     rgba(0, 0, 0, 0.06);
 
@@ -30,9 +28,9 @@ $divider:     rgba(0, 0, 0, 0.06);
   gap: 8px;
   font-size: 13px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
 
-  mat-icon { font-size: 18px; width: 18px; height: 18px; color: $blue; }
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: t.$brand; }
 }
 
 .header-actions {
@@ -43,7 +41,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 .icon-btn {
   width: 30px;
   height: 30px;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.18);
   border-radius: 7px;
   background: transparent;
   cursor: pointer;
@@ -55,7 +53,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
 
-  &:hover { background: $blue-light; color: $blue; }
+  &:hover { background: rgba(t.$brand, 0.07); color: t.$brand; }
 
   &--danger {
     border-color: rgba(239, 68, 68, 0.22);
@@ -82,8 +80,8 @@ $divider:     rgba(0, 0, 0, 0.06);
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:focus-within {
-    border-color: $blue-border;
-    box-shadow: 0 0 0 3px $blue-light;
+    border-color: rgba(t.$brand, 0.18);
+    box-shadow: 0 0 0 3px rgba(t.$brand, 0.07);
   }
 }
 
@@ -94,7 +92,7 @@ $divider:     rgba(0, 0, 0, 0.06);
 
 .search-input {
   flex: 1; border: none; outline: none;
-  font-size: 12px; color: $text;
+  font-size: 12px; color: t.$ink;
   background: transparent; font-family: system-ui, sans-serif;
 
   &::placeholder { color: #9ca3af; }
@@ -131,8 +129,8 @@ $divider:     rgba(0, 0, 0, 0.06);
 }
 
 .drag-placeholder {
-  background: $blue-light;
-  border: 1.5px dashed $blue-border;
+  background: rgba(t.$brand, 0.07);
+  border: 1.5px dashed rgba(t.$brand, 0.18);
   border-radius: 6px;
   min-height: 52px;
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
@@ -162,19 +160,19 @@ $divider:     rgba(0, 0, 0, 0.06);
 .thumb-img {
   width: 36px; height: 36px;
   border-radius: 7px; object-fit: cover;
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.18);
 }
 
 .thumb-placeholder {
   width: 36px; height: 36px;
   border-radius: 7px;
-  border: 1px solid $blue-border;
-  background: $blue-light;
+  border: 1px solid rgba(t.$brand, 0.18);
+  background: rgba(t.$brand, 0.07);
   display: flex; align-items: center; justify-content: center;
 
-  mat-icon { font-size: 18px; width: 18px; height: 18px; color: $blue; }
+  mat-icon { font-size: 18px; width: 18px; height: 18px; color: t.$brand; }
 
-  &.loading { background: rgba(1, 73, 155, 0.05); }
+  &.loading { background: rgba(t.$brand, 0.05); }
   &.error {
     background: rgba(239, 68, 68, 0.06);
     border-color: rgba(239, 68, 68, 0.25);
@@ -187,7 +185,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   bottom: -4px; right: -4px;
   width: 14px; height: 14px;
   border-radius: 50%;
-  background: $blue;
+  background: t.$brand;
   border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
 
@@ -217,11 +215,11 @@ $divider:     rgba(0, 0, 0, 0.06);
 // ── Toggle color ──────────────────────────────────────────────────────────────
 
 ::ng-deep .mat-mdc-slide-toggle.mat-accent {
-  --mdc-switch-selected-track-color: #{$blue};
+  --mdc-switch-selected-track-color: #{t.$brand};
   --mdc-switch-selected-handle-color: #fff;
-  --mdc-switch-selected-hover-track-color: #{$blue};
-  --mdc-switch-selected-focus-track-color: #{$blue};
-  --mdc-switch-selected-pressed-track-color: #{$blue};
+  --mdc-switch-selected-hover-track-color: #{t.$brand};
+  --mdc-switch-selected-focus-track-color: #{t.$brand};
+  --mdc-switch-selected-pressed-track-color: #{t.$brand};
 }
 
 // ── Menu button ───────────────────────────────────────────────────────────────
@@ -236,14 +234,14 @@ $divider:     rgba(0, 0, 0, 0.06);
 
   mat-icon { font-size: 16px; width: 16px; height: 16px; }
 
-  &:hover { background: rgba(0, 0, 0, 0.06); color: $text; }
+  &:hover { background: rgba(0, 0, 0, 0.06); color: t.$brand-deep; }
 }
 
 // ── Context menu panel ────────────────────────────────────────────────────────
 
 ::ng-deep .layer-context-menu {
   border-radius: 12px !important;
-  border: 1px solid $blue-border !important;
+  border: 1px solid rgba(t.$brand, 0.18) !important;
   box-shadow: 0 8px 28px rgba(0, 0, 0, 0.13) !important;
   padding: 4px 0 !important;
   min-width: 210px !important;
@@ -261,7 +259,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   height: 36px !important;
   min-height: 36px !important;
   font-size: 12.5px !important;
-  color: $text !important;
+  color: t.$ink !important;
   letter-spacing: 0 !important;
 
   // suppress Material's own icon/text layout
@@ -284,13 +282,14 @@ $divider:     rgba(0, 0, 0, 0.06);
 .ctx-label {
   flex: 1;
   font-size: 12.5px;
-  color: $text;
+  color: t.$ink;
 }
 
-.ctx-item:hover .ctx-icon mat-icon { color: $blue; }
+.ctx-item:hover .ctx-icon mat-icon { color: t.$brand; }
 
 .ctx-item--active {
-  .ctx-icon mat-icon, .ctx-label { color: $blue !important; }
+  .ctx-icon mat-icon { color: t.$brand !important; }
+  .ctx-label { color: t.$brand-deep !important; }
 }
 
 .ctx-item--danger {
@@ -330,17 +329,17 @@ $divider:     rgba(0, 0, 0, 0.06);
   }
 
   ::ng-deep .mat-mdc-slider {
-    --mdc-slider-active-track-color: #{$blue};
-    --mdc-slider-inactive-track-color: #{$blue-border};
-    --mdc-slider-handle-color: #{$blue};
-    --mdc-slider-focus-handle-color: #{$blue};
-    --mdc-slider-hover-handle-color: #{$blue};
+    --mdc-slider-active-track-color: #{t.$brand};
+    --mdc-slider-inactive-track-color: #{rgba(t.$brand, 0.18)};
+    --mdc-slider-handle-color: #{t.$brand};
+    --mdc-slider-focus-handle-color: #{t.$brand};
+    --mdc-slider-hover-handle-color: #{t.$brand};
   }
 }
 
 .ctx-opacity-label {
   font-size: 12.5px;
-  color: $text;
+  color: t.$ink;
   white-space: nowrap;
   margin-right: 4px;
   flex-shrink: 0;
@@ -367,7 +366,7 @@ $divider:     rgba(0, 0, 0, 0.06);
   background: #fff;
   border-radius: 8px;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
-  border: 1px solid $blue-border;
+  border: 1px solid rgba(t.$brand, 0.18);
 }
 
 ::ng-deep .cdk-drag-animating {

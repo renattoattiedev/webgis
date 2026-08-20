@@ -1,7 +1,4 @@
-$blue: #1b5e20;
-$blue-light: rgba(1, 73, 155, 0.08);
-$blue-border: rgba(1, 73, 155, 0.22);
-$text: #14532d;
+@use '../../../../../styles/tokens' as t;
 
 :host {
   display: block;
@@ -25,7 +22,7 @@ $text: #14532d;
 .panel-label {
   font-size: 11.5px;
   font-weight: 700;
-  color: $text;
+  color: t.$brand-deep;
   letter-spacing: 0.3px;
 }
 
@@ -47,7 +44,7 @@ $text: #14532d;
 .field-label {
   font-size: 9.5px;
   font-weight: 700;
-  color: $blue;
+  color: t.$brand-deep;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -62,8 +59,8 @@ $text: #14532d;
   transition: border-color 0.15s, box-shadow 0.15s;
 
   &:focus-within {
-    border-color: $blue-border;
-    box-shadow: 0 0 0 3px $blue-light;
+    border-color: rgba(t.$brand, 0.22);
+    box-shadow: 0 0 0 3px rgba(t.$brand, 0.08);
   }
 }
 
@@ -89,7 +86,7 @@ $text: #14532d;
   padding: 8px 12px;
   border: none;
   border-radius: 8px;
-  background: $blue;
+  background: t.$brand-deep;
   color: #fff;
   font-size: 11.5px;
   font-weight: 700;
@@ -97,7 +94,7 @@ $text: #14532d;
   transition: background 0.15s;
   letter-spacing: 0.3px;
 
-  &:hover { background: #14532d; }
+  &:hover { background: t.$brand-mid; }
 
   &:active { background: #012d63; }
 }

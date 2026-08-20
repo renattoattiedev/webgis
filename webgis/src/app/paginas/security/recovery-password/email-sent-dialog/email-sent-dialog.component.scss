@@ -1,7 +1,6 @@
-$brand:   #1b5e20;
+@use '../../../../../styles/tokens' as t;
 $success: #16a34a;
 $info:    #0369a1;
-$text:    #14532d;
 $muted:   #64748b;
 
 ::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
@@ -32,15 +31,15 @@ $muted:   #64748b;
   }
 
   &--info {
-    background: rgba(1,73,155,0.09);
-    color: $brand;
+    background: rgba(38, 138, 151,0.09);
+    color: t.$brand;
   }
 }
 
 .sd-title {
   font-size: 20px !important;
   font-weight: 700 !important;
-  color: $text !important;
+  color: t.$ink !important;
   margin: 0 0 10px !important;
   padding: 0 !important;
   letter-spacing: -0.3px;
@@ -73,7 +72,7 @@ $muted:   #64748b;
   gap: 8px;
   height: 44px;
   padding: 0 26px;
-  background: $brand;
+  background: t.$brand-deep;
   color: #fff;
   border: none;
   border-radius: 10px;
@@ -88,6 +87,6 @@ $muted:   #64748b;
 
   &:hover {
     background: #012d6b;
-    box-shadow: 0 4px 14px rgba(1,73,155,0.28);
+    box-shadow: 0 4px 14px rgba(38, 138, 151,0.28);
   }
 }

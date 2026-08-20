@@ -1,3 +1,5 @@
+@use '../../../../../../styles/tokens' as t;
+
 .rus-wrapper { display: flex; flex-direction: column; }
 
 .rus-header {
@@ -13,7 +15,7 @@
   @media print { position: static; padding: 8px 0; }
 }
 
-.rus-title { font-weight: 700; color: #14532d; font-size: 15px; }
+.rus-title { font-weight: 700; color: t.$brand-deep; font-size: 15px; }
 .rus-filters { display: flex; gap: 8px; margin-left: auto; @media print { display: none; } }
 
 .rus-select {
@@ -41,9 +43,9 @@
   background: white;
   border-radius: 8px;
   padding: 14px 16px;
-  border-left: 4px solid #1b5e20;
+  border-left: 4px solid t.$brand;
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
-  &--blue   { border-color: #1b5e20; .rus-kpi-value { color: #1b5e20; } }
+  &--blue   { border-color: t.$brand; .rus-kpi-value { color: t.$brand; } }
   &--purple { border-color: #7c3aed; .rus-kpi-value { color: #7c3aed; } }
   &--green  { border-color: #2e7d32; .rus-kpi-value { color: #2e7d32; } }
   &--amber  { border-color: #b45309; .rus-kpi-value { color: #b45309; } }
@@ -69,7 +71,7 @@
   box-shadow: 0 1px 3px rgba(0,0,0,0.07);
 }
 
-.rus-chart-title { font-size: 11px; font-weight: 700; color: #14532d; margin-bottom: 8px; }
+.rus-chart-title { font-size: 11px; font-weight: 700; color: t.$brand-deep; margin-bottom: 8px; }
 
 // ── Feed de atividades ───────────────────────────────────────────────────────
 
@@ -83,7 +85,7 @@
   min-height: 0;
 }
 
-.rus-feed-title { font-size: 11px; font-weight: 700; color: #14532d; margin-bottom: 8px; }
+.rus-feed-title { font-size: 11px; font-weight: 700; color: t.$brand-deep; margin-bottom: 8px; }
 
 .rus-feed-note {
   display: flex;
@@ -126,7 +128,7 @@
   width: 7px;
   height: 7px;
   border-radius: 50%;
-  background: #1b5e20;
+  background: t.$brand;
   flex-shrink: 0;
 
   &--mapa { background: #7c3aed; }
@@ -141,7 +143,7 @@
   overflow: hidden;
 }
 
-.rus-feed-who   { font-weight: 600; color: #14532d; white-space: nowrap; }
+.rus-feed-who   { font-weight: 600; color: t.$brand-deep; white-space: nowrap; }
 .rus-feed-action { color: #6b7280; white-space: nowrap; }
 .rus-feed-tipo  { color: #6b7280; white-space: nowrap; }
 .rus-feed-nome  {
@@ -174,7 +176,7 @@
   flex-wrap: wrap;
 }
 
-.rus-table-title { font-size: 11px; font-weight: 700; color: #14532d; }
+.rus-table-title { font-size: 11px; font-weight: 700; color: t.$brand-deep; }
 .rus-table-controls { display: flex; gap: 8px; margin-left: auto; @media print { display: none; } }
 
 .rus-search {
@@ -236,8 +238,8 @@
   border-radius: 99px;
   font-size: 10px;
   font-weight: 600;
-  background: #eff6ff;
-  color: #1b5e20;
+  background: t.$brand-tint;
+  color: t.$brand;
 }
 
 .rus-pagination {

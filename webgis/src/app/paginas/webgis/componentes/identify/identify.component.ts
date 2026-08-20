@@ -373,7 +373,7 @@ export class IdentifyComponent implements AfterViewInit, OnDestroy {
         image: new CircleStyle({
           radius: 7,
           fill: new Fill({ color: '#ffffff' }),
-          stroke: new Stroke({ color: '#1b5e20', width: 2.5 }),
+          stroke: new Stroke({ color: '#268A97', width: 2.5 }),
         }),
       });
     } else if (
@@ -381,15 +381,15 @@ export class IdentifyComponent implements AfterViewInit, OnDestroy {
       geometry_type === 'MultiLineString'
     ) {
       style = new Style({
-        stroke: new Stroke({ color: '#1b5e20', width: 4 }),
+        stroke: new Stroke({ color: '#268A97', width: 4 }),
       });
     } else if (
       geometry_type === 'Polygon' ||
       geometry_type === 'MultiPolygon'
     ) {
       style = new Style({
-        fill: new Fill({ color: 'rgba(1, 73, 155, 0.13)' }),
-        stroke: new Stroke({ color: '#1b5e20', width: 3 }),
+        fill: new Fill({ color: 'rgba(38, 138, 151, 0.13)' }),
+        stroke: new Stroke({ color: '#268A97', width: 3 }),
       });
     }
 

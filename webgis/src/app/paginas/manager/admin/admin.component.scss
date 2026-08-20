@@ -1,11 +1,9 @@
 // ─── Admin shell ─────────────────────────────────────────────────────────
-$brand:#1b5e20; $brand-mid:#14532d; $brand-tint:#eef5ec; $brand-tint-2:#e2eee0;
-$ink:#1a2e1f; $ink-soft:#4d6b52; $muted:#6b8f74; $line:#e7f0e7; $line-soft:#edf4ea;
-$bg:#f0f6ed;
+@use '../../../../styles/tokens' as t;
 $font-ui:'Geist',system-ui,sans-serif;
 $font-serif:'Instrument Serif',Georgia,serif;
 
-:host { display:block; background:$bg; font-family:$font-ui; color:$ink; }
+:host { display:block; background:t.$bg; font-family:$font-ui; color:t.$ink; }
 * { box-sizing:border-box; }
 
 .ad-page {
@@ -15,7 +13,7 @@ $font-serif:'Instrument Serif',Georgia,serif;
 }
 
 .ad-side {
-  background:#fff; border:1px solid $line; border-radius:14px;
+  background:#fff; border:1px solid t.$line; border-radius:14px;
   padding:18px 14px; align-self:flex-start;
   position:sticky; top:134px;
   box-shadow:0 2px 8px rgba(11,37,69,0.04);
@@ -23,7 +21,7 @@ $font-serif:'Instrument Serif',Georgia,serif;
 .ad-side-head { padding:0 6px 12px; }
 .ad-side-title {
   font-size:11px; font-weight:700; letter-spacing:1.8px;
-  text-transform:uppercase; color:$muted;
+  text-transform:uppercase; color:t.$muted;
 }
 
 .ad-nav { display:flex; flex-direction:column; gap:2px; }
@@ -31,20 +29,20 @@ $font-serif:'Instrument Serif',Georgia,serif;
   display:flex; align-items:center; gap:10px;
   padding:9px 12px; border-radius:8px;
   background:transparent; border:1px solid transparent;
-  font-family:inherit; font-size:13.5px; font-weight:500; color:$ink-soft;
+  font-family:inherit; font-size:13.5px; font-weight:500; color:t.$ink-soft;
   cursor:pointer; text-align:left;
   transition:background 0.12s, color 0.12s, border-color 0.12s;
-  svg { width:15px; height:15px; flex-shrink:0; color:$muted; }
-  &:hover { background:$brand-tint; color:$ink; svg{color:$brand;} }
+  svg { width:15px; height:15px; flex-shrink:0; color:t.$muted; }
+  &:hover { background:t.$brand-tint; color:t.$ink; svg{color:t.$brand;} }
   &.active {
-    background:$brand-tint; color:$brand; font-weight:600;
-    border-color:$brand-tint-2;
-    svg { color:$brand; }
+    background:t.$brand-tint; color:t.$brand; font-weight:600;
+    border-color:t.$brand-tint-2;
+    svg { color:t.$brand; }
   }
 }
 
 .ad-main {
-  background:#fff; border:1px solid $line; border-radius:16px;
+  background:#fff; border:1px solid t.$line; border-radius:16px;
   box-shadow:0 4px 18px rgba(11,37,69,0.04);
   padding:24px; min-width:0; align-self:flex-start;
 }
@@ -71,56 +69,56 @@ $font-serif:'Instrument Serif',Georgia,serif;
   // Header (56px) — índice ou seção com voltar + troca
   .ad-m-header {
     display:flex; align-items:center; height:56px;
-    background:#fff; border-bottom:1px solid $line;
+    background:#fff; border-bottom:1px solid t.$line;
     position:sticky; top:113px; z-index:100; // navbar(60) + tabs(53)
     gap:12px; padding:0 16px;
   }
   .ad-m-header-tile {
     width:30px; height:30px; border-radius:9px;
-    background:$brand-tint; color:$brand; flex-shrink:0;
+    background:t.$brand-tint; color:t.$brand; flex-shrink:0;
     display:inline-flex; align-items:center; justify-content:center;
     svg { width:15px; height:15px; }
   }
   .ad-m-header-title {
-    font-size:15.5px; font-weight:600; color:$ink; letter-spacing:-0.2px;
+    font-size:15.5px; font-weight:600; color:t.$ink; letter-spacing:-0.2px;
   }
   .ad-m-back {
     width:44px; height:44px; border-radius:11px; flex-shrink:0; margin-left:-6px;
-    background:transparent; border:1px solid transparent; color:$ink;
+    background:transparent; border:1px solid transparent; color:t.$ink;
     display:inline-flex; align-items:center; justify-content:center; cursor:pointer;
     svg { width:20px; height:20px; }
-    &:active { background:$brand-tint; }
+    &:active { background:t.$brand-tint; }
   }
   .ad-m-section-trigger {
     flex:1; min-width:0; display:flex; align-items:center; gap:7px;
     background:none; border:none; padding:0; cursor:pointer; text-align:left;
-    svg { width:13px; height:13px; color:$muted; flex-shrink:0; }
+    svg { width:13px; height:13px; color:t.$muted; flex-shrink:0; }
   }
   .ad-m-section-title {
-    font-size:15.5px; font-weight:600; color:$ink; letter-spacing:-0.2px;
+    font-size:15.5px; font-weight:600; color:t.$ink; letter-spacing:-0.2px;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-    em { font-family:$font-serif; font-style:italic; font-weight:400; color:$ink-soft; }
+    em { font-family:$font-serif; font-style:italic; font-weight:400; color:t.$ink-soft; }
   }
   .ad-m-header-action { flex-shrink:0; margin-right:-4px; }
   .ad-m-save-btn {
     height:38px; padding:0 14px; border-radius:10px;
-    background:$brand; color:#fff; border:none;
+    background:t.$brand-deep; color:#fff; border:none;
     font-family:inherit; font-size:13px; font-weight:600; cursor:pointer;
     &:disabled { opacity:0.4; cursor:not-allowed; }
   }
   .ad-m-header-count {
-    font-size:11.5px; font-weight:700; color:$brand;
-    background:$brand-tint; padding:3px 9px; border-radius:100px;
+    font-size:11.5px; font-weight:700; color:t.$brand;
+    background:t.$brand-tint; padding:3px 9px; border-radius:100px;
     white-space:nowrap;
   }
 
   // Índice
   .ad-m-index { display:block; padding:14px 14px 24px; }
   .ad-m-index-lead {
-    margin:0; padding:0 4px 12px; font-size:13px; color:$ink-soft; line-height:1.5;
+    margin:0; padding:0 4px 12px; font-size:13px; color:t.$ink-soft; line-height:1.5;
   }
   .ad-m-index-card {
-    background:#fff; border:1px solid $line; border-radius:14px;
+    background:#fff; border:1px solid t.$line; border-radius:14px;
     overflow:hidden; box-shadow:0 1px 3px rgba(11,37,69,0.04);
   }
   .ad-m-index-item {
@@ -130,24 +128,24 @@ $font-serif:'Instrument Serif',Georgia,serif;
   }
   .ad-m-index-icon {
     width:38px; height:38px; border-radius:10px; flex-shrink:0;
-    background:$brand-tint; color:$brand;
+    background:t.$brand-tint; color:t.$brand;
     display:inline-flex; align-items:center; justify-content:center;
     svg { width:18px; height:18px; }
   }
   .ad-m-index-text {
     flex:1; min-width:0; display:flex; flex-direction:column; gap:2px;
   }
-  .ad-m-index-name { font-size:14.5px; font-weight:600; color:$ink; }
+  .ad-m-index-name { font-size:14.5px; font-weight:600; color:t.$ink; }
   .ad-m-index-sub {
-    font-size:11.5px; color:$muted;
+    font-size:11.5px; color:t.$muted;
     white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
   }
   .ad-m-index-count {
-    font-size:11.5px; font-weight:700; color:$brand; background:$brand-tint;
+    font-size:11.5px; font-weight:700; color:t.$brand; background:t.$brand-tint;
     padding:3px 9px; border-radius:100px; flex-shrink:0;
   }
-  .ad-m-index-chevron { width:14px; height:14px; color:$muted; flex-shrink:0; }
-  .ad-m-index-sep { height:1px; background:$line-soft; margin-left:64px; }
+  .ad-m-index-chevron { width:14px; height:14px; color:t.$muted; flex-shrink:0; }
+  .ad-m-index-sep { height:1px; background:t.$line-soft; margin-left:64px; }
 
   // Folha de troca de seção
   .ad-m-sheet-backdrop {
@@ -167,18 +165,18 @@ $font-serif:'Instrument Serif',Georgia,serif;
   }
   .ad-m-sheet-handle {
     padding:10px 0 6px; display:flex; justify-content:center;
-    span { width:44px; height:4px; border-radius:2px; background:$brand-tint-2; }
+    span { width:44px; height:4px; border-radius:2px; background:t.$brand-tint-2; }
   }
   .ad-m-sheet-head {
-    padding:4px 18px 12px; border-bottom:1px solid $line-soft;
+    padding:4px 18px 12px; border-bottom:1px solid t.$line-soft;
     display:flex; align-items:center; justify-content:space-between;
     span {
       font-size:11px; font-weight:700; letter-spacing:1.8px; text-transform:uppercase;
-      color:$muted;
+      color:t.$muted;
     }
     button {
       background:none; border:none; padding:0; cursor:pointer;
-      font-size:12.5px; font-weight:600; color:$brand;
+      font-size:12.5px; font-weight:600; color:t.$brand-deep;
     }
   }
   .ad-m-sheet-list {
@@ -190,21 +188,21 @@ $font-serif:'Instrument Serif',Georgia,serif;
     background:none; border:1px solid transparent; cursor:pointer; text-align:left;
     font-family:inherit; width:calc(100% + 4px);
     &--active {
-      background:$brand-tint; border-color:$brand-tint-2;
+      background:t.$brand-tint; border-color:t.$brand-tint-2;
     }
   }
   .ad-m-sheet-icon {
     width:32px; height:32px; border-radius:9px; flex-shrink:0;
-    background:$brand-tint; color:$brand;
+    background:t.$brand-tint; color:t.$brand;
     display:inline-flex; align-items:center; justify-content:center;
     svg { width:15px; height:15px; }
-    .ad-m-sheet-item--active & { background:$brand; color:#fff; }
+    .ad-m-sheet-item--active & { background:t.$brand; color:#fff; }
   }
   .ad-m-sheet-label {
-    flex:1; font-size:14.5px; font-weight:500; color:$ink;
-    .ad-m-sheet-item--active & { color:$brand; font-weight:600; }
+    flex:1; font-size:14.5px; font-weight:500; color:t.$ink;
+    .ad-m-sheet-item--active & { color:t.$brand; font-weight:600; }
   }
-  .ad-m-sheet-check { width:15px; height:15px; color:$brand; flex-shrink:0; }
+  .ad-m-sheet-check { width:15px; height:15px; color:t.$brand; flex-shrink:0; }
 }
 
 @media (max-width:1024px) {
